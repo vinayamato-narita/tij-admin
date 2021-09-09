@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\AdminUser;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Enums\StatusCode;
 use Illuminate\Support\Facades\Mail;
@@ -27,9 +27,9 @@ class ResetPasswordController extends BaseController
     
     public function reset($token)
     {
-        $account = AdminUser::where([
-            ['reset_password_token', $token],
-            ['reset_password_token_exprire', '>=', Carbon::now()]
+        $account = User::where([
+            ['remember_token', $token],
+            ['remember_token_expires_at', '>=', Carbon::now()]
         ])->first();
 
         if ($account) {
@@ -45,13 +45,13 @@ class ResetPasswordController extends BaseController
     }
     public function changePassword(ResetPasswordRequest $request)
     {
-        $account = AdminUser::where([
-            ['reset_password_token', $request->reset_password_token],
-            ['reset_password_token_exprire', '>=', Carbon::now()]
+        $account = User::where([
+            ['remember_token', $request->remember_token],
+            ['remember_token_expires_at', '>=', Carbon::now()]
         ])->first();
         if ($account) {
             $account->password = Hash::make($request->password);
-            $account->reset_password_token = null;
+            $account->remember_token = null;
             if ($account->save()) {
                 $this->setFlash(__('パスワード変更が完了しました。'));
                 return redirect('login');

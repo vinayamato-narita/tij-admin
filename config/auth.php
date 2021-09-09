@@ -67,8 +67,8 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'custom_auth',
-            'model' => App\Models\AdminUser::class,
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
             'hash' => false,
         ],
 

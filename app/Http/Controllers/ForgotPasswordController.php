@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\AdminUser;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
@@ -46,23 +46,23 @@ class ForgotPasswordController extends BaseController
      */
     public function store(ForgotPasswordRequest $request)
     {
-        $account = AdminUser::where('admin_user_email', $request->email)->first();
+        $account = User::where('email', $request->email)->first();
         if (!$account) {
             $this->setFlash(__('メールでユーザーを見つけることができません'), 'error');
             return redirect(route('forgot_password.create'));
         }
-        $account->reset_password_token = md5($request->email . random_bytes(25) . Carbon::now());
-        $account->reset_password_token_exprire = Carbon::now()->addMinutes(30);
+        $account->remember_token = md5($request->email . random_bytes(25) . Carbon::now());
+        $account->remember_token_expires_at = Carbon::now()->addMinutes(30);
         if (!$account->save()) {
             $this->setFlash(__('メールが一致しません。'), 'error');
         }
         $mailContents = [
             'data' => [
                 'name' => $account->user_account_name,
-                'link' => route('reset-password', $account->reset_password_token)
+                'link' => route('reset-password', $account->remember_token)
             ]
         ];
-        Mail::to($account->admin_user_email)->send(new ForgotPassword($mailContents));
+        Mail::to($account->email)->send(new ForgotPassword($mailContents));
         return redirect(route('forgot_password.index'));
     }
 
@@ -90,8 +90,8 @@ class ForgotPasswordController extends BaseController
 
     public function reset($token)
     {
-        $account = AdminUser::where([
-            ['reset_password_token', $token],
+        $account = User::where([
+            ['remember_token', $token],
             ['reset_password_token_exprire', '>=', Carbon::now()]
         ])->first();
 
@@ -109,7 +109,7 @@ class ForgotPasswordController extends BaseController
 
     public function changePassword(ResetPasswordRequest $request)
     {
-        $account = AdminUser::where([
+        $account = User::where([
             ['reset_password_token', $request->reset_password_token],
             ['reset_password_token_exprire', '>=', Carbon::now()]
         ])->first();

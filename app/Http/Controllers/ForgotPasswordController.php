@@ -58,7 +58,7 @@ class ForgotPasswordController extends BaseController
         }
         $mailContents = [
             'data' => [
-                'name' => $account->user_account_name,
+                'name' => $account->name,
                 'link' => route('reset-password', $account->remember_token)
             ]
         ];
@@ -114,8 +114,8 @@ class ForgotPasswordController extends BaseController
             ['reset_password_token_exprire', '>=', Carbon::now()]
         ])->first();
         if ($account) {
-            $account->user_account_password = Hash::make($request->password);
-            $account->reset_password_token = null;
+            $account->password = Hash::make($request->password);
+            $account->remember_token = null;
             if ($account->save()) {
                 $this->setFlash(__('パスワード変更が完了しました。'));
                 return redirect('login');

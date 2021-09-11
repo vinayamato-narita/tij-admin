@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\User;
+use App\Models\AdminUser;
 use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
@@ -46,7 +46,7 @@ class ForgotPasswordController extends BaseController
      */
     public function store(ForgotPasswordRequest $request)
     {
-        $account = User::where('email', $request->email)->first();
+        $account = AdminUser::where('email', $request->email)->first();
         if (!$account) {
             $this->setFlash(__('メールでユーザーを見つけることができません'), 'error');
             return redirect(route('forgot_password.create'));
@@ -90,7 +90,7 @@ class ForgotPasswordController extends BaseController
 
     public function reset($token)
     {
-        $account = User::where([
+        $account = AdminUser::where([
             ['remember_token', $token],
             ['reset_password_token_exprire', '>=', Carbon::now()]
         ])->first();
@@ -109,7 +109,7 @@ class ForgotPasswordController extends BaseController
 
     public function changePassword(ResetPasswordRequest $request)
     {
-        $account = User::where([
+        $account = AdminUser::where([
             ['reset_password_token', $request->reset_password_token],
             ['reset_password_token_exprire', '>=', Carbon::now()]
         ])->first();

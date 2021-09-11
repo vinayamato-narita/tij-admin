@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\AdminUser;
 use App\Http\Requests\LoginRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -44,9 +44,18 @@ class LoginController extends BaseController
     public function store(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials, $request->remember_me ?? false)) {
-            $account = User::where('id', Auth::user()->id)->firstOrFail();
-            $account->last_login_at = Carbon::now();
+        if (Auth::attempt([
+            'admin_user_email' => $credentials['email'],
+            'password' => $credentials['password']
+            ], $request->remember_me ?? false)) {
+            try {
+                $a = Auth::user();
+            $account = AdminUser::where('id', Auth::user()->id)->firstOrFail();
+                $account->last_login_at = Carbon::now();
+            }
+            catch (\Exception $exception){
+                throw new \Exception($exception);
+            }
             if (!$account->save()) {
                 Auth::logout();
                 return redirect('/');

@@ -131,7 +131,7 @@ table tbody tr td {
     vertical-align: middle !important;
 }
 .c-main {
-    padding-top: 15px !important;
+    padding-top: 5px !important;
 }
 .searchFrom .checkbox {
     margin-right: 5px;
@@ -177,4 +177,55 @@ table tbody tr td {
 }
 .container {
     max-width: 100% !important;
+}
+html:not([dir="rtl"]) .c-sidebar.c-sidebar-lg-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper, html:not([dir="rtl"]) .c-sidebar.c-sidebar-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper {
+    margin-left: 200px;
+}
+.c-sidebar {
+    width: 200px;
+    flex: 0 0 200px;
+}
+.c-sidebar-nav-icon {
+    height: 13px;
+}
+.c-sidebar-nav-link, .c-sidebar-nav-dropdown-toggle {
+    padding: 10px;
+}
+body {
+    font-size: 11px;
+}
+.input-search {
+    width: 300px;
+    float: right;
+}
+.clear {
+    clear: both;
+}
+.pagination {
+    justify-content: flex-end;
+    margin-bottom: 0;
+}
+.container-fluid {
+    padding-left: 10px !important;
+    padding-right: 10px !important
+}
+.c-subheader {
+    min-height: 40px;
+}
+.c-subheader .breadcrumb {
+    padding-left: 10px;
+}
+.card-body {
+    padding: 15px;
+}
+.mrb-5 {
+    margin-bottom: 5px;
+}
+.table>tbody>tr>td {
+    vertical-align: middle;
+    word-break: break-all;
+    padding: 3px!important;
+}
+.table-striped tbody tr {
+    background-color: white !important;
 }

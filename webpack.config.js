@@ -23,7 +23,7 @@ module.exports = [{
         mode: "development",
         entry: {
             babel: "@babel/polyfill",
-            customerApp: "./resources/js/customerApp.js",
+            app: "./resources/js/app.js",
             guestApp: "./resources/js/guestApp.js"
         },
         output: {

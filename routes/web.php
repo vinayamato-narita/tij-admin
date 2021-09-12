@@ -25,4 +25,5 @@ Route::group([
     'middleware' => ['customer']
 ], function () {
     Route::resource('dashboard', DashboardController::class);
+    Route::resource('admin', AdminController::class);
 });

@@ -20,11 +20,11 @@ class BaseController extends Controller
     {
         $newSizeLimit = PAGE_SIZE_DEFAULT;
         $arrPageSize = PAGE_SIZE_LIMIT;
-        if (isset($query['limit_page'])) {
-            $newSizeLimit = (($query['limit_page'] === '') || !in_array($query['limit_page'], $arrPageSize)) ? $newSizeLimit : $query['limit_page'];
+        if (isset($query['limit'])) {
+            $newSizeLimit = (($query['limit'] === '') || !in_array($query['limit'], $arrPageSize)) ? $newSizeLimit : $query['limit'];
         }
-        if (((isset($query['limit_page']))) && (!empty($query->query('limit_page')))){
-            $newSizeLimit = (!in_array($query->query('limit_page'), $arrPageSize)) ? $newSizeLimit : $query->query('limit_page');
+        if (((isset($query['limit']))) && (!empty($query->query('limit')))){
+            $newSizeLimit = (!in_array($query->query('limit'), $arrPageSize)) ? $newSizeLimit : $query->query('limit');
         }
         return $newSizeLimit;
     }

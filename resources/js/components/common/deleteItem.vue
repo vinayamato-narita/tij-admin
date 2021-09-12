@@ -19,7 +19,7 @@ export default {
   components: {
     Loader
   },
-  props: ['deleteAction', 'listUrl', 'messageConfirm'],
+  props: ['deleteAction', 'messageConfirm'],
   mounted() {},
   methods: {
     showAlert() {
@@ -47,7 +47,6 @@ export default {
                   confirmButtonText: "閉じる"
                 })
                 .then(function () {
-                  //   window.location.href = that.listUrl;
                   location.reload();
                 });
             })

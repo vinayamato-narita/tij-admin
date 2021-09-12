@@ -35,8 +35,11 @@ Vue.component('nl2br', Nl2br)
 
 import PopupAlert from "./components/common/popupAlert.vue"
 import DataEmpty from "./components/common/dataEmpty.vue"
-import BtnDeleteConfirm from "./components/common/btnDeleteConfirm.vue"
+import DeleteItem from "./components/common/deleteItem.vue"
 import LimitPageOption from "./components/common/limitPageOption.vue"
+import InputSearch from "./components/common/inputSearch.vue"
+import PageSize from "./components/common/pageSize.vue"
+
 new Vue({
     created() {
         // this.$validator.extend('required', {
@@ -101,8 +104,10 @@ new Vue({
     components: {
         PopupAlert,
         LimitPageOption,
-        BtnDeleteConfirm,
+        DeleteItem,
         DataEmpty,
+        InputSearch,
+        PageSize,
     },
     methods: {},
     mounted() {}

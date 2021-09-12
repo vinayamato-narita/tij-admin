@@ -1,4 +1,4 @@
-@extends('layouts.customer')
+@extends('layouts.default')
 
 @section('content')
 @endsection

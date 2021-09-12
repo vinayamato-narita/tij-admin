@@ -5,7 +5,7 @@
     <a class="c-header-brand d-sm-none" href="#">
         <img class="c-header-brand" src="{{ url('/images/logo.png')}}" width="97" height="46" alt="POOF-LOGO">
     </a>
-    <button class="c-header-toggler c-class-toggler ml-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+    <button class="c-header-toggler c-class-toggler d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
         <span class="c-header-toggler-icon"></span>
     </button>
     <ul class="c-header-nav ml-auto mr-6">
@@ -30,15 +30,15 @@
             </div>
         </li>
     </ul>
-    <div class="c-subheader px-3">
+    <div class="c-subheader">
         <ol class="breadcrumb border-0 m-0">
             <li class="breadcrumb-item"><a href="{{route('dashboard.index')}}">ホーム</a></li>
             @if (isset($breadcrumbs))
                 @foreach ($breadcrumbs as $key => $breadcrumb)
                     @if ($key != count($breadcrumbs) - 1)
-                        <li class="breadcrumb-item"><a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['name'] }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['text'] }}</a></li>
                     @else
-                        <li class="breadcrumb-item active">{{ $breadcrumb }}</li>
+                        <li class="breadcrumb-item active">{{ $breadcrumb['text'] }}</li>
                     @endif
                 @endforeach
             @endif

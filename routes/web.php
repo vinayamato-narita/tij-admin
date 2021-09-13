@@ -25,4 +25,7 @@ Route::group([
     'middleware' => ['customer']
 ], function () {
     Route::resource('dashboard', DashboardController::class);
+    Route::resource('teacher', TeacherController::class);
+    $a = \Illuminate\Support\Facades\Auth::user();
+    Route::get('/teacher/teacher-list', "TeacherController@getTeacherList")->name('teacher.getTeacherList');
 });

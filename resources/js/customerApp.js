@@ -32,11 +32,15 @@ Vue.config.productionTip = false
 //Nl2br
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
+import DataTable from 'laravel-vue-datatable';
+Vue.use(DataTable);
 
 import PopupAlert from "./components/common/popupAlert.vue"
 import DataEmpty from "./components/common/dataEmpty.vue"
 import BtnDeleteConfirm from "./components/common/btnDeleteConfirm.vue"
 import LimitPageOption from "./components/common/limitPageOption.vue"
+import TeacherList from "./components/teacher/index.vue"
+
 new Vue({
     created() {
         // this.$validator.extend('required', {
@@ -103,6 +107,7 @@ new Vue({
         LimitPageOption,
         BtnDeleteConfirm,
         DataEmpty,
+        TeacherList,
     },
     methods: {},
     mounted() {}

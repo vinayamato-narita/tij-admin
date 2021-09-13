@@ -23,6 +23,10 @@ class BreadcrumbComponent
                 'text' => '講師情報一覧',
                 'route_str' => "teacher.index",
             ],
+            'teacher_add' => [
+                'text' => '講師新規作成',
+                'route_str' => "teacher.create",
+            ],
         ];
     }
 

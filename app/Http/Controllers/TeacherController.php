@@ -48,7 +48,15 @@ class TeacherController extends BaseController
      */
     public function create()
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_add']
+        ]);
+        return view('teacher.add', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+
     }
 
     /**

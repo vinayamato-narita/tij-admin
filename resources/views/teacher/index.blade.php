@@ -15,7 +15,7 @@
                         </h5>
                     </div>
                     <div class="pull-right mrb-5">
-                        <a href="{{ route('admin.create') }}" class="btn btn-primary pull-right"
+                        <a href="{{ route('teacher.create') }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                         </a>
                     </div>

@@ -229,3 +229,16 @@ body {
 .table-striped tbody tr {
     background-color: white !important;
 }
+label .required {
+    color: red;
+    font-size: 80%;
+    margin-right: -13px !important;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+.is-danger {
+    color: red;
+}

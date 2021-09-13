@@ -39,7 +39,10 @@ import DeleteItem from "./components/common/deleteItem.vue"
 import LimitPageOption from "./components/common/limitPageOption.vue"
 import InputSearch from "./components/common/inputSearch.vue"
 import PageSize from "./components/common/pageSize.vue"
-
+import TeacherAdd from "./components/teacher/add.vue"
+Vue.use(VeeValidate, {
+    useConstraintAttrs: false
+});
 new Vue({
     created() {
         // this.$validator.extend('required', {
@@ -108,6 +111,7 @@ new Vue({
         DataEmpty,
         InputSearch,
         PageSize,
+        TeacherAdd
     },
     methods: {},
     mounted() {}

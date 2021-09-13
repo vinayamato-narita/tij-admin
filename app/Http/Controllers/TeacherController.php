@@ -115,7 +115,7 @@ class TeacherController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => 'Delete teacher success',
+            'message' => ' 講師が削除されました',
             'data' => [],
         ], StatusCode::OK);
     }

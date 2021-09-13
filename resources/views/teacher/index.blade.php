@@ -56,7 +56,16 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('admin.show', $teacher->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="#"><i class="fa fa-skype mr-2"></i>スカイプ接続</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="fa fa-envelope mr-2"></i>メール送信</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"><i class="fa fa-book mr-2"></i> レッスン履歴</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="{{ route('admin.show', $teacher->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Kyslik\ColumnSortable\Sortable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AdminUser extends Authenticatable
 {
@@ -27,5 +26,9 @@ class AdminUser extends Authenticatable
      * @var array
      */
     public $timestamps = false;
-    protected $fillable = ['admin_user_id', 'admin_user_name', 'admin_user_email', 'admin_user_password', 'last_login_date', 'remember_token', 'remember_token_expires_at', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'admin_user_name', 'admin_user_email', 'admin_user_description', 'last_login_date', 'is_sercurity', 'is_join_contact', 'is_online', 'last_login_at'];
+    protected $hidden = [
+        'admin_user_password',
+        'is_sercurity',
+    ];
 }

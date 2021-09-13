@@ -16,12 +16,24 @@ class BreadcrumbComponent
                 'route_str' => "dashboard.index",
             ],
             'admin_list' => [
-                'text' => '従業員一覧',
+                'text' => '管理ユーザ一覧',
                 'route_str' => "admin.index",
             ],
             'teacher_list' => [
                 'text' => '講師情報一覧',
                 'route_str' => "teacher.index",
+            ],
+            'create_admin' => [
+                'text' => '管理ユーザ新規作成',
+                'route_str' => "admin.create",
+            ],
+            'show_admin' => [
+                'text' => 'show admin',
+                'route_str' => "admin.show",
+            ],
+            'edit_admin' => [
+                'text' => 'edit admin',
+                'route_str' => "admin.edit",
             ],
         ];
     }

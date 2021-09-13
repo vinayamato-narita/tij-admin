@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdminUser;
+use App\Components\BreadcrumbComponent;
+use App\Enums\StatusCode;
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\Components\BreadcrumbComponent;
-use App\Http\Controllers\BaseController;
-use App\Enums\StatusCode;
-use Log;
 
-class AdminController extends BaseController
+class TeacherController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -21,25 +19,25 @@ class AdminController extends BaseController
     {
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
-            ['name' => 'admin_list']
+            ['name' => 'teacher_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = new AdminUser();
+        $queryBuilder = new Teacher();
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('email', $request['search_input']));
+                $query->where($this->escapeLikeSentence('teacher_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('teacher_email', $request['search_input']));
             });
         }
 
-        $userList = $queryBuilder->sortable(['updated_at' => 'desc'])->paginate($pageLimit);
+        $teacherList = $queryBuilder->sortable(['display_order' => 'asc'])->paginate($pageLimit);
 
-        return view('admin.index', [
+        return view('teacher.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
-            'userList' => $userList,
+            'teacherList' => $teacherList,
         ]);
     }
 
@@ -107,7 +105,7 @@ class AdminController extends BaseController
     public function destroy($id)
     {
         try {
-            $user = AdminUser::where('id', $id)->delete();
+            $teacher = Teacher::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([
@@ -117,7 +115,7 @@ class AdminController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => 'Delete user success',
+            'message' => 'Delete teacher success',
             'data' => [],
         ], StatusCode::OK);
     }

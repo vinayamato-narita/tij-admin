@@ -34,8 +34,8 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('name', ' ユーザ名')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('email', ' メールアドレス')</th>
+                                                    <th class="text-center width-130">@sortablelink('admin_user_name', ' ユーザ名')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
                                                     <th class="text-center min-width-120">説明</th>
                                                     <th class="text-center min-width-150">業務優先度設定</th>
                                                     <th class="w-100">操作</th>
@@ -44,9 +44,9 @@
                                             <tbody>
                                                 @foreach ($userList as $index => $user)
                                                     <tr>
-                                                        <td class="text-center">{{ $user->name }}</td>
-                                                        <td class="text-center">{{ $user->email }}</td>
-                                                        <td class="text-center">{{ $user->description }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_name }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_email }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_description }}</td>
                                                         <td class="text-center"></td>
                                                         <td>
                                                             <div class="btn-group">

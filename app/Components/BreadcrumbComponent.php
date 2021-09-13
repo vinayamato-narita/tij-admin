@@ -19,6 +19,10 @@ class BreadcrumbComponent
                 'text' => '従業員一覧',
                 'route_str' => "admin.index",
             ],
+            'teacher_list' => [
+                'text' => '講師情報一覧',
+                'route_str' => "teacher.index",
+            ],
         ];
     }
 

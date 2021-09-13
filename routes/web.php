@@ -26,4 +26,5 @@ Route::group([
 ], function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
+    Route::resource('teacher', TeacherController::class);
 });

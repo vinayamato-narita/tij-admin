@@ -45,6 +45,8 @@ import EditAdmin from "./components/admin/edit-admin.vue"
 import TeacherAdd from "./components/teacher/add.vue"
 import CreateFaq from "./components/faq/create-faq.vue"
 import EditFaq from "./components/faq/edit-faq.vue"
+import TeacherEdit from "./components/teacher/edit.vue"
+import TeacherShow from "./components/teacher/detail.vue"
 
 new Vue({
     created() {
@@ -120,6 +122,9 @@ new Vue({
         TeacherAdd,
         CreateFaq,
         EditFaq,
+        TeacherAdd,
+        TeacherEdit,
+        TeacherShow
     },
     methods: {},
     mounted() {}

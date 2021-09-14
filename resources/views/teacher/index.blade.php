@@ -65,7 +65,7 @@
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-book mr-2"></i> レッスン履歴</a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('admin.show', $teacher->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('teacher.show', $teacher->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item

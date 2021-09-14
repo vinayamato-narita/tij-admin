@@ -6,7 +6,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            講師新規作成
+                            講師情報編集
                         </h5>
                     </div>
                 </div>
@@ -17,6 +17,7 @@
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
                                     <div class="card-header">講師情報</div>
                                     <div class="card-body">
+
 
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
@@ -38,7 +39,7 @@
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
-                                                <div class="col-md-6">
+                                            <div class="col-md-6">
                                                 <input class="form-control" id="teacherName" type="text" name="teacherName" @input="changeInput()"  v-model="teacherName"  v-validate="'required|max:255'" />
 
                                                 <div class="input-group is-danger" role="alert">
@@ -87,8 +88,10 @@
                                             </label>
                                             <div class="col-md-6">
                                                 <select name="timeZone" class="form-control valid" id="timeZone" v-model="timeZone" aria-invalid="false">
-                                                    <option value="0" selected="selected"></option>
-                                                    <option v-for="tz in timeZones" :value="tz.timezone_id">{{tz.timezone_name_native}}</option>
+                                                    <option value="0" ></option>
+                                                    <option v-for="tz in timeZones" :value="tz.timezone_id" :selected="(tz.timeZone_id == timeZone) ? true : false">
+                                                    {{tz.timezone_name_native}}
+                                                    </option>
                                                 </select>
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("timeZone") }}
@@ -102,12 +105,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="is-free-teacher-0">
-                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" checked>
+                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" :checked="(isFreeTeacher == 0) ? true : false ">
                                                         固定
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="is-free-teacher-1">
-                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  type="radio">
+                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  type="radio" :checked="(isFreeTeacher == 1) ? true : false ">
                                                         自由
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">
@@ -124,12 +127,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" checked>
+                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" :checked="(teacherSex == 0) ? true : false ">
                                                         女性
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" >
+                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" :checked="(teacherSex == 1) ? true : false " >
                                                         男性
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">
@@ -238,7 +241,6 @@
 
                                             </div>
                                         </div>
-
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> イメージ画像: </label>
 
@@ -250,7 +252,6 @@
                                                     {{ errors.first("photoSavepath") }}
                                                 </div>
 
-
                                             </div>
                                         </div>
                                         <div class="form-actions text-center">
@@ -258,7 +259,9 @@
                                             <div class="form-group">
                                                 <div class="text-center">
                                                     <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                    <a :href="listTeacherUrl" class="btn btn-default w-100">閉じる</a>
+                                                    <button type="button" class="btn btn-danger w-100 mr-2" v-on:click="showAlert" >削除
+                                                    </button>
+                                                    <a :href="detailTeacherUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
 
@@ -317,6 +320,8 @@
                     photoSavepath : {
                         url: "イメージ画像をURL形で入力してください。"
                     }
+
+
                 },
             };
             this.$validator.localize("en", messError);
@@ -326,31 +331,66 @@
         },
         data() {
             return {
+                id : this.teacher.id,
                 csrfToken: Laravel.csrfToken,
-                teacherName: '',
-                displayOrder: 1,
-                mail: '',
-                nickName: '',
-                isFreeTeacher : 0,
+                teacherName: this.teacher.teacher_name,
+                displayOrder: this.teacher.display_order,
+                mail: this.teacher.teacher_email,
+                nickName: this.teacher.teacher_nickname,
+                isFreeTeacher : this.teacher.is_free_teacher,
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
-                timeZone : 0,
-                teacherSex : 0,
-                teacherBirthday :  null,
-                teacherUniversity : '',
-                teacherDepartment : '',
-                teacherHobby : '',
-                teacherIntroduction : '',
-                introduceFromAdmin : '',
-                teacherNote : '',
-                photoSavepath : ''
+                timeZone : this.teacher.timezone_id,
+                teacherSex : this.teacher.teacher_sex,
+                teacherBirthday :   this.teacher.teacher_birthday == null ? null : new Date(Date.parse(this.teacher.teacher_birthday)).toISOString().slice(0,10),
+                teacherUniversity : this.teacher.teacher_university,
+                teacherDepartment : this.teacher.teacher_department,
+                teacherHobby : this.teacher.teacher_hobby,
+                teacherIntroduction : this.teacher.teacher_introduction,
+                introduceFromAdmin : this.teacher.introduce_from_admin,
+                teacherNote : this.teacher.teacher_note,
+                photoSavepath : this.teacher.photo_save_path
 
             };
         },
-        props: ["listTeacherUrl", "timeZones", "createUrl"],
+        props: ["listTeacherUrl", "timeZones", "updateUrl", 'teacher', 'deleteAction', 'detailTeacherUrl'],
         mounted() {},
         methods: {
+            showAlert() {
+                let that = this;
+                this.$swal({
+                    title: 'この講師を削除しますか？',
+                    icon: "warning",
+                    confirmButtonText: "削除する",
+                    cancelButtonText: "閉じる",
+                    showCancelButton: true
+                }).then(result => {
+                    if (result.value) {
+                        that.flagShowLoader = true;
+                        $('.loading-div').removeClass('hidden');
+                        axios
+                            .delete(that.deleteAction, {
+                                _token: Laravel.csrfToken
+                            })
+                            .then(function (response) {
+                                that.flagShowLoader = false;
+                                that
+                                    .$swal({
+                                        title: response.data.message,
+                                        icon: "success",
+                                        confirmButtonText: "閉じる"
+                                    })
+                                    .then(function () {
+                                        window.location.href = that.detail;
+                                    });
+                            })
+                            .catch(error => {
+                                that.flagShowLoader = false;
+                            });
+                    }
+                });
+            },
             register() {
                 let that = this;
                 let formData = new FormData();
@@ -368,26 +408,31 @@
                 formData.append("teacherIntroduction", this.teacherIntroduction);
                 formData.append("introduceFromAdmin", this.introduceFromAdmin);
                 formData.append("teacherNote", this.teacherNote);
-                formData.append("photoSavepath", this.photoSavepath);
+                formData.append('_method', 'PUT');
+                formData.append('id', this.id);
+/*
+                formData.append('photoSavepath', this.photoSavepath);
+*/
+
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;
                         axios
-                            .post(that.createUrl , formData, {
+                            .post(that.updateUrl , formData, {
                                 header: {
                                     "Content-Type": "multipart/form-data",
                                 },
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "講師新規作成が完了しました。",
+                                    title: "講師編集が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTeacherUrl;
+                                window.location.href = this.detailTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {
@@ -398,7 +443,7 @@
                                         break;
                                     case 500:
                                         this.$swal({
-                                            title: "失敗したデータを追加しました",
+                                            title: "失敗したデータを編集しました",
                                             icon: "error",
                                             confirmButtonText: "OK",
                                         }).then(function (confirm) {});

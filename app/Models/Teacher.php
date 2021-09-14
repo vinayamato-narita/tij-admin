@@ -11,6 +11,14 @@ class Teacher extends Model
     use HasFactory, Sortable;
 
     protected $table = 'teacher';
+
+    public $timestamps = false;
+
     protected $fillable = [];
+
+    public function timeZone()
+    {
+        return $this->hasOne('App\Models\TimeZone', 'timezone_id', 'timezone_id');
+    }
 
 }

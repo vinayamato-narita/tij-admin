@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            管理ユーザ新規作成
+                            FAQ新規作成
                         </h5>
                     </div>
                 </div>
@@ -13,40 +13,42 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save" ref="formSubmit">
+                                <form class="basic-form" @submit.prevent="save">
                                     <input
                                         name="_token"
                                         type="hidden"
-                                        v-model="adminInfo._token"
+                                        v-model="faqInfo._token"
                                     />
                                     <div class="card-header">
-                                        <h5 class="title-page">管理ユーザ情報</h5>
+                                        <h5 class="title-page">FAQ情報</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ユーザ名<span class="glyphicon glyphicon-star"
+                                                >No.<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
                                             >
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_user_name"
-                                                    v-model="adminInfo.admin_user_name"
+                                                    name="no_faq"
+                                                    min="1"
+                                                    @keypress="validateNumber"
+                                                    v-model="faqInfo.no_faq"
                                                     v-validate="
-                                                        'required|max:255'
+                                                        'required|numeric|between:1,1000000000'
                                                     "
                                                 />
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_name')"
+                                                    v-if="errors.has('no_faq')"
                                                 >
-                                                    {{ errors.first("admin_user_name") }}
+                                                    {{ errors.first("no_faq") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -54,37 +56,54 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >メールアドレス<span class="glyphicon glyphicon-star"
+                                                >カテゴリ<span class="glyphicon glyphicon-star"
+                                                    ></span
+                                                ></label
+                                            >
+                                            <div class="col-md-6">
+                                                <select
+                                                    class="form-control"
+                                                    name="faq_category_id"
+                                                    v-model="faqInfo.faq_category_id"
+                                                    v-validate="'required'"
+                                                >
+                                                    <option :value="category.faq_category_id" v-for="category in faqCategories">
+                                                        {{ category.faq_category_name }}</option
+                                                    >
+                                                </select>
+
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                    v-if="errors.has('faq_category_id')"
+                                                >
+                                                    {{ errors.first("faq_category_id") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >質問・Q<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
                                             >
                                             <div class="col-md-6">
                                                 <input
                                                     class="form-control"
-                                                    type="text"
-                                                    name="admin_user_email"
-                                                    v-model="adminInfo.admin_user_email"
-                                                    @change="emailUnique = ''"
+                                                    name="question"
+                                                    v-model="faqInfo.question"
                                                     v-validate="
-                                                        'required|email|max:255'
+                                                        'required|max:2000'
                                                     "
                                                 />
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_email')"
+                                                    v-if="errors.has('question')"
                                                 >
-                                                    {{ errors.first("admin_user_email") }}
-                                                </div>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="
-                                                        emailUnique &&
-                                                            !errors.has('admin_user_email')
-                                                    "
-                                                >
-                                                    {{ emailUnique }}
+                                                    {{ errors.first("question") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -92,79 +111,26 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >パスワード<span class="glyphicon glyphicon-star"
+                                                >答え・A<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    type="password"
-                                                    name="admin_user_password"
-                                                    v-model="adminInfo.admin_user_password"
-                                                    ref="admin_user_password"
-                                                    v-validate="
-                                                        'required|password_rule|min:8|max:32'
-                                                    "
-                                                />
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('admin_user_password')"
-                                                >
-                                                    {{ errors.first("admin_user_password") }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >確認<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    type="password"
-                                                    name="password_confirm"
-                                                    v-model="adminInfo.password_confirm"
-                                                    v-validate="
-                                                        'required|confirmed:admin_user_password'
-                                                    "
-                                                />
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('password_confirm')"
-                                                >
-                                                    {{ errors.first("password_confirm") }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >説明</label
                                             >
                                             <div class="col-md-6">
                                                 <textarea
                                                     class="form-control"
                                                     rows = "5"
-                                                    name="admin_user_description"
-                                                    v-model="adminInfo.admin_user_description"
+                                                    name="answer"
+                                                    v-model="faqInfo.answer"
                                                     v-validate="
-                                                        'max:2000'
+                                                        'required|max:2000'
                                                     "
                                                 ></textarea>
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_description')"
+                                                    v-if="errors.has('answer')"
                                                 >
-                                                    {{ errors.first("admin_user_description") }}
+                                                    {{ errors.first("answer") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +138,7 @@
                                         <div class="form-group">
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                <a :href="urlAdminList" class="btn btn-default w-100">閉じる</a>
+                                                <a :href="urlFaqList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
                                     </div>
@@ -195,29 +161,22 @@ export default {
     created: function() {
         let messError = {
             custom: {
-                admin_user_name: {
-                    required: "ユーザ名を入力してください",
-                    max: "ユーザ名は255文字以内で入力してください"
+                no_faq: {
+                    required: "No.を入力してください",
+                    numeric: "No.は1～1000000000 を入力してください",
+                    between: "No.は1～1000000000 を入力してください",
                 },
-                admin_user_email: {
-                    required: "メールアドレスを入力してください",
-                    max: "メールアドレスは255文字以内で入力してください",
-                    email: "メールアドレスを正確に入力してください"
+                faq_category_id: {
+                    required: "カテゴリを入力してください",
                 },
-                admin_user_password: {
-                    required: "パスワードを入力してください",
-                    max: "パスワードは32文字以内で入力してください",
-                    min: "パスワードは8文字以上で入力してください",
-                    password_rule:
-                        "パスワードは半角英字・記号と数字混在で入力してください"
+                question: {
+                    required: "質問・Qを入力してください",
+                    max: "質問・Qは2000文字以内で入力してください",
                 },
-                password_confirm: {
-                    required: "確認を入力してください",
-                    confirmed: "確認が一致しません"
+                answer: {
+                    required: "答え・Aを入力してください",
+                    max: "答え・Aは2000文字以内で入力してください"
                 },
-                admin_user_description: {
-                    max: "説明は2000文字以内で入力してください",
-                }
             }
         };
         this.$validator.localize("en", messError);
@@ -228,13 +187,12 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            emailUnique: "",
-            adminInfo: {
+            faqInfo: {
                 _token: Laravel.csrfToken
             }
         };
     },
-    props: ["urlAction", "urlAdminList"],
+    props: ["urlAction", "urlFaqList", "faqCategories"],
     mounted() {},
     methods: {
         save() {
@@ -252,28 +210,29 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.adminInfo)
+                .post(that.urlAction, that.faqInfo)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "管理ユーザ新規作成が完了しました。",
+                            text: "FAQ新規作成が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlAdminList;
+                            window.location = this.urlFaqList;
                         });
                     }
                 })
                 .catch(e => {
                     this.flagShowLoader = false;
-                    this.emailUnique = e.response.data.errors.hasOwnProperty(
-                        "admin_user_email"
-                    )
-                        ? e.response.data.errors.admin_user_email[0]
-                        : "";
                 });
-        }
+        },
+        validateNumber: (val) => {
+            let keyCode = event.keyCode;
+            if (keyCode < 48 || keyCode > 57) {
+                event.preventDefault();
+            }
+        },
     }
 };
 </script>

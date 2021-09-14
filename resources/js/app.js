@@ -42,8 +42,9 @@ import PageSize from "./components/common/page-size.vue"
 import ChangeStatus from "./components/admin/change-status.vue"
 import CreateAdmin from "./components/admin/create-admin.vue"
 import EditAdmin from "./components/admin/edit-admin.vue"
-
 import TeacherAdd from "./components/teacher/add.vue"
+import CreateFaq from "./components/faq/create-faq.vue"
+import EditFaq from "./components/faq/edit-faq.vue"
 
 new Vue({
     created() {
@@ -116,7 +117,9 @@ new Vue({
         ChangeStatus,
         CreateAdmin,
         EditAdmin,
-        TeacherAdd
+        TeacherAdd,
+        CreateFaq,
+        EditFaq,
     },
     methods: {},
     mounted() {}

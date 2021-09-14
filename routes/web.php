@@ -28,4 +28,5 @@ Route::group([
     Route::resource('admin', AdminController::class);
     Route::resource('teacher', TeacherController::class);
     Route::post('changeStatus/{id}', 'AdminController@changeStatus')->name('changeStatus');
+    Route::resource('faq', FaqController::class);
 });

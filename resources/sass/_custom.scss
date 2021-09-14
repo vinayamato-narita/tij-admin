@@ -268,3 +268,12 @@ input[type=number]::-webkit-outer-spin-button {
 .c-active {
     border-right: 5px solid red !important;
 }
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+}
+.card-header .title-page {
+    line-height: 2;
+    margin-bottom: 0;
+}

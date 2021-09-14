@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', 'show admin')
+@section('title', 'FAQ情報表示')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">
@@ -7,7 +7,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            show admin
+                            FAQ情報表示
                         </h5>
                     </div>
                 </div>
@@ -16,45 +16,50 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="title-page">show admin</h5>
-                                </div>
+                                	<h5 class="title-page">FAQ情報</h5>
+                                	<a href="{{ route('faq.edit', $faqInfo->faq_id) }}" class="btn btn-primary">編集</a>     
+                            	</div>
+                                
                                 <div class="card-body">
                                     <div class="form-group row">
                                         <label
                                             class="col-md-3 col-form-label text-md-right"
                                             for="text-input"
-                                            >ユーザ名:</label
+                                            >No.:</label
                                         >
-                                        <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_name }}
+                                        <div class="col-md-3 pd-7">
+                                            {{ $faqInfo->no_faq }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label
                                             class="col-md-3 col-form-label text-md-right"
                                             for="text-input"
-                                            >メールアドレス:</label
+                                            >カテゴリ:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_email }}
+                                            {{ $faqInfo->faqCategory->faq_category_name }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label
                                             class="col-md-3 col-form-label text-md-right"
                                             for="text-input"
-                                            >説明:</label
+                                            >質問・Q:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_description }}
+                                            {{ $faqInfo->question }}
                                         </div>
                                     </div>
-                                    <div class="line"></div>
-                                    <div class="form-group">
-                                        <div class="text-center">
-                                            <a href="{{ route('admin.edit', $adminInfo->id) }}" class="btn btn-primary w-100 mr-2">編集</a>
-                                            <a href="{{ route('admin.index') }}" class="btn btn-default w-100">閉じる</a>
-                                          </div>
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-md-3 col-form-label text-md-right"
+                                            for="text-input"
+                                            >答え・A:</label
+                                        >
+                                        <div class="col-md-6 pd-7">
+                                            {{ $faqInfo->answer }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -18,12 +18,10 @@
                                         name="_token"
                                         type="hidden"
                                         v-model="adminInfo._token"
-                                        value=""
-                                        v-validate="
-                                            'required|max:255'
-                                        "
                                     />
-                                    <div class="card-header">管理ユーザ情報</div>
+                                    <div class="card-header">
+                                        <h5 class="title-page">管理ユーザ情報</h5>
+                                    </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <label
@@ -223,7 +221,6 @@ export default {
     },
     data() {
         return {
-            csrfToken: Laravel.csrfToken,
             flagShowLoader: false,
             emailUnique: "",
         };

@@ -39,6 +39,22 @@ class BreadcrumbComponent
                 'text' => '講師新規作成',
                 'route_str' => "teacher.create",
             ],
+            'faq_list' => [
+                'text' => 'FAQ一覧',
+                'route_str' => "faq.index",
+            ],
+            'create_faq' => [
+                'text' => 'FAQ新規作成',
+                'route_str' => "faq.create",
+            ],
+            'show_faq' => [
+                'text' => 'FAQ情報表示',
+                'route_str' => "faq.show",
+            ],
+            'edit_faq' => [
+                'text' => 'FAQ編集',
+                'route_str' => "faq.edit",
+            ],
         ];
     }
 

@@ -47,7 +47,7 @@
                                                 </div>
 
                                                 <div class="form-group row col-md-9">
-                                                    <label class="col-md-3 col-form-label" for="teacherName">ニックネーム:
+                                                    <label class="col-md-3 col-form-label" for="nickName">ニックネーム:
                                                         <span class="required fa fa-star" aria-required="true"></span></label>
                                                     <div class="col-md-9">
                                                         <input class="form-control" id="nickName" type="text" name="nickName" @input="changeInput()"  v-model="nickName"  v-validate="'required|max:255'" />
@@ -60,7 +60,7 @@
                                                 </div>
 
                                                 <div class="form-group row col-md-9">
-                                                    <label class="col-md-3 col-form-label" for="teacherName">メールアドレス:
+                                                    <label class="col-md-3 col-form-label" for="mail">メールアドレス:
                                                         <span class="required fa fa-star" aria-required="true"></span></label>
                                                     <div class="col-md-9">
                                                         <input class="form-control" id="mail" type="text" name="mail" @input="changeInput()"  v-model="mail"  v-validate="'required|email_format|max:255'" />
@@ -91,7 +91,7 @@
                                                     <div class="col-md-9">
                                                         <div style="margin-top: 5px">
                                                             <label class="radio" for="is-free-teacher-0">
-                                                                <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio">
+                                                                <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" checked>
                                                                 固定
                                                             </label>
                                                             &nbsp;
@@ -107,18 +107,124 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <svg class="c-icon">
-                                            <use xlink:href="/assets/icons/coreui/free-symbol-defs.svg#cui-user"></use>
-                                        </svg>
-                                    </span>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label"> 性別: </label>
+                                                    <div class="col-md-9">
+                                                        <div style="margin-top: 5px">
+                                                            <label class="radio" for="teacher-sex-0">
+                                                                <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" checked>
+                                                                女性
+                                                            </label>
+                                                            &nbsp;
+                                                            <label class="radio" for="teacher-sex-0">
+                                                                <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" >
+                                                                男性
+                                                            </label>
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherSex") }}
+                                                            </div>
+                                                        </div>
+
+
                                                     </div>
-                                                    <input type="text" class="form-control" id="nameUser" name="nameUser" placeholder="お名前" v-model="nameUser" @input="changeInput()" v-validate="'required|max:255'" />
-                                                    <div class="input-group is-danger" role="alert">
-                                                        {{ errors.first("nameUser") }}
-                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label"> 誕生日: </label>
+
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" id="teacherBirthday" type="date" name="teacherBirthday" @input="changeInput()"  v-model="teacherBirthday"   />
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherBirthday") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="teacherUniversity"> 出身国: </label>
+
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" id="teacherUniversity" type="text" name="teacherUniversity" @input="changeInput()"  v-model="teacherUniversity"  v-validate="'max:255'"  />
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherUniversity") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="teacherDepartment"> 居住地: </label>
+
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" id="teacherDepartment" type="text" name="teacherDepartment" @input="changeInput()"  v-model="teacherDepartment"  v-validate="'max:255'"  />
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherDepartment") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="teacherHobby"> 英語対応: </label>
+
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" id="teacherHobby" type="text" name="teacherHobby" @input="changeInput()"  v-model="teacherDepartment"  v-validate="'max:255'"  />
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherHobby") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="teacherIntroduction"> 自己紹介: </label>
+
+                                                        <div class="col-md-9">
+                                                            <textarea class="form-control" id="teacherIntroduction"  name="teacherIntroduction"
+                                                                      @input="changeInput()"  v-model="teacherIntroduction">
+                                                            </textarea>
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherIntroduction") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="introduceFromAdmin"> 管理者からの紹介: </label>
+
+                                                        <div class="col-md-9">
+                                                            <textarea class="form-control" id="introduceFromAdmin"  name="teacherIntroduction"
+                                                                      @input="changeInput()"  v-model="introduceFromAdmin">
+                                                            </textarea>
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("introduceFromAdmin") }}
+                                                            </div>
+
+                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row col-md-9">
+                                                    <label class="col-md-3 col-form-label" for="teacherNote"> 管理者メモ: </label>
+
+                                                        <div class="col-md-9">
+                                                            <textarea class="form-control" id="teacherNote"  name="teacherNote"
+                                                                      @input="changeInput()"  v-model="teacherNote">
+                                                            </textarea>
+
+                                                            <div class="input-group is-danger" role="alert">
+                                                                {{ errors.first("teacherNote") }}
+                                                            </div>
+
+                                                        </div>
                                                 </div>
                                                 <div class="form-actions text-center">
                                                     <button class="btn btn-primary" type="submit">新規登録</button>
@@ -165,6 +271,16 @@
                         email_format: "メールアドレス形式は正しくありません。",
                         max: "メールアドレスは255文字以内で入力してください。",
                     },
+                    teacherUniversity :{
+                        max: "出身国は255文字以内で入力してください。",
+                    },
+                    teacherDepartment :{
+                        max: "居住地は255文字以内で入力してください。",
+                    },
+                    teacherHobby : {
+                        max: "英語対応は255文字以内で入力してください。"
+                    }
+
 
                 },
             };
@@ -176,13 +292,24 @@
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
-                nameUser: '',
-                displayOrder: '',
-                email: '',
+                teacherName: '',
+                displayOrder: 1,
+                mail: '',
+                nickName: '',
+                isFreeTeacher : 0,
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
-                timeZone : 0
+                timeZone : 0,
+                teacherSex : 0,
+                teacherBirthday : new Date(),
+                teacherUniversity : '',
+                teacherDepartment : '',
+                teacherHobby : '',
+                teacherIntroduction : '',
+                introduceFromAdmin : '',
+                teacherNote : '',
+
             };
         },
         props: ["listUserUrl"],

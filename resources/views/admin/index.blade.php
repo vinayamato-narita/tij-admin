@@ -10,7 +10,7 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        従業員一覧
+                        管理ユーザ一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
@@ -29,7 +29,7 @@
                                     <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
                                     <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('admin.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                 </div>
-                                @if(!$userList->isEmpty())
+                                @if(!$adminList->isEmpty())
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
@@ -42,12 +42,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($userList as $index => $user)
+                                                @foreach ($adminList as $index => $user)
                                                     <tr>
                                                         <td class="text-center">{{ $user->admin_user_name }}</td>
                                                         <td class="text-center">{{ $user->admin_user_email }}</td>
                                                         <td class="text-center">{{ $user->admin_user_description }}</td>
-                                                        <td class="text-center"></td>
+                                                        <td class="text-center">
+                                                            <change-status :url-action="{{ json_encode(route('changeStatus', $user->id)) }}" :status="{{ $user->is_online }}"></change-status>
+                                                        </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
@@ -71,7 +73,7 @@
                                         </table>
                                     </div>
 
-                                    {{ $userList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
+                                    {{ $adminList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                 @else
                                     <data-empty></data-empty>
                                 @endif

@@ -39,10 +39,12 @@ import DeleteItem from "./components/common/deleteItem.vue"
 import LimitPageOption from "./components/common/limitPageOption.vue"
 import InputSearch from "./components/common/inputSearch.vue"
 import PageSize from "./components/common/pageSize.vue"
+import ChangeStatus from "./components/admin/changeStatus.vue"
+import CreateAdmin from "./components/admin/createAdmin.vue"
+import EditAdmin from "./components/admin/editAdmin.vue"
+
 import TeacherAdd from "./components/teacher/add.vue"
-Vue.use(VeeValidate, {
-    useConstraintAttrs: false
-});
+
 new Vue({
     created() {
         // this.$validator.extend('required', {
@@ -111,6 +113,9 @@ new Vue({
         DataEmpty,
         InputSearch,
         PageSize,
+        ChangeStatus,
+        CreateAdmin,
+        EditAdmin,
         TeacherAdd
     },
     methods: {},

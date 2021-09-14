@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\CreateTeacherRequest;
+use App\Http\Requests\UpdateTeacherRequest;
 use App\Models\Teacher;
 use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -84,7 +85,7 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = $request->teacherBirthday;
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null : $request->teacherBirthday;
                 $teacher->teacher_university = $request->teacherUniversity　?? '';
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
@@ -92,6 +93,7 @@ class TeacherController extends BaseController
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->teacher_password = '';
+                $teacher->photo_savepath = $request->photoSavepath ?? "";
 
                 $teacher->save();
                 DB::commit();
@@ -119,7 +121,18 @@ class TeacherController extends BaseController
      */
     public function show($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_show', $id]
+        ]);
+
+        $teacher = Teacher::where('id', $id)->with(['timeZone'])->first();
+        if (!$teacher) return redirect()->route('teacher.index');
+        return view('teacher.show', [
+            'breadcrumbs' => $breadcrumbs,
+            'teacher' => $teacher
+        ]);
     }
 
     /**
@@ -130,7 +143,21 @@ class TeacherController extends BaseController
      */
     public function edit($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_show', $id],
+            ['name' => 'teacher_edit', $id]
+        ]);
+
+        $teacher = Teacher::where('id', $id)->first();
+        if (!$teacher) return redirect()->route('teacher.index');
+        $timeZones = TimeZone::all()->toArray();
+        return view('teacher.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'timeZones' => $timeZones,
+            'teacher' => $teacher
+        ]);
     }
 
     /**
@@ -140,9 +167,52 @@ class TeacherController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTeacherRequest $request, $id)
     {
-        //
+        if($request->isMethod('PUT')){
+            $teacher = Teacher::where('id', $id)->first();
+            if (!$teacher) {
+                return response()->json([
+                    'status' => 'NOT_FOUND',
+                ], StatusCode::NOT_FOUND);
+            }
+
+            DB::beginTransaction();
+            try {
+                $teacher->display_order = $request->displayOrder;
+                $teacher->teacher_nickname = $request->nickName;
+                $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_email = $request->mail;
+                $teacher->timezone_id = $request->timeZone;
+                $teacher->is_free_teacher = $request->isFreeTeacher;
+                $teacher->teacher_sex = $request->teacherSex;
+                $teacher->teacher_birthday = ($request->teacherBirthday == 'null' || $request->teacherBirthday == null) ? null : $request->teacherBirthday;
+                $teacher->teacher_university = $request->teacherUniversity　?? '';
+                $teacher->teacher_department = $request->teacherDepartment ?? '';
+                $teacher->teacher_hobby = $request->teacherHobby ?? '';
+                $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
+                $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
+                $teacher->teacher_note = $request->teacherNote ?? "";
+                $teacher->teacher_password = '';
+                $teacher->photo_savepath = $request->photoSavepath ?? "";
+
+
+                $teacher->save();
+                DB::commit();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 'INTERNAL_ERR',
+                ], StatusCode::INTERNAL_ERR);
+            }
+
+        }
+        return response()->json([
+            'status' => 'METHOD_NOT_ALLOWED',
+        ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
     /**

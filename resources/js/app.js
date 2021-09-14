@@ -44,6 +44,8 @@ import CreateAdmin from "./components/admin/create-admin.vue"
 import EditAdmin from "./components/admin/edit-admin.vue"
 
 import TeacherAdd from "./components/teacher/add.vue"
+import TeacherEdit from "./components/teacher/edit.vue"
+import TeacherShow from "./components/teacher/detail.vue"
 
 new Vue({
     created() {
@@ -116,7 +118,9 @@ new Vue({
         ChangeStatus,
         CreateAdmin,
         EditAdmin,
-        TeacherAdd
+        TeacherAdd,
+        TeacherEdit,
+        TeacherShow
     },
     methods: {},
     mounted() {}

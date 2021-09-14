@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class CreateTeacherRequest extends FormRequest
+class UpdateTeacherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +32,9 @@ class CreateTeacherRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:teacher,teacher_email'
+                Rule::unique('teacher', 'teacher_email')->where(function ($query) {
+                    return $query;
+                })->ignore($this->id)
             ],
             'timezone' => 'exists:timeZone,timezone_id',
             'teacherUniversity' => 'max:255',

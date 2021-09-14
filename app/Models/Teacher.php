@@ -16,4 +16,9 @@ class Teacher extends Model
 
     protected $fillable = [];
 
+    public function timeZone()
+    {
+        return $this->hasOne('App\Models\TimeZone', 'timezone_id', 'timezone_id');
+    }
+
 }

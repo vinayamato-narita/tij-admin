@@ -68,6 +68,10 @@
                                                         <div class="input-group is-danger" role="alert">
                                                             {{ errors.first("mail") }}
                                                         </div>
+                                                        <div class="input-group is-danger" role="alert" v-if="errorsData.errors">
+                                                            {{ errorsData.errors.mail[0]}}
+                                                        </div>
+
 
                                                     </div>
                                                 </div>
@@ -78,6 +82,7 @@
                                                     <div class="col-md-9">
                                                         <select name="timeZone" class="form-control valid" id="timeZone" v-model="timeZone" aria-invalid="false">
                                                             <option value="0" selected="selected"></option>
+                                                            <option v-for="tz in timeZones" :value="tz.timezone_id">{{tz.timezone_name_native}}</option>
                                                         </select>
                                                         <div class="input-group is-danger" role="alert">
                                                             {{ errors.first("timeZone") }}
@@ -134,7 +139,8 @@
                                                     <label class="col-md-3 col-form-label"> 誕生日: </label>
 
                                                         <div class="col-md-9">
-                                                            <input class="form-control" id="teacherBirthday" type="date" name="teacherBirthday" @input="changeInput()"  v-model="teacherBirthday"   />
+
+                                                            <input class="form-control" id="teacherBirthday" type="date"   name="teacherBirthday" @input="changeInput()"  v-model="teacherBirthday"  >
 
                                                             <div class="input-group is-danger" role="alert">
                                                                 {{ errors.first("teacherBirthday") }}
@@ -173,7 +179,7 @@
                                                     <label class="col-md-3 col-form-label" for="teacherHobby"> 英語対応: </label>
 
                                                         <div class="col-md-9">
-                                                            <input class="form-control" id="teacherHobby" type="text" name="teacherHobby" @input="changeInput()"  v-model="teacherDepartment"  v-validate="'max:255'"  />
+                                                            <input class="form-control" id="teacherHobby" type="text" name="teacherHobby" @input="changeInput()"  v-model="teacherHobby"  v-validate="'max:255'"  />
 
                                                             <div class="input-group is-danger" role="alert">
                                                                 {{ errors.first("teacherHobby") }}
@@ -228,7 +234,7 @@
                                                 </div>
                                                 <div class="form-actions text-center">
                                                     <button class="btn btn-primary" type="submit">新規登録</button>
-                                                    <a :href="listUserUrl" class="btn btn-secondary" type="button">キャンセル</a>
+                                                    <a :href="listTeacherUrl" class="btn btn-secondary" type="button">キャンセル</a>
                                                 </div>
                                             </div>
                                         </form>
@@ -241,6 +247,8 @@
                 </div>
             </div>
         </main>
+        <loader :flag-show="flagShowLoader"></loader>
+
     </div>
 
 </template>
@@ -302,7 +310,7 @@
                 errorsData: {},
                 timeZone : 0,
                 teacherSex : 0,
-                teacherBirthday : new Date(),
+                teacherBirthday :  new Date(1989, 1 , 1).toISOString().slice(0,10),
                 teacherUniversity : '',
                 teacherDepartment : '',
                 teacherHobby : '',
@@ -312,44 +320,60 @@
 
             };
         },
-        props: ["listUserUrl"],
+        props: ["listTeacherUrl", "timeZones", "createUrl"],
         mounted() {},
         methods: {
             register() {
                 let that = this;
                 let formData = new FormData();
-                formData.append("name", this.nameUser);
-                formData.append("email", this.email);
+                formData.append("teacherName", this.teacherName);
+                formData.append("mail", this.mail);
+                formData.append("displayOrder", this.displayOrder);
+                formData.append("nickName", this.nickName);
+                formData.append("timeZone", this.timeZone);
+                formData.append("isFreeTeacher", this.isFreeTeacher);
+                formData.append("teacherSex", this.teacherSex);
+                formData.append("teacherBirthday", this.teacherBirthday);
+                formData.append("teacherUniversity", this.teacherUniversity);
+                formData.append("teacherDepartment", this.teacherDepartment);
+                formData.append("teacherHobby", this.teacherHobby);
+                formData.append("teacherIntroduction", this.teacherIntroduction);
+                formData.append("introduceFromAdmin", this.introduceFromAdmin);
+                formData.append("teacherNote", this.teacherNote);
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;
                         axios
-                            .post(`post-register-user`, formData, {
+                            .post(that.createUrl , formData, {
                                 header: {
                                     "Content-Type": "multipart/form-data",
                                 },
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "営業マンが追加されました",
+                                    title: "講師新規作成が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    location.replace(res.data);
                                 });
+                                that.flagShowLoader = false;
+                                window.location.href = this.listTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {
+                                    case 422:
                                     case 400:
                                         this.errorsData = err.response.data;
+                                        that.flagShowLoader = false;
                                         break;
                                     case 500:
                                         this.$swal({
                                             title: "失敗したデータを追加しました",
                                             icon: "error",
-                                            confirmButtonText: "Cool",
+                                            confirmButtonText: "OK",
                                         }).then(function (confirm) {});
+                                        that.flagShowLoader = false;
                                         break;
                                     default:
                                         break;

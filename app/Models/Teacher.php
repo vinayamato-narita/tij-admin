@@ -11,6 +11,9 @@ class Teacher extends Model
     use HasFactory, Sortable;
 
     protected $table = 'teacher';
+
+    public $timestamps = false;
+
     protected $fillable = [];
 
 }

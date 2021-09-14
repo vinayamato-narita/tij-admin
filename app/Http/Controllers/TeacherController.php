@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Http\Requests\CreateTeacherRequest;
 use App\Models\Teacher;
+use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeacherController extends BaseController
 {
@@ -53,8 +56,11 @@ class TeacherController extends BaseController
             ['name' => 'teacher_list'],
             ['name' => 'teacher_add']
         ]);
+
+        $timeZones = TimeZone::all()->toArray();
         return view('teacher.add', [
             'breadcrumbs' => $breadcrumbs,
+            'timeZones' => $timeZones
         ]);
 
     }
@@ -65,9 +71,44 @@ class TeacherController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateTeacherRequest $request)
     {
-        //
+        if($request->isMethod('POST')){
+            DB::beginTransaction();
+            try {
+                $teacher = new Teacher();
+                $teacher->display_order = $request->displayOrder;
+                $teacher->teacher_nickname = $request->nickName;
+                $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_email = $request->mail;
+                $teacher->timezone_id = $request->timeZone;
+                $teacher->is_free_teacher = $request->isFreeTeacher;
+                $teacher->teacher_sex = $request->teacherSex;
+                $teacher->teacher_birthday = $request->teacherBirthday;
+                $teacher->teacher_university = $request->teacherUniversity　?? '';
+                $teacher->teacher_department = $request->teacherDepartment ?? '';
+                $teacher->teacher_hobby = $request->teacherHobby ?? '';
+                $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
+                $teacher->introduce_from_admin = $request->introduceFromAdmin;
+                $teacher->teacher_note = $request->teacherNote ?? "";
+                $teacher->teacher_password = '';
+
+                $teacher->save();
+                DB::commit();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 'INTERNAL_ERR',
+                ], StatusCode::INTERNAL_ERR);
+            }
+
+        }
+        return response()->json([
+            'status' => 'METHOD_NOT_ALLOWED',
+        ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
     /**

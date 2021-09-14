@@ -32,7 +32,7 @@ class BreadcrumbComponent
                 'route_str' => "admin.show",
             ],
             'edit_admin' => [
-                'text' => 'edit admin',
+                'text' => '管理ユーザ編集',
                 'route_str' => "admin.edit",
             ],
             'teacher_add' => [

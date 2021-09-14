@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'show admin')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">

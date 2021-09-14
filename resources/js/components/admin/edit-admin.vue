@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            管理ユーザ新規作成
+                            管理ユーザ編集
                         </h5>
                     </div>
                 </div>

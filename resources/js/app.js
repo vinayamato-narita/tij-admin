@@ -33,15 +33,15 @@ Vue.config.productionTip = false
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
 
-import PopupAlert from "./components/common/popupAlert.vue"
-import DataEmpty from "./components/common/dataEmpty.vue"
-import DeleteItem from "./components/common/deleteItem.vue"
-import LimitPageOption from "./components/common/limitPageOption.vue"
-import InputSearch from "./components/common/inputSearch.vue"
-import PageSize from "./components/common/pageSize.vue"
-import ChangeStatus from "./components/admin/changeStatus.vue"
-import CreateAdmin from "./components/admin/createAdmin.vue"
-import EditAdmin from "./components/admin/editAdmin.vue"
+import PopupAlert from "./components/common/popup-alert.vue"
+import DataEmpty from "./components/common/data-empty.vue"
+import DeleteItem from "./components/common/delete-item.vue"
+import LimitPageOption from "./components/common/limit-page-option.vue"
+import InputSearch from "./components/common/input-search.vue"
+import PageSize from "./components/common/page-size.vue"
+import ChangeStatus from "./components/admin/change-status.vue"
+import CreateAdmin from "./components/admin/create-admin.vue"
+import EditAdmin from "./components/admin/edit-admin.vue"
 
 import TeacherAdd from "./components/teacher/add.vue"
 

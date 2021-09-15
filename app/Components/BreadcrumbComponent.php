@@ -63,6 +63,22 @@ class BreadcrumbComponent
                 'text' => 'FAQ編集',
                 'route_str' => "faq.edit",
             ],
+            'text_list' => [
+                'text' => 'テキスト一覧',
+                'route_str' => "text.index",
+            ],
+            'text_add' => [
+                'text' => 'テキスト新規作成',
+                'route_str' => "text.create",
+            ],
+            'text_show' => [
+                'text' => 'テキスト情報表示',
+                'route_str' => "text.show",
+            ],
+            'text_edit' => [
+                'text' => 'テキスト編集',
+                'route_str' => "text.edit",
+            ],
         ];
     }
 

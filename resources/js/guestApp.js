@@ -23,7 +23,7 @@ Vue.config.productionTip = false
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
 
-import PopupAlert from "./components/common/popupAlert.vue"
+import PopupAlert from "./components/common/popup-alert"
 import Login from "./components/login/index.vue"
 import ForgotPassword from "./components/forgotPassword/create.vue"
 import ForgotPasswordSuccess from "./components/forgotPassword/success.vue"

@@ -37,6 +37,29 @@
                 FAQ管理
             </a>
         </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" onclick="$('#learning-sub').hasClass('hidden') ?
+            $('#learning-sub').removeClass('hidden') : $('#learning-sub').addClass('hidden')">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                学習管理
+                <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
+            </a>
+            <ul class="nav-dropdown-items hidden" id="learning-sub">
+                <li class=" c-sidebar-nav-item ">
+                    <a class=" c-sidebar-nav-link " href="{{route('text.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        テキスト管理
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

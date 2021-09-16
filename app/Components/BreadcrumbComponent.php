@@ -79,6 +79,18 @@ class BreadcrumbComponent
                 'text' => 'テキスト編集',
                 'route_str' => "text.edit",
             ],
+            'lesson_list' => [
+                'text' => 'レッスン一覧',
+                'route_str' => "lesson.index",
+            ],
+            'lesson_add' => [
+                'text' => 'レッスン新規作成',
+                'route_str' => "lesson.create",
+            ],
+            'lesson_show' => [
+                'text' => 'レッスン情報表示',
+                'route_str' => "lesson.show",
+            ],
         ];
     }
 

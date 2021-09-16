@@ -137,8 +137,8 @@ class TextController extends BaseController
     public function update(StoreUpdateTextRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $teacher = LessonText::where('lesson_text_id', $id)->first();
-            if (!$teacher) {
+            $lessonText = LessonText::where('lesson_text_id', $id)->first();
+            if (!$lessonText) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
                 ], StatusCode::NOT_FOUND);
@@ -146,7 +146,6 @@ class TextController extends BaseController
 
             DB::beginTransaction();
             try {
-                $lessonText = new LessonText();
                 $lessonText->lesson_text_no = $request->lessonTextNo;
                 $lessonText->lesson_text_url = $request->lessonTextUrl;
                 $lessonText->lesson_text_url_for_teacher = $request->lessonTextUrlForTeacher;

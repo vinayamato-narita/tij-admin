@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class LessonText extends Model
+class Lesson extends Model
 {
     use HasFactory, Sortable;
-    protected $primaryKey = 'lesson_text_id';
+    protected $primaryKey = 'lesson_id';
 
-    protected $table = 'lesson_text';
 
-    public $timestamps = false;
-}
+    protected $table = 'lesson';
+
+    public $timestamps = false;}

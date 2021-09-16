@@ -27,7 +27,11 @@ Route::group([
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
     Route::resource('teacher', TeacherController::class);
-    Route::post('changeStatus/{id}', 'AdminController@changeStatus')->name('changeStatus');
+    Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
     Route::resource('text', TextController::class);
+    Route::resource('news', NewsController::class);
+    Route::post('changeStatusNews/{id}', 'NewsController@changeStatus')->name('changeStatusNews');
+    Route::get('/news/{id}/edit-lang/{type}', 'NewsController@editLang')->name('editLangNews');
+    Route::post('updateLangNews', 'NewsController@updateLang')->name('updateLangNews');
 });

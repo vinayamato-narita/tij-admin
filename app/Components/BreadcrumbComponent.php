@@ -79,6 +79,26 @@ class BreadcrumbComponent
                 'text' => 'テキスト編集',
                 'route_str' => "text.edit",
             ],
+            'news_list' => [
+                'text' => 'お知らせ一覧',
+                'route_str' => "news.index",
+            ],
+            'create_news' => [
+                'text' => 'お知らせ新規作成',
+                'route_str' => "news.create",
+            ],
+            'edit_news' => [
+                'text' => 'お知らせ編集',
+                'route_str' => "news.edit",
+            ],
+            'show_news' => [
+                'text' => 'お知らせ情報表示',
+                'route_str' => "news.show",
+            ],
+            'edit_lang_news' => [
+                'text' => 'お知らせ多言語編集',
+                'route_str' => "editLangNews",
+            ],
         ];
     }
 

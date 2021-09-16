@@ -54,6 +54,9 @@ import ChangeStatusNews from "./components/news/change-status.vue"
 import CreateNews from "./components/news/create-news.vue"
 import EditNews from "./components/news/edit-news.vue"
 import EditLangNews from "./components/news/edit-lang-news.vue"
+import LessonAdd from "./components/lesson/add.vue"
+import LessonShow from "./components/lesson/detail.vue"
+import LessonEdit from "./components/lesson/edit.vue"
 
 new Vue({
     created() {
@@ -138,6 +141,9 @@ new Vue({
         CreateNews,
         EditNews,
         EditLangNews,
+        LessonAdd,
+        LessonShow,
+        LessonEdit
     },
     methods: {},
     mounted() {}

@@ -98,6 +98,7 @@ class BreadcrumbComponent
             'edit_lang_news' => [
                 'text' => 'お知らせ多言語編集',
                 'route_str' => "editLangNews",
+            ],
             'lesson_list' => [
                 'text' => 'レッスン一覧',
                 'route_str' => "lesson.index",

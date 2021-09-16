@@ -6,7 +6,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            テキスト編集
+                            レッスン編集
 
                         </h5>
                     </div>
@@ -16,68 +16,37 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">テキスト情報
+                                    <div class="card-header">レッスン情報
                                     </div>
                                     <div class="card-body">
 
-
                                         <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextNo">表示順:
+                                            <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextNo" type="number" name="lessonTextNo" @input="changeInput()" style="max-width: 100px" v-model="lessonTextNo" value="1" onKeyDown="return false" v-validate="'min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextNo") }}
+                                                    {{ errors.first("displayOrder") }}
                                                 </div>
 
                                             </div>
                                         </div>
 
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrl">テキストURL（生徒用） :
 
-                                            </label>
-                                            <div class="col-md-6" style="display: flex">
-                                                <input style="" class="form-control col-md-8 col-md-" id="lessonTextUrl" type="text" name="lessonTextUrl" @input="changeInput()"  v-model="lessonTextUrl"  v-validate="'max:255|url'" />
-                                                <div class="col-md-1"></div>
-                                                <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(lessonTextUrl)">チェック</button>
-
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextUrl") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrlForTeacher">テキストURL（先生用） :
-
-                                            </label>
-                                            <div class="col-md-6" style="display: flex">
-                                                <input class="form-control col-md-8" id="lessonTextUrlForTeacher" type="text" name="lessonTextUrlForTeacher" @input="changeInput()"  v-model="lessonTextUrlForTeacher"  v-validate="'url|max:255'" />
-                                                <div class="col-md-1"></div>
-                                                <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(lessonTextUrlForTeacher)">チェック</button>
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextUrlForTeacher") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextName">テキスト名 :
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonName">レッスン名:
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextName" type="text" name="lessonTextName" @input="changeInput()"  v-model="lessonTextName"  v-validate="'required|max:255'" />
+                                                <input class="form-control" id="lessonName" type="text" name="lessonName" @input="changeInput()"  v-model="lessonName"  v-validate="'required|max:255'" />
 
                                                 <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextName") }}
+                                                    {{ errors.first("lessonName") }}
                                                 </div>
 
 
@@ -88,39 +57,78 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextDescription"> 説明 : </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="isTestLesson"> テストあり/なし: </label>
+
+                                            <div class="col-md-6 col-form-label">
+                                                <input class=" checkbox" id="isTestLesson" name="isTestLesson"
+                                                       type="checkbox"
+                                                       @input="changeInput()" v-model="isTestLesson" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="isTestLesson">
+                                                    テストあり
+                                                </label>
+
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("isTestLesson") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="isShowToSearch"> サジェスト検索に含める:</label>
+
+                                            <div class="col-md-6 col-form-label">
+                                                <input class=" checkbox" id="isShowToSearch" name="isShowToSearch"
+                                                       type="checkbox"
+                                                       @input="changeInput()" v-model="isShowToSearch" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="isShowToSearch">
+                                                    サジェスト検索に含める
+                                                </label>
+
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("isShowToSearch") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="isShowToSearchDetail"> 講師プロフィールに表示:
+                                                </label>
+
+                                            <div class="col-md-6 col-form-label">
+                                                <input class=" checkbox" id="isShowToSearchDetail" name="isShowToSearchDetail"
+                                                       type="checkbox"
+                                                       @input="changeInput()" v-model="isShowToSearchDetail" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="isShowToSearchDetail">
+                                                    表示する
+                                                </label>
+
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("isShowToSearchDetail") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonDescription"> 説明: </label>
 
                                             <div class="col-md-6">
-                                                            <textarea class="form-control" id="lessonTextDescription"  name="lessonTextDescription"
-                                                                      @input="changeInput()"  v-model="lessonTextDescription">
+                                                            <textarea class="form-control" id="lessonDescription"  name="lessonDescription"
+                                                                      @input="changeInput()"  v-model="lessonDescription">
                                                             </textarea>
 
                                                 <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextDescription") }}
+                                                    {{ errors.first("lessonDescription") }}
                                                 </div>
 
                                             </div>
                                         </div>
-
-
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextSoundUrl"> MP3 URL : </label>
-
-                                            <div class="col-md-6" style="display: flex ">
-
-                                                <input class="form-control col-md-8" id="lessonTextSoundUrl" type="text" name="lessonTextSoundUrl" @input="changeInput()"  v-model="lessonTextSoundUrl"  v-validate="'url|max:255'"  />
-                                                <div class="col-md-1"></div>
-                                                <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(lessonTextSoundUrl)">チェック</button>
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextSoundUrl") }}
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-
-
-
 
 
                                         <div class="form-actions text-center">
@@ -128,9 +136,7 @@
                                             <div class="form-group">
                                                 <div class="text-center">
                                                     <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                    <button type="button" class="btn btn-danger w-100 mr-2" v-on:click="showAlert" >削除
-                                                    </button>
-                                                    <a :href="detailTextUrl" class="btn btn-default w-100">閉じる</a>
+                                                    <a :href="listLessonUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
 
@@ -159,27 +165,15 @@
         created: function () {
             let messError = {
                 custom: {
-                    lessonTextNo : {
+                    displayOrder : {
                         require: "表示順を入力してください",
                         min_value: "表示順は1～1000000000 を入力してください",
                         max_value: "表示順は1～1000000000 を入力してください"
                     },
-                    lessonTextUrl : {
-                        url: "テキストURL（生徒用）をURL形で入力してください。",
-                        max: "テキストURL（生徒用）は255文字以内で入力してください。",
+                    lessonName: {
+                        required: "レッスン名を入力してください",
+                        max: "レッスン名は255文字以内で入力してください。",
                     },
-                    lessonTextUrlForTeacher : {
-                        url: "テキストURL（先生用）をURL形で入力してください。",
-                        max: "テキストURL（先生用）は255文字以内で入力してください。",
-                    },
-                    lessonTextName: {
-                        required: "テキスト名を入力してください",
-                        max: "テキスト名は255文字以内で入力してください。",
-                    },
-                    lessonTextSoundUrl : {
-                        max: "MP3 URLは255文字以内で入力してください。",
-                        url: "MP3 URLをURL形で入力してください。",
-                    }
 
                 },
             };
@@ -190,32 +184,27 @@
         },
         data() {
             return {
-                id : this.lessonText.lesson_text_id,
+                id : this.lesson.lesson_id,
                 csrfToken: Laravel.csrfToken,
-                lessonTextNo: this.lessonText.lesson_text_no,
-                lessonTextUrl: this.lessonText.lesson_text_url,
-                lessonTextUrlForTeacher: this.lessonText.lesson_text_url_for_teacher,
-                lessonTextDescription : this.lessonText.lesson_text_description,
-                lessonTextName : this.lessonText.lesson_text_name,
-                lessonTextSoundUrl : this.lessonText.lesson_text_sound_url,
+                displayOrder: this.lesson.display_order,
+                lessonName: this.lesson.lesson_name,
+                isTestLesson: this.lesson.is_test_lesson ? true : false,
+                isShowToSearch : this.lesson.is_show_to_search ? true : false,
+                isShowToSearchDetail : this.lesson.is_show_to_teacher_detail ? true : false,
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
+                lessonDescription : this.lesson.lesson_description,
 
             };
         },
-        props: ["listTextUrl", "updateUrl", 'lessonText', 'deleteAction', 'detailTextUrl'],
+        props: ["listLessonUrl", "updateUrl", 'lesson', 'deleteAction', 'detailLessonUrl'],
         mounted() {},
         methods: {
-            checkLink(url) {
-                if (url != "") {
-                    window.open(url, '_blank');
-                }
-            },
             showAlert() {
                 let that = this;
                 this.$swal({
-                    title: 'このテキストを削除しますか？',
+                    title: 'このレッスンを削除しますか？',
                     icon: "warning",
                     confirmButtonText: "削除する",
                     cancelButtonText: "閉じる",
@@ -237,7 +226,7 @@
                                         confirmButtonText: "閉じる"
                                     })
                                     .then(function () {
-                                        window.location.href = that.listTextUrl;
+                                        window.location.href = that.listLessonUrl;
                                     });
                             })
                             .catch(error => {
@@ -249,13 +238,12 @@
             register() {
                 let that = this;
                 let formData = new FormData();
-                formData.append("lessonTextNo", this.lessonTextNo);
-                formData.append("lessonTextUrl", this.lessonTextUrl);
-                formData.append("lessonTextUrlForTeacher", this.lessonTextUrlForTeacher);
-                formData.append("lessonTextName", this.lessonTextName);
-                formData.append("lessonTextDescription", this.lessonTextDescription);
-                formData.append("lessonTextSoundUrl", this.lessonTextSoundUrl);
-                formData.append("teacherNote", this.teacherNote);
+                formData.append("displayOrder", this.displayOrder);
+                formData.append("lessonName", this.lessonName);
+                formData.append("isTestLesson", this.isTestLesson);
+                formData.append("isShowToSearch", this.isShowToSearch);
+                formData.append("isShowToSearchDetail", this.isShowToSearchDetail);
+                formData.append("lessonDescription", this.lessonDescription);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.id);
 
@@ -270,12 +258,12 @@
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "テキスト編集が完了しました。",
+                                    title: "レッスン編集が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.detailTextUrl;
+                                    window.location.href = that.detailLessonUrl;
                                 });
                                 that.flagShowLoader = false;
                             })

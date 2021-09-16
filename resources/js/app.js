@@ -50,6 +50,9 @@ import TeacherShow from "./components/teacher/detail.vue"
 import TextAdd from "./components/text/add.vue"
 import TextShow from "./components/text/detail.vue"
 import TextEdit from "./components/text/edit.vue"
+import LessonAdd from "./components/lesson/add.vue"
+import LessonShow from "./components/lesson/detail.vue"
+import LessonEdit from "./components/lesson/edit.vue"
 
 
 new Vue({
@@ -130,7 +133,10 @@ new Vue({
         TeacherShow,
         TextAdd,
         TextShow,
-        TextEdit
+        TextEdit,
+        LessonAdd,
+        LessonShow,
+        LessonEdit
     },
     methods: {},
     mounted() {}

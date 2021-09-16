@@ -30,4 +30,5 @@ Route::group([
     Route::post('changeStatus/{id}', 'AdminController@changeStatus')->name('changeStatus');
     Route::resource('faq', FaqController::class);
     Route::resource('text', TextController::class);
+    Route::resource('lesson', LessonController::class);
 });

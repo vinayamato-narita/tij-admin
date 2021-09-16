@@ -39,7 +39,7 @@ import DeleteItem from "./components/common/delete-item.vue"
 import LimitPageOption from "./components/common/limit-page-option.vue"
 import InputSearch from "./components/common/input-search.vue"
 import PageSize from "./components/common/page-size.vue"
-import ChangeStatus from "./components/admin/change-status.vue"
+import ChangeStatusAdmin from "./components/admin/change-status.vue"
 import CreateAdmin from "./components/admin/create-admin.vue"
 import EditAdmin from "./components/admin/edit-admin.vue"
 import TeacherAdd from "./components/teacher/add.vue"
@@ -50,10 +50,13 @@ import TeacherShow from "./components/teacher/detail.vue"
 import TextAdd from "./components/text/add.vue"
 import TextShow from "./components/text/detail.vue"
 import TextEdit from "./components/text/edit.vue"
+import ChangeStatusNews from "./components/news/change-status.vue"
+import CreateNews from "./components/news/create-news.vue"
+import EditNews from "./components/news/edit-news.vue"
+import EditLangNews from "./components/news/edit-lang-news.vue"
 import LessonAdd from "./components/lesson/add.vue"
 import LessonShow from "./components/lesson/detail.vue"
 import LessonEdit from "./components/lesson/edit.vue"
-
 
 new Vue({
     created() {
@@ -123,7 +126,7 @@ new Vue({
         DataEmpty,
         InputSearch,
         PageSize,
-        ChangeStatus,
+        ChangeStatusAdmin,
         CreateAdmin,
         EditAdmin,
         TeacherAdd,
@@ -134,6 +137,10 @@ new Vue({
         TextAdd,
         TextShow,
         TextEdit,
+        ChangeStatusNews,
+        CreateNews,
+        EditNews,
+        EditLangNews,
         LessonAdd,
         LessonShow,
         LessonEdit

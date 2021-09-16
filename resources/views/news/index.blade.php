@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', '管理ユーザ一覧')
+@section('title', 'お知らせ一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -11,11 +11,11 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        管理ユーザ一覧
+                        お知らせ一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('admin.create') }}" class="btn btn-primary pull-right"
+                    <a href="{{ route('news.create') }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -28,40 +28,43 @@
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
-                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('admin.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('news.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                 </div>
-                                @if(!$adminList->isEmpty())
+                                @if(!$newsList->isEmpty())
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('admin_user_name', ' ユーザ名')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
-                                                    <th class="text-center min-width-120">説明</th>
-                                                    <th class="text-center min-width-150">業務優先度設定</th>
+                                                    <th class="text-center width-130">@sortablelink('is_show_on_student_top', 'トップ表示')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('news_update_date', '日時')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('news_subject_id', '対象')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('news_title', 'タイトル')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('news_body', '内容')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($adminList as $index => $user)
-                                                    <tr>
-                                                        <td class="text-center">{{ $user->admin_user_name }}</td>
-                                                        <td class="text-center">{{ $user->admin_user_email }}</td>
-                                                        <td class="text-center">{{ $user->admin_user_description }}</td>
-                                                        <td class="text-center">
-                                                            <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
-                                                        </td>
+                                                @foreach ($newsList as $index => $news)
+                                                    <tr class="eachRow">
+                                                        <td class="text-center status">{{ $news->status }}</td>
+                                                        <td class="text-center">{{ $news->news_update_date }}</td>
+                                                        <td class="text-center">{{ $news->newsSubject->news_subject_ja }}</td>
+                                                        <td class="text-center">{{ $news->news_title }}</td>
+                                                        <td class="text-center">{{ $news->news_body }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('admin.show', $user->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('news.show', $news->news_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <change-status-news :url-action="{{ json_encode(route('changeStatusNews', $news->news_id)) }}" :status="{{ $news->is_show_on_student_top }}"></change-status-news>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                            :delete-action="{{ json_encode(route('admin.destroy', $user->id)) }}"
-                                                                            :message-confirm="{{ json_encode('この管理ユーザを削除しますか？') }}"
+                                                                            :delete-action="{{ json_encode(route('news.destroy', $news->news_id)) }}"
+                                                                            :message-confirm="{{ json_encode('このお知らせを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>
                                                                     </li>
@@ -74,7 +77,7 @@
                                         </table>
                                     </div>
 
-                                    {{ $adminList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
+                                    {{ $newsList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                 @else
                                     <data-empty></data-empty>
                                 @endif

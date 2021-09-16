@@ -102,7 +102,7 @@ class FaqController extends BaseController
             ['name' => 'show_faq', $id],
         ]);
         $faqInfo = Faq::where('faq_id', $id)->with('faqCategory')->firstOrFail();
-        Log::info($faqInfo);
+        
         return view('faq.show', [
             'breadcrumbs' => $breadcrumbs,
             'faqInfo' => $faqInfo,

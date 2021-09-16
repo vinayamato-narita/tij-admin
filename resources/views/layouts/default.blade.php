@@ -39,6 +39,7 @@
                 'csrfToken' => csrf_token(),
                 'baseUrl' => url('/'),
             ], JSON_UNESCAPED_UNICODE)!!};
+            var baseUrl = '{{url('')}}';
         </script>
     </head>
 

@@ -30,15 +30,20 @@ class NewsController extends BaseController
             ['name' => 'news_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = AdminNews::with('newsSubject');
+        $queryBuilder = AdminNews::with('newsSubject')->leftJoin('news_subject', 'news_subject.news_subject_id', '=', 'admin_news.news_subject_id');
 
         if (isset($request['search_input'])) {
-            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+            $news_subject_ids = NewsSubject::where($this->escapeLikeSentence('news_subject_ja', $request['search_input']))->pluck('news_subject_id')->toArray();
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request, $news_subject_ids) {
                 $query->where($this->escapeLikeSentence('news_title', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('news_body', $request['search_input']));
+                    ->orWhere($this->escapeLikeSentence('news_body', $request['search_input']))
+                    ->orWhereIn('admin_news.news_subject_id', $news_subject_ids);
             });
         }
-
+        if (isset($request['sort']) && $request['sort'] == "news_subject_ja") {
+            $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('news_subject.news_subject_ja','ASC') : $queryBuilder->orderBy('news_subject.news_subject_ja','DESC');
+        }
+        
         $newsList = $queryBuilder->sortable(['news_update_date' => 'desc'])->paginate($pageLimit);
 
         return view('news.index', [

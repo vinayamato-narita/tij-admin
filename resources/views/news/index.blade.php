@@ -37,7 +37,7 @@
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('is_show_on_student_top', 'トップ表示')</th>
                                                     <th class="text-center min-width-150">@sortablelink('news_update_date', '日時')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('news_subject_id', '対象')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('news_subject_ja', '対象')</th>
                                                     <th class="text-center min-width-120">@sortablelink('news_title', 'タイトル')</th>
                                                     <th class="text-center min-width-120">@sortablelink('news_body', '内容')</th>
                                                     <th class="w-100"></th>

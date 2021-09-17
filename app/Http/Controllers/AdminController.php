@@ -170,7 +170,7 @@ class AdminController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => 'Delete user success',
+            'message' => '管理ユーザの削除が完了しました。',
         ], StatusCode::OK);
     }
 

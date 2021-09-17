@@ -166,8 +166,11 @@
                                         </div>
                                         <div class="line"></div>
                                         <div class="form-group">
-                                            <div class="text-center">
+                                            <div class="text-center display-flex">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
+                                                <btn-delete :delete-action="deleteAction"
+                                                            :message-confirm="messageConfirm" 
+                                                            :url-redirect="urlRedirect"></btn-delete>
                                                 <a :href="urlAdminDetail" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
@@ -186,6 +189,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
+import BtnDelete from "./../common/btn-delete.vue";
 
 export default {
     created: function() {
@@ -218,14 +222,16 @@ export default {
     },
     components: {
         Loader,
+        BtnDelete
     },
     data() {
         return {
             flagShowLoader: false,
             emailUnique: "",
         };
+
     },
-    props: ["urlAction", "urlAdminDetail", 'adminInfo'],
+    props: ["urlAction", "urlAdminDetail", 'adminInfo', 'deleteAction', 'messageConfirm', 'urlRedirect'],
     mounted() {},
     methods: {
         save() {
@@ -247,18 +253,18 @@ export default {
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
-                        this.$swal({
+                        that.$swal({
                             text: "管理ユーザ編集が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlAdminDetail;
+                            window.location = that.urlAdminDetail;
                         });
                     }
                 })
                 .catch(e => {
-                    this.flagShowLoader = false;
-                    this.emailUnique = e.response.data.errors.hasOwnProperty(
+                    that.flagShowLoader = false;
+                    that.emailUnique = e.response.data.errors.hasOwnProperty(
                         "admin_user_email"
                     )
                         ? e.response.data.errors.admin_user_email[0]

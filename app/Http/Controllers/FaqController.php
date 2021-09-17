@@ -7,9 +7,12 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Enums\LangType;
 use App\Models\Faq;
 use App\Models\FaqCategory;
+use App\Models\FaqInfo;
 use App\Http\Requests\FaqRequest;
+use App\Http\Requests\FaqLangRequest;
 use Log;
 
 class FaqController extends BaseController
@@ -75,6 +78,13 @@ class FaqController extends BaseController
     public function store(FaqRequest $request)
     {
         if($request->isMethod('POST')){
+            $faqCategoryInfo = FaqCategory::where('faq_category_id', $request->faq_category_id)->first();
+            if ($faqCategoryInfo == null) {
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::NOT_FOUND);
+            }
+
             $faq = new Faq;
             $faq->no_faq = $request->no_faq;
             $faq->faq_category_id = $request->faq_category_id;
@@ -102,11 +112,57 @@ class FaqController extends BaseController
             ['name' => 'show_faq', $id],
         ]);
         $faqInfo = Faq::where('faq_id', $id)->with('faqCategory')->firstOrFail();
-        
+        $faqVnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::VN])->first();
+        $faqEnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::EN])->first();
+
         return view('faq.show', [
             'breadcrumbs' => $breadcrumbs,
             'faqInfo' => $faqInfo,
+            'faqVnInfo' => $faqVnInfo,
+            'faqEnInfo' => $faqEnInfo,
         ]);
+    }
+
+    public function editLang($id, $langType)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'faq_list'],
+            ['name' => 'show_faq', $id],
+            ['name' => 'edit_lang_faq', $id, $langType],
+        ]);
+        $faqInfo = Faq::where('faq_id', $id)->firstOrFail();
+        
+        $faqLangInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => $langType])->first();
+        $faqInfo->_token = csrf_token();
+        $faqInfo->lang_question = $faqLangInfo->question ?? "";
+        $faqInfo->lang_answer = $faqLangInfo->answer ?? "";
+        $faqInfo->lang = $langType;
+
+        return view('faq.edit_lang', [
+            'breadcrumbs' => $breadcrumbs,
+            'faqInfo' => $faqInfo,
+            'langType' => $langType,
+        ]);
+    }
+
+    public function updateLang(FaqLangRequest $request)
+    {
+        if($request->isMethod('POST')){
+            $faqInfo = Faq::where('faq_id', $request->faq_id)->first();
+            if ($faqInfo == null) {
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::NOT_FOUND);
+            }
+            $faqLangInfo = FaqInfo::updateOrCreate(
+                ['faq_id' => $request->faq_id, 'lang_type' => $request->lang],
+                ['question' => $request->lang_question, 'answer' => $request->lang_answer]
+            );
+        }
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 
     /**

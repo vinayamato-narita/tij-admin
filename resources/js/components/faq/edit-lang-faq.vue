@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            お知らせ編集
+                            FAQ多言語編集
                         </h5>
                     </div>
                 </div>
@@ -13,57 +13,62 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">お知らせ情報</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-md-3 col-form-label text-md-right"
+                                            for="text-input"
+                                            >No:
+                                            </label
+                                        >
+                                        <div class="col-md-6 pt-7">
+                                            {{ faqInfo.no_faq }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label
+                                            class="col-md-3 col-form-label text-md-right"
+                                            for="text-input"
+                                            >質問・Q:</label
+                                        >
+                                        <div class="col-md-6 pt-7">
+                                            {{ faqInfo.question }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
                                     <input
                                         name="_token"
                                         type="hidden"
-                                        v-model="newsInfo._token"
+                                        v-model="faqInfo._token"
                                     />
                                     <div class="card-header">
-                                        <h5 class="title-page">お知らせ情報</h5>
+                                        <h5 class="title-page">英語版</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >対象<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-3">
-                                                <select
-                                                    class="form-control"
-                                                    name="news_subject_id"
-                                                    v-model="newsInfo.news_subject_id"
-                                                    v-validate="'required'"
-                                                >
-                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
-                                                        {{ subject.news_subject_ja }}</option
-                                                    >
-                                                </select>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('news_subject_id')"
-                                                >
-                                                    {{ errors.first("news_subject_id") }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >タイトル<span class="glyphicon glyphicon-star"
+                                                >質問・Q<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
                                             >
                                             <div class="col-md-6">
                                                 <input
                                                     class="form-control"
-                                                    name="news_title"
-                                                    v-model="newsInfo.news_title"
+                                                    name="lang_question"
+                                                    v-model="faqInfo.lang_question"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -72,9 +77,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('news_title')"
+                                                    v-if="errors.has('lang_question')"
                                                 >
-                                                    {{ errors.first("news_title") }}
+                                                    {{ errors.first("lang_question") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -82,7 +87,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >内容<span class="glyphicon glyphicon-star"
+                                                >答え・A<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
                                             >
@@ -90,8 +95,8 @@
                                                 <textarea
                                                     class="form-control"
                                                     rows = "5"
-                                                    name="news_body"
-                                                    v-model="newsInfo.news_body"
+                                                    name="lang_answer"
+                                                    v-model="faqInfo.lang_answer"
                                                     v-validate="
                                                         'required|max:20000'
                                                     "
@@ -100,20 +105,17 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('news_body')"
+                                                    v-if="errors.has('lang_answer')"
                                                 >
-                                                    {{ errors.first("news_body") }}
+                                                    {{ errors.first("lang_answer") }}
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="line"></div>
                                         <div class="form-group">
-                                            <div class="text-center display-flex">
+                                            <div class="text-center">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                <btn-delete :delete-action="deleteAction"
-                                                            :message-confirm="messageConfirm" 
-                                                            :url-redirect="urlRedirect"></btn-delete>
-                                                <a :href="urlNewsDetail" class="btn btn-default w-100">閉じる</a>
+                                                <a :href="urlFaqDetail" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
                                     </div>
@@ -131,22 +133,18 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
-import BtnDelete from "./../common/btn-delete.vue";
 
 export default {
     created: function() {
         let messError = {
             custom: {
-                news_subject_id: {
-                    required: "対象を選択してください",
+                lang_question: {
+                    required: "質問・Qを入力してください",
+                    max: "質問・Qは255文字以内で入力してください",
                 },
-                news_title: {
-                    required: "タイトルを入力してください",
-                    max: "タイトルは255文字以内で入力してください",
-                },
-                news_body: {
-                    required: "内容を入力してください",
-                    max: "内容は20000文字以内で入力してください",
+                lang_answer: {
+                    required: "答え・Aを入力してください",
+                    max: "答え・Aは20000文字以内で入力してください",
                 },
             }
         };
@@ -154,14 +152,13 @@ export default {
     },
     components: {
         Loader,
-        BtnDelete
     },
     data() {
         return {
             flagShowLoader: false,
         };
     },
-    props: ["urlAction", "urlNewsDetail", "newsSubjects", "newsInfo", 'deleteAction', 'messageConfirm', 'urlRedirect'],
+    props: ["urlAction", "urlFaqDetail", "faqInfo"],
     mounted() {},
     methods: {
         save() {
@@ -179,16 +176,16 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.newsInfo)
+                .post(that.urlAction, that.faqInfo)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "お知らせ編集が完了しました。",
+                            text: "FAQ多言語編集が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlNewsDetail;
+                            window.location.href = that.urlFaqDetail;
                         });
                     }
                 })

@@ -35,4 +35,6 @@ Route::group([
     Route::get('/news/{id}/edit-lang/{type}', 'NewsController@editLang')->name('editLangNews');
     Route::post('updateLangNews', 'NewsController@updateLang')->name('updateLangNews');
     Route::resource('lesson', LessonController::class);
+    Route::get('/faq/{id}/edit-lang/{type}', 'FaqController@editLang')->name('editLangFaq');
+    Route::post('updateLangFaq', 'FaqController@updateLang')->name('updateLangFaq');
 });

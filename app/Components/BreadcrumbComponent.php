@@ -111,6 +111,10 @@ class BreadcrumbComponent
                 'text' => 'レッスン情報表示',
                 'route_str' => "lesson.show",
             ],
+            'edit_lang_faq' => [
+                'text' => 'FAQ多言語編集',
+                'route_str' => "editLangFaq",
+            ],
         ];
     }
 

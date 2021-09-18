@@ -6,7 +6,9 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use App\Models\Lesson;
 use App\Models\Teacher;
+use App\Models\TeacherLesson;
 use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -127,12 +129,32 @@ class TeacherController extends BaseController
             ['name' => 'teacher_show', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->with(['timeZone'])->first();
+        $teacher = Teacher::where('id', $id)->with(['timeZone', 'lesson'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
         return view('teacher.show', [
             'breadcrumbs' => $breadcrumbs,
             'teacher' => $teacher
         ]);
+    }
+
+    public function lesson(Request $request, $id)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Lesson();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('lesson_name', $request['inputSearch']));
+            });
+        }
+        $lessonHasAdded = TeacherLesson::where('teacher_id', $id)->pluck('lesson_id');
+
+        $lessonList = $queryBuilder->whereNotIn('lesson_id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'lessonList' => $lessonList
+        ], StatusCode::OK);
+
     }
 
     /**

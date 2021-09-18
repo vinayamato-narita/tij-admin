@@ -4,6 +4,9 @@
             :list-teacher-url = "{{json_encode(route('teacher.index'))}}"
             :edit-teacher-url = "{{json_encode(route('teacher.edit', $teacher->id))}}"
             :teacher ="{{json_encode($teacher)}}"
+            :page-size-limit  ="{{json_encode(PAGE_SIZE_LIMIT)}}"
+            :lesson-list-url ="{{json_encode(route('teacher.lesson', $teacher->id))}}"
+            :data-query = "{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"
     >
 
     </teacher-show>

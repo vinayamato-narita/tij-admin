@@ -21,4 +21,9 @@ class Teacher extends Model
         return $this->hasOne('App\Models\TimeZone', 'timezone_id', 'timezone_id');
     }
 
+    public function lesson()
+    {
+        return $this->belongsToMany('App\Models\Lesson', 'teacher_lesson' ,'teacher_id', 'lesson_id');
+    }
+
 }

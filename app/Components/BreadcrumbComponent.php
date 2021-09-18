@@ -111,6 +111,10 @@ class BreadcrumbComponent
                 'text' => 'レッスン情報表示',
                 'route_str' => "lesson.show",
             ],
+            'lesson_list' => [
+                'text' => 'レッスン一覧',
+                'route_str' => "lesson.index",
+            ],
         ];
     }
 

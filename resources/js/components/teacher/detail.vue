@@ -170,19 +170,31 @@
                             <div class="card">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
-                                        <a href="#" class="btn btn-primary ">
+                                        <a href="javascript:void(0);" v-on:click="show" class="btn btn-primary ">
                                             追加
                                         </a>
                                     </div>
                                 </div>
                                 <div class="card-body">
-
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="lesson in this.teacher.lesson">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
+                                                <a href="javascript:void(0)" class="text-dark pull-right text-left btn-default btn-item-dropdown btn-sm btn-delete-teacher-leson" onclick="return false" data-toggle="tooltip" data-placement="top" data-teacher-lesson-id="19863" style="padding: 0 0" data-original-title="" title="">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i> 削除
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ol>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
+                <modal-table :url="lessonListUrl" :data-query="dataQuery" :pageSizeLimit="pageSizeLimit" :id="teacher.id">
+
+                </modal-table>
             </div>
         </main>
     </div>
@@ -192,22 +204,58 @@
 
 <script>
     import axios from 'axios';
+    import PageSize from "./../../components/common/page-size";
+    import InputSearch from "./../../components/common/input-search";
     import Loader from "./../../components/common/loader";
+    import ModalTable from "../common/modal-table";
 
     export default {
         created: function () {
         },
         components: {
+            ModalTable,
             Loader,
+            PageSize,
+            InputSearch
         },
         data() {
             return {
+                showModal: false,
                 csrfToken: Laravel.csrfToken,
+                pageLimit : 20,
         };
         },
-        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl'],
-        mounted() {},
+        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery'],
+        mounted() {
+
+        },
         methods: {
+            onChangePageSize(event) {
+                console.log(event)
+/*                let pathname = window.location.pathname;
+                let search = window.location.search;
+                if (search.indexOf("limit=") >= 0) {
+                    search = search.replace(
+                        /limit=([0-9]*)/gi,
+                        "limit=" + event.target.value
+                    );
+                } else {
+                    if (search == "") {
+                        search = search + "?limit=" + event.target.value;
+                    } else {
+                        search = search + "&limit=" + event.target.value;
+                    }
+                }
+                window.location = window.location.origin + pathname + search;*/
+            },
+
+            show () {
+
+                this.$modal.show('select-teacher-lesson-modal');
+            },
+            hide () {
+                this.$modal.hide('select-teacher-lesson-modal');
+            }
         },
     }
 </script>

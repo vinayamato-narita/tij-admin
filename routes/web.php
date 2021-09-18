@@ -27,6 +27,7 @@ Route::group([
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
     Route::resource('teacher', TeacherController::class);
+    Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');
     Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
     Route::resource('text', TextController::class);

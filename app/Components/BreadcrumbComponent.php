@@ -115,6 +115,14 @@ class BreadcrumbComponent
                 'text' => 'FAQ多言語編集',
                 'route_str' => "editLangFaq",
             ],
+            'inquiry_list' => [
+                'text' => '問い合わせ履歴一覧',
+                'route_str' => "inquiry.index",
+            ],
+            'edit_inquiry' => [
+                'text' => '問い合わせ詳細',
+                'route_str' => "inquiry.edit",
+            ],
         ];
     }
 

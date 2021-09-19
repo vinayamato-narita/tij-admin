@@ -37,4 +37,7 @@ Route::group([
     Route::resource('lesson', LessonController::class);
     Route::get('/faq/{id}/edit-lang/{type}', 'FaqController@editLang')->name('editLangFaq');
     Route::post('updateLangFaq', 'FaqController@updateLang')->name('updateLangFaq');
+    Route::resource('inquiry', InquiryController::class);
+    Route::post('changeInquiryFlag', 'InquiryController@changeInquiryFlag')->name('changeInquiryFlag');
+    Route::get('exportInquiry/{searchInput?}', 'InquiryController@exportInquiry')->name('exportInquiry');
 });

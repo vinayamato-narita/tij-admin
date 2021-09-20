@@ -38,7 +38,7 @@
                                                     v-model="newsInfo.news_subject_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
+                                                    <option :value="subject.id" v-for="subject in newsSubjects">
                                                         {{ subject.news_subject_ja }}</option
                                                     >
                                                 </select>
@@ -186,8 +186,8 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            let news_id = response.data.news_id;
-                            window.location.href = baseUrl + "/news/" + news_id;
+                            let id = response.data.id;
+                            window.location.href = baseUrl + "/news/" + id;
                         });
                     }
                 })

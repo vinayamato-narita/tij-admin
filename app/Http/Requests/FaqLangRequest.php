@@ -25,7 +25,7 @@ class FaqLangRequest extends FormRequest
     public function rules()
     {
         return [
-            'faq_id' => 'required|integer',
+            'id' => 'required|integer',
             'lang_question' => 'required|max:255',
             'lang_answer' => 'required|max:20000',
             'lang' => 'required|enum_value:' . LangType::class . ',false'

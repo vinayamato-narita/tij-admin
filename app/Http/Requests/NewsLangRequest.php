@@ -25,7 +25,7 @@ class NewsLangRequest extends FormRequest
     public function rules()
     {
         return [
-            'news_id' => 'required|integer',
+            'id' => 'required|integer',
             'news_lang_title' => 'required|max:255',
             'news_lang_body' => 'max:20000',
             'lang' => 'required|enum_value:' . LangType::class . ',false'

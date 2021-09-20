@@ -31,7 +31,7 @@ class EditAdminRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('admin_user', 'admin_email')->where(function ($query) {
+                Rule::unique('admin_users', 'admin_email')->where(function ($query) {
                     return $query->where('id', '!=', $this->id);
                 }),
             ],

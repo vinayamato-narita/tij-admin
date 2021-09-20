@@ -15,7 +15,6 @@ class Student extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'student';
 
     /**
      * @var array

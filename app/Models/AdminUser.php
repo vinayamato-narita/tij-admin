@@ -19,7 +19,6 @@ class AdminUser extends Authenticatable
     /**
      * @var array
      */
-    public $timestamps = false;
     protected $fillable = ['id', 'admin_name', 'admin_email', 'description', 'last_login_at', 'remember_token', 'is_join_contact', 'is_online'];
     protected $hidden = [
         'password',

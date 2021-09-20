@@ -9,10 +9,5 @@ class AdminNewsInfo extends Model
 {
     use HasFactory;
 
-    protected $table = 'admin_news_info';
-    public $timestamps = false;
-    protected $primaryKey = 'admin_news_info_id';
-
-    protected $fillable = ['admin_news_info_id', 'news_id', 'news_title', 'news_body', 'lang_type'];
-
+    protected $fillable = ['id', 'news_id', 'news_title', 'news_body', 'lang_type'];
 }

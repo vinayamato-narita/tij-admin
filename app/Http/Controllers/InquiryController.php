@@ -32,20 +32,20 @@ class InquiryController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $queryBuilder = AdminInquiry::leftJoin('student', 'student.student_id', '=', 'admin_inquiry.user_id')
-        ->select('inquiry_id', 'inquiry_date', 'inquiry_subject', 'user_id', 'student.student_name as student_name', DB::raw('ifnull(admin_inquiry.user_mail,student.student_email) as j_student_email'), 'inquiry_flag');
+        $queryBuilder = AdminInquiry::leftJoin('students', 'students.id', '=', 'admin_inquiries.student_id')
+        ->select('admin_inquiries.id as id', 'inquiry_date', 'inquiry_subject', 'student_id', 'students.student_name as student_name', DB::raw('ifnull(admin_inquiries.student_email,students.student_email) as j_student_email'), 'inquiry_flag');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('inquiry_subject', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('user_mail', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_email', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('admin_inquiries.student_email', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('students.student_email', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('student_name', $request['search_input']));
             });
         }
 
         if (isset($request['sort']) && $request['sort'] == "student_name") {
-            $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student.student_name','ASC') : $queryBuilder->orderBy('student.student_name','DESC');
+            $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('students.student_name','ASC') : $queryBuilder->orderBy('students.student_name','DESC');
         }
         if (isset($request['sort']) && $request['sort'] == "j_student_email") {
             $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_student_email','ASC') : $queryBuilder->orderBy('j_student_email','DESC');
@@ -105,10 +105,10 @@ class InquiryController extends BaseController
             ['name' => 'inquiry_list'],
             ['name' => 'edit_inquiry', $id],
         ]);
-        $inquiryInfo = AdminInquiry::where('inquiry_id', $id)->firstOrFail();
-        $studentInfo = Student::where('student_id', $inquiryInfo->user_id)->first();
+        $inquiryInfo = AdminInquiry::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('id', $inquiryInfo->student)->first();
         $inquiryInfo->student_name = $studentInfo->student_name ?? "";
-        $inquiryInfo->user_mail = $inquiryInfo->user_mail ?? $studentInfo->student_email ?? "";
+        $inquiryInfo->student_email = $inquiryInfo->student_email ?? $studentInfo->student_email ?? "";
         $inquiryInfo->_token = csrf_token();
 
         return view('inquiry.edit', [
@@ -127,7 +127,7 @@ class InquiryController extends BaseController
     public function update(Request $request, $id)
     {
         if($request->isMethod('PUT')){
-            $inquiryInfo = AdminInquiry::where('inquiry_id', $request->inquiry_id)->first();
+            $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
             if ($inquiryInfo == null) {
                 return response()->json([
                     'status' => 'OK',
@@ -146,7 +146,7 @@ class InquiryController extends BaseController
     public function changeInquiryFlag(Request $request)
     {
         if($request->isMethod('POST')){
-            $inquiryInfo = AdminInquiry::where('inquiry_id', $request->inquiry_id)->first();
+            $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
             if ($inquiryInfo == null) {
                 return response()->json([
                     'status' => 'OK',

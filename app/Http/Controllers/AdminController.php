@@ -31,12 +31,12 @@ class AdminController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('admin_user_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('admin_user_email', $request['search_input']));
+                $query->where($this->escapeLikeSentence('admin_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('admin_email', $request['search_input']));
             });
         }
 
-        $adminList = $queryBuilder->sortable(['admin_user_name' => 'asc'])->paginate($pageLimit);
+        $adminList = $queryBuilder->sortable(['updated_at' => 'desc'])->paginate($pageLimit);
 
         return view('admin.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -73,10 +73,10 @@ class AdminController extends BaseController
     {
         if($request->isMethod('POST')){
             $admin = new AdminUser;
-            $admin->admin_user_name = $request->admin_user_name;
-            $admin->admin_user_email = $request->admin_user_email;
-            $admin->admin_user_password = Hash::make($request->admin_user_password);
-            $admin->admin_user_description = $request->admin_user_description;
+            $admin->admin_name = $request->admin_name;
+            $admin->admin_email = $request->admin_email;
+            $admin->password = Hash::make($request->password);
+            $admin->description = $request->description;
             $admin->save();            
         }
         return response()->json([
@@ -138,13 +138,13 @@ class AdminController extends BaseController
     {
         if($request->isMethod('PUT')){
             $adminInfo = AdminUser::where('id', $id)->firstOrFail();
-            $adminInfo->admin_user_name = $request->admin_user_name;
-            $adminInfo->admin_user_email = $request->admin_user_email;
-            if ($request->admin_user_password != "") {
-                $adminInfo->admin_user_password = Hash::make($request->admin_user_password);
+            $adminInfo->admin_name = $request->admin_name;
+            $adminInfo->admin_email = $request->admin_email;
+            if ($request->password != "") {
+                $adminInfo->password = Hash::make($request->password);
             }
             
-            $adminInfo->admin_user_description = $request->admin_user_description;
+            $adminInfo->description = $request->description;
             $adminInfo->save();            
         }
         return response()->json([

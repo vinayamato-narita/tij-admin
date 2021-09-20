@@ -26,24 +26,24 @@ class EditAdminRequest extends FormRequest
     {
         Log::info($this);
         return [
-            'admin_user_name' => 'required|max:255',
-            'admin_user_email' => [
+            'admin_name' => 'required|max:255',
+            'admin_email' => [
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('admin_user', 'admin_user_email')->where(function ($query) {
+                Rule::unique('admin_user', 'admin_email')->where(function ($query) {
                     return $query->where('id', '!=', $this->id);
                 }),
             ],
-            'admin_user_password' => 'nullable|min:8|max:32|regex:/^[A-Za-z0-9]*$/i',
-            'admin_user_description' => 'max:2000'
+            'password' => 'nullable|min:8|max:32|regex:/^[A-Za-z0-9]*$/i',
+            'description' => 'max:2000'
         ];
     }
 
     public function messages()
     {
         return [
-            'admin_user_email.unique' => 'このメールアドレスは既に存在します',
+            'admin_email.unique' => 'このメールアドレスは既に存在します',
         ];
     }
 }

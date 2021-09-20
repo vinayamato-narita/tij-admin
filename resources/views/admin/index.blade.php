@@ -45,9 +45,9 @@
                                             <tbody>
                                                 @foreach ($adminList as $index => $user)
                                                     <tr>
-                                                        <td class="text-center">{{ $user->admin_user_name }}</td>
-                                                        <td class="text-center">{{ $user->admin_user_email }}</td>
-                                                        <td class="text-center">{{ $user->admin_user_description }}</td>
+                                                        <td class="text-center">{{ $user->admin_name }}</td>
+                                                        <td class="text-center">{{ $user->admin_email }}</td>
+                                                        <td class="text-center">{{ $user->description }}</td>
                                                         <td class="text-center">
                                                             <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
                                                         </td>

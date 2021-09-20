@@ -9,7 +9,4 @@ use Kyslik\ColumnSortable\Sortable;
 class FaqCategory extends Model
 {
     use HasFactory, Sortable;
-
-    protected $table = 'faq_category';
-    public $timestamps = false;
 }

@@ -36,10 +36,10 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('inquiry_id', '問合せ番号')</th>
+                                                    <th class="text-center width-130">@sortablelink('id', '問合せ番号')</th>
                                                     <th class="text-center min-width-150">@sortablelink('inquiry_date', '日時')</th>
                                                     <th class="text-center min-width-150">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('user_id', '生徒番号')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('student_id', '生徒番号')</th>
                                                     <th class="text-center min-width-120">@sortablelink('student_name', '名前')</th>
                                                     <th class="text-center min-width-120">@sortablelink('j_student_email', 'メールアドレス')</th>
                                                     <th class="text-center min-width-120">@sortablelink('inquiry_flag', '対応状況')</th>
@@ -49,10 +49,10 @@
                                             <tbody>
                                                 @foreach ($inquiryList as $index => $inquiry)
                                                     <tr class="eachRow">
-                                                        <td class="text-center">{{ $inquiry->inquiry_id }}</td>
+                                                        <td class="text-center">{{ $inquiry->id }}</td>
                                                         <td class="text-center">{{ $inquiry->inquiry_date }}</td>
                                                         <td class="text-center">{{ $inquiry->inquiry_subject }}</td>
-                                                        <td class="text-center">{{ $inquiry->user_id }}</td>
+                                                        <td class="text-center">{{ $inquiry->student_id }}</td>
                                                         <td class="text-center">{{ $inquiry->student_name ?? "" }}</td>
                                                         <td class="text-center">{{ $inquiry->j_student_email }}</td>
                                                         <td class="text-center">{{ InquiryFlag::getDescription($inquiry->inquiry_flag) }}</td>
@@ -61,7 +61,7 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('inquiry.edit', $inquiry->inquiry_id) }}"><i class="fa fa-edit mr-2"></i>編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('inquiry.edit', $inquiry->id) }}"><i class="fa fa-edit mr-2"></i>編集</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

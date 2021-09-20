@@ -10,24 +10,20 @@ class AdminNews extends Model
 {
     use HasFactory, Sortable;
 
-    protected $table = 'admin_news';
-    public $timestamps = false;
-    protected $primaryKey = 'news_id';
-
     public function getStatusAttribute($value) {
-		$status = $this->is_show_on_student_top == 0 ? "非表示" : "表示";
+		$status = $this->public_flag == 0 ? "非表示" : "表示";
 		return $status;
     }
     public function getStatusClassAttribute($value) {
-        $status = $this->is_show_on_student_top == 0 ? "fa-toggle-on" : "fa fa-toggle-off";
+        $status = $this->public_flag == 0 ? "fa-toggle-on" : "fa fa-toggle-off";
         return $status;
     }
     public function newsSubject() 
     {
-    	return $this->belongsTo(NewsSubject::class, 'news_subject_id', 'news_subject_id');
+    	return $this->belongsTo(NewsSubject::class);
     }
     public function adminNewsInfo() 
     {
-        return $this->hasMany(AdminNewsInfo::class, 'news_id', 'news_id');
+        return $this->hasMany(AdminNewsInfo::class);
     }
 }

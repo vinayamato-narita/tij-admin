@@ -38,7 +38,7 @@
                                                     v-model="newsInfo.news_subject_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
+                                                    <option :value="subject.id" v-for="subject in newsSubjects">
                                                         {{ subject.news_subject_ja }}</option
                                                     >
                                                 </select>

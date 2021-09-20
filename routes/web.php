@@ -38,6 +38,11 @@ Route::group([
     Route::get('/news/{id}/edit-lang/{type}', 'NewsController@editLang')->name('editLangNews');
     Route::post('updateLangNews', 'NewsController@updateLang')->name('updateLangNews');
     Route::resource('lesson', LessonController::class);
+    Route::get('/faq/{id}/edit-lang/{type}', 'FaqController@editLang')->name('editLangFaq');
+    Route::post('updateLangFaq', 'FaqController@updateLang')->name('updateLangFaq');
+    Route::resource('inquiry', InquiryController::class);
+    Route::post('changeInquiryFlag', 'InquiryController@changeInquiryFlag')->name('changeInquiryFlag');
+    Route::get('exportInquiry/{searchInput?}', 'InquiryController@exportInquiry')->name('exportInquiry');
     Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');

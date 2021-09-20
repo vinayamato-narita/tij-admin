@@ -13,8 +13,8 @@ class CreateLmsProjectCourseStudentTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_project_course_student', function (Blueprint $table) {
-            $table->integer('project_course_student_id')->primary();
+        Schema::create('lms_project_course_students', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('project_course_id');
             $table->integer('project_id')->nullable();
             $table->integer('course_id')->nullable();
@@ -24,11 +24,10 @@ class CreateLmsProjectCourseStudentTable extends Migration
             $table->dateTime('expired_date')->nullable();
             $table->integer('point_subscription_id')->nullable()->unique('point_id');
             $table->string('other_department_management_number', 20)->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->boolean('delete_flag')->nullable()->default(0);
             $table->string('course_code')->nullable();
             $table->string('parent_course_code')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -39,6 +38,6 @@ class CreateLmsProjectCourseStudentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_project_course_student');
+        Schema::dropIfExists('lms_project_course_students');
     }
 }

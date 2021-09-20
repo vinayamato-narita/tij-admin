@@ -35,8 +35,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_user_name"
-                                                    v-model="adminInfo.admin_user_name"
+                                                    name="admin_name"
+                                                    v-model="adminInfo.admin_name"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -44,9 +44,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_name')"
+                                                    v-if="errors.has('admin_name')"
                                                 >
-                                                    {{ errors.first("admin_user_name") }}
+                                                    {{ errors.first("admin_name") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -62,8 +62,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_user_email"
-                                                    v-model="adminInfo.admin_user_email"
+                                                    name="admin_email"
+                                                    v-model="adminInfo.admin_email"
                                                     @change="emailUnique = ''"
                                                     v-validate="
                                                         'required|email|max:255'
@@ -72,16 +72,16 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_email')"
+                                                    v-if="errors.has('admin_email')"
                                                 >
-                                                    {{ errors.first("admin_user_email") }}
+                                                    {{ errors.first("admin_email") }}
                                                 </div>
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
                                                     v-if="
                                                         emailUnique &&
-                                                            !errors.has('admin_user_email')
+                                                            !errors.has('admin_email')
                                                     "
                                                 >
                                                     {{ emailUnique }}
@@ -100,9 +100,9 @@
                                                 <input
                                                     class="form-control"
                                                     type="password"
-                                                    name="admin_user_password"
-                                                    v-model="adminInfo.admin_user_password"
-                                                    ref="admin_user_password"
+                                                    name="password"
+                                                    v-model="adminInfo.password"
+                                                    ref="password"
                                                     v-validate="
                                                         'required|password_rule|min:8|max:32'
                                                     "
@@ -110,9 +110,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_password')"
+                                                    v-if="errors.has('password')"
                                                 >
-                                                    {{ errors.first("admin_user_password") }}
+                                                    {{ errors.first("password") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -131,7 +131,7 @@
                                                     name="password_confirm"
                                                     v-model="adminInfo.password_confirm"
                                                     v-validate="
-                                                        'required|confirmed:admin_user_password'
+                                                        'required|confirmed:password'
                                                     "
                                                 />
                                                 <div
@@ -153,8 +153,8 @@
                                                 <textarea
                                                     class="form-control"
                                                     rows = "5"
-                                                    name="admin_user_description"
-                                                    v-model="adminInfo.admin_user_description"
+                                                    name="description"
+                                                    v-model="adminInfo.description"
                                                     v-validate="
                                                         'max:2000'
                                                     "
@@ -162,9 +162,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_user_description')"
+                                                    v-if="errors.has('description')"
                                                 >
-                                                    {{ errors.first("admin_user_description") }}
+                                                    {{ errors.first("description") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -195,16 +195,16 @@ export default {
     created: function() {
         let messError = {
             custom: {
-                admin_user_name: {
+                admin_name: {
                     required: "ユーザ名を入力してください",
                     max: "ユーザ名は255文字以内で入力してください"
                 },
-                admin_user_email: {
+                admin_email: {
                     required: "メールアドレスを入力してください",
                     max: "メールアドレスは255文字以内で入力してください",
                     email: "メールアドレスを正確に入力してください"
                 },
-                admin_user_password: {
+                password: {
                     required: "パスワードを入力してください",
                     max: "パスワードは32文字以内で入力してください",
                     min: "パスワードは8文字以上で入力してください",
@@ -215,7 +215,7 @@ export default {
                     required: "確認を入力してください",
                     confirmed: "確認が一致しません"
                 },
-                admin_user_description: {
+                description: {
                     max: "説明は2000文字以内で入力してください",
                 }
             }
@@ -270,7 +270,7 @@ export default {
                     this.emailUnique = e.response.data.errors.hasOwnProperty(
                         "admin_user_email"
                     )
-                        ? e.response.data.errors.admin_user_email[0]
+                        ? e.response.data.errors.admin_email[0]
                         : "";
                 });
         }

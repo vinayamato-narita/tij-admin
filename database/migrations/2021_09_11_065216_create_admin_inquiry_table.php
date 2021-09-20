@@ -13,17 +13,18 @@ class CreateAdminInquiryTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_inquiry', function (Blueprint $table) {
-            $table->increments('inquiry_id');
+        Schema::create('admin_inquiries', function (Blueprint $table) {
+            $table->increments('id');
             $table->dateTime('inquiry_date');
             $table->string('inquiry_subject');
             $table->text('inquiry_body');
             $table->integer('inquiry_flag');
             $table->text('inquiry_memo');
-            $table->unsignedInteger('user_type');
-            $table->unsignedInteger('user_id');
-            $table->string('user_mail')->nullable();
-            $table->tinyInteger('brand_id');
+            $table->unsignedInteger('student_type');
+            $table->unsignedInteger('student_id');
+            $table->string('student_email')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -34,6 +35,6 @@ class CreateAdminInquiryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_inquiry');
+        Schema::dropIfExists('admin_inquiries');
     }
 }

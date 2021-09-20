@@ -13,8 +13,8 @@ class CreateLmsAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_admin', function (Blueprint $table) {
-            $table->integer('admin_id')->primary();
+        Schema::create('lms_admins', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('default_project_code', 50)->nullable()->default(null);
             $table->string('admin_email')->nullable();
             $table->string('admin_password')->nullable();
@@ -38,10 +38,8 @@ class CreateLmsAdminTable extends Migration
             $table->dateTime('last_change_password_time')->nullable();
             $table->dateTime('last_login_datetime')->nullable();
             $table->string('last_login_ip', 50)->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->boolean('delete_flag')->nullable()->default(0);
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -52,6 +50,6 @@ class CreateLmsAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_admin');
+        Schema::dropIfExists('lms_admins');
     }
 }

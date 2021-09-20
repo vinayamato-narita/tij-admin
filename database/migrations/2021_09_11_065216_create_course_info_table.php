@@ -13,12 +13,14 @@ class CreateCourseInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_info', function (Blueprint $table) {
-            $table->integer('course_info_id')->primary();
+        Schema::create('course_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('course_id');
             $table->string('course_name')->nullable();
             $table->text('course_description')->nullable();
             $table->string('lang_type', 10);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateCourseInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_info');
+        Schema::dropIfExists('course_infos');
     }
 }

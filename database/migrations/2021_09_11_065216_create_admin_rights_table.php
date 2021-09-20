@@ -14,10 +14,12 @@ class CreateAdminRightsTable extends Migration
     public function up()
     {
         Schema::create('admin_rights', function (Blueprint $table) {
-            $table->increments('admin_rights_id');
+            $table->increments('id');
             $table->string('admin_rights_name_ja')->nullable();
             $table->string('admin_rights_menu')->nullable();
             $table->unsignedInteger('admin_rights_menu_order');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

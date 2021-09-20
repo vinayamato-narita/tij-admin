@@ -13,15 +13,15 @@ class CreateCourseVideoTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_video', function (Blueprint $table) {
-            $table->integer('course_video_id')->primary();
+        Schema::create('course_videos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('course_id');
             $table->string('video_name');
             $table->string('video_url');
             $table->integer('type')->nullable()->default(0);
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
             $table->string('image_url')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +32,6 @@ class CreateCourseVideoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_video');
+        Schema::dropIfExists('course_videos');
     }
 }

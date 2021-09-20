@@ -14,9 +14,10 @@ class CreateCategoryCourseTable extends Migration
     public function up()
     {
         Schema::create('category_course', function (Blueprint $table) {
-            $table->integer('category_course_id')->primary();
             $table->integer('course_id')->nullable();
             $table->integer('category_id')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

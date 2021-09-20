@@ -13,12 +13,10 @@ class CreateSystemButtonsTimingTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_buttons_timing', function (Blueprint $table) {
+        Schema::create('system_buttons_timings', function (Blueprint $table) {
             $table->unsignedInteger('button_id');
-            $table->tinyInteger('brand_id');
             $table->string('start_time', 50)->nullable();
             $table->string('end_time', 50)->nullable();
-            $table->primary(['button_id', 'brand_id']);
         });
     }
 
@@ -29,6 +27,6 @@ class CreateSystemButtonsTimingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('system_buttons_timing');
+        Schema::dropIfExists('system_buttons_timings');
     }
 }

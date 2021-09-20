@@ -13,7 +13,7 @@ class CreateStudentLessonReserveTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_lesson_reserve_type', function (Blueprint $table) {
+        Schema::create('student_lesson_reserve_types', function (Blueprint $table) {
             $table->unsignedInteger('student_lesson_reserve_type')->primary();
             $table->string('student_lesson_reserve_type_name_ja', 45);
         });
@@ -26,6 +26,6 @@ class CreateStudentLessonReserveTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_lesson_reserve_type');
+        Schema::dropIfExists('student_lesson_reserve_types');
     }
 }

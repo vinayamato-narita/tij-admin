@@ -13,15 +13,16 @@ class CreateLessonTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson', function (Blueprint $table) {
-            $table->increments('lesson_id')->index();
+        Schema::create('lessons', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('lesson_name')->nullable();
             $table->text('lesson_description')->nullable();
-            $table->tinyInteger('brand_id');
             $table->integer('display_order')->default(1);
             $table->boolean('is_test_lesson')->nullable()->default(0);
             $table->boolean('is_show_to_search')->nullable()->default(1);
             $table->boolean('is_show_to_teacher_detail')->nullable()->default(1);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +33,6 @@ class CreateLessonTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson');
+        Schema::dropIfExists('lessons');
     }
 }

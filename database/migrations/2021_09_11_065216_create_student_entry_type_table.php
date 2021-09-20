@@ -13,7 +13,7 @@ class CreateStudentEntryTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_entry_type', function (Blueprint $table) {
+        Schema::create('student_entry_types', function (Blueprint $table) {
             $table->unsignedInteger('student_entry_type_id')->primary();
             $table->string('student_entry_type_name', 45);
         });
@@ -26,6 +26,6 @@ class CreateStudentEntryTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_entry_type');
+        Schema::dropIfExists('student_entry_types');
     }
 }

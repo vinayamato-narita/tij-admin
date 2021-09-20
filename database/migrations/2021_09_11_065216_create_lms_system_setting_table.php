@@ -13,13 +13,12 @@ class CreateLmsSystemSettingTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_system_setting', function (Blueprint $table) {
-            $table->integer('system_setting_id')->primary();
+        Schema::create('lms_system_settings', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('admin_progress_show_setting')->nullable()->default(0);
             $table->integer('observer_progress_show_setting')->nullable()->default(0);
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +29,6 @@ class CreateLmsSystemSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_system_setting');
+        Schema::dropIfExists('lms_system_settings');
     }
 }

@@ -13,8 +13,8 @@ class CreatePointSubscriptionHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('point_subscription_history', function (Blueprint $table) {
-            $table->increments('point_subscription_history_id');
+        Schema::create('point_subscription_histories', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedInteger('student_id')->index('student_id');
             $table->unsignedInteger('course_id')->index('course_id');
             $table->integer('set_course_id')->nullable();
@@ -47,6 +47,6 @@ class CreatePointSubscriptionHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('point_subscription_history');
+        Schema::dropIfExists('point_subscription_histories');
     }
 }

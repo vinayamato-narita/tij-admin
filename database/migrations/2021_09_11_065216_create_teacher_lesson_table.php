@@ -14,9 +14,11 @@ class CreateTeacherLessonTable extends Migration
     public function up()
     {
         Schema::create('teacher_lesson', function (Blueprint $table) {
-            $table->integer('teacher_lesson_id')->primary();
+            $table->increments('id');
             $table->integer('teacher_id')->nullable()->index('teacher_id');
             $table->integer('lesson_id')->nullable()->index('lesson_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

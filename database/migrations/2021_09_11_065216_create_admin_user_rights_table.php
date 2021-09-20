@@ -14,11 +14,13 @@ class CreateAdminUserRightsTable extends Migration
     public function up()
     {
         Schema::create('admin_user_rights', function (Blueprint $table) {
-            $table->increments('admin_user_rights_id');
+            $table->increments('id');
             $table->integer('admin_user_id')->nullable();
             $table->integer('admin_rights_id')->nullable();
             $table->boolean('is_permitted')->nullable()->default(0);
             $table->boolean('can_edit')->nullable()->default(0);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

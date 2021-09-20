@@ -13,7 +13,7 @@ class CreateLessonMapTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_map', function (Blueprint $table) {
+        Schema::create('lesson_maps', function (Blueprint $table) {
             $table->integer('lesson_id')->nullable();
             $table->integer('togo_lesson_id')->nullable();
             $table->integer('new_lesson_id')->nullable();
@@ -29,6 +29,6 @@ class CreateLessonMapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_map');
+        Schema::dropIfExists('lesson_maps');
     }
 }

@@ -57,6 +57,8 @@ import EditLangNews from "./components/news/edit-lang-news.vue"
 import LessonAdd from "./components/lesson/add.vue"
 import LessonShow from "./components/lesson/detail.vue"
 import LessonEdit from "./components/lesson/edit.vue"
+import EditLangFaq from "./components/faq/edit-lang-faq.vue"
+import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
 
 
@@ -145,6 +147,9 @@ new Vue({
         EditLangNews,
         LessonAdd,
         LessonShow,
+        LessonEdit,
+        EditLangFaq,
+        EditInquiry,
         LessonEdit,
         ModalTable
     },

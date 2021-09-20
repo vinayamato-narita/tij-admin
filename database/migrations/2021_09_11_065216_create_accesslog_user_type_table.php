@@ -13,8 +13,8 @@ class CreateAccesslogUserTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('accesslog_user_type', function (Blueprint $table) {
-            $table->increments('login_user_type_id');
+        Schema::create('accesslog_user_types', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('login_user_type_name_ja')->nullable();
         });
     }
@@ -26,6 +26,6 @@ class CreateAccesslogUserTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accesslog_user_type');
+        Schema::dropIfExists('accesslog_user_types');
     }
 }

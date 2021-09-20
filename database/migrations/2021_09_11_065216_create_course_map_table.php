@@ -13,7 +13,7 @@ class CreateCourseMapTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_map', function (Blueprint $table) {
+        Schema::create('course_maps', function (Blueprint $table) {
             $table->integer('course_id')->primary();
             $table->integer('togo_course_id')->nullable();
             $table->integer('new_course_id')->nullable();
@@ -29,6 +29,6 @@ class CreateCourseMapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_map');
+        Schema::dropIfExists('course_maps');
     }
 }

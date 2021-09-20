@@ -13,8 +13,8 @@ class CreateSystemSettingTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_setting', function (Blueprint $table) {
-            $table->unsignedInteger('system_setting_id')->primary();
+        Schema::create('system_settings', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedInteger('student_lesson_reservable_day');
             $table->unsignedInteger('teacher_lesson_applicatinable_day');
             $table->unsignedInteger('admin_lesson_creatable_day');
@@ -46,6 +46,6 @@ class CreateSystemSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('system_setting');
+        Schema::dropIfExists('system_settings');
     }
 }

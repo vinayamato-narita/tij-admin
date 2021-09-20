@@ -13,17 +13,19 @@ class CreateAdminUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_user', function (Blueprint $table) {
-            $table->increments('admin_user_id');
-            $table->string('admin_user_name')->nullable();
-            $table->string('admin_user_email')->nullable();
-            $table->string('admin_user_password')->nullable();
-            $table->text('admin_user_description')->nullable();
-            $table->dateTime('last_login_date')->nullable();
-            $table->string('is_sercurity')->default('0');
-            $table->unsignedTinyInteger('is_join_contact')->nullable()->default(0);
-            $table->unsignedTinyInteger('is_online')->nullable()->default(0);
-            $table->tinyInteger('brand_id');
+        Schema::create('admin_users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('admin_name')->nullable();
+            $table->string('admin_email')->nullable();
+            $table->string('password')->nullable();
+            $table->text('description')->nullable();
+            $table->dateTime('last_login_at')->nullable();
+            $table->string('remember_token')->nullable();
+            $table->dateTime('remember_token_expires_at')->nullable();
+            $table->boolean('is_join_contact')->nullable()->default(0);
+            $table->boolean('is_online')->nullable()->default(0);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -34,6 +36,6 @@ class CreateAdminUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_user');
+        Schema::dropIfExists('admin_users');
     }
 }

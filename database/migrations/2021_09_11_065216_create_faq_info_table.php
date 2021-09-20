@@ -13,12 +13,14 @@ class CreateFaqInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('faq_info', function (Blueprint $table) {
-            $table->integer('faq_info_id')->primary();
+        Schema::create('faq_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('faq_id');
             $table->string('question')->nullable();
             $table->text('answer')->nullable();
             $table->string('lang_type', 10);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateFaqInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faq_info');
+        Schema::dropIfExists('faq_infos');
     }
 }

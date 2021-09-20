@@ -13,8 +13,8 @@ class CreateSendRemindMailPatternInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('send_remind_mail_pattern_info', function (Blueprint $table) {
-            $table->integer('id')->primary();
+        Schema::create('send_remind_mail_pattern_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('send_remind_mail_pattern_id')->nullable();
             $table->string('mail_subject')->nullable();
             $table->text('mail_body')->nullable();
@@ -29,6 +29,6 @@ class CreateSendRemindMailPatternInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('send_remind_mail_pattern_info');
+        Schema::dropIfExists('send_remind_mail_pattern_infos');
     }
 }

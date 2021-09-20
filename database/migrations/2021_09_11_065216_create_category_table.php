@@ -13,14 +13,13 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->integer('category_id')->primary();
+        Schema::create('categories', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('category_icon')->nullable();
             $table->string('category_name')->nullable();
             $table->integer('order_num')->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +30,6 @@ class CreateCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('categories');
     }
 }

@@ -13,9 +13,11 @@ class CreateNewsSubjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('news_subject', function (Blueprint $table) {
-            $table->increments('news_subject_id');
+        Schema::create('news_subjects', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('news_subject_ja');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateNewsSubjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_subject');
+        Schema::dropIfExists('news_subjects');
     }
 }

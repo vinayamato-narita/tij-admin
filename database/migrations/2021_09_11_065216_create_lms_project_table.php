@@ -13,8 +13,8 @@ class CreateLmsProjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_project', function (Blueprint $table) {
-            $table->integer('project_id')->primary();
+        Schema::create('lms_projects', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('project_code')->index('project_code');
             $table->string('project_name')->nullable();
             $table->string('project_password')->nullable();
@@ -26,10 +26,8 @@ class CreateLmsProjectTable extends Migration
             $table->boolean('buy_course_continue')->nullable()->default(0);
             $table->boolean('tsv_import_flag')->nullable()->default(0);
             $table->boolean('payment_type')->nullable()->default(1);
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->boolean('delete_flag')->nullable()->default(0)->index('delete_flag');
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -40,6 +38,6 @@ class CreateLmsProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_project');
+        Schema::dropIfExists('lms_projects');
     }
 }

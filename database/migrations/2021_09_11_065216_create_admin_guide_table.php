@@ -13,10 +13,11 @@ class CreateAdminGuideTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_guide', function (Blueprint $table) {
-            $table->increments('admin_guide_id');
+        Schema::create('admin_guides', function (Blueprint $table) {
+            $table->increments('id');
             $table->text('guide_step_1');
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateAdminGuideTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_guide');
+        Schema::dropIfExists('admin_guides');
     }
 }

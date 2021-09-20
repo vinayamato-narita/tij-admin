@@ -13,8 +13,8 @@ class CreateStudentPointHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_point_history', function (Blueprint $table) {
-            $table->increments('student_point_history_id');
+        Schema::create('student_point_histories', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedInteger('student_id')->default(0)->index('student_id');
             $table->dateTime('pay_date');
             $table->text('pay_description')->nullable();
@@ -28,6 +28,8 @@ class CreateStudentPointHistoryTable extends Migration
             $table->boolean('paid_status')->nullable()->default(1);
             $table->integer('point_subscription_id')->nullable()->default(0)->index('point_id');
             $table->index(['student_id', 'course_id'], 'st_course');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -38,6 +40,6 @@ class CreateStudentPointHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_point_history');
+        Schema::dropIfExists('student_point_histories');
     }
 }

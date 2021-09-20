@@ -13,14 +13,15 @@ class CreateGmoMaintainSettingTable extends Migration
      */
     public function up()
     {
-        Schema::create('gmo_maintain_setting', function (Blueprint $table) {
-            $table->increments('gmo_maintain_setting_id');
+        Schema::create('gmo_maintain_settings', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedTinyInteger('gmo_payment_type')->default(1);
             $table->unsignedTinyInteger('cvs_type')->default(1);
             $table->dateTime('maintain_time_from')->nullable();
             $table->dateTime('maintain_time_to')->nullable();
             $table->text('maintain_text')->nullable();
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +32,6 @@ class CreateGmoMaintainSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gmo_maintain_setting');
+        Schema::dropIfExists('gmo_maintain_settings');
     }
 }

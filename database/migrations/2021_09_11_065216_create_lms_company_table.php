@@ -13,8 +13,8 @@ class CreateLmsCompanyTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_company', function (Blueprint $table) {
-            $table->integer('company_id')->primary();
+        Schema::create('lms_companies', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('company_code', 8)->nullable();
             $table->string('company_name')->nullable();
             $table->string('company_name_kana')->nullable();
@@ -45,10 +45,8 @@ class CreateLmsCompanyTable extends Migration
             $table->string('bill_address')->nullable();
             $table->string('common_mgt_no')->nullable();
             $table->text('note')->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
-            $table->boolean('delete_flag')->nullable()->default(0);
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -59,6 +57,6 @@ class CreateLmsCompanyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_company');
+        Schema::dropIfExists('lms_companies');
     }
 }

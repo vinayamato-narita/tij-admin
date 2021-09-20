@@ -13,12 +13,14 @@ class CreateLessonInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_info', function (Blueprint $table) {
-            $table->integer('lesson_info_id')->primary();
+        Schema::create('lesson_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('lesson_id');
             $table->string('lesson_name')->nullable();
             $table->text('lesson_description')->nullable();
             $table->string('lang_type', 10);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateLessonInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_info');
+        Schema::dropIfExists('lesson_infos');
     }
 }

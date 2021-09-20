@@ -13,8 +13,8 @@ class CreateLessonCancelHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_cancel_history', function (Blueprint $table) {
-            $table->increments('lesson_cancel_history_id');
+        Schema::create('lesson_cancel_histories', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('teacher_id');
             $table->dateTime('lesson_date');
@@ -24,6 +24,8 @@ class CreateLessonCancelHistoryTable extends Migration
             $table->text('cancel_student_comment');
             $table->text('cancel_admin_comment');
             $table->text('cancel_teacher_comment');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -34,6 +36,6 @@ class CreateLessonCancelHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_cancel_history');
+        Schema::dropIfExists('lesson_cancel_histories');
     }
 }

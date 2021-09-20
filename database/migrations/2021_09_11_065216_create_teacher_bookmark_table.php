@@ -13,7 +13,7 @@ class CreateTeacherBookmarkTable extends Migration
      */
     public function up()
     {
-        Schema::create('teacher_bookmark', function (Blueprint $table) {
+        Schema::create('teacher_bookmarks', function (Blueprint $table) {
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('teacher_id');
             $table->primary(['student_id', 'teacher_id']);
@@ -27,6 +27,6 @@ class CreateTeacherBookmarkTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teacher_bookmark');
+        Schema::dropIfExists('teacher_bookmarks');
     }
 }

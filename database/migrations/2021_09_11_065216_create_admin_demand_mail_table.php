@@ -13,8 +13,8 @@ class CreateAdminDemandMailTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_demand_mail', function (Blueprint $table) {
-            $table->integer('admin_demand_mail_id')->primary();
+        Schema::create('admin_demand_mails', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('demand_mail_name')->nullable();
             $table->string('mail_subject')->nullable();
             $table->text('mail_body')->nullable();
@@ -22,11 +22,9 @@ class CreateAdminDemandMailTable extends Migration
             $table->integer('send_mail_date')->nullable();
             $table->integer('data_summary_range')->nullable()->default(0);
             $table->smallInteger('data_summary_range_direction')->nullable()->default(1);
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
             $table->boolean('public_flag')->nullable()->default(1);
-            $table->boolean('delete_flag')->nullable()->default(0);
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -37,6 +35,6 @@ class CreateAdminDemandMailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_demand_mail');
+        Schema::dropIfExists('admin_demand_mails');
     }
 }

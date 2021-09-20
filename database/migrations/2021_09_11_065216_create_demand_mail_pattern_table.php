@@ -13,8 +13,8 @@ class CreateDemandMailPatternTable extends Migration
      */
     public function up()
     {
-        Schema::create('demand_mail_pattern', function (Blueprint $table) {
-            $table->integer('demand_mail_pattern_id')->primary();
+        Schema::create('demand_mail_patterns', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('demand_mail_name')->nullable();
             $table->string('mail_subject')->nullable();
             $table->text('mail_body')->nullable();
@@ -30,11 +30,9 @@ class CreateDemandMailPatternTable extends Migration
             $table->string('target_user_type', 50)->nullable()->default('');
             $table->boolean('project_condition_active')->nullable()->default(0);
             $table->integer('project_id_condition')->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('modified')->nullable();
             $table->boolean('public_flag')->nullable()->default(1);
-            $table->boolean('delete_flag')->nullable()->default(0);
-            $table->tinyInteger('brand_id');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -45,6 +43,6 @@ class CreateDemandMailPatternTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('demand_mail_pattern');
+        Schema::dropIfExists('demand_mail_patterns');
     }
 }

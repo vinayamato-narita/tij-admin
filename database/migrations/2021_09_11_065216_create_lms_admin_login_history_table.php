@@ -13,8 +13,8 @@ class CreateLmsAdminLoginHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_admin_login_history', function (Blueprint $table) {
-            $table->integer('admin_login_history_id')->primary();
+        Schema::create('lms_admin_login_histories', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('admin_id')->nullable();
             $table->integer('company_id')->nullable();
             $table->dateTime('login_date')->nullable();
@@ -30,6 +30,6 @@ class CreateLmsAdminLoginHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_admin_login_history');
+        Schema::dropIfExists('lms_admin_login_histories');
     }
 }

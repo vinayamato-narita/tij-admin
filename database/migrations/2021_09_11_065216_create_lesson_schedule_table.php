@@ -13,8 +13,8 @@ class CreateLessonScheduleTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_schedule', function (Blueprint $table) {
-            $table->bigIncrements('lesson_schedule_id');
+        Schema::create('lesson_schedules', function (Blueprint $table) {
+            $table->increments('id');
             $table->dateTime('lesson_date')->index('lesson_date');
             $table->dateTime('lesson_starttime')->index('lesson_starttime');
             $table->dateTime('lesson_endtime');
@@ -27,6 +27,8 @@ class CreateLessonScheduleTable extends Migration
             $table->unsignedInteger('lesson_subscription_type')->default(0);
             $table->string('lesson_text_name', 100)->nullable();
             $table->dateTime('last_update_date')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -37,6 +39,6 @@ class CreateLessonScheduleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_schedule');
+        Schema::dropIfExists('lesson_schedules');
     }
 }

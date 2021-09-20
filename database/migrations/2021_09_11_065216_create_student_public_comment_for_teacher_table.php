@@ -13,13 +13,13 @@ class CreateStudentPublicCommentForTeacherTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_public_comment_for_teacher', function (Blueprint $table) {
-            $table->bigIncrements('student_public_comment_for_teacher_id');
-            $table->unsignedInteger('teacher_id')->default(0);
-            $table->unsignedInteger('student_id')->default(0);
+        Schema::create('student_public_comment_for_teachers', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedInteger('teacher_id')->nullable();
+            $table->unsignedInteger('student_id')->nullable();
             $table->text('comment');
-            $table->dateTime('create_date');
-            $table->dateTime('update_date');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +30,6 @@ class CreateStudentPublicCommentForTeacherTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_public_comment_for_teacher');
+        Schema::dropIfExists('student_public_comment_for_teachers');
     }
 }

@@ -13,11 +13,13 @@ class CreateFaqCategoryInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('faq_category_info', function (Blueprint $table) {
-            $table->integer('faq_category_info_id')->primary();
+        Schema::create('faq_category_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('faq_category_id')->nullable();
             $table->string('faq_category_name')->nullable();
             $table->string('lang_type', 10)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateFaqCategoryInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faq_category_info');
+        Schema::dropIfExists('faq_category_infos');
     }
 }

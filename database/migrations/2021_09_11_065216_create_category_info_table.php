@@ -13,11 +13,13 @@ class CreateCategoryInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_info', function (Blueprint $table) {
-            $table->integer('category_info_id')->primary();
+        Schema::create('category_infos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('category_id');
             $table->string('category_name')->nullable();
             $table->string('lang_type', 10);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateCategoryInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_info');
+        Schema::dropIfExists('category_infos');
     }
 }

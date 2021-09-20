@@ -13,7 +13,7 @@ class CreateCourseTable extends Migration
      */
     public function up()
     {
-        Schema::create('course', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->increments('course_id');
             $table->string('course_name')->nullable();
             $table->string('course_name_short')->nullable();
@@ -23,7 +23,6 @@ class CreateCourseTable extends Migration
             $table->string('paypal_item_number', 45);
             $table->string('amount', 45);
             $table->unsignedInteger('max_reserve_count')->default(5);
-            $table->tinyInteger('brand_id');
             $table->integer('is_show')->default(0);
             $table->integer('is_campaign')->nullable()->default(0);
             $table->string('campaign_code', 8)->nullable();
@@ -35,6 +34,8 @@ class CreateCourseTable extends Migration
             $table->integer('reserve_end')->nullable()->default(60);
             $table->integer('cancel_end')->nullable()->default(720);
             $table->boolean('is_for_lms')->nullable()->default(0);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -45,6 +46,6 @@ class CreateCourseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course');
+        Schema::dropIfExists('courses');
     }
 }

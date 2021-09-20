@@ -13,10 +13,12 @@ class CreateCourseTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_tags', function (Blueprint $table) {
-            $table->integer('course_tag_id')->primary();
+        Schema::create('course_tag', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('course_id')->nullable();
             $table->integer('tag_id')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateCourseTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_tags');
+        Schema::dropIfExists('course_tag');
     }
 }

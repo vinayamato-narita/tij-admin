@@ -7,6 +7,7 @@ use App\Enums\StatusCode;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
 use App\Models\Lesson;
+use App\Models\Lesson_Text_Lesson;
 use App\Models\Teacher;
 use App\Models\TeacherLesson;
 use App\Models\TimeZone;
@@ -155,6 +156,51 @@ class TeacherController extends BaseController
             'lessonList' => $lessonList
         ], StatusCode::OK);
 
+    }
+
+    public function registerTextLesson(Request $request, $id) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->all() as $rq) {
+                $tc = new Lesson_Text_Lesson();
+                $tc->teacher_id = $id;
+                $tc->lesson_id = $rq;
+                $tc->save();
+            }
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function TeacherLessonDelete($id, $lessonId)
+    {
+
+        try {
+            $teacherLesson = TeacherLesson::where([
+                'teacher_id' => $id,
+                'lesson_id' => $lessonId
+            ])->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' レッスンの解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
     }
 
     /**

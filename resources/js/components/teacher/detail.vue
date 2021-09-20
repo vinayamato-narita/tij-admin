@@ -2,7 +2,7 @@
 
     <div class="c-body">
         <main class="c-main pt-0">
-            <div class="container-fluid">
+            <div class="container-fluid info-screen">
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
@@ -180,9 +180,15 @@
                                         <li v-for="lesson in this.teacher.lesson">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
                                                 <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
-                                                <a href="javascript:void(0)" class="text-dark pull-right text-left btn-default btn-item-dropdown btn-sm btn-delete-teacher-leson" onclick="return false" data-toggle="tooltip" data-placement="top" data-teacher-lesson-id="19863" style="padding: 0 0" data-original-title="" title="">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i> 削除
-                                                </a>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriDelete(teacher.id , lesson.lesson_id)"
+                                                            :message-confirm="messageConfirm"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
                                             </div>
                                         </li>
                                     </ol>
@@ -192,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                <modal-table :url="lessonListUrl" :data-query="dataQuery" :pageSizeLimit="pageSizeLimit" :id="teacher.id">
+                <modal-table :detailUrl="detailTeacherUrl" :url="lessonListUrl"  :pageSizeLimit="pageSizeLimit" :id="teacher.id" :register-url="registerUrl">
 
                 </modal-table>
             </div>
@@ -208,6 +214,7 @@
     import InputSearch from "./../../components/common/input-search";
     import Loader from "./../../components/common/loader";
     import ModalTable from "../common/modal-table";
+    import DeleteItem from "./../../components/common/delete-item";
 
     export default {
         created: function () {
@@ -216,45 +223,31 @@
             ModalTable,
             Loader,
             PageSize,
-            InputSearch
+            InputSearch,
+            DeleteItem
         },
         data() {
             return {
                 showModal: false,
                 csrfToken: Laravel.csrfToken,
-                pageLimit : 20,
-        };
+                messageConfirm : 'このレッスンを解除しますか？',
+            };
         },
-        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery'],
+        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl'],
         mounted() {
 
         },
         methods: {
-            onChangePageSize(event) {
-                console.log(event)
-/*                let pathname = window.location.pathname;
-                let search = window.location.search;
-                if (search.indexOf("limit=") >= 0) {
-                    search = search.replace(
-                        /limit=([0-9]*)/gi,
-                        "limit=" + event.target.value
-                    );
-                } else {
-                    if (search == "") {
-                        search = search + "?limit=" + event.target.value;
-                    } else {
-                        search = search + "&limit=" + event.target.value;
-                    }
-                }
-                window.location = window.location.origin + pathname + search;*/
-            },
-
             show () {
 
                 this.$modal.show('select-teacher-lesson-modal');
             },
             hide () {
                 this.$modal.hide('select-teacher-lesson-modal');
+            },
+            getUriDelete(id, lessonId) {
+                 return  id + '/lesson/' + lessonId + '/delete';
+
             }
         },
     }

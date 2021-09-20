@@ -284,3 +284,9 @@ input[type=number]::-webkit-outer-spin-button {
 .v--modal-overlay {
     z-index: 9999!important;
 }
+
+.info-screen  {
+    .dropdown-item {
+        padding: 0;
+    }
+}

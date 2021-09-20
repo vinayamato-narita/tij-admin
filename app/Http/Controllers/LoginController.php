@@ -46,7 +46,7 @@ class LoginController extends BaseController
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt([
-            'admin_user_email' => $credentials['email'],
+            'admin_email' => $credentials['email'],
             'password' => $credentials['password']
             ], $request->remember_me ?? false)) {
             try {

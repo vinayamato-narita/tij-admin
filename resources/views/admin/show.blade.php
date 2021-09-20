@@ -26,7 +26,7 @@
                                             >ユーザ名:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_name }}
+                                            {{ $adminInfo->admin_name }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -36,7 +36,7 @@
                                             >メールアドレス:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_email }}
+                                            {{ $adminInfo->admin_email }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -46,7 +46,7 @@
                                             >説明:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $adminInfo->admin_user_description }}
+                                            {{ $adminInfo->description }}
                                         </div>
                                     </div>
                                     <div class="line"></div>

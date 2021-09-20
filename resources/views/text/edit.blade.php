@@ -1,11 +1,11 @@
 @extends('layouts.default')
 @section('content')
     <text-edit
-            :update-url = "{{json_encode(route('text.update', $lessonText->lesson_text_id))}}"
+            :update-url = "{{json_encode(route('text.update', $lessonText->id))}}"
             :list-text-url = "{{json_encode(route('text.index'))}}"
-            :detail-text-url = "{{json_encode(route('text.show', $lessonText->lesson_text_id))}}"
+            :detail-text-url = "{{json_encode(route('text.show', $lessonText->id))}}"
             :lesson-text ="{{json_encode($lessonText)}}"
-            :delete-action="{{ json_encode(route('text.destroy',  $lessonText->lesson_text_id)) }}"
+            :delete-action="{{ json_encode(route('text.destroy',  $lessonText->id)) }}"
     >
 
     </text-edit>

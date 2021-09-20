@@ -2,6 +2,7 @@
     <modal name="select-teacher-lesson-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" >
         <div class="card">
             <div class="card-header">レッスン一覧
+
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
@@ -89,9 +90,10 @@
                             <tbody>
                             <tr v-for="lesson in dataList">
                                 <td class="text-center">
-                                    <input id="isTestLesson" v-on:click="checkedId(lesson.lesson_id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input id="isTestLesson" v-on:click="checkedId(lesson.id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </td>
-                                <td class="text-md-left">{{lesson.lesson_name}}</td>
+                                <td class="text-md-left" v-if="type == 'lesson'">{{  lesson.lesson_text_name }}</td>
+                                <td class="text-md-left" v-if="type != 'lesson'">{{ lesson.lesson_name  }}</td>
 
                             </tr>
 
@@ -168,11 +170,11 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                checkedIds : []
+                checkedIds : [],
 
             };
         },
-        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl'],
+        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl', 'type'],
         mounted() {
         },
         created: function () {

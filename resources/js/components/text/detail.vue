@@ -107,6 +107,17 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="lesson in this.lessonText.lesson">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
+                                                <div class="col-md-2">
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
 
                                 </div>
 
@@ -137,7 +148,7 @@
             };
         },
         props: ["listTextUrl", "createUrl", 'lessonText', 'editTextUrl'],
-        mounted() {},
+        mounted() { console.log(this.lessonText)},
         methods: {
         },
     }

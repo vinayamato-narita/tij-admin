@@ -6,11 +6,12 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
-use App\Models\Lesson;
+use App\Models\Lessons;
 use App\Models\Lesson_Text_Lesson;
-use App\Models\Teacher;
+use App\Models\LessonTextLesson;
+use App\Models\Teachers;
 use App\Models\TeacherLesson;
-use App\Models\TimeZone;
+use App\Models\TimeZones;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = new Teacher();
+        $queryBuilder = new Teachers();
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -61,7 +62,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_add']
         ]);
 
-        $timeZones = TimeZone::all()->toArray();
+        $timeZones = TimeZones::all()->toArray();
         return view('teacher.add', [
             'breadcrumbs' => $breadcrumbs,
             'timeZones' => $timeZones
@@ -80,7 +81,7 @@ class TeacherController extends BaseController
         if($request->isMethod('POST')){
             DB::beginTransaction();
             try {
-                $teacher = new Teacher();
+                $teacher = new Teachers();
                 $teacher->display_order = $request->displayOrder;
                 $teacher->teacher_nickname = $request->nickName;
                 $teacher->teacher_name = $request->teacherName;
@@ -95,7 +96,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->teacher_password = '';
+                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
 
                 $teacher->save();
@@ -130,7 +131,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_show', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->with(['timeZone', 'lesson'])->first();
+        $teacher = Teachers::where('id', $id)->with(['timeZone', 'lesson'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
         return view('teacher.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -141,7 +142,7 @@ class TeacherController extends BaseController
     public function lesson(Request $request, $id)
     {
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = new Lesson();
+        $queryBuilder = new Lessons();
 
         if (isset($request['inputSearch'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -150,19 +151,19 @@ class TeacherController extends BaseController
         }
         $lessonHasAdded = TeacherLesson::where('teacher_id', $id)->pluck('lesson_id');
 
-        $lessonList = $queryBuilder->whereNotIn('lesson_id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        $dataList = $queryBuilder->whereNotIn('id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
-            'lessonList' => $lessonList
+            'dataList' => $dataList
         ], StatusCode::OK);
 
     }
 
-    public function registerTextLesson(Request $request, $id) {
+    public function registerLesson(Request $request, $id) {
         DB::beginTransaction();
         try {
             foreach ($request->all() as $rq) {
-                $tc = new Lesson_Text_Lesson();
+                $tc = new TeacherLesson();
                 $tc->teacher_id = $id;
                 $tc->lesson_id = $rq;
                 $tc->save();
@@ -218,9 +219,9 @@ class TeacherController extends BaseController
             ['name' => 'teacher_edit', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->first();
+        $teacher = Teachers::where('id', $id)->first();
         if (!$teacher) return redirect()->route('teacher.index');
-        $timeZones = TimeZone::all()->toArray();
+        $timeZones = TimeZones::all()->toArray();
         return view('teacher.edit', [
             'breadcrumbs' => $breadcrumbs,
             'timeZones' => $timeZones,
@@ -238,7 +239,7 @@ class TeacherController extends BaseController
     public function update(UpdateTeacherRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $teacher = Teacher::where('id', $id)->first();
+            $teacher = Teachers::where('id', $id)->first();
             if (!$teacher) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
@@ -261,7 +262,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->teacher_password = '';
+                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
 
 
@@ -292,7 +293,7 @@ class TeacherController extends BaseController
     public function destroy($id)
     {
         try {
-            $teacher = Teacher::where('id', $id)->delete();
+            $teacher = Teachers::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

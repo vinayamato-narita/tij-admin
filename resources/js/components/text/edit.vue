@@ -190,7 +190,7 @@
         },
         data() {
             return {
-                id : this.lessonText.lesson_text_id,
+                id : this.lessonText.id,
                 csrfToken: Laravel.csrfToken,
                 lessonTextNo: this.lessonText.lesson_text_no,
                 lessonTextUrl: this.lessonText.lesson_text_url,
@@ -284,6 +284,7 @@
                                     case 422:
                                     case 400:
                                         this.errorsData = err.response.data;
+                                        console.log(this.errorsData)
                                         that.flagShowLoader = false;
                                         break;
                                     case 500:

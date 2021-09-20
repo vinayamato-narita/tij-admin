@@ -40,7 +40,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.lesson.lesson_id}}
+                                            {{this.lesson.id}}
 
                                         </div>
                                     </div>
@@ -119,7 +119,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{lessonText.lesson_text_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(lesson.lesson_id , lessonText.lesson_text_id)"
+                                                            :delete-action="getUriDelete(lesson.id , lessonText.id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-                <modal-table :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl">
+                <modal-table :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl" :type="type">
 
                 </modal-table>
             </div>
@@ -163,6 +163,7 @@
         data() {
             return {
                 messageConfirm : 'このテキストをレッスンに解除しますか？',
+                type : 'lesson',
                 csrfToken: Laravel.csrfToken,
             };
         },

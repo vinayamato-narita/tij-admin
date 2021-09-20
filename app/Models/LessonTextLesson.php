@@ -10,7 +10,6 @@ class LessonTextLesson extends Model
 {
     use HasFactory, Sortable;
     public $timestamps = false;
-    protected $primaryKey = 'lesson_text_lesson_id';
 
     protected $table = 'lesson_text_lesson';
 }

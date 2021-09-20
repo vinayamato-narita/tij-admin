@@ -47,6 +47,4 @@ Route::group([
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
 
-
-
 });

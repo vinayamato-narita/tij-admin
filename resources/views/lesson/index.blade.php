@@ -46,7 +46,7 @@
                                                 @foreach ($lessonList as $index => $lesson)
                                                     <tr>
                                                         <td class="text-center">{{ $lesson->display_order }}</td>
-                                                        <td class="text-center">{{ $lesson->lesson_id }}</td>
+                                                        <td class="text-center">{{ $lesson->id }}</td>
                                                         <td class="text-center">{{ $lesson->is_test_lesson ? "あり" : "なし" }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_name }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_description }}</td>
@@ -56,11 +56,11 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('lesson.show', $lesson->lesson_id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('lesson.show', $lesson->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                                :delete-action="{{ json_encode(route('lesson.destroy',  $lesson->lesson_id)) }}"
+                                                                                :delete-action="{{ json_encode(route('lesson.destroy',  $lesson->id)) }}"
                                                                                 :message-confirm="{{ json_encode('このレッスンを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

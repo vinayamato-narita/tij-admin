@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Models\Lessons;
 use Illuminate\Http\Request;
 
 class CourseController extends BaseController
@@ -19,7 +20,7 @@ class CourseController extends BaseController
             ['name' => 'course_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = new Lesson();
+        $queryBuilder = new Lessons();
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

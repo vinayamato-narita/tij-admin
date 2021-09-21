@@ -55,6 +55,7 @@ import TeacherShow from "./components/teacher/detail.vue"
 import TextAdd from "./components/text/add.vue"
 import TextShow from "./components/text/detail.vue"
 import TextEdit from "./components/text/edit.vue"
+<<<<<<< HEAD
 import ChangeStatusNews from "./components/news/change-status.vue"
 import CreateNews from "./components/news/create-news.vue"
 import EditNews from "./components/news/edit-news.vue"
@@ -66,6 +67,8 @@ import EditLangFaq from "./components/faq/edit-lang-faq.vue"
 import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
 
+=======
+>>>>>>> 49b4afa49c2dd5c1ec3aa6a3e64ffcc4f0ce9be9
 import CsvExport from "./components/csv/csv-export.vue"
 
 new Vue({
@@ -147,6 +150,7 @@ new Vue({
         TextAdd,
         TextShow,
         TextEdit,
+<<<<<<< HEAD
         ChangeStatusNews,
         CreateNews,
         EditNews,
@@ -158,6 +162,8 @@ new Vue({
         EditInquiry,
         LessonEdit,
         ModalTable,
+=======
+>>>>>>> 49b4afa49c2dd5c1ec3aa6a3e64ffcc4f0ce9be9
         CsvExport
     },
     methods: {},

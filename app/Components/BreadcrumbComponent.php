@@ -79,6 +79,10 @@ class BreadcrumbComponent
                 'text' => 'テキスト編集',
                 'route_str' => "text.edit",
             ],
+            'csv_index' => [
+                'text' => 'CSV出力',
+                'route_str' => "csv.index",
+            ],
         ];
     }
 

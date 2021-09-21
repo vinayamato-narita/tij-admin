@@ -30,4 +30,13 @@ Route::group([
     Route::post('changeStatus/{id}', 'AdminController@changeStatus')->name('changeStatus');
     Route::resource('faq', FaqController::class);
     Route::resource('text', TextController::class);
+
+    //csvExport
+    Route::resource('csv', CsvController::class);
+    Route::post('/csv/exportPayment', 'CsvController@exportPayment')->name('csvExportPayment');
+    Route::post('/csv/exportLessonHistory', 'CsvController@exportLessonHistory')->name('csvExportLessonHistory');
+    Route::post('/csv/exportSuperGrace', 'CsvController@exportSuperGrace')->name('exportSuperGrace');
+    Route::post('/csv/exportLessonSummaryProcess', 'CsvController@exportLessonSummaryProcess')->name('exportLessonSummaryProcess');
+    Route::post('/csv/exportStudentBoughtCourse', 'CsvController@exportStudentBoughtCourse')->name('exportStudentBoughtCourse');
+    Route::post('/csv/exportSuperGraceNormal', 'CsvController@exportSuperGraceNormal')->name('exportSuperGraceNormal');
 });

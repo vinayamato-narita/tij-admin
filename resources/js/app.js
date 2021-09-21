@@ -9,6 +9,9 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
@@ -32,6 +35,7 @@ Vue.config.productionTip = false
 //Nl2br
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
+Vue.use(DatePicker);
 
 import PopupAlert from "./components/common/popup-alert.vue"
 import DataEmpty from "./components/common/data-empty.vue"
@@ -50,7 +54,7 @@ import TeacherShow from "./components/teacher/detail.vue"
 import TextAdd from "./components/text/add.vue"
 import TextShow from "./components/text/detail.vue"
 import TextEdit from "./components/text/edit.vue"
-
+import CsvExport from "./components/csv/csv-export.vue"
 
 new Vue({
     created() {
@@ -130,7 +134,8 @@ new Vue({
         TeacherShow,
         TextAdd,
         TextShow,
-        TextEdit
+        TextEdit,
+        CsvExport
     },
     methods: {},
     mounted() {}

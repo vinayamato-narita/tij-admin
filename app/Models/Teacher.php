@@ -10,7 +10,7 @@ class Teacher extends Model
 {
     use HasFactory, Sortable;
 
-    protected $table = 'teacher';
+    protected $table = 'teachers';
 
     public $timestamps = false;
 
@@ -18,7 +18,13 @@ class Teacher extends Model
 
     public function timeZone()
     {
-        return $this->hasOne('App\Models\TimeZone', 'timezone_id', 'timezone_id');
+        return $this->hasOne('App\Models\TimeZone', 'id', 'timezone_id');
+    }
+
+    public function lesson()
+    {
+        return $this->belongsToMany('App\Models\Lesson', 'teacher_lesson' ,
+            'teacher_id', 'lesson_id', 'id', 'id');
     }
 
 }

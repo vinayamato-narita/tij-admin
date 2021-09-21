@@ -9,9 +9,11 @@ use Kyslik\ColumnSortable\Sortable;
 class LessonText extends Model
 {
     use HasFactory, Sortable;
-    protected $primaryKey = 'lesson_text_id';
-
-    protected $table = 'lesson_text';
+    protected $table = 'lesson_texts';
 
     public $timestamps = false;
+    public function lesson()
+    {
+        return $this->belongsToMany('App\Models\Lesson', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'id', 'id');
+    }
 }

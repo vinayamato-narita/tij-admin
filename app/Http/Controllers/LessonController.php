@@ -6,6 +6,8 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\StoreUpdateLessonRequest;
 use App\Models\Lesson;
+use App\Models\LessonText;
+use App\Models\LessonTextLesson;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -113,12 +115,78 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->first();
+        $lesson = Lesson::where('id', $id)->with('lessonText')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
             'lesson' => $lesson
         ]);
+    }
+
+    public function textLessonDelete($id, $textLessonId)
+    {
+
+        try {
+            $textLesson = LessonTextLesson::where([
+                'lesson_id' => $id,
+                'lesson_text_id' => $textLessonId
+            ])->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' テキストの解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
+    }
+
+    public function textLesson(Request $request, $id)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new LessonText();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('lesson_text_name', $request['inputSearch']));
+            });
+        }
+        $lessonTextHasAdded = LessonTextLesson::where('lesson_id', $id)->pluck('lesson_text_id');
+
+        $lessonTextList = $queryBuilder->whereNotIn('id', $lessonTextHasAdded)->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $lessonTextList
+        ], StatusCode::OK);
+
+    }
+
+
+    public function registerTextLesson(Request $request, $id) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->all() as $rq) {
+                $tc = new LessonTextLesson();
+                $tc->lesson_text_id = $rq;
+                $tc->lesson_id = $id;
+                $tc->save();
+            }
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 
 
@@ -137,7 +205,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_edit', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->first();
+        $lesson = Lesson::where('id', $id)->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -156,7 +224,7 @@ class LessonController extends BaseController
     public function update(StoreUpdateLessonRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $lesson = Lesson::where('lesson_id', $id)->first();
+            $lesson = Lesson::where('id', $id)->first();
             if (!$lesson) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
@@ -199,7 +267,7 @@ class LessonController extends BaseController
     public function destroy($id)
     {
         try {
-            $lesson = Lesson::where('lesson_id', $id)->delete();
+            $lesson = Lesson::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

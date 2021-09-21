@@ -41,7 +41,7 @@ class TextController extends BaseController
     public function destroy($id)
     {
         try {
-            $text = LessonText::where('lesson_text_id', $id)->delete();
+            $text = LessonText::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([
@@ -109,7 +109,7 @@ class TextController extends BaseController
             ['name' => 'text_show', $id]
         ]);
 
-        $lessonText = LessonText::where('lesson_text_id', $id)->first();
+        $lessonText = LessonText::where('id', $id)->with(['lesson'])->first();
         if (!$lessonText) return redirect()->route('text.index');
         return view('text.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -126,7 +126,7 @@ class TextController extends BaseController
             ['name' => 'text_edit', $id]
         ]);
 
-        $lessonText = LessonText::where('lesson_text_id', $id)->first();
+        $lessonText = LessonText::where('id', $id)->first();
         if (!$lessonText) return redirect()->route('text.index');
         return view('text.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -137,7 +137,7 @@ class TextController extends BaseController
     public function update(StoreUpdateTextRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $lessonText = LessonText::where('lesson_text_id', $id)->first();
+            $lessonText = LessonText::where('id', $id)->first();
             if (!$lessonText) {
                 return response()->json([
                     'status' => 'NOT_FOUND',

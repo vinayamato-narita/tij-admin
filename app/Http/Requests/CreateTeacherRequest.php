@@ -31,7 +31,7 @@ class CreateTeacherRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:teacher,teacher_email'
+                'unique:teachers,teacher_email'
             ],
             'timezone' => 'exists:timeZone,timezone_id',
             'teacherUniversity' => 'max:255',

@@ -27,6 +27,9 @@ Route::group([
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
     Route::resource('teacher', TeacherController::class);
+    Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');
+    Route::post('teacher/{id}/lesson', 'TeacherController@registerLesson')->name('teacher.registerLesson');
+    Route::delete('teacher/{id}/lesson/{lessonId}/delete', 'TeacherController@teacherLessonDelete')->name('teacher.teacherLessonDelete');
     Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
     Route::resource('text', TextController::class);
@@ -40,4 +43,8 @@ Route::group([
     Route::resource('inquiry', InquiryController::class);
     Route::post('changeInquiryFlag', 'InquiryController@changeInquiryFlag')->name('changeInquiryFlag');
     Route::get('exportInquiry/{searchInput?}', 'InquiryController@exportInquiry')->name('exportInquiry');
+    Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
+    Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
+    Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
+
 });

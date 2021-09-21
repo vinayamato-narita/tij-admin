@@ -6,7 +6,10 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use App\Models\Lesson;
+use App\Models\LessonTextLesson;
 use App\Models\Teacher;
+use App\Models\TeacherLesson;
 use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -92,7 +95,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->teacher_password = '';
+                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
 
                 $teacher->save();
@@ -127,12 +130,77 @@ class TeacherController extends BaseController
             ['name' => 'teacher_show', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->with(['timeZone'])->first();
+        $teacher = Teacher::where('id', $id)->with(['timeZone', 'lesson'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
         return view('teacher.show', [
             'breadcrumbs' => $breadcrumbs,
             'teacher' => $teacher
         ]);
+    }
+
+    public function lesson(Request $request, $id)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Lesson();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('lesson_name', $request['inputSearch']));
+            });
+        }
+        $lessonHasAdded = TeacherLesson::where('teacher_id', $id)->pluck('lesson_id');
+
+        $dataList = $queryBuilder->whereNotIn('id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $dataList
+        ], StatusCode::OK);
+
+    }
+
+    public function registerLesson(Request $request, $id) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->all() as $rq) {
+                $tc = new TeacherLesson();
+                $tc->teacher_id = $id;
+                $tc->lesson_id = $rq;
+                $tc->save();
+            }
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function TeacherLessonDelete($id, $lessonId)
+    {
+
+        try {
+            $teacherLesson = TeacherLesson::where([
+                'teacher_id' => $id,
+                'lesson_id' => $lessonId
+            ])->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' レッスンの解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
     }
 
     /**
@@ -193,7 +261,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->teacher_password = '';
+                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
 
 

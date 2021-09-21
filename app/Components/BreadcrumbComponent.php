@@ -123,6 +123,10 @@ class BreadcrumbComponent
                 'text' => '問い合わせ詳細',
                 'route_str' => "inquiry.edit",
             ],
+            'lesson_list' => [
+                'text' => 'レッスン一覧',
+                'route_str' => "lesson.index",
+            ],
         ];
     }
 

@@ -2,7 +2,7 @@
 
     <div class="c-body">
         <main class="c-main pt-0">
-            <div class="container-fluid">
+            <div class="container-fluid info-screen">
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
@@ -40,7 +40,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.lesson.lesson_id}}
+                                            {{this.lesson.id}}
 
                                         </div>
                                     </div>
@@ -106,19 +106,38 @@
                             <div class="card">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
-                                        <a href="#" class="btn btn-primary ">
+                                        <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show">
                                             追加
                                         </a>
                                     </div>
                                 </div>
                                 <div class="card-body">
 
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="lessonText in this.lesson.lesson_text">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{lessonText.lesson_text_name}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriDelete(lesson.id , lessonText.id)"
+                                                            :message-confirm="messageConfirm"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
+                <modal-table :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl" :type="type">
+
+                </modal-table>
             </div>
         </main>
     </div>
@@ -129,21 +148,38 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
+    import DeleteItem from "./../../components/common/delete-item";
+    import ModalTable from "../common/modal-table";
+
 
     export default {
         created: function () {
         },
         components: {
             Loader,
+            DeleteItem,
+            ModalTable
         },
         data() {
             return {
+                messageConfirm : 'このテキストをレッスンに解除しますか？',
+                type : 'lesson',
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ["listLessonUrl", "createUrl", 'lesson', 'editLessonUrl'],
+        props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl'],
         mounted() {},
         methods: {
+            getUriDelete(id, textId) {
+                return  id + '/text/' + textId + '/delete';
+
+            },
+            show () {
+                this.$modal.show('select-teacher-lesson-modal');
+            },
+            hide () {
+                this.$modal.hide('select-teacher-lesson-modal');
+            },
         },
     }
 </script>

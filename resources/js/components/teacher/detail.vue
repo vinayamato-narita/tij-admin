@@ -182,7 +182,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(teacher.id , lesson.lesson_id)"
+                                                            :delete-action="getUriDelete(teacher.id , lesson.id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>

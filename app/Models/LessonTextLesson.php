@@ -11,5 +11,4 @@ class LessonTextLesson extends Model
     use HasFactory, Sortable;
     public $timestamps = false;
 
-    protected $table = 'lesson_text_lesson';
-}
+    protected $table = 'lesson_text_lesson';}

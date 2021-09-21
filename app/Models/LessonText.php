@@ -14,6 +14,6 @@ class LessonText extends Model
     public $timestamps = false;
     public function lesson()
     {
-        return $this->belongsToMany('App\Models\Lessons', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'id', 'id');
+        return $this->belongsToMany('App\Models\Lesson', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'id', 'id');
     }
 }

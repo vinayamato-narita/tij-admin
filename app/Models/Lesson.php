@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class Lessons extends Model
+class Lesson extends Model
 {
     use HasFactory, Sortable;
 

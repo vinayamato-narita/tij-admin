@@ -101,9 +101,9 @@
                             <div class="card">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
-                                        <a href="#" class="btn btn-primary ">
-                                            追加
-                                        </a>
+                                        <div style="min-height: 38px">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-body">

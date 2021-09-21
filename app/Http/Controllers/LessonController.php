@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Http\Requests\StoreUpdateLessonRequest;
-use App\Models\Lessons;
+use App\Models\Lesson;
 use App\Models\LessonText;
 use App\Models\LessonTextLesson;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -26,7 +26,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = new Lessons();
+        $queryBuilder = new Lesson();
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -75,7 +75,7 @@ class LessonController extends BaseController
         if($request->isMethod('POST')){
             DB::beginTransaction();
             try {
-                $lesson = new Lessons();
+                $lesson = new Lesson();
                 $lesson->display_order = $request->displayOrder;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
@@ -115,7 +115,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lessons::where('id', $id)->with('lessonText')->first();
+        $lesson = Lesson::where('id', $id)->with('lessonText')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -205,7 +205,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_edit', $id]
         ]);
 
-        $lesson = Lessons::where('id', $id)->first();
+        $lesson = Lesson::where('id', $id)->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -224,7 +224,7 @@ class LessonController extends BaseController
     public function update(StoreUpdateLessonRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $lesson = Lessons::where('id', $id)->first();
+            $lesson = Lesson::where('id', $id)->first();
             if (!$lesson) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
@@ -267,7 +267,7 @@ class LessonController extends BaseController
     public function destroy($id)
     {
         try {
-            $lesson = Lessons::where('id', $id)->delete();
+            $lesson = Lesson::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

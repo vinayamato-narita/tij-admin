@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class Teachers extends Model
+class Teacher extends Model
 {
     use HasFactory, Sortable;
 
@@ -18,12 +18,12 @@ class Teachers extends Model
 
     public function timeZone()
     {
-        return $this->hasOne('App\Models\TimeZones', 'id', 'timezone_id');
+        return $this->hasOne('App\Models\TimeZone', 'id', 'timezone_id');
     }
 
     public function lesson()
     {
-        return $this->belongsToMany('App\Models\Lessons', 'teacher_lesson' ,
+        return $this->belongsToMany('App\Models\Lesson', 'teacher_lesson' ,
             'teacher_id', 'lesson_id', 'id', 'id');
     }
 

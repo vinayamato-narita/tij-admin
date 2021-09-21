@@ -46,12 +46,18 @@
                                                 <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(lessonTextUrl)">チェック</button>
 
 
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextUrl") }}
-                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row " style="margin-top: -15px">
+                                            <div class="col-md-3">
 
                                             </div>
+                                            <div class="col-md-6 input-group is-danger" role="alert">
+                                                {{ errors.first("lessonTextUrl") }}
+                                            </div>
                                         </div>
+
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrlForTeacher">テキストURL（先生用） :
@@ -67,6 +73,15 @@
 
                                             </div>
                                         </div>
+                                        <div class="form-group row " style="margin-top: -15px">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-6 input-group is-danger" role="alert">
+                                                {{ errors.first("lessonTextUrlForTeacher") }}
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextName">テキスト名 :
@@ -118,9 +133,14 @@
 
                                             </div>
                                         </div>
+                                        <div class="form-group row " style="margin-top: -15px">
+                                            <div class="col-md-3">
 
-
-
+                                            </div>
+                                            <div class="col-md-6 input-group is-danger" role="alert">
+                                                {{ errors.first("lessonTextSoundUrl") }}
+                                            </div>
+                                        </div>
 
 
                                         <div class="form-actions text-center">
@@ -195,7 +215,7 @@
                 lessonTextNo: this.lessonText.lesson_text_no,
                 lessonTextUrl: this.lessonText.lesson_text_url,
                 lessonTextUrlForTeacher: this.lessonText.lesson_text_url_for_teacher,
-                lessonTextDescription : this.lessonText.lesson_text_description,
+                lessonTextDescription : this.lessonText.lesson_text_description ?? '',
                 lessonTextName : this.lessonText.lesson_text_name,
                 lessonTextSoundUrl : this.lessonText.lesson_text_sound_url,
                 flagShowLoader: false,
@@ -208,7 +228,7 @@
         mounted() {},
         methods: {
             checkLink(url) {
-                if (url != "") {
+                if (url != null) {
                     window.open(url, '_blank');
                 }
             },
@@ -250,12 +270,11 @@
                 let that = this;
                 let formData = new FormData();
                 formData.append("lessonTextNo", this.lessonTextNo);
-                formData.append("lessonTextUrl", this.lessonTextUrl);
-                formData.append("lessonTextUrlForTeacher", this.lessonTextUrlForTeacher);
+                formData.append("lessonTextUrl", this.lessonTextUrl ?? '');
+                formData.append("lessonTextUrlForTeacher", this.lessonTextUrlForTeacher ?? '');
                 formData.append("lessonTextName", this.lessonTextName);
-                formData.append("lessonTextDescription", this.lessonTextDescription);
-                formData.append("lessonTextSoundUrl", this.lessonTextSoundUrl);
-                formData.append("teacherNote", this.teacherNote);
+                formData.append("lessonTextDescription", this.lessonTextDescription ?? '');
+                formData.append("lessonTextSoundUrl", this.lessonTextSoundUrl ?? '');
                 formData.append('_method', 'PUT');
                 formData.append('id', this.id);
 
@@ -284,7 +303,6 @@
                                     case 422:
                                     case 400:
                                         this.errorsData = err.response.data;
-                                        console.log(this.errorsData)
                                         that.flagShowLoader = false;
                                         break;
                                     case 500:

@@ -127,6 +127,10 @@ class BreadcrumbComponent
                 'text' => 'レッスン一覧',
                 'route_str' => "lesson.index",
             ],
+            'csv_index' => [
+                'text' => 'CSV出力',
+                'route_str' => "csv.index",
+            ],
         ];
     }
 

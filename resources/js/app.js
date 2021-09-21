@@ -9,6 +9,10 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import 'vue2-datepicker/locale/ja';
+
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
@@ -32,6 +36,7 @@ Vue.config.productionTip = false
 //Nl2br
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
+Vue.use(DatePicker);
 
 import PopupAlert from "./components/common/popup-alert.vue"
 import DataEmpty from "./components/common/data-empty.vue"
@@ -61,6 +66,7 @@ import EditLangFaq from "./components/faq/edit-lang-faq.vue"
 import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
 
+import CsvExport from "./components/csv/csv-export.vue"
 
 new Vue({
     created() {
@@ -151,7 +157,8 @@ new Vue({
         EditLangFaq,
         EditInquiry,
         LessonEdit,
-        ModalTable
+        ModalTable,
+        CsvExport
     },
     methods: {},
     mounted() {}

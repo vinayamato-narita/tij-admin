@@ -57,10 +57,8 @@
                       <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           placeholder="法人コード"
                           v-model="corporationCodePayment"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -73,10 +71,8 @@
                       <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           placeholder="商品コード"
                           v-model="productCode"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -90,10 +86,8 @@
                       <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           placeholder="得意先コード"
                           v-model="customerCode"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -160,13 +154,11 @@
                         for="text-input"
                         >受注番号
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           v-model="lessonResultNumber"
                           placeholder="受注番号"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -176,13 +168,11 @@
                         for="text-input"
                         >法人コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           v-model="lessonResultCampaign"
                           placeholder="法人コード"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -193,13 +183,11 @@
                         for="text-input"
                         >商品コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           placeholder="商品コード"
                           v-model="lessonResultProduct"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -209,13 +197,11 @@
                         for="text-input"
                         >得意先コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           placeholder="得意先コード"
                           v-model="lessonResultCustomer"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -259,7 +245,7 @@
                         <date-picker
                           v-model="superGraceDate"
                           :format="'YYYY/MM'"
-                          type="date"
+                          type="month"
                         ></date-picker>
                       </div>
                     </div>
@@ -269,12 +255,11 @@
                         for="text-input"
                         >法人コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceCampaign"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="法人コード"
                         />
                       </div>
                     </div>
@@ -284,12 +269,11 @@
                         for="text-input"
                         >企業名
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
+                          placeholder="企業名"
                           v-model="superGraceCompany"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -300,12 +284,11 @@
                         for="text-input"
                         >得意先コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceCustomer"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="得意先コード"
                         />
                       </div>
                     </div>
@@ -315,12 +298,11 @@
                         for="text-input"
                         >キャンペーンコード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceCampaignCode"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="キャンペーンコード"
                         />
                       </div>
                     </div>
@@ -330,12 +312,11 @@
                         for="text-input"
                         >商品コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceProduct"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="商品コード"
                         />
                       </div>
                     </div>
@@ -345,12 +326,11 @@
                         for="text-input"
                         >企業ID
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceProjectCode"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="企業ID"
                         />
                       </div>
                     </div>
@@ -396,7 +376,7 @@
                         >出力形式
                       </label>
 
-                      <div class="col-md-6 block-radio">
+                      <div class="col-md-5 block-radio">
                         <div class="form-check">
                           <input
                             class="form-check-input"
@@ -464,7 +444,7 @@
                         <date-picker
                           v-model="superGraceNormalDate"
                           :format="'YYYY/MM'"
-                          type="date"
+                          type="month"
                         ></date-picker>
                       </div>
                     </div>
@@ -474,12 +454,11 @@
                         for="text-input"
                         >法人コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceNormalCampaign"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="法人コード"
                         />
                       </div>
                     </div>
@@ -489,12 +468,11 @@
                         for="text-input"
                         >企業名
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
+                          placeholder="企業名"
                           v-model="superGraceNormalCompany"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -505,12 +483,11 @@
                         for="text-input"
                         >得意先コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceNormalCustomer"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="得意先コード"
                         />
                       </div>
                     </div>
@@ -520,12 +497,11 @@
                         for="text-input"
                         >キャンペーンコード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceNormalCampaignCode"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="キャンペーンコード"
                         />
                       </div>
                     </div>
@@ -535,12 +511,11 @@
                         for="text-input"
                         >商品コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceNormalProduct"
-                          name="question"
-                          v-validate="'required|max:2000'"
+                          placeholder="商品コード"
                         />
                       </div>
                     </div>
@@ -550,13 +525,11 @@
                         for="text-input"
                         >生徒番号
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="superGraceNormalStudentId"
-                          name="question"
                           placeholder="例:生徒番号1,生徒番号2,生徒番号3"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -568,7 +541,7 @@
                         >法人名なしを含む
                       </label>
 
-                      <div class="col-md-6 block-radio">
+                      <div class="col-md-5 block-radio">
                         <div class="form-check">
                           <input
                             class="form-check-input"
@@ -602,7 +575,7 @@
                         >出力形式
                       </label>
 
-                      <div class="col-md-6 block-radio">
+                      <div class="col-md-5 block-radio">
                         <div class="form-check">
                           <input
                             class="form-check-input"
@@ -720,19 +693,12 @@
                         for="text-input"
                         >生徒名
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
                           v-model="studentName"
-                          v-validate="'required|max:2000'"
+                          placeholder="生徒名"
                         />
-                        <div
-                          class="input-group is-danger"
-                          role="alert"
-                          v-if="errors.has('question')"
-                        >
-                          {{ errors.first("question") }}
-                        </div>
                       </div>
                     </div>
 
@@ -826,13 +792,11 @@
                         for="text-input"
                         >法人コード
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           v-model="smCompanyCode"
                           placeholder="法人コード"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -843,13 +807,11 @@
                         for="text-input"
                         >企業ID
                       </label>
-                      <div class="col-md-6">
+                      <div class="col-md-5">
                         <input
                           class="form-control"
-                          name="question"
                           v-model="smProjectCode"
                           placeholder="企業ID"
-                          v-validate="'required|max:2000'"
                         />
                       </div>
                     </div>
@@ -964,14 +926,19 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
@@ -993,15 +960,19 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
-          console.log(res.data.file_name);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
@@ -1025,15 +996,20 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
-          console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
+
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
@@ -1058,15 +1034,19 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
-          console.log(res.data.file_name);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
@@ -1087,15 +1067,19 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
-          console.log(res.data.file_name);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
@@ -1117,19 +1101,31 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          var fileLink = document.createElement("a");
-          fileLink.href = res.data.path;
-          fileLink.setAttribute("download", res.data.file_name);
-          document.body.appendChild(fileLink);
-          console.log(res.data.file_name);
+          if (res.data == '200') {
+            var fileLink = document.createElement("a");
+            fileLink.href = res.data.path;
+            fileLink.setAttribute("download", res.data.file_name);
+            document.body.appendChild(fileLink);
+            console.log(res.data.file_name);
 
-          window.setTimeout(function () {
-            fileLink.click();
-          }, 1000);
+            window.setTimeout(function () {
+              fileLink.click();
+            }, 1000);
+          } else {
+            this.showAlert(res.data.message)
+          }
         })
         .catch((error) => {
           this.flagShowLoader = true;
         });
+    },
+    showAlert(message) {
+      let that = this;
+      this.$swal({
+        title: message,
+        icon: "warning",
+        showCancelButton: false,
+      }).then(result => {});
     }
   },
 };

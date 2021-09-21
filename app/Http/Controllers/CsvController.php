@@ -99,7 +99,8 @@ class CsvController extends Controller
 
         if (empty($data)) {
             return response()->json([
-                'status' => 404
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
             ]);
         }
         $paymentDate1 = $data['payment_date_1'] ? date("Y-m-d",strtotime($data['payment_date_1'])) : null;
@@ -108,7 +109,7 @@ class CsvController extends Controller
         $productCode = $data['product_code'] != null ? $data['product_code'] : '';
         $customerCode = $data['customer_code'] != null ? $data['customer_code'] : '';
 
-        $string = DB::select("CALL sp_get_payment_for_export_csv('".$paymentDate1."','".$paymentDate2."','".$corporationCode."','".$productCode."','".$customerCode."',"."1)");
+        $string = DB::select("CALL sp_get_payment_for_export_csv('".$paymentDate1."','".$paymentDate2."','".$corporationCode."','".$productCode."','".$customerCode."')");
         $fileName = "payment_".$paymentDate1."-".$paymentDate2.".csv";
 
         $headers = array(
@@ -173,7 +174,8 @@ class CsvController extends Controller
         if (!isset($data["lesson_result_date1"]) || !isset($data["lesson_result_date2"])
         || empty($data["lesson_result_date1"]) || empty($data["lesson_result_date2"])) {
             return response()->json([
-                'status' => 404
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
             ]);
         }
 
@@ -184,7 +186,7 @@ class CsvController extends Controller
         $product = $data["lesson_result_product"] != null ? $data["lesson_result_product"] : '';
         $customer = $data["lesson_result_customer"] != null ? $data["lesson_result_customer"] : '';
 
-        $string = DB::select("CALL sp_get_lesson_history_for_export_csv('".$lessondateForm."','".$lessondateTo."','".$number."','".$campaign."','".$product."','".$customer."',"."1)");
+        $string = DB::select("CALL sp_get_lesson_history_for_export_csv('".$lessondateForm."','".$lessondateTo."','".$number."','".$campaign."','".$product."','".$customer."')");
         $fileName = 'lesson_'.date('Ymd_His' ).'.csv';
 
         $headers = array(
@@ -279,7 +281,8 @@ class CsvController extends Controller
 
         if (empty($data["super_grace_date"])) {
             return response()->json([
-                'status' => 404
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
             ]);
         }
         $data['super_grace_date'] = str_replace('-','/',substr($data['super_grace_date'],0,7));
@@ -801,7 +804,10 @@ class CsvController extends Controller
             || empty($data["payment_date_from"])
             || empty($data["payment_date_to"])
         ){
-            return "エラーが発生しました。もう一度出力してください";
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
         }
 
         $studentDateFrom = date('Y-m', strtotime($data["project_course_student_start_date"]));

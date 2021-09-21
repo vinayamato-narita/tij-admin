@@ -11,6 +11,7 @@ import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import 'vue2-datepicker/locale/ja';
 
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

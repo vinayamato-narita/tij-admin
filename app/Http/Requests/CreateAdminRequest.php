@@ -29,7 +29,7 @@ class CreateAdminRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:admin_user,admin_user_email'
+                'unique:admin_users,admin_email'
             ],
             'password' => 'required|min:8|max:32|regex:/^[A-Za-z0-9]*$/i',
             'description' => 'max:2000'

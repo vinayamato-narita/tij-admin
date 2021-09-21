@@ -78,7 +78,7 @@ class FaqController extends BaseController
     public function store(FaqRequest $request)
     {
         if($request->isMethod('POST')){
-            $faqCategoryInfo = FaqCategory::where('faq_category_id', $request->faq_category_id)->first();
+            $faqCategoryInfo = FaqCategory::where('id', $request->faq_category_id)->first();
             if ($faqCategoryInfo == null) {
                 return response()->json([
                     'status' => 'OK',
@@ -90,7 +90,6 @@ class FaqController extends BaseController
             $faq->faq_category_id = $request->faq_category_id;
             $faq->question = $request->question;
             $faq->answer = $request->answer;
-            $faq->brand_id = 1;
             $faq->save();            
         }
         return response()->json([
@@ -111,7 +110,7 @@ class FaqController extends BaseController
             ['name' => 'faq_list'],
             ['name' => 'show_faq', $id],
         ]);
-        $faqInfo = Faq::where('faq_id', $id)->with('faqCategory')->firstOrFail();
+        $faqInfo = Faq::where('id', $id)->with('faqCategory')->firstOrFail();
         $faqVnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::VN])->first();
         $faqEnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::EN])->first();
 
@@ -131,7 +130,7 @@ class FaqController extends BaseController
             ['name' => 'show_faq', $id],
             ['name' => 'edit_lang_faq', $id, $langType],
         ]);
-        $faqInfo = Faq::where('faq_id', $id)->firstOrFail();
+        $faqInfo = Faq::where('id', $id)->firstOrFail();
         
         $faqLangInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => $langType])->first();
         $faqInfo->_token = csrf_token();
@@ -149,14 +148,14 @@ class FaqController extends BaseController
     public function updateLang(FaqLangRequest $request)
     {
         if($request->isMethod('POST')){
-            $faqInfo = Faq::where('faq_id', $request->faq_id)->first();
+            $faqInfo = Faq::where('id', $request->id)->first();
             if ($faqInfo == null) {
                 return response()->json([
                     'status' => 'OK',
                 ], StatusCode::NOT_FOUND);
             }
             $faqLangInfo = FaqInfo::updateOrCreate(
-                ['faq_id' => $request->faq_id, 'lang_type' => $request->lang],
+                ['faq_id' => $request->id, 'lang_type' => $request->lang],
                 ['question' => $request->lang_question, 'answer' => $request->lang_answer]
             );
         }
@@ -179,7 +178,7 @@ class FaqController extends BaseController
             ['name' => 'show_faq', $id],
             ['name' => 'edit_faq', $id],
         ]);
-        $faqInfo = Faq::where('faq_id', $id)->firstOrFail();
+        $faqInfo = Faq::where('id', $id)->firstOrFail();
         $faqInfo->_token = csrf_token();
         $faqCategories = FaqCategory::orderBy('oder_number', 'asc')->get();
         
@@ -200,7 +199,7 @@ class FaqController extends BaseController
     public function update(FaqRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $faqInfo = Faq::where('faq_id', $id)->firstOrFail();
+            $faqInfo = Faq::where('id', $id)->firstOrFail();
             $faqInfo->no_faq = $request->no_faq;
             $faqInfo->faq_category_id = $request->faq_category_id;
             $faqInfo->question = $request->question;
@@ -222,7 +221,7 @@ class FaqController extends BaseController
     public function destroy($id)
     {
         try {
-            $user = Faq::where('faq_id', $id)->delete();
+            $user = Faq::where('id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

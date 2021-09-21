@@ -67,7 +67,7 @@
                                                     v-model="faqInfo.faq_category_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="category.faq_category_id" v-for="category in faqCategories">
+                                                    <option :value="category.id" v-for="category in faqCategories">
                                                         {{ category.faq_category_name }}</option
                                                     >
                                                 </select>

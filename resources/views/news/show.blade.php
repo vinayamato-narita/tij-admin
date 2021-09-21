@@ -20,7 +20,7 @@ use App\Enums\LangType;
                             <div class="card">
                                 <div class="card-header">
                                 	<h5 class="title-page">お知らせ情報</h5>
-                                	<a href="{{ route('news.edit', $newsInfo->news_id) }}" class="btn btn-primary">編集</a>     
+                                	<a href="{{ route('news.edit', $newsInfo->id) }}" class="btn btn-primary">編集</a>     
                             	</div>
                                 
                                 <div class="card-body">
@@ -65,7 +65,7 @@ use App\Enums\LangType;
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="title-page">英語版</h5>
-                                    <a href="{{ route('editLangNews', [$newsInfo->news_id, LangType::EN]) }}" class="btn btn-primary">編集</a>     
+                                    <a href="{{ route('editLangNews', [$newsInfo->id, LangType::EN]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 
                                 <div class="card-body">
@@ -99,7 +99,7 @@ use App\Enums\LangType;
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="title-page">ベトナム語版</h5>
-                                    <a href="{{ route('editLangNews', [$newsInfo->news_id, LangType::VN]) }}" class="btn btn-primary">編集</a>     
+                                    <a href="{{ route('editLangNews', [$newsInfo->id, LangType::VN]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 
                                 <div class="card-body">

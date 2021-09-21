@@ -35,8 +35,8 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('admin_user_name', ' ユーザ名')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
+                                                    <th class="text-center width-130">@sortablelink('admin_name', ' ユーザ名')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('admin_email', ' メールアドレス')</th>
                                                     <th class="text-center min-width-120">説明</th>
                                                     <th class="text-center min-width-150">業務優先度設定</th>
                                                     <th class="w-100"></th>

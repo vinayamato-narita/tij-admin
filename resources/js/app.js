@@ -147,7 +147,6 @@ new Vue({
         TextAdd,
         TextShow,
         TextEdit,
-<<<<<<< HEAD
         ChangeStatusNews,
         CreateNews,
         EditNews,
@@ -159,8 +158,6 @@ new Vue({
         EditInquiry,
         LessonEdit,
         ModalTable,
-=======
->>>>>>> 49b4afa49c2dd5c1ec3aa6a3e64ffcc4f0ce9be9
         CsvExport
     },
     methods: {},

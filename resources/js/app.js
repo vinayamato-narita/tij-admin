@@ -65,6 +65,9 @@ import LessonEdit from "./components/lesson/edit.vue"
 import EditLangFaq from "./components/faq/edit-lang-faq.vue"
 import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
+import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
+import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
+import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
 
 import CsvExport from "./components/csv/csv-export.vue"
 
@@ -158,7 +161,10 @@ new Vue({
         EditInquiry,
         LessonEdit,
         ModalTable,
-        CsvExport
+        CsvExport,
+        EditLangInquirySubject,
+        EditInquirySubject,
+        CreateInquirySubject
     },
     methods: {},
     mounted() {}

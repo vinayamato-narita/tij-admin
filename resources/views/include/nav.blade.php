@@ -29,6 +29,16 @@
                 講師情報管理
             </a>
         </li>
+        
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('inquirySubject.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                問い合わせ件名管理
+            </a>
+        </li>
+
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{route('faq.index')}}">
                 <svg class="c-sidebar-nav-icon">

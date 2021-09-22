@@ -131,6 +131,23 @@ class BreadcrumbComponent
                 'text' => 'CSV出力',
                 'route_str' => "csv.index",
             ],
+            'inquiry_subject_index' => [
+                'text' => '問い合わせ件名管理',
+                'route_str' => "inquirySubject.index",
+            ],
+            'show_inquiry_subject' => [
+                'text' => '問い合わせ件名情報表示',
+                'route_str' => "inquirySubject.show",
+            ],
+            'edit_inquiry_subject' => [
+                'text' => '問い合わせ件名編集',
+                'route_str' => "inquirySubject.edit",
+            ],
+            'create_inquiry_subject' => [
+                'text' => '問い合わせ件名新規作成',
+                'route_str' => "inquirySubject.create",
+            ],
+            
         ];
     }
 

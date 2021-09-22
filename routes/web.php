@@ -16,10 +16,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 Route::resource('login', LoginController::class);
-Route::resource('forgot_password', ForgotPasswordController::class);
 Route::get('logout', "LoginController@logout");
-Route::get('reset/{token}', 'ForgotPasswordController@reset')->name('reset-password');
-Route::post('change_password', 'ForgotPasswordController@changePassword');
+Route::get('reset/{token}', 'ForgotPasswordController@reset')->name('resetPassword');
+Route::get('forgot-password', 'ForgotPasswordController@forgotPassword')->name('forgotPassword');
+Route::post('forgot-password', 'ForgotPasswordController@storeForgotPassword')->name('storeForgotPassword');
+Route::post('change-password', 'ForgotPasswordController@changePassword')->name('changePassword');
 
 Route::group([
     'middleware' => ['customer']

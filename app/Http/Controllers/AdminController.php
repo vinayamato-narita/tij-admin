@@ -71,7 +71,7 @@ class AdminController extends BaseController
      */
     public function store(CreateAdminRequest $request)
     {
-        if($request->isMethod('POST')){
+        if($request->isMethod('POST')) {
             $admin = new AdminUser;
             $admin->admin_name = $request->admin_name;
             $admin->admin_email = $request->admin_email;

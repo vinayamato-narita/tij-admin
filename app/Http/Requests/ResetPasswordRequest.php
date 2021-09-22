@@ -24,6 +24,7 @@ class ResetPasswordRequest extends FormRequest
     public function rules()
     {
         return [
+            'remember_token' => 'required',
             'password' => 'required|min:8|regex:/^[A-Za-z0-9]*$/i',
             'password_confirm' => 'required|same:password',
         ];

@@ -64,7 +64,6 @@
                                                     type="text"
                                                     name="admin_email"
                                                     v-model="adminInfo.admin_email"
-                                                    @change="emailUnique = ''"
                                                     v-validate="
                                                         'required|email|max:255'
                                                     "
@@ -75,16 +74,6 @@
                                                     v-if="errors.has('admin_email')"
                                                 >
                                                     {{ errors.first("admin_email") }}
-                                                </div>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="
-                                                        emailUnique &&
-                                                            !errors.has('admin_email')
-                                                    "
-                                                >
-                                                    {{ emailUnique }}
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +217,6 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            emailUnique: "",
             adminInfo: {
                 _token: Laravel.csrfToken
             }
@@ -266,12 +254,12 @@ export default {
                     }
                 })
                 .catch(e => {
-                    this.flagShowLoader = false;
-                    this.emailUnique = e.response.data.errors.hasOwnProperty(
-                        "admin_user_email"
-                    )
-                        ? e.response.data.errors.admin_email[0]
-                        : "";
+                    that.flagShowLoader = false;
+                    that.errors.add({
+                        field: 'admin_email',
+                        msg: e.response.data.errors.admin_email[0]
+                    });
+                    
                 });
         }
     }

@@ -24,7 +24,7 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => [
+            'admin_email' => [
                 'required',
                 'max:255',
                 'email'

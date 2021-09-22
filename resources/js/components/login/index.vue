@@ -43,7 +43,7 @@
               </div>
               <div class="row justify-content-center">
                 <div class="col-sm-8 p-l-20">
-                  <a class="btn-link px-0" :href="baseUrl+'/forgot_password/create'">パスワードを忘れた方へ</a><br>
+                  <a class="btn-link px-0" :href="urlForgotPassword">パスワードを忘れた方へ</a><br>
                   <button class="btn btn-primary px-4 btn-login" type="submit">ログイン</button>
                 </div>
               </div>
@@ -84,7 +84,7 @@ export default {
     }
   },
   mounted() {},
-  props: ['data'],
+  props: ['data', 'urlForgotPassword'],
   components: {
     Loader
   },

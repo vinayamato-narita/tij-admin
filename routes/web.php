@@ -62,4 +62,5 @@ Route::group([
     Route::resource('inquirySubject', InquirySubjectController::class);
     Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
     Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
+    Route::get('comment', 'CommentController@index')->name('comment.index');
 });

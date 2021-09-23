@@ -147,7 +147,10 @@ class BreadcrumbComponent
                 'text' => '問い合わせ件名新規作成',
                 'route_str' => "inquirySubject.create",
             ],
-            
+            'comment_list' => [
+                'text' => 'コメント一覧',
+                'route_str' => "comment.index",
+            ],
         ];
     }
 

@@ -66,6 +66,16 @@
                     </a>
                 </li>
 
+                <li class=" c-sidebar-nav-item ">
+                    <a class=" c-sidebar-nav-link " href="{{route('course.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        コース一覧
+
+                    </a>
+                </li>
+
             </ul>
         </li>
 

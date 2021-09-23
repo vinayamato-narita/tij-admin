@@ -9,6 +9,10 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Multiselect from 'vue-multiselect'
+
+Vue.component('multiselect', Multiselect)
+
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
@@ -60,6 +64,12 @@ import LessonEdit from "./components/lesson/edit.vue"
 import EditLangFaq from "./components/faq/edit-lang-faq.vue"
 import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
+import InputSearchMulti from "./components/course/input-search-multi.vue"
+import CourseAdd from "./components/course/add"
+import CourseSetAdd from "./components/course/set-add.vue"
+import CourseShow from "./components/course/detail.vue"
+import CourseSetShow from "./components/course/set-detail.vue"
+
 
 
 new Vue({
@@ -150,8 +160,13 @@ new Vue({
         LessonEdit,
         EditLangFaq,
         EditInquiry,
-        LessonEdit,
-        ModalTable
+        ModalTable,
+        CourseAdd,
+        CourseSetAdd,
+        CourseShow,
+        CourseSetShow,
+        InputSearchMulti
+
     },
     methods: {},
     mounted() {}

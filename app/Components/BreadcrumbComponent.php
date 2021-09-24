@@ -123,9 +123,25 @@ class BreadcrumbComponent
                 'text' => '問い合わせ詳細',
                 'route_str' => "inquiry.edit",
             ],
-            'lesson_list' => [
-                'text' => 'レッスン一覧',
-                'route_str' => "lesson.index",
+            'course_list' => [
+                'text' => 'コース一覧',
+                'route_str' => "course.index",
+            ],
+            'course_add' => [
+                'text' => 'コース新規作成',
+                'route_str' => "course.create",
+            ],
+            'course_set_add' => [
+                'text' => 'セットコース新規作成',
+                'route_str' => "course.setCreate",
+            ],
+            'course_show' => [
+                'text' => 'コース情報表示',
+                'route_str' => "course.show",
+            ],
+            'course_set_show' => [
+                'text' => 'セットコース情報表示',
+                'route_str' => "course.setShow",
             ],
             'csv_index' => [
                 'text' => 'CSV出力',
@@ -150,6 +166,14 @@ class BreadcrumbComponent
             'comment_list' => [
                 'text' => 'コメント一覧',
                 'route_str' => "comment.index",
+            ],
+            'course_edit' => [
+                'text' => 'コース編集',
+                'route_str' => "course.edit",
+            ],
+            'course_set_edit' => [
+                'text' => 'セットコース編集',
+                'route_str' => "course.setEdit",
             ],
         ];
     }

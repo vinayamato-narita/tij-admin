@@ -47,6 +47,22 @@ Route::group([
     Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
+    Route::resource('course', courseController::class);
+    Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
+    Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
+    Route::get('course/set/get-course/{id}', 'CourseController@getCourse')->name('course.getCourse');
+    Route::delete('course/{id}/lesson/{lessonId}/delete', 'CourseController@lessonDelete')->name('course.lessonDelete');
+    Route::post('course/{id}/lesson', 'CourseController@registerLesson')->name('course.registerLesson');
+    Route::get('course/{id}/lesson', 'CourseController@lesson')->name('course.lesson');
+    Route::get('course/set/{id}', 'CourseController@setShow')->name('course.setShow');
+    Route::post('course/{id}/registerVideo', 'CourseController@registerVideo')->name('course.registerVideo');
+    Route::delete('course/{id}/video/{videoId}/delete', 'CourseController@videoDelete')->name('course.videoDelete');
+    Route::get('course/set/{id}/edit', 'CourseController@setEdit')->name('course.setEdit');
+    Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
+
+
+
+
 
 
     //csvExport

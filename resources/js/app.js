@@ -9,6 +9,10 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import 'vue2-datepicker/locale/ja';
+
 import Multiselect from 'vue-multiselect'
 
 Vue.component('multiselect', Multiselect)
@@ -36,6 +40,7 @@ Vue.config.productionTip = false
 //Nl2br
 import Nl2br from 'vue-nl2br'
 Vue.component('nl2br', Nl2br)
+Vue.use(DatePicker);
 
 import PopupAlert from "./components/common/popup-alert.vue"
 import DataEmpty from "./components/common/data-empty.vue"
@@ -64,6 +69,9 @@ import LessonEdit from "./components/lesson/edit.vue"
 import EditLangFaq from "./components/faq/edit-lang-faq.vue"
 import EditInquiry from "./components/inquiry/edit-inquiry.vue"
 import ModalTable from "./components/common/modal-table.vue"
+import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
+import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
+import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
 import InputSearchMulti from "./components/course/input-search-multi.vue"
 import CourseAdd from "./components/course/add"
 import CourseSetAdd from "./components/course/set-add.vue"
@@ -71,6 +79,7 @@ import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
 
 
+import CsvExport from "./components/csv/csv-export.vue"
 
 new Vue({
     created() {
@@ -160,6 +169,11 @@ new Vue({
         LessonEdit,
         EditLangFaq,
         EditInquiry,
+        ModalTable,
+        CsvExport,
+        EditLangInquirySubject,
+        EditInquirySubject,
+        CreateInquirySubject
         ModalTable,
         CourseAdd,
         CourseSetAdd,

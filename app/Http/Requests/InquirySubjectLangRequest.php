@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\LangType;
 
-class ForgotPasswordRequest extends FormRequest
+class InquirySubjectLangRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +25,9 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'admin_email' => [
-                'required',
-                'max:255',
-                'email'
-            ],
+            'id' => 'required|integer',
+            'lang_inquiry_subject' => 'required|max:255',
+            'lang' => 'required|enum_value:' . LangType::class . ',false'
         ];
     }
 }

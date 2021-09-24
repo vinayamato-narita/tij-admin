@@ -16,10 +16,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 Route::resource('login', LoginController::class);
-Route::resource('forgot_password', ForgotPasswordController::class);
 Route::get('logout', "LoginController@logout");
-Route::get('reset/{token}', 'ForgotPasswordController@reset')->name('reset-password');
-Route::post('change_password', 'ForgotPasswordController@changePassword');
+Route::get('reset/{token}', 'ForgotPasswordController@reset')->name('resetPassword');
+Route::get('forgot-password', 'ForgotPasswordController@forgotPassword')->name('forgotPassword');
+Route::post('forgot-password', 'ForgotPasswordController@storeForgotPassword')->name('storeForgotPassword');
+Route::post('change-password', 'ForgotPasswordController@changePassword')->name('changePassword');
 
 Route::group([
     'middleware' => ['customer']
@@ -60,4 +61,19 @@ Route::group([
 
 
 
+
+    //csvExport
+    Route::resource('csv', CsvController::class);
+    Route::post('/csv/exportPayment', 'CsvController@exportPayment')->name('csvExportPayment');
+    Route::post('/csv/exportLessonHistory', 'CsvController@exportLessonHistory')->name('csvExportLessonHistory');
+    Route::post('/csv/exportSuperGrace', 'CsvController@exportSuperGrace')->name('exportSuperGrace');
+    Route::post('/csv/exportLessonSummaryProcess', 'CsvController@exportLessonSummaryProcess')->name('exportLessonSummaryProcess');
+    Route::post('/csv/exportStudentBoughtCourse', 'CsvController@exportStudentBoughtCourse')->name('exportStudentBoughtCourse');
+    Route::post('/csv/exportSuperGraceNormal', 'CsvController@exportSuperGraceNormal')->name('exportSuperGraceNormal');
+
+    //inquirySubject
+    Route::resource('inquirySubject', InquirySubjectController::class);
+    Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
+    Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
+    Route::get('comment', 'CommentController@index')->name('comment.index');
 });

@@ -3,5 +3,5 @@
 @section('content')
 <login :data="{{ json_encode([
     'request' => $request,
-]) }}"></login>
+]) }}" :url-forgot-password="{{ json_encode(route('forgotPassword')) }}"></login>
 @endsection

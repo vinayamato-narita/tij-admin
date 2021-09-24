@@ -29,6 +29,16 @@
                 講師情報管理
             </a>
         </li>
+        
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('inquirySubject.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                問い合わせ件名管理
+            </a>
+        </li>
+
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{route('faq.index')}}">
                 <svg class="c-sidebar-nav-icon">
@@ -93,6 +103,22 @@
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 問い合わせ履歴
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('csv.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                CSV出力
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('comment.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                レッスン単位
             </a>
         </li>
     </ul>

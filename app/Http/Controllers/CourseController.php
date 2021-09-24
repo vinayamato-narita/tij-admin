@@ -444,7 +444,46 @@ class CourseController extends BaseController
      */
     public function edit($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'course_list'],
+            ['name' => 'course_show', $id],
+            ['name' => 'course_edit', $id]
+        ]);
+        $tag = Tag::all()->toArray();
+
+        $course = Course::where([
+            'course_id' => $id,
+            'is_set_course' => false
+        ])->with(['tags'])->first();
+        if (!$course) return redirect()->route('course.index');
+        return view('course.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'course' => $course,
+            'tag' => $tag
+        ]);
+    }
+
+    public function setEdit($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'course_list'],
+            ['name' => 'course_set_show', $id],
+            ['name' => 'course_set_edit', $id]
+        ]);
+        $tag = Tag::all()->toArray();
+
+        $course = Course::where([
+            'course_id' => $id,
+            'is_set_course' => true
+        ])->with(['tags'])->first();
+        if (!$course) return redirect()->route('course.index');
+        return view('course.setEdit', [
+            'breadcrumbs' => $breadcrumbs,
+            'course' => $course,
+            'tags' => $tag
+        ]);
     }
 
     /**
@@ -454,9 +493,136 @@ class CourseController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUpdateCourseRequest $request, $id)
     {
-        //
+        if ($request->reverseStart && $request->reverseStart < $request->reverseEnd) {
+            return response()->json([
+                'status' => 'UNPROCESSABLE_ENTITY',
+            ], StatusCode::UNPROCESSABLE_ENTITY);
+        }
+        $course = Course::where([
+            'course_id' => $id,
+            'is_set_course' => false
+        ])->first();
+        if (!$course)
+        return response()->json([
+            'status' => 'NOT_FOUND',
+        ], StatusCode::NOT_FOUND);
+
+        if($request->isMethod('PUT')){
+            DB::beginTransaction();
+            try {
+                $course->display_order = $request->displayOrder;
+                $course->is_show = $request->isShow == true ? 1 : 0;
+                $course->course_name_short = $request->courseNameShort;
+                $course->course_name = $request->courseName;
+                $course->point_expire_day = $request->pointExpireDay;
+                $course->point_count = $request->pointCount;
+                $course->max_reserve_count = $request->maxReverseCount;
+                $course->amount = $request->amount;
+                $course->paypal_item_number = $request->paypalItemNumber == true ? 1 : 0;
+                $course->is_campaign = $request->isCampaign == true ? 1 : 0;
+                $course->campaign_code = $request->campaignCode;
+                $course->course_description = $request->courseDescription;
+                $course->is_schedule_limit = $request->isScheduleLimit == true ? 1 : 0;
+                $course->reserve_end = $request->reverseEnd;
+                $course->reserve_start = $request->reverseStart;
+                $course->cancel_end = $request->cancelEnd;
+                $course->is_for_lms = $request->isForLMS == true ? 1 : 0;
+                $course->is_set_course = false;
+
+                $course->save();
+
+                CourseTag::where([
+                    'course_id' => $id,
+                ])->delete();
+
+                if (isset($request->tagIds)) {
+                    $arrTagId = explode(',', $request->tagIds);
+                    foreach ($arrTagId as $id) {
+                        $ct = new  CourseTag();
+                        $ct->course_id = $course->course_id;
+                        $ct->tag_id = $id;
+                        $ct->save();
+                    }
+                }
+
+
+                DB::commit();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 'INTERNAL_ERR',
+                ], StatusCode::INTERNAL_ERR);
+            }
+
+        }
+        return response()->json([
+            'status' => 'METHOD_NOT_ALLOWED',
+        ], StatusCode::METHOD_NOT_ALLOWED);    }
+    public function setUpdate(StoreUpdateCourseSetRequest $request, $id)
+    {
+        $course = Course::where([
+            'course_id' => $id,
+            'is_set_course' => true
+        ])->first();
+        if (!$course)
+            return response()->json([
+                'status' => 'NOT_FOUND',
+            ], StatusCode::NOT_FOUND);
+        if($request->isMethod('POST')){
+            DB::beginTransaction();
+            try {
+                $course->display_order = $request->displayOrder;
+                $course->is_show = $request->isShow == true ? 1 : 0;
+                $course->course_name_short = $request->courseNameShort == 'null' ? '' : $request->courseNameShort;
+                $course->course_name = $request->courseName;
+                $course->amount = $request->amount;
+                $course->is_campaign = $request->isCampaign == true ? 1 : 0;
+                $course->campaign_code = $request->campaignCode == 'null' ? '' : $request->campaignCode;
+                $course->course_description = $request->courseDescription == 'null' ? '' : $request->courseDescription;
+                $course->is_for_lms = $request->isForLMS == true ? 1 : 0;
+                $course->is_set_course = true;
+                $course->point_count = '';
+                $course->point_expire_day = 0;
+                $course->paypal_item_number = '';
+                $course->max_reserve_count = 0;
+
+
+                $course->save();
+                CourseTag::where([
+                    'course_id' => $id,
+                ])->delete();
+
+                if (isset($request->tagIds)) {
+                    $arrTagId = explode(',', $request->tagIds);
+                    foreach ($arrTagId as $id) {
+                        $ct = new  CourseTag();
+                        $ct->course_id = $course->course_id;
+                        $ct->tag_id = $id;
+                        $ct->save();
+                    }
+                }
+
+
+                DB::commit();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 'INTERNAL_ERR',
+                ], StatusCode::INTERNAL_ERR);
+            }
+
+        }
+        return response()->json([
+            'status' => 'METHOD_NOT_ALLOWED',
+        ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
     /**

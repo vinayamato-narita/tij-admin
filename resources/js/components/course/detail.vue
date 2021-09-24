@@ -268,7 +268,16 @@
                                     <ol style="margin-left: -30px;list-style-type: none;">
                                         <li v-for="video in this.courseVideo">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text">{{video.video_name}}</div>
+                                                <div class="col-md-2" >
+                                                    <img :src="video.image_url" style="max-width: 50px;max-height: 50px">
+
+                                                </div>
+                                                <div class="col-md-8 wrap-long-text text-left">
+                                                    <a :href="video.video_url">
+                                                        {{video.video_name}}
+
+                                                    </a>
+                                                </div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriDeleteVideo(course.course_id , video.id)"

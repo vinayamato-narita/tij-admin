@@ -167,6 +167,14 @@ class BreadcrumbComponent
                 'text' => 'コメント一覧',
                 'route_str' => "comment.index",
             ],
+            'course_edit' => [
+                'text' => 'コース編集',
+                'route_str' => "course.edit",
+            ],
+            'course_set_edit' => [
+                'text' => 'セットコース編集',
+                'route_str' => "course.setEdit",
+            ],
         ];
     }
 

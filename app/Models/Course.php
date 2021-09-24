@@ -9,6 +9,8 @@ use Kyslik\ColumnSortable\Sortable;
 class Course extends Model
 {
     use HasFactory, Sortable;
+
+    protected $primaryKey = 'course_id';
     public function childCourse()
     {
         return $this->belongsToMany('App\Models\Course', 'course_set_course' ,

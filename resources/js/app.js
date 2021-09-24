@@ -77,6 +77,8 @@ import CourseAdd from "./components/course/add"
 import CourseSetAdd from "./components/course/set-add.vue"
 import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
+import CourseEdit from "./components/course/edit.vue"
+import CourseSetEdit from "./components/course/set-edit.vue"
 
 
 import CsvExport from "./components/csv/csv-export.vue"
@@ -173,13 +175,14 @@ new Vue({
         CsvExport,
         EditLangInquirySubject,
         EditInquirySubject,
-        CreateInquirySubject
-        ModalTable,
+        CreateInquirySubject,
         CourseAdd,
         CourseSetAdd,
         CourseShow,
         CourseSetShow,
-        InputSearchMulti
+        InputSearchMulti,
+        CourseEdit,
+        CourseSetEdit
 
     },
     methods: {},

@@ -29,7 +29,7 @@ class StoreUpdateCourseSetRequest extends FormRequest
             'amount' => 'required|digits_between:0,1000000000',
             'courseName' => 'required|max:255',
             'courseNameShort' => 'max:255',
-            'campaignCode' => 'max:8',
+            'campaignCode' => 'nullable|max:8',
         ];
     }
 }

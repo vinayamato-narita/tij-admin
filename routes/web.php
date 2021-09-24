@@ -57,6 +57,9 @@ Route::group([
     Route::get('course/set/{id}', 'CourseController@setShow')->name('course.setShow');
     Route::post('course/{id}/registerVideo', 'CourseController@registerVideo')->name('course.registerVideo');
     Route::delete('course/{id}/video/{videoId}/delete', 'CourseController@videoDelete')->name('course.videoDelete');
+    Route::get('course/set/{id}/edit', 'CourseController@setEdit')->name('course.setEdit');
+    Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
+
 
 
 

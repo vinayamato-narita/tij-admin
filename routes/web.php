@@ -27,26 +27,36 @@ Route::group([
 ], function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
+
+    //teacher
     Route::resource('teacher', TeacherController::class);
     Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');
     Route::post('teacher/{id}/lesson', 'TeacherController@registerLesson')->name('teacher.registerLesson');
     Route::delete('teacher/{id}/lesson/{lessonId}/delete', 'TeacherController@teacherLessonDelete')->name('teacher.teacherLessonDelete');
     Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
+
+    //text
     Route::resource('text', TextController::class);
+
+
     Route::resource('news', NewsController::class);
     Route::post('changeStatusNews/{id}', 'NewsController@changeStatus')->name('changeStatusNews');
     Route::get('/news/{id}/edit-lang/{type}', 'NewsController@editLang')->name('editLangNews');
     Route::post('updateLangNews', 'NewsController@updateLang')->name('updateLangNews');
-    Route::resource('lesson', LessonController::class);
     Route::get('/faq/{id}/edit-lang/{type}', 'FaqController@editLang')->name('editLangFaq');
     Route::post('updateLangFaq', 'FaqController@updateLang')->name('updateLangFaq');
     Route::resource('inquiry', InquiryController::class);
     Route::post('changeInquiryFlag', 'InquiryController@changeInquiryFlag')->name('changeInquiryFlag');
     Route::get('exportInquiry/{searchInput?}', 'InquiryController@exportInquiry')->name('exportInquiry');
+
+    // lesson
+    Route::resource('lesson', LessonController::class);
     Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
+
+    //course course set
     Route::resource('course', courseController::class);
     Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
     Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
@@ -60,9 +70,8 @@ Route::group([
     Route::get('course/set/{id}/edit', 'CourseController@setEdit')->name('course.setEdit');
     Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
 
-
-
-
+   //lesson cancel history
+    Route::resource('lessonCancelHistory', LessonCancelHistoryController::class);
 
 
     //csvExport

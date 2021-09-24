@@ -49,6 +49,16 @@
         </li>
 
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('lessonCancelHistory.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                レッスンキャンセル履歴
+
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" onclick="$('#learning-sub').hasClass('hidden') ?
             $('#learning-sub').removeClass('hidden') : $('#learning-sub').addClass('hidden')">
                 <svg class="c-sidebar-nav-icon">

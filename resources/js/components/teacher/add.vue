@@ -146,7 +146,12 @@
 
                                             <div class="col-md-6">
 
-                                                <input class="form-control" id="teacherBirthday" type="date"   name="teacherBirthday" @input="changeInput()"  v-model="teacherBirthday"  >
+                                                <date-picker
+                                                        v-model="teacherBirthday"
+                                                        :format="'YYYY/MM/DD'"
+                                                        type="date"
+                                                ></date-picker>
+
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("teacherBirthday") }}
@@ -361,7 +366,7 @@
                 formData.append("timeZone", this.timeZone);
                 formData.append("isFreeTeacher", this.isFreeTeacher);
                 formData.append("teacherSex", this.teacherSex);
-                formData.append("teacherBirthday", this.teacherBirthday);
+                formData.append("teacherBirthday", this.teacherBirthday == null ? null : this.teacherBirthday.toISOString());
                 formData.append("teacherUniversity", this.teacherUniversity);
                 formData.append("teacherDepartment", this.teacherDepartment);
                 formData.append("teacherHobby", this.teacherHobby);

@@ -62,4 +62,8 @@ Route::group([
     Route::resource('inquirySubject', InquirySubjectController::class);
     Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
     Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
+
+    //lessonStatus
+    Route::resource('lessonStatus', LessonStatusController::class);
+    Route::post('getDataLessonStatus', 'LessonStatusController@getData')->name('getDataLessonStatus');
 });

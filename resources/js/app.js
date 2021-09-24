@@ -68,6 +68,7 @@ import ModalTable from "./components/common/modal-table.vue"
 import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
 import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
 import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
+import LessonStatusIndex from "./components/lessonStatus/lesson-status-index.vue"
 
 import CsvExport from "./components/csv/csv-export.vue"
 
@@ -164,7 +165,8 @@ new Vue({
         CsvExport,
         EditLangInquirySubject,
         EditInquirySubject,
-        CreateInquirySubject
+        CreateInquirySubject,
+        LessonStatusIndex
     },
     methods: {},
     mounted() {}

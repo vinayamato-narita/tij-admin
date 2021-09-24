@@ -147,6 +147,10 @@ class BreadcrumbComponent
                 'text' => '問い合わせ件名新規作成',
                 'route_str' => "inquirySubject.create",
             ],
+            'lesson_status_index' => [
+                'text' => 'レッスン状況',
+                'route_str' => "lessonStatus.create",
+            ],
             
         ];
     }

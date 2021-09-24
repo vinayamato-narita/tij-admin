@@ -36,7 +36,19 @@ class CommentController extends BaseController
             })
             ->leftJoin('teachers', function($join) {
                 $join->on('lesson_schedules.teacher_id', '=', 'teachers.id');
+            })
+            ->whereNull('lesson_histories.deleted_at')
+            ->where(function($query) {
+                $query->orWhere('lesson_histories.teacher_rating', '<>', 0)
+                    ->orWhere('lesson_histories.skype_voice_rating_from_student', '<>', 0)
+                    ->orWhere('lesson_histories.teacher_attitude', '<>', 0)
+                    ->orWhere('lesson_histories.teacher_punctual', '<>', 0)
+                    ->orWhere('lesson_histories.comment_from_student_to_office', '<>', "")
+                    ->orWhere('lesson_histories.comment_from_teacher_to_student', '<>', "")
+                    ->orWhere('lesson_histories.comment_from_teacher_to_office', '<>', "")
+                    ->orWhere('lesson_histories.note_from_student_to_teacher', '<>', "");
             });
+            
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -44,8 +56,45 @@ class CommentController extends BaseController
                     ->orWhere($this->escapeLikeSentence('teacher_nickname', $request['search_input']));
             });
         }
-
-        $commentList = $queryBuilder->orderByDesc('lesson_schedules.lesson_starttime')->paginate($pageLimit);
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "student_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.student_id','ASC') : $queryBuilder->orderBy('lesson_histories.student_id','DESC');
+            }
+            if ($request['sort'] == "student_nickname") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('students.student_nickname','ASC') : $queryBuilder->orderBy('students.student_nickname','DESC');
+            }
+            if ($request['sort'] == "course_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('courses.course_name','ASC') : $queryBuilder->orderBy('courses.course_name','DESC');
+            }
+            if ($request['sort'] == "teacher_rating") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.teacher_rating','ASC') : $queryBuilder->orderBy('lesson_histories.teacher_rating','DESC');
+            }
+            if ($request['sort'] == "teacher_attitude") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.teacher_attitude','ASC') : $queryBuilder->orderBy('lesson_histories.teacher_attitude','DESC');
+            }
+            if ($request['sort'] == "teacher_punctual") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.teacher_punctual','ASC') : $queryBuilder->orderBy('lesson_histories.teacher_punctual','DESC');
+            }
+            if ($request['sort'] == "skype_voice_rating_from_student") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.skype_voice_rating_from_student','ASC') : $queryBuilder->orderBy('lesson_histories.skype_voice_rating_from_student','DESC');
+            }
+            if ($request['sort'] == "comment_from_student_to_office") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.comment_from_student_to_office','ASC') : $queryBuilder->orderBy('lesson_histories.comment_from_student_to_office','DESC');
+            }
+            if ($request['sort'] == "skype_voice_rating_from_teacher") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.skype_voice_rating_from_teacher','ASC') : $queryBuilder->orderBy('lesson_histories.skype_voice_rating_from_teacher','DESC');
+            }
+            if ($request['sort'] == "comment_from_teacher_to_student") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.comment_from_teacher_to_student','ASC') : $queryBuilder->orderBy('lesson_histories.comment_from_teacher_to_student','DESC');
+            }
+            if ($request['sort'] == "comment_from_teacher_to_office") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.comment_from_teacher_to_office','ASC') : $queryBuilder->orderBy('lesson_histories.comment_from_teacher_to_office','DESC');
+            }
+            if ($request['sort'] == "note_from_student_to_teacher") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_histories.note_from_student_to_teacher','ASC') : $queryBuilder->orderBy('lesson_histories.note_from_student_to_teacher','DESC');
+            }
+        }
+        $commentList = $queryBuilder->orderByDesc('lesson_histories.id')->paginate($pageLimit);
 
         return view('comment.index', [
             'breadcrumbs' => $breadcrumbs,

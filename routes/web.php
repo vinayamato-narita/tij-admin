@@ -87,5 +87,13 @@ Route::group([
     Route::resource('inquirySubject', InquirySubjectController::class);
     Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
     Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
-    Route::get('comment', 'CommentController@index')->name('comment.index');
+
+    Route::resource('student', StudentController::class);
+    Route::get('/comment', 'CommentController@index')->name('comment.index');
+    Route::get('/student/comment/{id}', 'StudentController@comment')->name('student.commentList');
+    Route::delete('/student/destroy-comment/{id}', 'StudentController@destroyComment')->name('student.destroyComment');
+    Route::get('/student/create-comment/{id}', 'StudentController@createComment')->name('student.createComment');
+    Route::post('/student/create-comment', 'StudentController@storeComment')->name('student.storeComment');
+    Route::get('/student/edit-comment/{id}', 'StudentController@editComment')->name('student.editComment');
+    Route::post('/student/update-comment', 'StudentController@updateComment')->name('student.updateComment');
 });

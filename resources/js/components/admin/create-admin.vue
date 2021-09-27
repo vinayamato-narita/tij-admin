@@ -249,7 +249,8 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlAdminList;
+                            let id = response.data.id;
+                            window.location.href = baseUrl + "/admin/" + id;
                         });
                     }
                 })

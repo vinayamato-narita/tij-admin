@@ -14,11 +14,6 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save" ref="formSubmit">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="adminInfo._token"
-                                    />
                                     <div class="card-header">
                                         <h5 class="title-page">管理ユーザ情報</h5>
                                     </div>

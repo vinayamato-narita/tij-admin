@@ -79,6 +79,8 @@ import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
 import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
+import StudentCreateComment from "./components/student/student-create-comment.vue"
+import StudentEditComment from "./components/student/student-edit-comment.vue"
 
 
 import CsvExport from "./components/csv/csv-export.vue"
@@ -182,7 +184,9 @@ new Vue({
         CourseSetShow,
         InputSearchMulti,
         CourseEdit,
-        CourseSetEdit
+        CourseSetEdit,
+        StudentCreateComment,
+        StudentEditComment,
 
     },
     methods: {},

@@ -29,10 +29,10 @@ class InquiryExport implements FromCollection, WithHeadings
         
         if (isset($this->searchInput)) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($searchInput) {
-                $query->where($this->escapeLikeSentence('inquiry_subject', $searchInput))
+                $query->where($this->escapeLikeSentence('admin_inquiries.inquiry_subject', $searchInput))
                     ->orWhere($this->escapeLikeSentence('admin_inquiries.student_email', $searchInput))
                     ->orWhere($this->escapeLikeSentence('students.student_email', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('student_name', $searchInput));
+                    ->orWhere($this->escapeLikeSentence('students.student_name', $searchInput));
             });
         }
         $inquiryList = $queryBuilder->get()->map(function($item, $key) {

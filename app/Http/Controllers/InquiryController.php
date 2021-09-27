@@ -37,10 +37,10 @@ class InquiryController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('inquiry_subject', $request['search_input']))
+                $query->where($this->escapeLikeSentence('admin_inquiries.inquiry_subject', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('admin_inquiries.student_email', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('students.student_email', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_name', $request['search_input']));
+                    ->orWhere($this->escapeLikeSentence('students.student_name', $request['search_input']));
             });
         }
 
@@ -106,8 +106,9 @@ class InquiryController extends BaseController
             ['name' => 'edit_inquiry', $id],
         ]);
         $inquiryInfo = AdminInquiry::where('id', $id)->firstOrFail();
-        $studentInfo = Student::where('id', $inquiryInfo->student)->first();
+        $studentInfo = Student::where('id', $inquiryInfo->student_id)->first();
         $inquiryInfo->student_name = $studentInfo->student_name ?? "";
+        $inquiryInfo->inquiry_flag_name = $inquiryInfo->inquiry_flag_name;
         $inquiryInfo->student_email = $inquiryInfo->student_email ?? $studentInfo->student_email ?? "";
         $inquiryInfo->_token = csrf_token();
 
@@ -126,18 +127,21 @@ class InquiryController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        if($request->isMethod('PUT')){
-            $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
-            if ($inquiryInfo == null) {
-                return response()->json([
-                    'status' => 'OK',
-                ], StatusCode::NOT_FOUND);
-            }
-
-            $inquiryInfo->inquiry_memo = $request->inquiry_memo;
-
-            $inquiryInfo->save();            
+        if(!$request->isMethod('PUT')){
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);              
         }
+        $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
+        if ($inquiryInfo == null) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        $inquiryInfo->inquiry_memo = $request->inquiry_memo;
+
+        $inquiryInfo->save();  
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);
@@ -145,18 +149,22 @@ class InquiryController extends BaseController
 
     public function changeInquiryFlag(Request $request)
     {
-        if($request->isMethod('POST')){
-            $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
-            if ($inquiryInfo == null) {
-                return response()->json([
-                    'status' => 'OK',
-                ], StatusCode::NOT_FOUND);
-            }
-
-            $inquiryInfo->inquiry_flag = InquiryFlag::SUPPORTED;
-
-            $inquiryInfo->save();            
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);            
         }
+        $inquiryInfo = AdminInquiry::where('id', $request->id)->first();
+        if ($inquiryInfo == null) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        $inquiryInfo->inquiry_flag = InquiryFlag::SUPPORTED;
+
+        $inquiryInfo->save();
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

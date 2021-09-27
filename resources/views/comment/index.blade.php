@@ -76,9 +76,6 @@
                                                         <td class="text-center">{{ Str::limit($item['comment_from_teacher_to_office'], 20) }}</td>
                                                         <td class="text-center">{{ Str::limit($item['note_from_student_to_teacher'], 20) }}</td>
                                                     </tr>
-                                                    {{-- <comment-index :lesson-time="{{ json_encode($lessonTime) }}" :comment="{{ json_encode($item) }}">
-                                                        
-                                                    </comment-index> --}}
                                                 @endforeach
                                             </tbody>
                                         </table>

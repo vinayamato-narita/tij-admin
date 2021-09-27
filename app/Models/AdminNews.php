@@ -10,6 +10,8 @@ class AdminNews extends Model
 {
     use HasFactory, Sortable;
 
+    protected $fillable = ['updated_at'];
+    
     public function getStatusAttribute($value) {
 		$status = $this->public_flag == 0 ? "非表示" : "表示";
 		return $status;

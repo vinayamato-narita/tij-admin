@@ -30,21 +30,22 @@ class NewsController extends BaseController
             ['name' => 'news_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = AdminNews::with('newsSubject')->leftJoin('news_subjects', 'news_subjects.id', '=', 'admin_news.news_subject_id');
+        $queryBuilder = AdminNews::select('admin_news.id as id', 'public_flag', 'admin_news.updated_at as updated_at',
+            'news_subjects.news_subject_ja as news_subject_ja', 'news_title', 'news_body')
+        ->leftJoin('news_subjects', 'news_subjects.id', '=', 'admin_news.news_subject_id');
 
         if (isset($request['search_input'])) {
-            $news_subject_ids = NewsSubject::where($this->escapeLikeSentence('news_subject_ja', $request['search_input']))->pluck('news_subject_id')->toArray();
-            $queryBuilder = $queryBuilder->where(function ($query) use ($request, $news_subject_ids) {
-                $query->where($this->escapeLikeSentence('news_title', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('news_body', $request['search_input']))
-                    ->orWhereIn('admin_news.news_subject_id', $news_subject_ids);
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('admin_news.news_title', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('admin_news.news_body', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('news_subjects.news_subject_ja', $request['search_input']));
             });
         }
         if (isset($request['sort']) && $request['sort'] == "news_subject_ja") {
             $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('news_subjects.news_subject_ja','ASC') : $queryBuilder->orderBy('news_subjects.news_subject_ja','DESC');
         }
         
-        $newsList = $queryBuilder->sortable(['news_update_date' => 'desc'])->paginate($pageLimit);
+        $newsList = $queryBuilder->sortable(['updated_at' => 'desc'])->paginate($pageLimit);
 
         return view('news.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -83,20 +84,24 @@ class NewsController extends BaseController
      */
     public function store(NewsRequest $request)
     {
-        if($request->isMethod('POST')){
-            $subjectInfo = NewsSubject::where('id', $request->news_subject_id)->first();
-            if ($subjectInfo == null) {
-                return response()->json([
-                    'status' => 'OK',
-                ], StatusCode::NOT_FOUND);
-            }
-            $news = new AdminNews;
-
-            $news->news_subject_id = $request->news_subject_id;
-            $news->news_title = $request->news_title;
-            $news->news_body = $request->news_body;
-            $news->save();            
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);        
         }
+        $subjectInfo = NewsSubject::where('id', $request->news_subject_id)->first();
+        if ($subjectInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $news = new AdminNews;
+
+        $news->news_subject_id = $request->news_subject_id;
+        $news->news_title = $request->news_title;
+        $news->news_body = $request->news_body;
+        $news->save();  
+
         return response()->json([
             'status' => 'OK',
             'id' => $news->id,
@@ -148,24 +153,27 @@ class NewsController extends BaseController
         return view('news.edit_lang', [
             'breadcrumbs' => $breadcrumbs,
             'newsInfo' => $newsInfo,
-            'langType' => $langType,
         ]);
     }
 
     public function updateLang(NewsLangRequest $request)
     {
-        if($request->isMethod('POST')){
-            $newsInfo = AdminNews::where('id', $request->id)->first();
-            if ($newsInfo == null) {
-                return response()->json([
-                    'status' => 'OK',
-                ], StatusCode::NOT_FOUND);
-            }
-            $newsLangInfo = AdminNewsInfo::updateOrCreate(
-                ['news_id' => $request->id, 'lang_type' => $request->lang],
-                ['news_title' => $request->news_lang_title, 'news_body' => $request->news_lang_body]
-            );
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);  
         }
+        $newsInfo = AdminNews::where('id', $request->id)->first();
+        if ($newsInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $newsLangInfo = AdminNewsInfo::updateOrCreate(
+            ['news_id' => $request->id, 'lang_type' => $request->lang],
+            ['news_title' => $request->news_lang_title, 'news_body' => $request->news_lang_body]
+        );
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);
@@ -205,21 +213,25 @@ class NewsController extends BaseController
      */
     public function update(NewsRequest $request, $id)
     {
-        if($request->isMethod('PUT')){
-            $subjectInfo = NewsSubject::where('id', $request->news_subject_id)->first();
-            if ($subjectInfo == null) {
-                return response()->json([
-                    'status' => 'OK',
-                ], StatusCode::NOT_FOUND);
-            }
-
-            $newsInfo = AdminNews::where('id', $id)->firstOrFail();
-            $newsInfo->news_subject_id = $request->news_subject_id;
-            $newsInfo->news_title = $request->news_title;
-            $newsInfo->news_body = $request->news_body;
-
-            $newsInfo->save();            
+        if(!$request->isMethod('PUT')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);         
         }
+        $subjectInfo = NewsSubject::where('id', $request->news_subject_id)->first();
+        if ($subjectInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        $newsInfo = AdminNews::where('id', $id)->firstOrFail();
+        $newsInfo->news_subject_id = $request->news_subject_id;
+        $newsInfo->news_title = $request->news_title;
+        $newsInfo->news_body = $request->news_body;
+
+        $newsInfo->save();  
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

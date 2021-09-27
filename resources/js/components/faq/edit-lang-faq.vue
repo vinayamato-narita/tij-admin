@@ -47,11 +47,6 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="faqInfo._token"
-                                    />
                                     <div class="card-header">
                                         <h5 class="title-page">英語版</h5>
                                     </div>

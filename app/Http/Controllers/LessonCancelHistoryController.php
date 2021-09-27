@@ -36,35 +36,40 @@ class LessonCancelHistoryController extends BaseController
             });
         }
 
-        if (!empty($request['course_id'])) {
-            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where('course_id', $request['course_id']);
+       if (!empty($request['cancelDateStart']) || !empty($request['cancelDateEnd'])) {
+           if (empty($request['cancelDateStart']))
+               $queryBuilder->whereDate('cancel_date', '<=', $request['cancelDateEnd']);
+           if (empty($request['cancelDateEnd']))
+               $queryBuilder->whereDate('cancel_date', '>=', $request['cancelDateStart']);
+           if (!empty($request['cancelDateStart']) &&  !empty($request['cancelDateEnd']))
+               $queryBuilder->whereBetween('cancel_date', [$request['cancelDateStart'], $request['cancelDateEnd']]);
+       }
+
+        if (!empty($request['lessonDateStart']) || !empty($request['lessonDateEnd'])) {
+            if (empty($request['lessonDateStart']))
+                $queryBuilder->whereDate('lesson_date', '<=', $request['lessonDateEnd']);
+            if (empty($request['lessonDateEnd']))
+                $queryBuilder->whereDate('lesson_date', '>=', $request['lessonDateStart']);
+            if (!empty($request['lessonDateStart']) &&  !empty($request['lessonDateEnd']))
+                $queryBuilder->whereBetween('lesson_date', [$request['lessonDateStart'], $request['lessonDateEnd']]);
+        }
+
+        if (!empty($request['teacherName'])) {
+            $queryBuilder->whereHas('teacher', function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('teacher_name', $request['teacherName']));
             });
         }
 
-        /*        if (!empty($request['course_name'])) {
-                    $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                        $query->where($this->escapeLikeSentence('course_name', $request['course_name']));
-                    });
-                }
+        if (!empty($request['studentId'])) {
+            $queryBuilder->where('student_id', $request['studentId']);
+        }
 
-                if (!empty($request['campaign_code'])) {
-                    $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                        $query->where($this->escapeLikeSentence('campaign_code', $request['campaign_code']));
-                    });
-                }
+        if (!empty($request['studentName'])) {
+            $queryBuilder->whereHas('student', function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('student_name', $request['studentName']));
+            });
+        }
 
-                if (!empty($request['paypal_item_number'])) {
-                    $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                        $query->where('paypal_item_number', $request['paypal_item_number']);
-                    });
-                }
-
-                if (!empty($request['is_show']) && $request['is_show'] != 2) {
-                    $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                        $query->where('is_show', $request['is_show']);
-                    });
-                }*/
 
         $historyList = $queryBuilder->sortable(['cancel_date' => 'desc'])->paginate($pageLimit);
 

@@ -88,7 +88,7 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null : $request->teacherBirthday;
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity　?? '';
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
@@ -254,7 +254,7 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = ($request->teacherBirthday == 'null' || $request->teacherBirthday == null) ? null : $request->teacherBirthday;
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity　?? '';
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';

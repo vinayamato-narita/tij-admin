@@ -175,6 +175,10 @@ class BreadcrumbComponent
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",
             ],
+            'lesson_cancel_history_list' => [
+                'text' => 'レッスンキャンセル履歴',
+                'route_str' => "lessonCancelHistory.index",
+            ],
         ];
     }
 

@@ -148,8 +148,12 @@
                                             <label class="col-md-3 col-form-label text-md-right"> 誕生日: </label>
 
                                             <div class="col-md-6">
+                                                <date-picker
+                                                        v-model="teacherBirthday"
+                                                        :format="'YYYY/MM/DD'"
+                                                        type="date"
+                                                ></date-picker>
 
-                                                <input class="form-control" id="teacherBirthday" type="date"   name="teacherBirthday" @input="changeInput()"  v-model="teacherBirthday"  >
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("teacherBirthday") }}
@@ -343,7 +347,7 @@
                 errorsData: {},
                 timeZone : this.teacher.timezone_id,
                 teacherSex : this.teacher.teacher_sex,
-                teacherBirthday :   this.teacher.teacher_birthday == null ? null : new Date(Date.parse(this.teacher.teacher_birthday)).toISOString().slice(0,10),
+                teacherBirthday :   this.teacher.teacher_birthday == null ? null : new Date(Date.parse(this.teacher.teacher_birthday)),
                 teacherUniversity : this.teacher.teacher_university,
                 teacherDepartment : this.teacher.teacher_department,
                 teacherHobby : this.teacher.teacher_hobby,
@@ -401,7 +405,7 @@
                 formData.append("timeZone", this.timeZone);
                 formData.append("isFreeTeacher", this.isFreeTeacher);
                 formData.append("teacherSex", this.teacherSex);
-                formData.append("teacherBirthday", this.teacherBirthday);
+                formData.append("teacherBirthday", this.teacherBirthday == null ? null : this.teacherBirthday.toISOString());
                 formData.append("teacherUniversity", this.teacherUniversity);
                 formData.append("teacherDepartment", this.teacherDepartment);
                 formData.append("teacherHobby", this.teacherHobby);

@@ -73,6 +73,7 @@ import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
 import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
 import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
 import InputSearchMulti from "./components/course/input-search-multi.vue"
+import CancelHistorySearchMulti from "./components/lessonCancelHistory/input-search-multi.vue"
 import CourseAdd from "./components/course/add"
 import CourseSetAdd from "./components/course/set-add.vue"
 import CourseShow from "./components/course/detail.vue"
@@ -187,6 +188,7 @@ new Vue({
         CourseSetEdit,
         StudentCreateComment,
         StudentEditComment,
+        CancelHistorySearchMulti
 
     },
     methods: {},

@@ -195,6 +195,14 @@ class BreadcrumbComponent
                 'text' => 'レッスンキャンセル履歴',
                 'route_str' => "lessonCancelHistory.index",
             ],
+            'student_lesson_history_list' => [
+                'text' => 'レッスン履歴一覧',
+                'route_str' => "student.lessonHistoryList",
+            ],
+            'show_student_lesson_history' => [
+                'text' => 'レッスン履歴詳細',
+                'route_str' => "student.showLessonHistory",
+            ],
             'remind_mail_list' => [
                 'text' => 'リマインドメール一覧',
                 'route_str' => "remindmail.index",

@@ -3,6 +3,7 @@
 @endphp
 
 @extends('layouts.default')
+@section('title', 'レッスンキャンセル履歴')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">

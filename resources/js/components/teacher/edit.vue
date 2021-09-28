@@ -89,7 +89,7 @@
                                             <div class="col-md-6">
                                                 <select name="timeZone" class="form-control valid" id="timeZone" v-model="timeZone" aria-invalid="false">
                                                     <option value="0" ></option>
-                                                    <option v-for="tz in timeZones" :value="tz.timezone_id" :selected="(tz.timeZone_id == timeZone) ? true : false">
+                                                    <option v-for="tz in timeZones" :value="tz.id" :selected="(tz.timeZone_id == timeZone) ? true : false">
                                                     {{tz.timezone_name_native}}
                                                     </option>
                                                 </select>
@@ -161,7 +161,6 @@
 
                                             </div>
                                         </div>
-
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="teacherUniversity"> 出身国: </label>
 
@@ -345,7 +344,7 @@
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
-                timeZone : this.teacher.timezone_id,
+                timeZone : this.teacher.timezone_id ,
                 teacherSex : this.teacher.teacher_sex,
                 teacherBirthday :   this.teacher.teacher_birthday == null ? null : new Date(Date.parse(this.teacher.teacher_birthday)),
                 teacherUniversity : this.teacher.teacher_university,

@@ -3,6 +3,7 @@
 @endphp
 
 @extends('layouts.default')
+@section('title', 'テキスト一覧')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">

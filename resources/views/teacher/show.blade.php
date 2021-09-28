@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', '講師情報表示')
 @section('content')
     <teacher-show
             :list-teacher-url = "{{json_encode(route('teacher.index'))}}"

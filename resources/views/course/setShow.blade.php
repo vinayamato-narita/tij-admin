@@ -1,4 +1,6 @@
 @extends('layouts.default')
+@section('title', 'セットコース情報表示')
+
 @section('content')
     <course-set-show
             :list-course-url = "{{json_encode(route('course.index'))}}"

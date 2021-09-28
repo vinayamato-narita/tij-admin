@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'セットコース編集')
 @section('content')
     <course-set-edit
             :update-url = "{{json_encode(route('course.setUpdate', $course->course_id))}}"

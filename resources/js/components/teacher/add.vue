@@ -88,7 +88,7 @@
                                             <div class="col-md-6">
                                                 <select name="timeZone" class="form-control valid" id="timeZone" v-model="timeZone" aria-invalid="false">
                                                     <option value="0" selected="selected"></option>
-                                                    <option v-for="tz in timeZones" :value="tz.timezone_id">{{tz.timezone_name_native}}</option>
+                                                    <option v-for="tz in timeZones" :value="tz.id">{{tz.timezone_name_native}}</option>
                                                 </select>
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("timeZone") }}

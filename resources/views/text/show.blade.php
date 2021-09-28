@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'テキスト情報表示')
 @section('content')
     <text-show
             :list-text-url = "{{json_encode(route('text.index'))}}"

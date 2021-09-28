@@ -73,6 +73,10 @@ Route::group([
    //lesson cancel history
     Route::resource('lessonCancelHistory', LessonCancelHistoryController::class);
 
+    //remind mail
+    Route::resource('remindmail', RemindMailController::class);
+
+
 
     //csvExport
     Route::resource('csv', CsvController::class);

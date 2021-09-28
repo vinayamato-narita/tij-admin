@@ -195,6 +195,18 @@ class BreadcrumbComponent
                 'text' => 'レッスンキャンセル履歴',
                 'route_str' => "lessonCancelHistory.index",
             ],
+            'remind_mail_list' => [
+                'text' => 'リマインドメール一覧',
+                'route_str' => "remindmail.index",
+            ],
+            'remind_mail_show' => [
+                'text' => 'リマインドメール情報表示',
+                'route_str' => "remindmail.show",
+            ],
+            'remind_mail_edit' => [
+                'text' => 'リマインドメール編集',
+                'route_str' => "remindmail.edit",
+            ],
         ];
     }
 

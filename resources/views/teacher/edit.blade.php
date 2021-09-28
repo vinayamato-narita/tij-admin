@@ -1,6 +1,5 @@
-
-
 @extends('layouts.default')
+@section('title', '講師情報編集')
 @section('content')
     <teacher-edit
             :time-zones = "{{json_encode($timeZones)}}"

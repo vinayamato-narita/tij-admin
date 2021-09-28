@@ -82,6 +82,7 @@ import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
 import StudentCreateComment from "./components/student/student-create-comment.vue"
 import StudentEditComment from "./components/student/student-edit-comment.vue"
+import ShowLessonHistory from "./components/student/show-lesson-history.vue"
 
 
 import CsvExport from "./components/csv/csv-export.vue"
@@ -188,8 +189,8 @@ new Vue({
         CourseSetEdit,
         StudentCreateComment,
         StudentEditComment,
-        CancelHistorySearchMulti
-
+        CancelHistorySearchMulti,
+        ShowLessonHistory,
     },
     methods: {},
     mounted() {}

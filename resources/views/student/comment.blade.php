@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', 'お知らせ一覧')
+@section('title', 'コメント履歴一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -11,11 +11,11 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        お知らせ一覧
+                        コメント履歴一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('news.create') }}" class="btn btn-primary pull-right"
+                    <a href="{{ route('student.createComment', $studentInfo->id) }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -28,43 +28,38 @@
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
-                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('news.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.commentList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                 </div>
-                                @if(!$newsList->isEmpty())
+                                @if(!$commentList->isEmpty())
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('public_flag', 'トップ表示')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('updated_at', '日時')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('news_subject_ja', '対象')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('news_title', 'タイトル')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('news_body', '内容')</th>
+                                                    <th class="text-center width-130">@sortablelink('teacher_nickname', '講師のニックネーム')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('created_at', '作成日')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('updated_at', '更新日')</th>
+                                                    <th class="text-center min-width-120" style="width: 40%">@sortablelink('comment', 'コメント')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($newsList as $index => $news)
-                                                    <tr class="eachRow">
-                                                        <td class="text-center status">{{ $news->public_flag == 0 ? "非表示" : "表示" }}</td>
-                                                        <td class="text-center">{{ $news->updated_at }}</td>
-                                                        <td class="text-center">{{ $news->news_subject_ja }}</td>
-                                                        <td class="text-center">{{ $news->news_title }}</td>
-                                                        <td class="text-center">{{ $news->news_body }}</td>
+                                                @foreach ($commentList as $index => $comment)
+                                                    <tr>
+                                                        <td class="text-center">{{ $comment->teacher_nickname }}</td>
+                                                        <td class="text-center">{{ $comment->created_at }}</td>
+                                                        <td class="text-center">{{ $comment->updated_at }}</td>
+                                                        <td class="text-center">{{ $comment->comment }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('news.show', $news->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <change-status-news :url-action="{{ json_encode(route('changeStatusNews', $news->id)) }}" :status="{{ $news->public_flag }}"></change-status-news>
+                                                                        <a class="dropdown-item" href="{{ route('student.editComment', $comment->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                            :delete-action="{{ json_encode(route('news.destroy', $news->id)) }}"
-                                                                            :message-confirm="{{ json_encode('このお知らせを削除しますか？') }}"
+                                                                            :delete-action="{{ json_encode(route('student.destroyComment', $comment->id)) }}"
+                                                                            :message-confirm="{{ json_encode('このコメントを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>
                                                                     </li>
@@ -77,7 +72,7 @@
                                         </table>
                                     </div>
 
-                                    {{ $newsList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
+                                    {{ $commentList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                 @else
                                     <data-empty></data-empty>
                                 @endif

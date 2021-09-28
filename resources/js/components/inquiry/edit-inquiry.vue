@@ -30,7 +30,7 @@
                                                 >問い合わせ番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_id }}
+                                                {{ inquiryInfo.id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -50,7 +50,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.user_id }}
+                                                {{ inquiryInfo.student_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -70,7 +70,7 @@
                                                 >メールアドレス</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.user_mail }}
+                                                {{ inquiryInfo.student_email }}
                                             </div>
                                         </div>
                                         <div class="form-group row">

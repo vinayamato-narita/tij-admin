@@ -175,6 +175,22 @@ class BreadcrumbComponent
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",
             ],
+            'student_list' => [
+                'text' => '生徒情報一覧',
+                'route_str' => "student.index",
+            ],
+            'student_comment_list' => [
+                'text' => 'コメント履歴一覧',
+                'route_str' => "student.commentList",
+            ],
+            'student_create_comment' => [
+                'text' => 'コメント新規作成',
+                'route_str' => "student.createComment",
+            ],
+            'student_edit_comment' => [
+                'text' => 'コメント編集',
+                'route_str' => "student.editComment",
+            ],
             'lesson_cancel_history_list' => [
                 'text' => 'レッスンキャンセル履歴',
                 'route_str' => "lessonCancelHistory.index",

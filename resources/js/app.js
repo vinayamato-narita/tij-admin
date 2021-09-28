@@ -80,6 +80,8 @@ import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
 import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
+import StudentCreateComment from "./components/student/student-create-comment.vue"
+import StudentEditComment from "./components/student/student-edit-comment.vue"
 import RemindMailShow from "./components/remindMailPatern/detail.vue"
 import RemindMailEdit from "./components/remindMailPatern/edit.vue"
 
@@ -186,6 +188,8 @@ new Vue({
         InputSearchMulti,
         CourseEdit,
         CourseSetEdit,
+        StudentCreateComment,
+        StudentEditComment,
         CancelHistorySearchMulti,
         RemindMailShow,
         RemindMailEdit

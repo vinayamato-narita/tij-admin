@@ -14,11 +14,6 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="newsInfo._token"
-                                    />
                                     <div class="card-header">
                                         <h5 class="title-page">お知らせ情報</h5>
                                     </div>

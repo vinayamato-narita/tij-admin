@@ -71,16 +71,21 @@ class AdminController extends BaseController
      */
     public function store(CreateAdminRequest $request)
     {
-        if($request->isMethod('POST')) {
-            $admin = new AdminUser;
-            $admin->admin_name = $request->admin_name;
-            $admin->admin_email = $request->admin_email;
-            $admin->password = Hash::make($request->password);
-            $admin->description = $request->description;
-            $admin->save();            
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);              
         }
+        $admin = new AdminUser;
+        $admin->admin_name = $request->admin_name;
+        $admin->admin_email = $request->admin_email;
+        $admin->password = Hash::make($request->password);
+        $admin->description = $request->description;
+        $admin->save();  
+
         return response()->json([
             'status' => 'OK',
+            'id' => $admin->id,
         ], StatusCode::OK);
     }
 
@@ -136,17 +141,21 @@ class AdminController extends BaseController
      */
     public function update(EditAdminRequest $request, $id)
     {
-        if($request->isMethod('PUT')){
-            $adminInfo = AdminUser::where('id', $id)->firstOrFail();
-            $adminInfo->admin_name = $request->admin_name;
-            $adminInfo->admin_email = $request->admin_email;
-            if ($request->password != "") {
-                $adminInfo->password = Hash::make($request->password);
-            }
-            
-            $adminInfo->description = $request->description;
-            $adminInfo->save();            
+        if(!$request->isMethod('PUT')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);   
         }
+        $adminInfo = AdminUser::where('id', $id)->firstOrFail();
+        $adminInfo->admin_name = $request->admin_name;
+        $adminInfo->admin_email = $request->admin_email;
+        if ($request->password != "") {
+            $adminInfo->password = Hash::make($request->password);
+        }
+        
+        $adminInfo->description = $request->description;
+        $adminInfo->save();  
+            
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

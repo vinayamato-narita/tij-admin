@@ -37,7 +37,7 @@
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('no_faq', ' No.')</th>
                                                     <th class="text-center min-width-150">@sortablelink('question', ' 質問・Q')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('question', ' 答え・A')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('answer', ' 答え・A')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

@@ -1,0 +1,153 @@
+<template>
+
+    <div class="c-body">
+        <main class="c-main pt-0">
+            <div class="container-fluid info-screen">
+                <div class="page-heading">
+                    <div class="page-heading-left">
+                        <h5>
+                            コースカテゴリ情報表示
+
+
+
+                        </h5>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-header">コースカテゴリ情報
+
+                                    <div class="float-right">
+                                        <a :href="this.editCategoryUrl" class="btn btn-primary ">編集</a>
+                                    </div>
+
+                                </div>
+                                <div class="card-body">
+
+
+                                    <div class="form-group row ">
+                                        <label class="col-md-4 col-form-label text-md-right">カテゴリID:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.category.id}}
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-4 col-form-label text-md-right">表示順:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.category.order_num}}
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-4 col-form-label text-md-right">表示アイコン:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <img  :src="`${this.category.category_icon}`" style="max-width: 100px"
+                                            >
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row ">
+                                        <label class="col-md-4 col-form-label text-md-right">カテゴリ名:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.category.category_name}}
+
+                                        </div>
+                                    </div>
+
+
+
+                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header">コース一覧
+
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show">
+                                            追加
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="course in this.category.courses">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{course.course_name}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriDelete(category.id , course.course_id)"
+                                                            :message-confirm="messageConfirm"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <category-modal-table :detailUrl="detailCategoryUrl" :url="listCourseUrl"  :pageSizeLimit="pageSizeLimit" :id="category.id" :register-url="registerUrl" :type="type">
+
+                </category-modal-table>
+            </div>
+        </main>
+    </div>
+
+
+</template>
+
+<script>
+    import axios from 'axios';
+    import Loader from "./../../components/common/loader";
+    import DeleteItem from "./../../components/common/delete-item";
+    import CategoryModalTable from "../category/category-modal-table";
+
+
+    export default {
+        created: function () {
+        },
+        components: {
+            Loader,
+            DeleteItem,
+            CategoryModalTable
+        },
+        data() {
+            return {
+                messageConfirm : 'このコースをコースカテゴリに解除しますか？',
+                type : 'category',
+                csrfToken: Laravel.csrfToken,
+            };
+        },
+        props: ['category', 'editCategoryUrl', 'detailCategoryUrl', 'pageSizeLimit', 'registerUrl', 'listCourseUrl'],
+        mounted() {},
+        methods: {
+            getUriDelete(id, courseId) {
+                return  id + '/course/' + courseId + '/delete';
+
+            },
+            show () {
+                this.$modal.show('select-teacher-lesson-modal');
+            },
+            hide () {
+                this.$modal.hide('select-teacher-lesson-modal');
+            },
+        },
+    }
+</script>

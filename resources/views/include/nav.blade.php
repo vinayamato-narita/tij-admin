@@ -96,6 +96,16 @@
                     </a>
                 </li>
 
+                <li class=" c-sidebar-nav-item ">
+                    <a class=" c-sidebar-nav-link " href="{{route('category.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        カテゴリ管理
+
+                    </a>
+                </li>
+
             </ul>
         </li>
         <li class="c-sidebar-nav-item">

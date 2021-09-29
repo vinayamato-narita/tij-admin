@@ -76,7 +76,11 @@ Route::group([
     //remind mail
     Route::resource('remindmail', RemindMailController::class);
 
-
+    //Category
+    Route::resource('category', CategoryController::class);
+    Route::delete('category/{id}/course/{courseId}/delete', 'CategoryController@courseDelete')->name('category.courseDelete');
+    Route::post('category/{id}/course', 'CategoryController@registerCourse')->name('category.registerCourse');
+    Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
 
     //csvExport
     Route::resource('csv', CsvController::class);

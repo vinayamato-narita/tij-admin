@@ -82,6 +82,7 @@ import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
 import StudentCreateComment from "./components/student/student-create-comment.vue"
 import StudentEditComment from "./components/student/student-edit-comment.vue"
+import ShowLessonHistory from "./components/student/show-lesson-history.vue"
 import RemindMailShow from "./components/remindMailPatern/detail.vue"
 import RemindMailEdit from "./components/remindMailPatern/edit.vue"
 import CategoryAdd from "./components/category/add.vue"
@@ -194,7 +195,9 @@ new Vue({
         StudentCreateComment,
         StudentEditComment,
         CancelHistorySearchMulti,
+        ShowLessonHistory,
         RemindMailShow,
+        RemindMailEdit,
         RemindMailEdit,
         CategoryAdd,
         CategoryShow,

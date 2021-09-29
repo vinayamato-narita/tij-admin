@@ -1,9 +1,10 @@
 @php
     use App\Components\SearchQueryComponent;
+    use App\Components\DateTimeComponent;
 @endphp
 
 @extends('layouts.default')
-@section('title', 'コメント履歴一覧')
+@section('title', 'レッスン履歴一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -11,13 +12,8 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        コメント履歴一覧
+                        レッスン履歴一覧
                     </h5>
-                </div>
-                <div class="pull-right mrb-5">
-                    <a href="{{ route('student.createComment', $studentInfo->id) }}" class="btn btn-primary pull-right"
-                        ><i class="las la-plus"></i>新規作成
-                    </a>
                 </div>
             </div>
             <div class="clear"></div>
@@ -39,41 +35,42 @@
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
-                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.commentList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.lessonHistoryList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                     </div>
                                 </div>
-                                @if(!$commentList->isEmpty())
+                                @if(!$lessonHistoryList->isEmpty())
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('teacher_nickname', '講師のニックネーム')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('created_at', '作成日')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('updated_at', '更新日')</th>
-                                                    <th class="text-center min-width-120" style="width: 40%">@sortablelink('comment', 'コメント')</th>
+                                                    <th class="text-center width-130">@sortablelink('lesson_date', '日付')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('lesson_starttime', '時間')</th>
+                                                    <th class="text-center min-width-120" style="width: 15%">@sortablelink('course_name', 'コース名')</th>
+                                                    <th class="text-center min-width-120" style="width: 15%">@sortablelink('lesson_name', 'レッスン名')</th>
+                                                    <th class="text-center min-width-120" style="width: 15%">@sortablelink('lesson_text_name', 'テキスト名')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('teacher_name', '講師名')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('set_course_id', 'セットコード')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($commentList as $index => $comment)
+                                                @foreach ($lessonHistoryList as $index => $lesson)
                                                     <tr>
-                                                        <td class="text-center">{{ $comment->teacher_nickname }}</td>
-                                                        <td class="text-center">{{ $comment->created_at }}</td>
-                                                        <td class="text-center">{{ $comment->updated_at }}</td>
-                                                        <td class="text-center">{{ $comment->comment }}</td>
+                                                        <td class="text-center">{{ DateTimeComponent::getDate($lesson->lesson_date) }}</td>
+                                                        <td class="text-center">{{ DateTimeComponent::getStartEndTime($lesson->lesson_starttime, $lesson->lesson_endtime) }}</td>
+                                                        <td class="text-center">{{ $lesson->course_name }}</td>
+                                                        <td class="text-center">{{ $lesson->lesson_name }}</td>
+                                                        <td class="text-center">{{ $lesson->lesson_text_name }}</td>
+                                                        <td class="text-center">{{ $lesson->teacher_name }}</td>
+                                                        <td class="text-center">{{ $lesson->skype_voice_rating_from_teacher }}</td>
+                                                        <td class="text-center">{{ $lesson->set_course_id }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('student.editComment', $comment->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <delete-item
-                                                                            :delete-action="{{ json_encode(route('student.destroyComment', $comment->id)) }}"
-                                                                            :message-confirm="{{ json_encode('このコメントを削除しますか？') }}"
-                                                                        >
-                                                                        </delete-item>
+                                                                        <a class="dropdown-item" href="{{ route('student.showLessonHistory', $lesson->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -84,7 +81,7 @@
                                         </table>
                                     </div>
 
-                                    {{ $commentList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
+                                    {{ $lessonHistoryList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                 @else
                                     <data-empty></data-empty>
                                 @endif

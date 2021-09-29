@@ -26,7 +26,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-2">
-                                        <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                        <div class="col-md-2">
+                                            <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                        </div>
                                         <cancel-history-search-multi :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('lessonCancelHistory.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></cancel-history-search-multi>
                                     </div>
                                     @if(!$historyList->isEmpty())

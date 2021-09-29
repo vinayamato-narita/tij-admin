@@ -30,8 +30,14 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-2">
-                                        <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
-                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('category.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <div class="col-md-2">
+                                            <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('category.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+
+                                        </div>
                                     </div>
                                     @if(!$categoryList->isEmpty())
                                         <div class="tanemaki-table">

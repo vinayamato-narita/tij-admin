@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', 'リマインドメール一覧')
+@section('title', 'コースカテゴリ一覧')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">
@@ -11,12 +11,16 @@
                 <div class="page-heading">
                     <div class="pull-left">
                         <h5>
-                            リマインドメール一覧
+                            コースカテゴリ一覧
+
 
 
                         </h5>
                     </div>
                     <div class="pull-right mrb-5">
+                        <a href="{{ route('category.create') }}" class="btn btn-primary "
+                        ><i class="las la-plus"></i>  新規作成
+                        </a>
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -30,38 +34,40 @@
                                             <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
 
                                         </div>
-                                            <div class="col-md-10">
-                                                <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('remindmail.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <div class="col-md-10">
+                                            <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('category.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
 
-                                            </div>
-
+                                        </div>
                                     </div>
-                                    @if(!$remindMailList->isEmpty())
+                                    @if(!$categoryList->isEmpty())
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('sendRemindMailTiming.send_remind_mail_timing_type_name', ' メール種類')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('timing_minutes', ' 送信タイミング')</th>
-                                                    <th class="text-center min-width-120"></th>
+                                                    <th class="text-center width-130">@sortablelink('order_num', ' 表示順')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('category_name', ' カテゴリ名')</th>
+                                                    <th class="text-center min-width-120">表示アイコン</th>
                                                     <th class="text-center min-width-120"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach ($remindMailList as $index => $rm)
+                                                @foreach ($categoryList as $index => $c)
                                                     <tr>
-                                                        <td class="text-center">{{ $rm->sendRemindMailTiming->send_remind_mail_timing_type_name }}</td>
+                                                        <td class="text-center">{{ $c->order_num }}</td>
 
                                                         <td class="text-center ">
-                                                            {{ $rm->timing_minutes == 0 ? '-' : $rm->timing_minutes }}</td>
-                                                        <td></td>
+                                                            {{ $c->category_name }}</td>
+                                                        <td class="text-center" >
+                                                            <img src="{{$c->category_icon}}" style="max-width: 100px">
+
+                                                        </td>
                                                         <td class="text-right">
                                                             <div class="btn-group ">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right ">
 
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('remindmail.show', $rm->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('category.show', $c->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -73,7 +79,7 @@
                                             </table>
                                         </div>
 
-                                        {{ $remindMailList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
+                                        {{ $categoryList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                     @else
                                         <data-empty></data-empty>
                                     @endif

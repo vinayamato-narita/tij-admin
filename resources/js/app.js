@@ -85,6 +85,11 @@ import StudentEditComment from "./components/student/student-edit-comment.vue"
 import ShowLessonHistory from "./components/student/show-lesson-history.vue"
 import RemindMailShow from "./components/remindMailPatern/detail.vue"
 import RemindMailEdit from "./components/remindMailPatern/edit.vue"
+import CategoryAdd from "./components/category/add.vue"
+import CategoryShow from "./components/category/detail.vue"
+import CategoryEdit from "./components/category/edit.vue"
+
+
 import CsvExport from "./components/csv/csv-export.vue"
 import CreatePaymentHistory from "./components/student/create-payment-history.vue"
 import EditPaymentHistory from "./components/student/edit-payment-history.vue"
@@ -199,9 +204,13 @@ new Vue({
         CancelHistorySearchMulti,
         ShowLessonHistory,
         RemindMailShow,
-        RemindMailEdit,
         CreatePaymentHistory,
         EditPaymentHistory,
+        RemindMailEdit,
+        CategoryAdd,
+        CategoryShow,
+        CategoryEdit
+
     },
     methods: {},
     mounted() {}

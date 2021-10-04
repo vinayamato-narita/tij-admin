@@ -227,6 +227,22 @@ class BreadcrumbComponent
                 'text' => '支払い履歴編集',
                 'route_str' => "student.editPaymentHistory",
             ],
+            'category_list' => [
+                'text' => 'コースカテゴリ一覧',
+                'route_str' => "category.index",
+            ],
+            'category_create' => [
+                'text' => 'コースカテゴリ新規作成',
+                'route_str' => "category.create",
+            ],
+            'category_show' => [
+                'text' => 'コースカテゴリ情報表示',
+                'route_str' => "category.show",
+            ],
+            'category_edit' => [
+                'text' => 'コースカテゴリ編集',
+                'route_str' => "category.edit",
+            ],
         ];
     }
 

@@ -29,13 +29,11 @@
                                             <div class="col-md-3">
                                                 <input
                                                     class="form-control"
-                                                    type="text"
+                                                    type="number"
                                                     name="no_faq"
-                                                    min="1"
-                                                    @keypress="validateNumber"
                                                     v-model="faqInfo.no_faq"
                                                     v-validate="
-                                                        'required|numeric|between:1,1000000000'
+                                                        'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
                                                 <div
@@ -158,8 +156,9 @@ export default {
             custom: {
                 no_faq: {
                     required: "No.を入力してください",
-                    numeric: "No.は1～1000000000 を入力してください",
-                    between: "No.は1～1000000000 を入力してください",
+                    decimal: "No.は半角数字を入力してください",
+                    min_value: "No.は1～1000000000 を入力してください",
+                    max_value: "No.は1～1000000000 を入力してください",
                 },
                 faq_category_id: {
                     required: "カテゴリを入力してください",
@@ -222,12 +221,6 @@ export default {
                 .catch(e => {
                     this.flagShowLoader = false;
                 });
-        },
-        validateNumber: (val) => {
-            let keyCode = event.keyCode;
-            if (keyCode < 48 || keyCode > 57) {
-                event.preventDefault();
-            }
         },
     }
 };

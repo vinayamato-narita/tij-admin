@@ -309,3 +309,6 @@ input[type=number]::-webkit-outer-spin-button {
 .fwb {
     font-weight: bold;
 }
+input:disabled {
+   background-color: #eee !important; 
+}

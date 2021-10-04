@@ -215,6 +215,18 @@ class BreadcrumbComponent
                 'text' => 'リマインドメール編集',
                 'route_str' => "remindmail.edit",
             ],
+            'student_payment_history_list' => [
+                'text' => '支払い履歴一覧',
+                'route_str' => "student.paymentHistoryList",
+            ],
+            'create_student_payment_history' => [
+                'text' => '支払い履歴新規作成',
+                'route_str' => "student.createPaymentHistory",
+            ],
+            'edit_student_payment_history' => [
+                'text' => '支払い履歴編集',
+                'route_str' => "student.editPaymentHistory",
+            ],
             'category_list' => [
                 'text' => 'コースカテゴリ一覧',
                 'route_str' => "category.index",

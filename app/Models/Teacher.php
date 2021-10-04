@@ -27,4 +27,8 @@ class Teacher extends Model
             'teacher_id', 'lesson_id', 'id', 'id');
     }
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

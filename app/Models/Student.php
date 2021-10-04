@@ -9,4 +9,9 @@ use Kyslik\ColumnSortable\Sortable;
 class Student extends Authenticatable
 {
     use HasFactory, Sortable;
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

@@ -91,6 +91,8 @@ import CategoryEdit from "./components/category/edit.vue"
 
 
 import CsvExport from "./components/csv/csv-export.vue"
+import CreatePaymentHistory from "./components/student/create-payment-history.vue"
+import EditPaymentHistory from "./components/student/edit-payment-history.vue"
 
 new Vue({
     created() {
@@ -151,6 +153,11 @@ new Vue({
                 return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
             }
         });
+        this.$validator.extend("management_number", {
+            validate: function(value) {
+                return /^[!-~]+$/i.test(value);
+            }
+        });
     },
     el: "#app",
     components: {
@@ -197,7 +204,8 @@ new Vue({
         CancelHistorySearchMulti,
         ShowLessonHistory,
         RemindMailShow,
-        RemindMailEdit,
+        CreatePaymentHistory,
+        EditPaymentHistory,
         RemindMailEdit,
         CategoryAdd,
         CategoryShow,

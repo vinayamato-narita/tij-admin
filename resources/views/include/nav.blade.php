@@ -17,7 +17,7 @@
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
-                管理ユーザ管理
+                管理ユーザー管理
             </a>
         </li>
 

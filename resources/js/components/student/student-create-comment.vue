@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ studentInfo.id }}
+                                               {{ studentInfoEx.id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -35,7 +35,7 @@
                                                 >生徒名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ studentInfo.student_name }}
+                                                {{ studentInfoEx.student_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -49,7 +49,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="comment"
-                                                    v-model="studentInfo.comment"
+                                                    v-model="studentInfoEx.comment"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -103,6 +103,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            studentInfoEx: this.studentInfo
         };
     },
     props: ["urlAction", "urlStudentCommentList", "studentInfo"],
@@ -123,7 +124,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.studentInfo)
+                .post(that.urlAction, that.studentInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

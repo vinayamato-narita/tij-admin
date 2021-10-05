@@ -552,7 +552,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);           
         }
 
-        $studentInfo = Student::select('id', 'student_name')->where('id', $request->id)->firstOrFail();
+        $studentInfo = Student::where('id', $request->id)->firstOrFail();
 
         if ($studentInfo == null) {
             return response()->json([
@@ -575,7 +575,7 @@ class StudentController extends BaseController
 
         $course_begin_month = "";
         if (isset($request->course_begin_month)) {
-            $course_begin_month = substr(str_replace('-','', $request->course_begin_month), 0, 6);
+            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
         }
 
         $course = Course::where('course_id', $request->course_id)->first();
@@ -601,6 +601,7 @@ class StudentController extends BaseController
                 $course->parent_id = isset($course1->parent_id) ? $course1->parent_id : 0;
             }
         }
+
         if(empty($listCourseBySetCourse)) {
             DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                 array(
@@ -675,6 +676,8 @@ class StudentController extends BaseController
         }
         if(!empty($paymentInfo->course_begin_month)) {
             $paymentInfo->course_begin_month = Carbon::createFromFormat('Ymd', $paymentInfo->course_begin_month . "01")->format('Y-m');
+        }else {
+            $paymentInfo->course_begin_month = "";
         }
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
@@ -712,11 +715,11 @@ class StudentController extends BaseController
 
             StudentPointHistory::whereIn('id', $studentPointHistoryIds)->delete();
         }
-
         $course_begin_month = "";
         if (isset($request->course_begin_month)) {
-            $course_begin_month = substr(str_replace('-','', $request->course_begin_month), 0, 6);
+            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
         }
+
         $management_number = $request->management_number ?? "";
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(

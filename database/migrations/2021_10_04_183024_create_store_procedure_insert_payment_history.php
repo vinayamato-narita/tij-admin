@@ -76,9 +76,9 @@ BEGIN
     course_begin_month,
     point_subscription_id,
     other_department_management_number,
-    created,
-    modified,
-    delete_flag,
+    created_at,
+    updated_at,
+    deleted_at,
     course_code,
     parent_course_code
     )
@@ -94,7 +94,7 @@ BEGIN
     _tmp,
     NOW(),
     NOW(),
-    0,
+    NULL,
     _course_code,
     _parent_course_code
     );
@@ -145,7 +145,7 @@ BEGIN
         
         DELETE FROM lesson_schedules
         WHERE id IN 
-        (SELECT id FROM student_point_histories WHERE point_subscription_id = _point_subscription_history_id);
+        (SELECT lesson_schedule_id FROM student_point_histories WHERE point_subscription_id = _point_subscription_history_id);
         
         DELETE FROM lesson_histories
         WHERE lesson_schedule_id IN
@@ -489,7 +489,6 @@ IN _tax VARCHAR(255),
 IN _management_number VARCHAR(100),
 IN _course_begin_month VARCHAR(100))
 BEGIN
-    DECLARE _order_id VARCHAR(32) DEFAULT NULL;
     SET @payment_type = IF(_payment_type >=2, 2, _payment_type);
     SET @paid_status = IF(_payment_type >=2, _payment_type -2, 1);
     SET @course_begin_month = IF(_course_begin_month <> '' , _course_begin_month,(SELECT course_begin_month FROM lms_project_course_students WHERE student_id = _student_id AND point_subscription_id = _payment_id));

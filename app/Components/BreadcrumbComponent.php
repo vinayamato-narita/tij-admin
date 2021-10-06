@@ -231,6 +231,10 @@ class BreadcrumbComponent
                 'text' => 'コースカテゴリ編集',
                 'route_str' => "category.edit",
             ],
+            'csv_import' => [
+                'text' => '一括登録（個人・単体コース',
+                'route_str' => "csv.import",
+            ],
         ];
     }
 

@@ -83,13 +83,18 @@ Route::group([
     Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
 
     //csvExport
-    Route::resource('csv', CsvController::class);
+    Route::get('/csv/import', 'CsvController@import')->name('csv.import');
+    Route::post('/csv/import', 'CsvController@doImport')->name('csv.doImport');
+    Route::resource('/csv', CsvController::class);
     Route::post('/csv/exportPayment', 'CsvController@exportPayment')->name('csvExportPayment');
     Route::post('/csv/exportLessonHistory', 'CsvController@exportLessonHistory')->name('csvExportLessonHistory');
     Route::post('/csv/exportSuperGrace', 'CsvController@exportSuperGrace')->name('exportSuperGrace');
     Route::post('/csv/exportLessonSummaryProcess', 'CsvController@exportLessonSummaryProcess')->name('exportLessonSummaryProcess');
     Route::post('/csv/exportStudentBoughtCourse', 'CsvController@exportStudentBoughtCourse')->name('exportStudentBoughtCourse');
     Route::post('/csv/exportSuperGraceNormal', 'CsvController@exportSuperGraceNormal')->name('exportSuperGraceNormal');
+
+    //csv import
+
 
     //inquirySubject
     Route::resource('inquirySubject', InquirySubjectController::class);

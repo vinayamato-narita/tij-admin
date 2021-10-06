@@ -150,6 +150,29 @@
                 レッスン単位
             </a>
         </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" onclick="$('#import-sub').hasClass('hidden') ?
+            $('#import-sub').removeClass('hidden') : $('#import-sub').addClass('hidden')">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-settings') }}"></use>
+                </svg>
+                一括登録
+                <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
+            </a>
+            <ul class="nav-dropdown-items hidden" id="import-sub">
+                <li class=" c-sidebar-nav-item ">
+                    <a class=" c-sidebar-nav-link " href="{{route('csv.import')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        個人・単体コース
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
     </ul>
+
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

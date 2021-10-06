@@ -35,7 +35,14 @@ class CsvController extends Controller
      */
     public function create()
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'csv_import']
+        ]);
+
+        return view('csv.import', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 
     /**
@@ -1150,7 +1157,145 @@ class CsvController extends Controller
     public function mb_trim($str,$regex = "^[ 　]*|[ 　]*$") {
         return mb_ereg_replace($regex, "", $str);
     }
-    public function mb_trim_re($str,$regex = "^[ 　]*|[ 　]*$") {
+
+    public function mb_trim_re($str, $regex = "^[ 　]*|[ 　]*$")
+    {
         return mb_ereg_replace($regex, "", $str);
-     }
+    }
+
+    public function import()
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'csv_import']
+        ]);
+
+        return view('csv.import', [
+            'breadcrumbs' => $breadcrumbs,
+            'errMsg' => ''
+        ]);
+    }
+
+    public function getFileExtension($fileName) {
+        $arr = explode('.', $fileName);
+        return end($arr);
+    }
+
+    public function readCSV($csvFile) {
+        $file_handle = fopen($csvFile, 'r');
+
+        while (!feof($file_handle) ) {
+            $line_of_text[] = fgetcsv($file_handle, 1024);
+        }
+        fclose($file_handle);
+        return $line_of_text;
+    }
+
+    public  function doImport(Request $request)
+    {
+        $errMsg = '';
+        $visible = false;
+        $csv = array();
+
+        if(isset($request['upfile'])){
+            $fileUploaded = $request->files->get('uploaded');
+
+            if ($fileUploaded->getSize() === 0 || $fileUploaded->getClientMimeType() === ""){
+                $errMsg= "ファイルを指定してください。";
+            } else {
+                $fileType = $this->getFileExtension($fileUploaded->getClientOriginalName());
+                if($fileType !== 'csv'){
+                    $errMsg = 'ファイル形式が正しくありません。';
+                } else {
+                    $fileNameStore =  str_replace('.csv', '', $fileUploaded->getClientOriginalName()) . '_' . time() . '.csv';
+                    $fileUploaded->move('public', $fileNameStore);
+                    $fileName = "public/" . $fileNameStore;
+                    $csv = $this->readCSV($fileName);
+                    // file empty
+                    if (empty($csv) || !is_array($csv) || count($csv) < 2) {
+                        $errMsg = 'ファイル内容がありません。';
+                    } else {
+                        // check header
+                        $defautHeaderArr = array(
+                            '氏名姓',
+                            '氏名名',
+                            'ニックネーム',
+                            'パスワード',
+                            'メールアドレス',
+                            'Skype名',
+                            'デフォルト言語',
+                            'タイムゾーン',
+                            'コースコード',
+                            '得意先コード',
+                            '法人コード',
+                            '法人名',
+                            '受注日',
+                            '基準日',
+                            '有効期限',
+                            '共通管理番号',
+                            '生徒番号',
+                            'メール送信'
+                        );
+
+                        $importHeader = $csv[0];
+                        $columnNum = count($defautHeaderArr);
+
+                        if (count($importHeader) != $columnNum) {
+                            $errMsg = 'ヘッダーが正しくありません。';
+                        }
+
+                        if (!$errMsg) {
+                            foreach ($defautHeaderArr as $headerIndex => $headerName) {
+                                if (!isset($importHeader[$headerIndex]) || trim($importHeader[$headerIndex]) != $headerName) {
+                                    $errMsg = 'ヘッダーが正しくありません。（'.$headerName.'がありません。）';
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!$errMsg) {
+                            $visible = true;
+                            $errorFlag = false;
+
+                            foreach ($csv as $key => &$value){
+                                if ($key == 0) {
+                                    continue;
+                                }
+
+                                if (!is_array($value) || count($value) != $columnNum) {
+                                    $value['error_list'] = array('class' => 'error-common');
+                                    $errorFlag = true;
+                                    continue;
+                                }
+
+                                $errorList = $this->checkRowImport($value);
+                                if (!empty($errorList)) {
+                                    $errorFlag = true;
+                                    $value['error_list'] = $errorList;
+                                }
+                            }
+
+                            if ($errorFlag) {
+                                $this->set(compact('errorFlag', 'csv'));
+                                return;
+                            }
+                            $this->request->session()->write("CSV_COURSE_CONTENT", $csv);
+                            // $_SESSION['content'] = $csv;
+                        }
+                    }
+                }
+            }
+        }
+
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'csv_import']
+        ]);
+        return view('csv.import', [
+            'breadcrumbs' => $breadcrumbs,
+            'errMsg' => $errMsg
+        ]);
+
+    }
+
 }

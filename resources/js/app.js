@@ -88,6 +88,7 @@ import RemindMailEdit from "./components/remindMailPatern/edit.vue"
 import CategoryAdd from "./components/category/add.vue"
 import CategoryShow from "./components/category/detail.vue"
 import CategoryEdit from "./components/category/edit.vue"
+import  CsvImport from "./components/csv/csv-import.vue"
 
 
 import CsvExport from "./components/csv/csv-export.vue"
@@ -198,10 +199,10 @@ new Vue({
         ShowLessonHistory,
         RemindMailShow,
         RemindMailEdit,
-        RemindMailEdit,
         CategoryAdd,
         CategoryShow,
-        CategoryEdit
+        CategoryEdit,
+        CsvImport
 
     },
     methods: {},

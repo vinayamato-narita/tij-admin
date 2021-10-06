@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfo.student_id }}
+                                               {{ commentInfoEx.student_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -35,7 +35,7 @@
                                                 >生徒名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ commentInfo.student_name }}
+                                                {{ commentInfoEx.student_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -45,7 +45,7 @@
                                                 >講師のニックネーム</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfo.teacher_nickname }}
+                                               {{ commentInfoEx.teacher_nickname }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -55,7 +55,7 @@
                                                 >作成日</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfo.created_at | formatDateTime }}
+                                               {{ commentInfoEx.created_at | formatDateTime }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -65,7 +65,7 @@
                                                 >更新日</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfo.updated_at | formatDateTime}}
+                                               {{ commentInfoEx.updated_at | formatDateTime}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -79,7 +79,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="comment"
-                                                    v-model="commentInfo.comment"
+                                                    v-model="commentInfoEx.comment"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -134,6 +134,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            commentInfoEx: this.commentInfo
         };
     },
     props: ["urlAction", "urlStudentCommentList", "commentInfo"],
@@ -154,7 +155,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.commentInfo)
+                .post(that.urlAction, that.commentInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

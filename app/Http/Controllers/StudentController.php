@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Enums\PaidStatus;
 use App\Models\Student;
 use App\Models\StudentPublicCommentForTeacher;
 use App\Models\LessonHistory;
@@ -14,9 +15,13 @@ use App\Models\LessonCancelHistory;
 use App\Models\LessonHistoryOld;
 use App\Models\StudentPointHistory;
 use App\Models\LessonSchedule;
+use App\Models\PointSubscriptionHistory;
 use App\Http\Requests\StudentCommentRequest;
+use App\Http\Requests\PaymentHistoryRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\Course;
+use App\Models\CourseSetCourse;
 use Log;
 
 class StudentController extends BaseController
@@ -336,7 +341,7 @@ class StudentController extends BaseController
         ]);
     }
 
-    public function updateLessonsHistory(Request $request)
+    public function updateLessonHistory(Request $request)
     {
         if(!$request->isMethod('POST')) {
             return response()->json([
@@ -358,7 +363,7 @@ class StudentController extends BaseController
         ], StatusCode::OK);
     }
 
-    public function cancelLessonsHistory(Request $request)
+    public function cancelLessonHistory(Request $request)
     {
         if(!$request->isMethod('POST')) {
             return response()->json([
@@ -432,5 +437,321 @@ class StudentController extends BaseController
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);
+    }
+
+    public function paymentHistory(Request $request, $id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'student_payment_history_list', $id],
+        ]);
+        $pageLimit = $this->newListLimit($request);
+
+        $studentInfo = Student::where('id', $id)->firstOrFail();
+
+        $queryBuilder = PointSubscriptionHistory::select('point_subscription_histories.id as id', 
+            'point_subscription_histories.management_number as management_number', 
+            'point_subscription_histories.corporation_code as corporation_code', 
+            'point_subscription_histories.amount as amount', 
+            'point_subscription_histories.payment_date as payment_date',
+            'point_subscription_histories.begin_date as begin_date',
+            'point_subscription_histories.point_expire_date as point_expire_date',
+            'point_subscription_histories.receive_payment_date as receive_payment_date',
+            'point_subscription_histories.set_course_id as set_course_id',
+            'courses.course_name as course_name',
+            'student_point_histories.start_date as start_date',
+            DB::raw('(CASE WHEN point_subscription_histories.payment_way = 2 THEN point_subscription_histories.payment_way + point_subscription_histories.paid_status ELSE point_subscription_histories.payment_way END) AS j_paid_status')
+        )
+        ->leftJoin('courses', function($join) {
+            $join->on('point_subscription_histories.course_id', '=', 'courses.course_id');
+        })
+        ->leftJoin('student_point_histories', function($join) {
+            $join->on('point_subscription_histories.id', '=', 'student_point_histories.point_subscription_id');
+        })
+        ->where('point_subscription_histories.del_flag', 0)
+        ->where('point_subscription_histories.student_id', $id)
+        ->groupBy('id');
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
+            });
+        }
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "start_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_histories.start_date','ASC') : $queryBuilder->orderBy('student_point_histories.start_date','DESC');
+            }
+            if ($request['sort'] == "j_paid_status") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_paid_status','ASC') : $queryBuilder->orderBy('j_paid_status','DESC');
+            }
+        }
+        $paymentHistoryList = $queryBuilder->sortable(['id' => 'desc'])->paginate($pageLimit);
+
+        return view('student.payment-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'paymentHistoryList' => $paymentHistoryList,
+            'studentInfo' => $studentInfo,
+        ]);
+    }
+
+    public function createPaymentHistory($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'student_payment_history_list', $id],
+            ['name' => 'create_student_payment_history', $id],
+        ]);
+
+        $studentInfo = Student::where('id', $id)->firstOrFail();
+
+        $paymentType = [];
+        $courseList = [];
+        if ($studentInfo->is_lms_user) {
+            $studentInfo->course_begin_month = Carbon::now();
+            $paymentType = PaidStatus::asSelectArray();
+            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->id, COURSE_FREE_ID));
+        }else {
+            $paymentType = [
+                0 => 'G',
+                1 => 'CSV'
+            ];
+
+            $courseList = DB::select('CALL sp_admin_get_course_list');
+        }
+
+        $studentInfo->_token = csrf_token();
+        $studentInfo->payment_type_list = $paymentType;
+        $studentInfo->payment_type = PaidStatus::G;
+        $studentInfo->course_id = 0;
+        $studentInfo->course_list = $courseList;
+        $studentInfo->payment_date = Carbon::now();
+        $studentInfo->start_date = Carbon::now();
+        $studentInfo->begin_date = Carbon::now();
+
+        return view('student.create-payment-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'studentInfo' => $studentInfo,
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storePaymentHistory(PaymentHistoryRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);           
+        }
+
+        $studentInfo = Student::where('id', $request->id)->firstOrFail();
+
+        if ($studentInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        if ($studentInfo->is_lms_user) {
+            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->id, COURSE_FREE_ID));
+        }else {
+            $courseList = DB::select('CALL sp_admin_get_course_list');
+        }
+
+        $orderId = $studentInfo->id . "alc" . Carbon::now()->format("YmdHis");
+
+        while(strlen($orderId) < 27) {
+            $random = rand(0, 9);
+            $orderId = "$random"."$orderId";
+        }
+
+        $course_begin_month = "";
+        if (isset($request->course_begin_month)) {
+            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
+        }
+
+        $course = Course::where('course_id', $request->course_id)->first();
+
+        $listCourseBySetCourse = [];
+        if($course && $course->is_set_course) {
+            $listCourseBySetCourse = CourseSetCourse::select('courses.course_name as course_name',
+                'courses.course_id as course_id', 'courses.amount as amount')
+            ->leftJoin('courses', function($join) {
+                $join->on('course_set_course.course_id', '=', 'courses.course_id');
+                $join->whereNull('courses.deleted_at');
+            })
+            ->where('course_set_course.set_course_id', $request->course_id)
+            ->whereNull('course_set_course.deleted_at')
+            ->orderBy('courses.course_name','ASC') 
+            ->get()
+            ->toArray();
+        }
+      
+        foreach($courseList as $course1) {
+            if($course1->course_id == $course->course_id){
+                $course->project_course_id = isset($course1->project_course_id) ? $course1->project_course_id : 0;
+                $course->parent_id = isset($course1->parent_id) ? $course1->parent_id : 0;
+            }
+        }
+
+        if(empty($listCourseBySetCourse)) {
+            DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+                array(
+                    $orderId,
+                    $studentInfo->id,
+                    $request->course_id,
+                    0,
+                    $course->project_course_id,
+                    $course->parent_id,
+                    $request->payment_type,
+                    $request->payment_date,
+                    $request->start_date,
+                    isset($request->begin_date) ? $request->begin_date : $request->start_date,
+                    $request->amount,
+                    $request->management_number ?? "",
+                    $course_begin_month
+                ));
+        } else {
+            foreach($listCourseBySetCourse as $courseSetCourse) {
+                DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+                    array(
+                        $orderId,
+                        $studentInfo->id,
+                        $courseSetCourse['course_id'],
+                        $request->course_id,
+                        $course->project_course_id,
+                        $course->parent_id,
+                        $request->payment_type,
+                        $request->payment_date,
+                        $request->start_date,
+                        isset($request->begin_date) ? $request->begin_date : $request->start_date,
+                        $request->amount,
+                        $request->management_number ?? "",
+                        $course_begin_month
+                    ));
+            }
+        }
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function editPaymentHistory($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $paymentInfo = PointSubscriptionHistory::getPaymentHistoryInfo($id);
+
+        if ($paymentInfo == null) {
+            return redirect()->route('student.paymentHistoryList', $id); 
+        }
+        $paymentType = [];
+        if ($paymentInfo->is_lms_user) {
+            $paymentType = PaidStatus::asSelectArray();
+        }else {
+            $paymentType = [
+                0 => 'G',
+                1 => 'CSV'
+            ];
+
+        }
+
+        $paymentInfo->_token = csrf_token();
+        $paymentInfo->payment_type_list = $paymentType;
+        $paymentInfo->is_payment_expired = 0;
+        if (!empty($paymentInfo->point_expire_date)) {
+            $today = Carbon::today()->format('Y-m-d');
+            $currentExpireDate = (new Carbon($paymentInfo->point_expire_date))->format('Y-m-d'); 
+            if ($currentExpireDate < $today) {
+                $paymentInfo->is_payment_expired = 1;
+            }
+        }
+        if(!empty($paymentInfo->course_begin_month)) {
+            $paymentInfo->course_begin_month = Carbon::createFromFormat('Ymd', $paymentInfo->course_begin_month . "01")->format('Y-m');
+        }else {
+            $paymentInfo->course_begin_month = "";
+        }
+
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'student_payment_history_list', $paymentInfo->student_id],
+            ['name' => 'edit_student_payment_history', $paymentInfo->student_id],
+        ]);
+        return view('student.edit-payment-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'paymentInfo' => $paymentInfo,
+        ]);
+    }
+
+    public function updatePaymentHistory(PaymentHistoryRequest $request) {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);           
+        }
+
+        $paymentInfo = PointSubscriptionHistory::getPaymentHistoryInfo($request->id);
+
+        if ($paymentInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        $request->point_expire_date = (new Carbon($request->point_expire_date))->format('Y-m-d 23:59:59');
+        if ($request->point_expire_date != $paymentInfo->point_expire_date) {
+            $studentPointHistoryIds = StudentPointHistory::where('point_subscription_id', $request->id)
+                ->where('pay_type', 5)
+                ->pluck('id')
+                ->toArray();
+
+            StudentPointHistory::whereIn('id', $studentPointHistoryIds)->delete();
+        }
+        $course_begin_month = "";
+        if (isset($request->course_begin_month)) {
+            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
+        }
+
+        $management_number = $request->management_number ?? "";
+        DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
+            array(
+                $paymentInfo->student_id,
+                $paymentInfo->id,
+                $request->payment_type,
+                $request->payment_date,
+                $request->start_date,
+                $request->begin_date,
+                $request->point_expire_date,
+                $request->amount,
+                $request->tax,
+                $management_number,
+                $course_begin_month
+            ));
+
+        return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+    }
+
+    public function destroyPaymentHistory(Request $request) {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);           
+        }
+
+        DB::select('CALL sp_admin_delete_student_point_subscription(?,?)', array($request->id, $request->cancel_type));
+        
+        return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
     }
 }

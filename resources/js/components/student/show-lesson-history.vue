@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ lessonHistoryInfo.id }}
+                                               {{ lessonHistoryInfoEx.id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -35,7 +35,7 @@
                                                 >生徒名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.student_name }}
+                                                {{ lessonHistoryInfoEx.student_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -45,7 +45,7 @@
                                                 >講師名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.teacher_name }}
+                                                {{ lessonHistoryInfoEx.teacher_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -55,7 +55,7 @@
                                                 >レッスン日時</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ getLessonStartEndTime(lessonHistoryInfo.lesson_starttime, lessonHistoryInfo.lesson_endtime) }}
+                                                {{ getLessonStartEndTime(lessonHistoryInfoEx.lesson_starttime, lessonHistoryInfoEx.lesson_endtime) }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -65,7 +65,7 @@
                                                 >コース名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.course_name }}
+                                                {{ lessonHistoryInfoEx.course_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -75,7 +75,7 @@
                                                 >レッスン名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.lesson_name }}
+                                                {{ lessonHistoryInfoEx.lesson_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -85,7 +85,7 @@
                                                 >テキスト名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.lesson_text_name }}
+                                                {{ lessonHistoryInfoEx.lesson_text_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -95,7 +95,7 @@
                                                 >出（0）欠（1）</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.skype_voice_rating_from_teacher }}
+                                                {{ lessonHistoryInfoEx.skype_voice_rating_from_teacher }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -105,7 +105,7 @@
                                                 >評価（生徒→先生）</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.average }}
+                                                {{ lessonHistoryInfoEx.average }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -115,7 +115,7 @@
                                                 >レッスンに対する感想（生徒）</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.comment_from_student_to_office }}
+                                                {{ lessonHistoryInfoEx.comment_from_student_to_office }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -125,7 +125,7 @@
                                                 >コメント（先生→生徒）</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfo.comment_from_teacher_to_student }}
+                                                {{ lessonHistoryInfoEx.comment_from_teacher_to_student }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -139,7 +139,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="comment"
-                                                    v-model="lessonHistoryInfo.comment_from_admin_to_student"
+                                                    v-model="lessonHistoryInfoEx.comment_from_admin_to_student"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -195,6 +195,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            lessonHistoryInfoEx: this.lessonHistoryInfo
         };
     },
     props: ["urlAction", "urlCancelLessonHistory", "urlStudentLessonHistoryList", "lessonHistoryInfo"],
@@ -215,7 +216,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.lessonHistoryInfo)
+                .post(that.urlAction, that.lessonHistoryInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
@@ -265,7 +266,7 @@ export default {
             axios
                 .post(that.urlCancelLessonHistory, {
                     cancel_type: type,
-                    id: that.lessonHistoryInfo.id,
+                    id: that.lessonHistoryInfoEx.id,
                     _token: Laravel.csrfToken
                 })
                 .then(response => {

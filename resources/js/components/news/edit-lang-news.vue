@@ -25,7 +25,7 @@
                                             </label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ newsInfo.id }}
+                                            {{ newsInfoEx.id }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -35,7 +35,7 @@
                                             >タイトル:</label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ newsInfo.news_title }}
+                                            {{ newsInfoEx.news_title }}
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="news_lang_title"
-                                                    v-model="newsInfo.news_lang_title"
+                                                    v-model="newsInfoEx.news_lang_title"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -89,7 +89,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="news_lang_body"
-                                                    v-model="newsInfo.news_lang_body"
+                                                    v-model="newsInfoEx.news_lang_body"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -148,6 +148,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            newsInfoEx: this.newsInfo
         };
     },
     props: ["urlAction", "urlNewsDetail", "newsInfo"],
@@ -168,7 +169,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.newsInfo)
+                .post(that.urlAction, that.newsInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

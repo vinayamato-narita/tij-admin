@@ -29,13 +29,11 @@
                                             <div class="col-md-3">
                                                 <input
                                                     class="form-control"
-                                                    type="text"
+                                                    type="number"
                                                     name="no_faq"
-                                                    min="1"
-                                                    @keypress="validateNumber"
-                                                    v-model="faqInfo.no_faq"
+                                                    v-model="faqInfoEx.no_faq"
                                                     v-validate="
-                                                        'required|numeric|between:1,1000000000'
+                                                        'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
                                                 <div
@@ -59,7 +57,7 @@
                                                 <select
                                                     class="form-control"
                                                     name="faq_category_id"
-                                                    v-model="faqInfo.faq_category_id"
+                                                    v-model="faqInfoEx.faq_category_id"
                                                     v-validate="'required'"
                                                 >
                                                     <option :value="category.id" v-for="category in faqCategories">
@@ -88,7 +86,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="question"
-                                                    v-model="faqInfo.question"
+                                                    v-model="faqInfoEx.question"
                                                     v-validate="
                                                         'required|max:2000'
                                                     "
@@ -115,7 +113,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="answer"
-                                                    v-model="faqInfo.answer"
+                                                    v-model="faqInfoEx.answer"
                                                     v-validate="
                                                         'required|max:2000'
                                                     "
@@ -162,8 +160,9 @@ export default {
             custom: {
                 no_faq: {
                     required: "No.を入力してください",
-                    numeric: "No.は1～1000000000 を入力してください",
-                    between: "No.は1～1000000000 を入力してください",
+                    decimal: "No.は半角数字を入力してください",
+                    min_value: "No.は1～1000000000 を入力してください",
+                    max_value: "No.は1～1000000000 を入力してください",
                 },
                 faq_category_id: {
                     required: "カテゴリを入力してください",
@@ -187,6 +186,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            faqInfoEx: this.faqInfo
         };
     },
     props: ["urlAction", "urlFaqDetail", "faqCategories", "faqInfo", 'deleteAction', 'messageConfirm', 'urlRedirect'],
@@ -207,7 +207,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.faqInfo)
+                .put(that.urlAction, that.faqInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
@@ -223,12 +223,6 @@ export default {
                 .catch(e => {
                     this.flagShowLoader = false;
                 });
-        },
-        validateNumber: (val) => {
-            let keyCode = event.keyCode;
-            if (keyCode < 48 || keyCode > 57) {
-                event.preventDefault();
-            }
         },
     }
 };

@@ -115,6 +115,13 @@ Route::group([
 
     Route::get('/student/lesson-history/{id}', 'StudentController@lessonHistory')->name('student.lessonHistoryList');
     Route::get('/student/show-lesson-history/{id}', 'StudentController@showLessonHistory')->name('student.showLessonHistory');
-    Route::post('/student/update-lesson-history', 'StudentController@updateLessonsHistory')->name('student.updateLessonsHistory');
-    Route::post('/student/cancel-lesson-history', 'StudentController@cancelLessonsHistory')->name('student.cancelLessonsHistory');
+    Route::post('/student/update-lesson-history', 'StudentController@updateLessonHistory')->name('student.updateLessonHistory');
+    Route::post('/student/cancel-lesson-history', 'StudentController@cancelLessonHistory')->name('student.cancelLessonHistory');
+
+    Route::get('/student/payment-history/{id}', 'StudentController@paymentHistory')->name('student.paymentHistoryList');
+    Route::get('/student/create-payment-history/{id}', 'StudentController@createPaymentHistory')->name('student.createPaymentHistory');
+    Route::post('/student/store-payment-history', 'StudentController@storePaymentHistory')->name('student.storePaymentHistory');
+    Route::get('/student/edit-payment-history/{id}', 'StudentController@editPaymentHistory')->name('student.editPaymentHistory');
+    Route::post('/student/update-payment-history', 'StudentController@updatePaymentHistory')->name('student.updatePaymentHistory');
+    Route::post('/student/destroy-payment-history', 'StudentController@destroyPaymentHistory')->name('student.destroyPaymentHistory');
 });

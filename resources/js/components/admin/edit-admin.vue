@@ -31,7 +31,7 @@
                                                     class="form-control"
                                                     type="text"
                                                     name="admin_name"
-                                                    v-model="adminInfo.admin_name"
+                                                    v-model="adminInfoEx.admin_name"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -58,7 +58,7 @@
                                                     class="form-control"
                                                     type="text"
                                                     name="admin_email"
-                                                    v-model="adminInfo.admin_email"
+                                                    v-model="adminInfoEx.admin_email"
                                                     v-validate="
                                                         'required|email|max:255'
                                                     "
@@ -83,7 +83,7 @@
                                                     class="form-control"
                                                     type="password"
                                                     name="password"
-                                                    v-model="adminInfo.password"
+                                                    v-model="adminInfoEx.password"
                                                     ref="password"
                                                     v-validate="
                                                         'password_rule|min:8|max:32'
@@ -109,7 +109,7 @@
                                                     class="form-control"
                                                     type="password"
                                                     name="password_confirm"
-                                                    v-model="adminInfo.password_confirm"
+                                                    v-model="adminInfoEx.password_confirm"
                                                     v-validate="
                                                         'confirmed:password'
                                                     "
@@ -134,7 +134,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="description"
-                                                    v-model="adminInfo.description"
+                                                    v-model="adminInfoEx.description"
                                                     v-validate="
                                                         'max:2000'
                                                     "
@@ -211,6 +211,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            adminInfoEx: this.adminInfo
         };
 
     },
@@ -232,7 +233,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.adminInfo)
+                .put(that.urlAction, that.adminInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

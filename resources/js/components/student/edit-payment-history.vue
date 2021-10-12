@@ -242,7 +242,7 @@
                                             <div class="col-md-6">
                                                 <date-picker
                                                     :disabled-date="disabledBeforeToday"
-                                                    name="begin_date"
+                                                    name="point_expire_date"
                                                     v-model="paymentInfoEx.point_expire_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"

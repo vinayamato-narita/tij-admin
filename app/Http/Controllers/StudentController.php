@@ -26,7 +26,6 @@ use App\Models\StudentList;
 use App\Exports\StudentExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Session;
-use App\Enums\StudentEntryType;
 use App\Models\LmsPrefecture;
 use App\Models\TimeZone;
 use App\Models\LmsProjectStudent;
@@ -36,6 +35,7 @@ use App\Enums\MailType;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail; 
 use App\Models\SendRemindMailPattern;
+use App\Models\StudentEntryType;
 use Hash;
 use Log; 
 
@@ -987,7 +987,7 @@ class StudentController extends BaseController
 
         $studentInfo = Student::where('id', $id)->firstOrFail();
 
-        $studentInfo->student_entry_types = StudentEntryType::asSelectArray();
+        $studentInfo->student_entry_types = StudentEntryType::pluck('student_entry_type_name', 'student_entry_type_id')->toArray();
         $studentInfo->lang_types = LangTypeOption::asSelectArray();
         $studentInfo->lms_prefectures = LmsPrefecture::whereNull('deleted_at')->pluck('prefecture_name', 'id')->toArray();
         $studentInfo->time_zones = TimeZone::where('id', 1)->pluck('timezone_name_native', 'id')->toArray();

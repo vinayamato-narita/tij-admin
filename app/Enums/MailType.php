@@ -12,4 +12,5 @@ use BenSampo\Enum\Enum;
 final class MailType extends Enum
 {
     const FORGOTPASSWORD = 9;
+    const CHANGEPASSSTUDENT = 6;
 }

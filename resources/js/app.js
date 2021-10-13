@@ -93,6 +93,8 @@ import CreatePaymentHistory from "./components/student/create-payment-history.vu
 import EditPaymentHistory from "./components/student/edit-payment-history.vue"
 import StudentSearch from "./components/student/student-search.vue"
 import EditStudent from "./components/student/edit-student.vue"
+import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
+import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
 
 new Vue({
     created() {
@@ -185,6 +187,11 @@ new Vue({
                 return /^[0-9-ー]{0,10}$/.test(value);
             }
         });
+        this.$validator.extend("payment_checkHankaku", {
+            validate: function(value) {
+                return /^[0-9０-９-]+$/i.test(value);
+            }
+        });
     },
     el: "#app",
     components: {
@@ -239,6 +246,8 @@ new Vue({
         CategoryEdit,
         StudentSearch,
         EditStudent,
+        PaymentHistorySearch,
+        EditHistoryPayment,
 
     },
     methods: {},

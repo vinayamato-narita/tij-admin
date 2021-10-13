@@ -127,4 +127,9 @@ Route::group([
     Route::post('/student/destroy-payment-history', 'StudentController@destroyPaymentHistory')->name('student.destroyPaymentHistory');
 
     Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
+
+    Route::get('/payment-history', 'PaymentHistoryController@index')->name('paymentHistory.index');
+    Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
+    Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
+    Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
 });

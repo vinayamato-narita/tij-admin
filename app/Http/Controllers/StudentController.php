@@ -879,8 +879,8 @@ class StudentController extends BaseController
                     if ($request['student_id'] != "") {
                         $query->where('student_list.student_id', '=', $request['student_id']);
                     }
-                    if ($request['date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['date']);
+                    if ($request['first_lesson_date'] != "") {
+                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
                     }
             });
 
@@ -911,8 +911,8 @@ class StudentController extends BaseController
                     if ($request['student_id'] != "") {
                         $query->where('student_list.student_id', '=', $request['student_id']);
                     }
-                    if ($request['date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['date']);
+                    if ($request['first_lesson_date'] != "") {
+                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
                     }
             });
 
@@ -943,19 +943,8 @@ class StudentController extends BaseController
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name','ASC') : $queryBuilder->orderBy('course_name','DESC');
             }
         }
-        $dataSession['search_input'] = $request['search_input'];
-        $dataSession['student_id'] = $request['student_id'];
-        $dataSession['student_name'] = $request['student_name'];
-        $dataSession['student_nickname'] = $request['student_nickname'];
-        $dataSession['student_skypename'] = $request['student_skypename'];
-        $dataSession['student_email'] = $request['student_email'];
-        $dataSession['company_name'] = $request['company_name'];
-        $dataSession['all_project_company_name'] = $request['all_project_company_name'];
-        $dataSession['project_code'] = $request['project_code'];
-        $dataSession['check_company_code'] = $request['check_company_code'];
-        $dataSession['date'] = $request['date'];
 
-        Session::put('sessionStudent', $dataSession);
+        Session::put('sessionStudent', json_encode($request));
 
         $studentList = $queryBuilder->sortable(['student_id' => 'desc'])->paginate($pageLimit);
         $number_published = $queryBuilderCount->count();

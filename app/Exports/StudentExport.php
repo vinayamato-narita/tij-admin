@@ -102,8 +102,8 @@ class StudentExport implements FromCollection, WithHeadings
                     if ($request['student_id'] != "") {
                         $query->where('student_list.student_id', '=', $request['student_id']);
                     }
-                    if ($request['date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['date']);
+                    if ($request['first_lesson_date'] != "") {
+                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
                     }
             });
         }

@@ -322,3 +322,18 @@ input:disabled {
     margin: auto;
     height: 200px;
 }
+.mx-datepicker {
+    width: auto !important;
+}
+.btn-drop-detail {
+    border-radius: 0;
+    height: 35px;
+    padding-right: 12px;
+    border: 1px solid #d8dbe0;
+}
+.clss_search_input {
+    border-radius: .25rem 0 0 .25rem;
+}
+.disabledSelect {
+    background-color: #eee !important;
+}

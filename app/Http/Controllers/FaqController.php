@@ -210,7 +210,12 @@ class FaqController extends BaseController
                 'status' => 'OK',
             ], StatusCode::BAD_REQUEST);  
         }
-        $faqInfo = Faq::where('id', $id)->firstOrFail();
+        $faqInfo = Faq::where('id', $id)->first();
+        if ($faqInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
         $faqInfo->no_faq = $request->no_faq;
         $faqInfo->faq_category_id = $request->faq_category_id;
         $faqInfo->question = $request->question;

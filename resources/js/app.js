@@ -94,6 +94,10 @@ import  CsvImport from "./components/csv/csv-import.vue"
 import CsvExport from "./components/csv/csv-export.vue"
 import CreatePaymentHistory from "./components/student/create-payment-history.vue"
 import EditPaymentHistory from "./components/student/edit-payment-history.vue"
+import StudentSearch from "./components/student/student-search.vue"
+import EditStudent from "./components/student/edit-student.vue"
+import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
+import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
 
 new Vue({
     created() {
@@ -159,6 +163,38 @@ new Vue({
                 return /^[!-~]+$/i.test(value);
             }
         });
+        this.$validator.extend("isKana", {
+            validate: function(value) {
+                var re = new RegExp(/^[A-Za-zア-ン゛゜ァ-ォャ-ョーヴ 　]+$/);
+                return re.test(value);
+            }
+        });
+        this.$validator.extend("skype", {
+            validate: function(value) {
+                var re = new RegExp(/^[a-zA-Z][a-zA-Z0-9\_\-\.\,\:]{5,31}$/i);
+                return re.test(value);
+            }
+        });
+        this.$validator.extend("login_id", {
+            validate: function(value) {
+                return /^[A-Za-z0-9]+$/i.test(value);
+            }
+        });
+        this.$validator.extend("isTelephone", {
+            validate: function(value) {
+                return /^[0-9-.()]{1,20}$/i.test(value);
+            }
+        });
+        this.$validator.extend("postcode", {
+            validate: function(value) {
+                return /^[0-9-ー]{0,10}$/.test(value);
+            }
+        });
+        this.$validator.extend("payment_checkHankaku", {
+            validate: function(value) {
+                return /^[0-9０-９-]+$/i.test(value);
+            }
+        });
     },
     el: "#app",
     components: {
@@ -210,6 +246,10 @@ new Vue({
         RemindMailEdit,
         CategoryAdd,
         CategoryShow,
+        StudentSearch,
+        EditStudent,
+        PaymentHistorySearch,
+        EditHistoryPayment,
         CategoryEdit,
         CsvImport
 

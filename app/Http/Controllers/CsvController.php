@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Components\CommonComponent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Components\BreadcrumbComponent;
@@ -9,6 +10,29 @@ use App\Enums\StatusCode;
 use Log;
 use Illuminate\Support\Facades\DB;
 
+define("STUDENT_FIRST_NAME", 0);
+define("STUDENT_LAST_NAME", 1);
+define("STUDENT_NICKNAME", 2);
+define("PASSWORD", 3);
+define("STUDENT_EMAIL", 4);
+define("SKYPE_NAME", 5);
+define("LANGDEFAULT", 6);
+define("TIMEZONE", 7);
+define("COURSE_ID", 8);
+define("CUSTOMER_CODE", 9);
+define("CORPORATION_CODE", 10);
+define("COMPANY_NAME", 11);
+define("ORDER_DATE", 12);
+define("START_DATE", 13);
+define("EXPIRE_DATE", 14);
+define("MANAGEMENT_NUMBER", 15);
+define("STUDENT_ID", 16);
+define("SEND_MAIL_FLAG", 17);
+define("SESSION_KEY", "SETCOURSE_IMPORT");
+define('COURSE_LIST_START', '#COURSE_LIST_START#');
+define('COURSE_LIST_END', '#COURSE_LIST_END#');
+define('COURSE_TAX', 0.1);
+define('NAME_OF_MAIL_SYS', '【アルクオンライン英会話】');
 class CsvController extends Controller
 {
     /**
@@ -1244,14 +1268,14 @@ class CsvController extends Controller
                             $errMsg = 'ヘッダーが正しくありません。';
                         }
 
-                        if (!$errMsg) {
+/*                        if (!$errMsg) {
                             foreach ($defautHeaderArr as $headerIndex => $headerName) {
                                 if (!isset($importHeader[$headerIndex]) || trim($importHeader[$headerIndex]) != $headerName) {
                                     $errMsg = 'ヘッダーが正しくありません。（'.$headerName.'がありません。）';
                                     break;
                                 }
                             }
-                        }
+                        }*/
 
                         if (!$errMsg) {
                             $visible = true;
@@ -1297,5 +1321,80 @@ class CsvController extends Controller
         ]);
 
     }
+
+    public $canEmptyWhenStudentExist = array(
+        STUDENT_FIRST_NAME,
+        STUDENT_LAST_NAME,
+        STUDENT_NICKNAME,
+        PASSWORD,
+        SKYPE_NAME,
+        LANGDEFAULT,
+        TIMEZONE
+    );
+
+    function checkRowImport($value) {
+        $errorList = array();
+        for($i = 0; $i < count($value); $i ++) {
+            // dont check sum colum when add course only
+            if (!empty($value[STUDENT_ID]) && $value[$i] == "" && in_array($i, $this->canEmptyWhenStudentExist)) {
+                $checkData = array();
+            }else{
+                $checkData = CommonComponent::checkData($value[$i], $i);
+            }
+            if (!empty($checkData)) {
+                $errorList[$i] = $checkData;
+            }
+        }
+
+        $checkDb = $this->checkDbImport($value);
+
+        if (empty($errorList[COURSE_ID]) && !$checkDb[0]['@check_course_exist']) {
+
+            $errorList[COURSE_ID] = $ret = array(
+                'class' => 'error-course-id'
+            );
+        }
+
+        if ($value[STUDENT_ID] === '') {
+            if (empty($errorList[STUDENT_EMAIL]) && $checkDb[0]['@check_mail_exist']) {
+                $errorList[STUDENT_EMAIL] = array(
+                    'class' => 'error-email-noneId'
+                );
+            }
+        } else {
+            if (empty($errorList[STUDENT_ID]) && !$checkDb[0]['@check_student_id_exist']) {
+                $errorList[STUDENT_ID] = array(
+                    'class' => 'error-student-id'
+                );
+            }
+
+            if (empty($errorList[STUDENT_EMAIL]) && !$checkDb[0]['@check_mail_and_id']) {
+                $errorList[STUDENT_EMAIL] = array(
+                    'class' => 'error-email'
+                );
+            }
+        }
+        return $errorList;
+    }
+
+    public function checkDbImport($value) {
+        $ret = DB::select('CALL sp_csv_check_db(?,?,?,?)',
+            array(
+                $value[STUDENT_ID],
+                $value[STUDENT_EMAIL],
+                (int) $value[COURSE_ID],
+                0
+            ));
+/*        $this->loadModel('Student');
+        $ret = $this->Student->callProcedure('sp_csv_check_db', array(
+            '_student_id' => $value[STUDENT_ID],
+            '_student_email' => $value[STUDENT_EMAIL],
+            '_course_id' => (int) $value[COURSE_ID],
+            '_is_lms_user' => 0,
+            '_brand_id' => BRAND_ID
+        ));*/
+        return $ret;
+    }
+
 
 }

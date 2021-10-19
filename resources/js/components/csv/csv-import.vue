@@ -58,7 +58,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                         </div>
-                                                        <div class="col-md-5 text-left error">
+                                                        <div class="col-md-5 text-left error text text-nowrap">
                                                             {{this.errMsg}}
 
                                                         </div>

@@ -247,6 +247,18 @@ class BreadcrumbComponent
                 'text' => '一括登録（個人・単体コース',
                 'route_str' => "csv.import",
             ],
+            'edit_student' => [
+                'text' => '生徒情報編集',
+                'route_str' => "student.edit",
+            ],
+            'payment_history_list' => [
+                'text' => '支払い履歴一覧',
+                'route_str' => "paymentHistory.index",
+            ],
+            'edit_payment_history' => [
+                'text' => '支払い履歴編集',
+                'route_str' => "paymentHistory.edit",
+            ],
         ];
     }
 

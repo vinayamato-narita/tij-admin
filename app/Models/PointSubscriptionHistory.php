@@ -11,7 +11,7 @@ use Log;
 class PointSubscriptionHistory extends Authenticatable
 {
     use HasFactory, Sortable;
-
+    public $timestamps = false;
     public function studentPointHistory() 
     {
         return $this->hasMany(StudentPointHistory::class);
@@ -57,7 +57,7 @@ class PointSubscriptionHistory extends Authenticatable
                 $join->on('lms_projects.company_id', '=', 'lms_companies.id');
             })
             ->where('point_subscription_histories.id', $id)
-            ->where('del_flag', 0)
+            ->where('point_subscription_histories.del_flag', 0)
             ->groupBy('point_subscription_histories.id')
             ->first();
     }

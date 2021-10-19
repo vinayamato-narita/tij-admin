@@ -105,7 +105,13 @@ Route::group([
     Route::get('/comment', 'CommentController@index')->name('comment.index');
 
     //student
-    Route::resource('student', StudentController::class);
+    Route::get('/student', 'StudentController@index')->name('student.index');
+    Route::get('/student/edit/{id}', 'StudentController@edit')->name('student.edit');
+    Route::put('/student/update', 'StudentController@update')->name('student.update');
+    Route::get('/student/export', 'StudentController@export')->name('student.export');
+    Route::delete('/student/destroy/{id}', 'StudentController@destroy')->name('student.destroy');
+    Route::post('/student/updatePassword', 'StudentController@updatePassword')->name('student.updatePassword');
+
     Route::get('/student/comment/{id}', 'StudentController@comment')->name('student.commentList');
     Route::delete('/student/destroy-comment/{id}', 'StudentController@destroyComment')->name('student.destroyComment');
     Route::get('/student/create-comment/{id}', 'StudentController@createComment')->name('student.createComment');
@@ -124,4 +130,11 @@ Route::group([
     Route::get('/student/edit-payment-history/{id}', 'StudentController@editPaymentHistory')->name('student.editPaymentHistory');
     Route::post('/student/update-payment-history', 'StudentController@updatePaymentHistory')->name('student.updatePaymentHistory');
     Route::post('/student/destroy-payment-history', 'StudentController@destroyPaymentHistory')->name('student.destroyPaymentHistory');
+
+    Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
+
+    Route::get('/payment-history', 'PaymentHistoryController@index')->name('paymentHistory.index');
+    Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
+    Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
+    Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
 });

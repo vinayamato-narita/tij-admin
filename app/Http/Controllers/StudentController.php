@@ -22,7 +22,22 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\CourseSetCourse;
-use Log;
+use App\Models\StudentList;
+use App\Exports\StudentExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Session;
+use App\Models\LmsPrefecture;
+use App\Models\TimeZone;
+use App\Models\LmsProjectStudent;
+use App\Enums\LangTypeOption;
+use App\Http\Requests\StudentEditRequest;
+use App\Enums\MailType;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Mail; 
+use App\Models\SendRemindMailPattern;
+use App\Models\StudentEntryType;
+use Hash;
+use Log; 
 
 class StudentController extends BaseController
 {
@@ -753,5 +768,371 @@ class StudentController extends BaseController
         return response()->json([
                 'status' => 'OK',
             ], StatusCode::OK);
+    }
+
+    public function index(Request $request)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+        ]);
+        $pageLimit = $this->newListLimit($request);
+
+        $queryBuilder = StudentList::select('student_list.student_id as student_id',
+            'student_list.student_name as student_name',
+            'student_list.student_email as student_email',
+            'student_list.student_nickname as student_nickname',
+            'student_list.student_skypename as student_skypename',
+            'student_list.create_date as create_date',
+            'student_list.last_login_at as last_login_at',
+            'student_list.is_tmp_entry as is_tmp_entry',
+            'student_list.direct_mail_flag as direct_mail_flag',
+            'student_list.student_comment_text as student_comment_text',
+            DB::raw("(CASE WHEN student_list.is_lms_user = 0 THEN student_list.company_name ELSE '' END) AS custom_company_name"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_projects.project_code SEPARATOR '/'),'/') as all_project_code"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_companies.company_name SEPARATOR '/'),'/') as all_project_company_name"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_companies.legal_code, point_subscription_histories.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
+            DB::raw("MAX(lesson_histories.reserve_date) AS last_reserve_date"),
+            DB::raw("MIN(CASE WHEN lesson_histories.student_lesson_reserve_type = 3 THEN lesson_schedules.lesson_starttime END) AS first_lesson_date"),
+            DB::raw("COUNT(DISTINCT lesson_histories.id) AS lesson_count"),
+            DB::raw("IF(student_list.course_id > 1,'有料','無料') AS course_name"),
+            DB::raw("COALESCE(MIN(IF(point_subscription_histories.course_id = 1 AND student_list.is_lms_user = 0, NULL, point_subscription_histories.payment_date)),'---') AS first_payment_date"),
+        )
+        ->leftJoin('point_subscription_histories', function($join) {
+            $join->on('student_list.student_id', '=', 'point_subscription_histories.student_id')
+                ->where('point_subscription_histories.del_flag', '=', 0);
+        })
+        ->leftJoin('lesson_histories', function($join) {
+            $join->on('student_list.student_id', '=', 'lesson_histories.student_id')
+                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
+        })
+        ->leftJoin('lesson_schedules', function($join) {
+            $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
+                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
+        })
+        ->leftJoin('lms_project_students', function($join) {
+            $join->on('student_list.student_id', '=', 'lms_project_students.student_id');
+        })
+        ->leftJoin('lms_projects', function($join) {
+            $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+        })
+        ->leftJoin('lms_companies', function($join) {
+            $join->on('lms_projects.company_id', '=', 'lms_companies.id');
+        })
+        ->groupBy('student_list.student_id');
+
+        $queryBuilderCount = DB::table('student_list')->leftJoin('point_subscription_histories', function($join) {
+            $join->on('student_list.student_id', '=', 'point_subscription_histories.student_id')
+                ->where('point_subscription_histories.del_flag', '=', 0);
+        })
+        ->leftJoin('lms_project_students', function($join) {
+            $join->on('student_list.student_id', '=', 'lms_project_students.student_id');
+        })
+        ->leftJoin('lms_projects', function($join) {
+            $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+        })
+        ->leftJoin('lms_companies', function($join) {
+            $join->on('lms_projects.company_id', '=', 'lms_companies.id');
+        })
+        ->where('student_list.course_id', '>', 1)
+        ->distinct('student_list.student_id');
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where('student_list.student_id', '=',$request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('student_list.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student_list.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student_list.student_email', $request['search_input']));
+            });
+
+            $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {
+                $query->where('student_list.student_id', '=', $request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('student_list.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student_list.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student_list.student_email', $request['search_input']));
+            });
+        }
+        if (isset($request['student_id'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('student_list.student_name', $request['student_name']))
+                    ->where($this->escapeLikeSentence('student_list.student_nickname', $request['student_nickname']))
+                    ->where($this->escapeLikeSentence('student_list.student_skypename', $request['student_skypename']))
+                    ->where($this->escapeLikeSentence('student_list.student_email', $request['student_email']))
+                    ->where($this->escapeLikeSentence('lms_companies.company_name', $request['all_project_company_name']))
+                    ->where($this->escapeLikeSentence('student_list.company_name', $request['custom_company_name']))
+                    ->where($this->escapeLikeSentence('lms_projects.project_code', $request['all_project_code']));
+
+                    if(!isset($request['check_company_code'])) {
+                        $query->where(function($query) use ($request) {
+                            $query->orWhere($this->escapeLikeSentence('lms_companies.legal_code', $request['company_code']))
+                                ->orWhere($this->escapeLikeSentence('point_subscription_histories.corporation_code', $request['company_code']));
+                        });
+                    }
+                    if(isset($request['check_company_code'])) {
+                        $query->where(function($query) {
+                            $query->orWhere('lms_companies.legal_code', '=', '')
+                                ->orWhereNull('lms_companies.legal_code')
+                                ->orWhere('point_subscription_histories.corporation_code', '=', '')
+                                ->orWhereNull('point_subscription_histories.corporation_code');
+                        });
+                    }
+                    if ($request['student_id'] != "") {
+                        $query->where('student_list.student_id', '=', $request['student_id']);
+                    }
+                    if ($request['first_lesson_date'] != "") {
+                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
+                    }
+            });
+
+            $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('student_list.student_name', $request['student_name']))
+                    ->where($this->escapeLikeSentence('student_list.student_nickname', $request['student_nickname']))
+                    ->where($this->escapeLikeSentence('student_list.student_skypename', $request['student_skypename']))
+                    ->where($this->escapeLikeSentence('student_list.student_email', $request['student_email']))
+                    ->where($this->escapeLikeSentence('lms_companies.company_name', $request['all_project_company_name']))
+                    ->where($this->escapeLikeSentence('student_list.company_name', $request['custom_company_name']))
+                    ->where($this->escapeLikeSentence('lms_projects.project_code', $request['all_project_code']));
+
+                    if(!isset($request['check_company_code'])) {
+                        $query->where(function($query) use ($request) {
+                            $query->orWhere($this->escapeLikeSentence('lms_companies.legal_code', $request['company_code']))
+                                ->orWhere($this->escapeLikeSentence('point_subscription_histories.corporation_code', $request['company_code']));
+                        });
+                    }
+                    if(isset($request['check_company_code'])) {
+                        $query->where(function($query) {
+                            $query->orWhere('lms_companies.legal_code', '=', '')
+                                ->orWhereNull('lms_companies.legal_code')
+                                ->orWhere('point_subscription_histories.corporation_code', '=', '')
+                                ->orWhereNull('point_subscription_histories.corporation_code');
+                        });
+                    }
+
+                    if ($request['student_id'] != "") {
+                        $query->where('student_list.student_id', '=', $request['student_id']);
+                    }
+                    if ($request['first_lesson_date'] != "") {
+                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
+                    }
+            });
+
+        }
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "custom_company_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('custom_company_name','ASC') : $queryBuilder->orderBy('custom_company_name','DESC');
+            }
+            if ($request['sort'] == "all_project_code") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('all_project_code','ASC') : $queryBuilder->orderBy('all_project_code','DESC');
+            }
+            if ($request['sort'] == "all_project_company_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('all_project_company_name','ASC') : $queryBuilder->orderBy('all_project_company_name','DESC');
+            }
+            if ($request['sort'] == "company_code") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('company_code','ASC') : $queryBuilder->orderBy('company_code','DESC');
+            }
+            if ($request['sort'] == "last_reserve_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('last_reserve_date','ASC') : $queryBuilder->orderBy('last_reserve_date','DESC');
+            }
+            if ($request['sort'] == "first_lesson_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('first_lesson_date','ASC') : $queryBuilder->orderBy('first_lesson_date','DESC');
+            }
+            if ($request['sort'] == "lesson_count") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_count','ASC') : $queryBuilder->orderBy('lesson_count','DESC');
+            }
+            if ($request['sort'] == "course_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name','ASC') : $queryBuilder->orderBy('course_name','DESC');
+            }
+        }
+
+        Session::put('sessionStudent', json_encode($request));
+
+        $studentList = $queryBuilder->sortable(['student_id' => 'desc'])->paginate($pageLimit);
+        $number_published = $queryBuilderCount->count();
+        $number_unpublished = $studentList->total() - $number_published;
+        return view('student.index', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'studentList' => $studentList,
+            'number_published' => $number_published,
+            'number_unpublished' => $number_unpublished,
+        ]);
+    }
+
+    public function export()
+    {
+        $request = Session::get('sessionStudent');
+        $fileName = "student_list_".date("Y_m_d").".csv";
+        return Excel::download(new StudentExport($request), $fileName);
+    }
+
+    public function edit($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'edit_student', $id],
+        ]);
+
+        $studentInfo = Student::where('id', $id)->firstOrFail();
+
+        $studentInfo->student_entry_types = StudentEntryType::pluck('student_entry_type_name', 'student_entry_type_id')->toArray();
+        $studentInfo->lang_types = LangTypeOption::asSelectArray();
+        $studentInfo->lms_prefectures = LmsPrefecture::whereNull('deleted_at')->pluck('prefecture_name', 'id')->toArray();
+        $studentInfo->time_zones = TimeZone::where('id', 1)->pluck('timezone_name_native', 'id')->toArray();
+        if ($studentInfo->is_lms_user) {
+            $studentInfo->lms_project_students = LmsProjectStudent::select('lms_companies.company_name as company_name',
+                'lms_projects.project_code as project_code',
+                'lms_companies.legal_code as legal_code',
+                'lms_projects.corporation_flag as corporation_flag',
+                'lms_projects.buy_course_continue as buy_course_continue',
+                'lms_project_students.id as id',
+                'lms_project_students.buy_course_flag as buy_course_flag',
+                'lms_project_students.department_name as department_name',
+                'lms_project_students.employee_number as employee_number',
+                'lms_project_students.department_number as department_number',
+            )
+                ->Join('students', function($join) {
+                    $join->on('lms_project_students.student_id', '=', 'students.id');
+                })
+                ->Join('lms_projects', function($join) {
+                    $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+                })
+                ->leftJoin('lms_companies', function($join) {
+                    $join->on('lms_project_students.company_id', '=', 'lms_companies.id');
+                })
+                ->where('lms_project_students.student_id', $id)
+                ->whereNull('lms_project_students.deleted_at')
+                ->get()
+                ->toArray();
+        }
+        
+        $studentInfo->_token = csrf_token();
+
+        return view('student.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'studentInfo' => $studentInfo,
+        ]);
+    }
+
+    public function update(StudentEditRequest $request)
+    {
+        if(!$request->isMethod('PUT')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+ 
+        $studentInfo = Student::where('id', $request->id)->first();
+        if ($studentInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+
+        $studentInfo->is_tmp_entry = $request->is_tmp_entry;
+        $studentInfo->student_first_name = $request->student_first_name;
+        $studentInfo->student_last_name = $request->student_last_name;
+        $studentInfo->student_name = $request->student_first_name ." ". $request->student_last_name;
+        $studentInfo->student_first_name_kata = $request->student_first_name_kata;
+        $studentInfo->student_last_name_kata = $request->student_last_name_kata;
+        $studentInfo->student_name_kana = ($request->student_first_name_kata ?? "") ." ".  ($request->student_last_name_kata ?? "");
+        $studentInfo->student_skypename = $request->student_skypename;
+        $studentInfo->student_nickname = $request->student_nickname;
+        $studentInfo->student_email = $request->student_email;
+        if (isset($request->company_name)) {
+            $studentInfo->company_name = $request->company_name;
+        }
+        $studentInfo->student_introduction = $request->student_introduction;
+        $studentInfo->student_home_tel = $request->student_home_tel;
+        $studentInfo->postcode = $request->postcode;
+        $studentInfo->prefecture_number = $request->prefecture_number;
+        $studentInfo->student_address = $request->student_address;
+        $studentInfo->student_address1 = $request->student_address1;
+        $studentInfo->student_address2 = $request->student_address2;
+        $studentInfo->student_address3 = $request->student_address3;
+        $studentInfo->is_sending_dm = $request->is_sending_dm;
+        $studentInfo->direct_mail_flag = $request->direct_mail_flag;
+        $studentInfo->lang_type = $request->lang_type;
+        $studentInfo->timezone_id = $request->timezone_id;
+        $studentInfo->student_comment_text = $request->student_comment_text;
+        $studentInfo->in_japan_flag = $request->in_japan_flag;
+
+        $studentInfo->save();  
+
+        if($studentInfo['is_lms_user']) {
+            foreach($request->lms_project_students as $lmsProject) {
+                $lmsProjectInfo = LmsProjectStudent::where('id', $lmsProject['id'])->first();
+
+                $lmsProjectInfo['department_name'] = $lmsProject['department_name'];
+                $lmsProjectInfo['employee_number'] = $lmsProject['employee_number'];
+                $lmsProjectInfo['department_number'] = $lmsProject['department_number'];
+                $lmsProjectInfo['buy_course_flag'] = $lmsProject['buy_course_flag'];
+
+                $lmsProjectInfo->save();
+            }
+        }
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            Student::where('id', $id)->delete();
+            StudentPointHistory::where('student_id', $id)->delete();
+            LmsProjectStudent::where('student_id', $id)->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => '生徒削除が完了しました',
+        ], StatusCode::OK);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+        
+        $studentInfo = Student::where('id', $request->id)->first();
+        
+        if ($studentInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $studentInfo->password = Hash::make($request->password);
+        $studentInfo->save();  
+        $langType = 'jp';
+        if ($studentInfo->lang_type == 2) {
+            $langType = 'en';
+        } else if ($studentInfo->lang_type == 3) {
+            $langType = 'vn';
+        }
+        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::CHANGEPASSSTUDENT, $langType);
+        if ($mailPattern) {
+            $mailSubject = $mailPattern->mail_subject;
+            $mailBody = $mailPattern->mail_body;
+            $mailBody = str_replace("#STUDENT_NAME#", $studentInfo->student_name, $mailBody);
+            
+            Mail::raw($mailBody, function ($message) use ($studentInfo, $mailSubject) {
+                $message->to($studentInfo->student_email)
+                    ->subject($mailSubject);
+            });
+        }
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 }

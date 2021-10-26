@@ -167,6 +167,22 @@
                 生徒情報管理
             </a>
         </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('lmsCsv.import')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                法人・単体コース
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('lmsCsv.setCourseImport')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                法人・セットコース
+            </a>
+        </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

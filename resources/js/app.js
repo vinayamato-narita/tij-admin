@@ -95,6 +95,9 @@ import StudentSearch from "./components/student/student-search.vue"
 import EditStudent from "./components/student/edit-student.vue"
 import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
 import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
+import LmsCsvImport from "./components/lms-csv/lms-csv-import.vue"
+import ImportSendMail from "./components/lms-csv/import-send-mail.vue"
+import LmsSetCourseImport from "./components/lms-csv/lms-set-course-import.vue"
 
 new Vue({
     created() {
@@ -248,7 +251,9 @@ new Vue({
         EditStudent,
         PaymentHistorySearch,
         EditHistoryPayment,
-
+        LmsCsvImport,
+        ImportSendMail,
+        LmsSetCourseImport,
     },
     methods: {},
     mounted() {}

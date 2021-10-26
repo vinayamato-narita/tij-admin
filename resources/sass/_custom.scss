@@ -337,3 +337,190 @@ input:disabled {
 .disabledSelect {
     background-color: #eee !important;
 }
+.input-csv {
+    margin-right: 20px;
+    width: 180px;
+    background-color: #fff !important;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #fff !important;
+    cursor: pointer !important;
+}
+.upload-csv {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+.form-group-csv {
+    display: inline-block;
+    margin-bottom: -4px;
+    vertical-align: middle;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    margin-right: 5px;
+}
+.inputForm {
+    margin-left: 100px;
+}
+.error-des {
+    padding: 20px;
+    font-size: 14px;
+}
+.error-empty {
+    background: #DEEBF6;
+}
+
+.error-length {
+    background: #FFE799;
+}
+
+.error-special-text {
+    background: #C5E0B2;
+}
+
+.error-male {
+    background: #757171;
+}
+
+.error-date {
+    background: #C55A11;
+}
+
+.error-student-id {
+    background: #ED7D31;
+}
+
+.error-course-id {
+    background: #FF66CC;
+}
+
+.error-pass {
+    background: #00B0F0;
+}
+
+.error-email {
+    background: #00B050;
+}
+
+.error-des {
+    padding: 30px;
+    font-size: 14px;
+}
+
+.error-common {
+    background: red;
+    color: #73879C !important;
+}
+
+.error-des table {
+    width: 360px !important;
+    font-size: 14px !important;
+}
+
+.width-100 {
+    width: 100px;
+}
+
+.error-email-noneId {
+    background: #1357AB;
+}
+
+.error-email-name {
+    background: #8D63BF;
+}
+
+.error-skype-name {
+    background: #71EBC0;
+}
+
+.error-td-class {
+    min-width: 250px;
+}
+
+.error-hankaku {
+    background: rgb(155, 111, 16);
+}
+
+.padding-left-40 {
+    padding-left: 40px;
+}
+
+.padding-left-60 {
+    padding-left: 60px;
+}
+
+.error-space {
+    background: #5C4CA5;
+    color: white !important;
+}
+
+.error-alphanumeric-symbol {
+    background: #9BA54C;
+    color: white !important;
+}
+.error-course-begin-month {
+    background: rgb(218, 155, 18);
+}
+
+.error-corporation {
+    background: rgb(7, 65, 69);
+    color: white !important;
+}
+
+.error-prefecture {
+    background: rgb(76, 15, 75);
+    color: white !important;
+}
+
+.error-project {
+    background: rgb(61, 108, 81);
+    color: white !important;
+}
+
+.error-project-course {
+    background: #333;
+    color: white !important;
+}
+
+.error-kana {
+    background: #711818;
+    color: white !important;
+}
+
+.error-hankaku-kana {
+    background: #A54C4C;
+    color: white !important;
+}
+
+.error-cannot-buy {
+    background: #DEE6C4;
+}
+
+.error-email-noneId-sendMail {
+    background: #8e417b;
+    color: white !important;
+}
+.error-lang-type {
+    background: rgb(148, 235, 113);
+}
+
+.error-time-zone {
+    background: rgb(160, 113, 235);
+}
+.csv-import .error {
+    color: #3c4b64;
+}
+.mt-20 {
+    margin-top: 20px;
+}

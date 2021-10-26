@@ -28,7 +28,7 @@ class CreateStudentListViews extends Migration
                 `s`.`is_lms_user` AS `is_lms_user`,
                 `s`.`course_id` AS `course_id`,
                 count(distinct `lh`.`id`) AS `lesson_count`,
-                `s`.`create_date` AS `create_date`,
+                `s`.`created_at` AS `create_date`,
                 max(`lh`.`reserve_date`) AS `last_reserve_date`,
                 `s`.`is_tmp_entry` AS `is_tmp_entry`,
                 if(`s`.`course_id` <> 1,'有料','無料') AS `course_name`,

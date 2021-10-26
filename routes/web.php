@@ -132,4 +132,13 @@ Route::group([
     Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
     Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
     Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
+
+    Route::get('/lms-csv/import', 'LmsCsvController@import')->name('lmsCsv.import');
+    Route::post('/lms-csv/uploadCsv', 'LmsCsvController@uploadCsv')->name('lmsCsv.uploadCsv');
+    Route::post('/lms-csv/importCsv', 'LmsCsvController@importCsv')->name('lmsCsv.importCsv');
+    Route::get('/lms-csv/import-send-mail', 'LmsCsvController@importSendMail')->name('lmsCsv.importSendMail');
+    Route::post('/lms-csv/send-mail', 'LmsCsvController@sendMail')->name('lmsCsv.sendMail');
+    Route::get('/lms-csv/set-course-import', 'LmsCsvController@setCourseImport')->name('lmsCsv.setCourseImport');
+    Route::post('/lms-csv/uploadSetCourseCsv', 'LmsCsvController@uploadSetCourseCsv')->name('lmsCsv.uploadSetCourseCsv');
+    Route::post('/lms-csv/importSetCourseCsv', 'LmsCsvController@importSetCourseCsv')->name('lmsCsv.importSetCourseCsv');
 });

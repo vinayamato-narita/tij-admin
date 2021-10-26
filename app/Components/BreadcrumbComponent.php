@@ -255,6 +255,14 @@ class BreadcrumbComponent
                 'text' => '支払い履歴編集',
                 'route_str' => "paymentHistory.edit",
             ],
+            'lms_csv_import' => [
+                'text' => '一括登録（法人・単体コース）',
+                'route_str' => "lmsCsv.import",
+            ],
+            'lms_set_course_import' => [
+                'text' => '一括登録（法人・セットコース）',
+                'route_str' => "lmsCsv.setCourseImport",
+            ],
         ];
     }
 

@@ -16,6 +16,6 @@ class Lesson extends Model
 
     public function lessonText()
     {
-        return $this->belongsToMany('App\Models\lessonText', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'id', 'id');
+        return $this->belongsToMany('App\Models\LessonText', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'id', 'id');
     }
 }

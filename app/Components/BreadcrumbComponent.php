@@ -244,7 +244,7 @@ class BreadcrumbComponent
                 'route_str' => "category.edit",
             ],
             'csv_import' => [
-                'text' => '一括登録（個人・単体コース',
+                'text' => '一括登録（個人・単体コース）',
                 'route_str' => "csv.import",
             ],
             'edit_student' => [

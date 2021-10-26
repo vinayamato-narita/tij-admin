@@ -1,6 +1,7 @@
 <?php
 namespace App\Components;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -382,8 +383,8 @@ class CommonComponent
 
     private static function validateDate($date)
     {
-        $d = DateTime::createFromFormat('Ymd', $date);
-        return $d && $d->format('Ymd') == $date;
+        $d = Carbon::createFromFormat('Ymd', $date);
+        return is_object($d);
         // return true;
     }
 

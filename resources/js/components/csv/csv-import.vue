@@ -201,6 +201,71 @@
                                             </div>
 
                                         </div>
+                                        <div v-if="this.isShowTable">
+                                            <table  class="table table-bordered resize JColResizer" style="margin: 10px!important">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="th-header">氏名姓 student_first_name</th>
+                                                    <th class="th-header">氏名名 student_last_name</th>
+                                                    <th class="th-header">ニックネーム student_nickname</th>
+                                                    <th class="th-header">パスワード student_password</th>
+                                                    <th class="th-header">メールアドレス student_email</th>
+                                                    <th class="th-header">Skype名 student_skypename</th>
+                                                    <th class="th-header">デフォルト言語</th>
+                                                    <th class="th-header">タイムゾーン timezone_id</th>
+                                                    <th class="th-header">コースコード course_id</th>
+                                                    <th class="th-header">得意先コード</th>
+                                                    <th class="th-header">法人コード</th>
+                                                    <th class="th-header">法人名 company_name</th>
+                                                    <th class="th-header">受注日</th>
+                                                    <th class="th-header">基準日</th>
+                                                    <th class="th-header">有効期限 expire_date</th>
+                                                    <th class="th-header">共通管理番号</th>
+                                                    <th class="th-header">生徒番号 student_id</th>
+                                                    <th class="th-header">メール送信</th>
+                                                </tr>
+                                                <tr >
+                                                    <th class="th-header" v-for="hd in this.csv[0]">
+                                                        {{hd}}
+                                                    </th>
+
+                                                    <th class="th-header"></th>
+                                                </tr>
+                                                <tr v-for="(data, index) in this.csv" >
+
+
+                                                    <td v-for="(itemData, indexTd) in data" v-if="index !== 0 && indexTd !== 'error_list'" :class="(data['error_list'] == null || data['error_list'][indexTd] == null) ? '' : data['error_list'][indexTd].class"
+                                                    >
+                                                        {{itemData}}
+                                                    </td>
+
+
+
+                                                    <td class="result-status"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="error error-common" v-for="hd in this.csv[0]">
+                                                    </th>
+                                                </tr>
+
+
+
+                                                </tbody>
+                                            </table>
+                                            <div>
+                                                <form class="form-inline" role="form" enctype="multipart/form-data" method="post">
+                                                    <input
+                                                            name="_token"
+                                                            type="hidden"
+                                                            v-model="csvExport._token"
+                                                    />
+                                                    <div style="text-align: center;width: 100%">
+                                                        <button type="submit" class="btn btn-sm btn-default" name="dataCommit" id="csvButton" style="text-align: center;" v-if="!this.errFlag">登録</button>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -225,7 +290,9 @@
     import Loader from "../common/loader.vue";
 
     export default {
-        created: function () {},
+        created: function () {
+            console.log(this.csv)
+        },
         components: {
             Loader,
         },
@@ -238,7 +305,7 @@
                 },
             };
         },
-        props: [ 'postUrl', 'errMsg'],
+        props: [ 'postUrl', 'errMsg', 'errFlag', 'csv', 'isShowTable'],
         mounted() {
             let that = this;
             $('input[type=file]').change(function () {

@@ -13,12 +13,12 @@ class CreateCourseMapTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_maps', function (Blueprint $table) {
-            $table->integer('course_id')->primary();
-            $table->integer('togo_course_id')->nullable();
-            $table->integer('new_course_id')->nullable();
-            $table->integer('en_course_id')->nullable();
-            $table->integer('vn_course_id')->nullable();
+        Schema::create('course_map', function (Blueprint $table) {
+            $table->integer('course_id')->primary()->comment('現在のコースID');
+            $table->integer('togo_course_id')->nullable()->comment('統合コースID');
+            $table->integer('new_course_id')->nullable()->comment('統合システムに導入した時');
+            $table->integer('en_course_id')->nullable()->comment('EN版');
+            $table->integer('vn_course_id')->nullable()->comment('VN版');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateCourseMapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_maps');
+        Schema::dropIfExists('course_map');
     }
 }

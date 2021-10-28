@@ -14,11 +14,9 @@ class CreateTagsTable extends Migration
     public function up()
     {
         Schema::create('tags', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('tag_id');
             $table->string('tag_name', 100)->nullable();
             $table->string('css_class', 100)->nullable();
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 

@@ -14,11 +14,11 @@ class CreateCourseSetCourseTable extends Migration
     public function up()
     {
         Schema::create('course_set_course', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('course_set_course_id');
             $table->integer('set_course_id')->nullable();
             $table->integer('course_id')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->tinyInteger('delete_flag')->nullable()->default(0)->comment('削除フラグ');
         });
     }
 

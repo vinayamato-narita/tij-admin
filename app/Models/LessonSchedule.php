@@ -9,4 +9,10 @@ use Kyslik\ColumnSortable\Sortable;
 class LessonSchedule extends Model
 {
     use HasFactory, Sortable;
+
+    protected $table = 'lesson_schedule';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'lesson_schedule_id';
 }

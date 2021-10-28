@@ -13,14 +13,12 @@ class CreateCourseInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('course_info', function (Blueprint $table) {
+            $table->increments('course_info_id')->comment('識別ID');
             $table->integer('course_id');
             $table->string('course_name')->nullable();
             $table->text('course_description')->nullable();
-            $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('lang_type', 10)->comment('言語タイプ。en:英語　vn:ベトナム語');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateCourseInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_infos');
+        Schema::dropIfExists('course_info');
     }
 }

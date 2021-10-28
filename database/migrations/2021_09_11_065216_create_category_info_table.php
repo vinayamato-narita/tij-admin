@@ -13,13 +13,11 @@ class CreateCategoryInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('category_info', function (Blueprint $table) {
+            $table->increments('category_info_id')->comment('識別ID');
             $table->integer('category_id');
             $table->string('category_name')->nullable();
-            $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('lang_type', 10)->comment('言語タイプ。en:英語　vn:ベトナム語');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateCategoryInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_infos');
+        Schema::dropIfExists('category_info');
     }
 }

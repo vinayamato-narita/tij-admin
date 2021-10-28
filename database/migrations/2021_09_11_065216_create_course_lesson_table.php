@@ -14,7 +14,7 @@ class CreateCourseLessonTable extends Migration
     public function up()
     {
         Schema::create('course_lesson', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('course_lesson_id');
             $table->unsignedInteger('course_id');
             $table->unsignedInteger('lesson_id')->index('lesson_id');
             $table->unique(['course_id', 'lesson_id'], 'co_ls');

@@ -11,7 +11,13 @@ use Log;
 class PointSubscriptionHistory extends Authenticatable
 {
     use HasFactory, Sortable;
+    
+    protected $table = 'point_subscription_history';
+
     public $timestamps = false;
+
+    protected $primaryKey = 'point_subscription_history_id';
+    
     public function studentPointHistory() 
     {
         return $this->hasMany(StudentPointHistory::class);

@@ -13,8 +13,8 @@ class CreateTeacherInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('teacher_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('teacher_info', function (Blueprint $table) {
+            $table->increments('teacher_info_id');
             $table->integer('teacher_id');
             $table->string('teacher_name')->nullable();
             $table->string('teacher_nickname')->nullable();
@@ -23,8 +23,6 @@ class CreateTeacherInfoTable extends Migration
             $table->string('teacher_university')->nullable();
             $table->string('teacher_department')->nullable();
             $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -35,6 +33,6 @@ class CreateTeacherInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teacher_infos');
+        Schema::dropIfExists('teacher_info');
     }
 }

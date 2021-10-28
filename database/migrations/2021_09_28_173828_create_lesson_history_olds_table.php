@@ -13,9 +13,8 @@ class CreateLessonHistoryOldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_history_olds', function (Blueprint $table) {
-            $table->id();
-            $table->integer('lesson_history_id')->nullable();
+        Schema::create('lesson_history_old', function (Blueprint $table) {
+            $table->integer('lesson_history_id')->default(0);
             $table->integer('lesson_schedule_id')->nullable();
             $table->integer('student_id')->nullable();
             $table->text('comment_from_student_to_teacher')->nullable();
@@ -40,8 +39,6 @@ class CreateLessonHistoryOldsTable extends Migration
             $table->smallInteger('marks')->nullable();
             $table->index(['lesson_schedule_id', 'student_lesson_reserve_type'], 'lesson_schedule_id');
             $table->index(['student_id', 'student_lesson_reserve_type'], 'student_id');
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -52,6 +49,6 @@ class CreateLessonHistoryOldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_history_olds');
+        Schema::dropIfExists('lesson_history_old');
     }
 }

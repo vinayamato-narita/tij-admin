@@ -13,8 +13,8 @@ class CreateLmsAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_admins', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('lms_admin', function (Blueprint $table) {
+            $table->increments('admin_id');
             $table->string('default_project_code', 50)->nullable()->default(null);
             $table->string('admin_email')->nullable();
             $table->string('admin_password')->nullable();
@@ -31,15 +31,16 @@ class CreateLmsAdminTable extends Migration
             $table->string('address2', 500)->nullable();
             $table->string('address3', 500)->nullable();
             $table->string('address4', 500)->nullable();
-            $table->boolean('super_admin_flag')->nullable()->default(0);
-            $table->boolean('type')->nullable()->default(1);
+            $table->tinyInteger('super_admin_flag')->nullable()->default(0)->comment('1:SuperAdmin');
+            $table->tinyInteger('type')->nullable()->default(1)->comment('送付先、オブザーバーユーザー');
             $table->string('security_string')->nullable();
             $table->dateTime('init_pass_expire_datetime')->nullable();
             $table->dateTime('last_change_password_time')->nullable();
             $table->dateTime('last_login_datetime')->nullable();
             $table->string('last_login_ip', 50)->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->dateTime('created')->nullable()->comment('作成日時');
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->tinyInteger('delete_flag')->nullable()->default(0)->comment('削除フラグ');
         });
     }
 
@@ -50,6 +51,6 @@ class CreateLmsAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_admins');
+        Schema::dropIfExists('lms_admin');
     }
 }

@@ -10,6 +10,10 @@ class Course extends Model
 {
     use HasFactory, Sortable;
 
+    protected $table = 'course';
+    
+    public $timestamps = false;
+    
     protected $primaryKey = 'course_id';
     public function childCourse()
     {
@@ -20,13 +24,13 @@ class Course extends Model
     public function tags()
     {
         return $this->belongsToMany('App\Models\Tag', 'course_tag' ,
-            'course_id', 'tag_id', 'course_id', 'id');
+            'course_id', 'tag_id', 'course_id', 'tag_id');
     }
 
     public function lesson()
     {
         return $this->belongsToMany('App\Models\Lesson', 'course_lesson' ,
-            'course_id', 'lesson_id', 'course_id', 'id');
+            'course_id', 'lesson_id', 'course_id', 'lesson_id');
     }
 
 

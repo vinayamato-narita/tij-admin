@@ -13,7 +13,7 @@ class CreatePaymentTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_types', function (Blueprint $table) {
+        Schema::create('payment_type', function (Blueprint $table) {
             $table->unsignedInteger('payment_type')->primary();
             $table->string('payment_type_name', 45);
         });
@@ -26,6 +26,6 @@ class CreatePaymentTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_types');
+        Schema::dropIfExists('payment_type');
     }
 }

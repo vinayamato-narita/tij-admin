@@ -14,13 +14,12 @@ class CreateAdminNewsTable extends Migration
     public function up()
     {
         Schema::create('admin_news', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('news_id')->comment('識別ID');
             $table->string('news_title', 500);
             $table->text('news_body');
             $table->integer('news_subject_id');
-            $table->boolean('public_flag')->default(0);
-            $table->softDeletes();
-            $table->timestamps();   
+            $table->dateTime('news_update_date');
+            $table->tinyInteger('is_show_on_student_top')->default(0)->comment('トップ表示。1:表示 0: 非表示');
         });
     }
 

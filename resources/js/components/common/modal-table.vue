@@ -1,7 +1,7 @@
 <template>
     <modal name="select-teacher-lesson-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header">レッスン一覧
+            <div class="card-header"> {{ this.type === 'teacher' || this.type === 'course' ? 'レッスン一覧' : 'テキスト一覧'}}
 
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -84,13 +84,15 @@
                                 <th class="text-center bg-gray-100 " style="width: 50px">
                                     <input   v-on:click="checkAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </th>
-                                <th class="text-center text-md-left bg-gray-100">レッスン名</th>
+                                <th class="text-center text-md-left bg-gray-100" v-if="this.type === 'teacher' || this.type === 'course'">レッスン名</th>
+                                <th class="text-center text-md-left bg-gray-100" v-if="this.type === 'lesson'">テキスト名</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="lesson in dataList">
                                 <td class="text-center">
-                                    <input id="isTestLesson" v-on:click="checkedId(lesson.lesson_id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input v-if="type == 'teacher' || type == 'course'" v-on:click="checkedId(lesson.lesson_id)"  type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input  v-if="type == 'lesson'" v-on:click="checkedId(lesson.lesson_text_id)"   type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </td>
                                 <td class="text-md-left" v-if="type == 'lesson'">{{  lesson.lesson_text_name }}</td>
                                 <td class="text-md-left" v-if="type == 'teacher'">{{ lesson.lesson_name  }}</td>

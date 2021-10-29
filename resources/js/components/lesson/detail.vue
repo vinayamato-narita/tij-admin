@@ -40,7 +40,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.lesson.id}}
+                                            {{this.lesson.lesson_id}}
 
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-5">
                             <div class="card">
-                                <div class="card-header">レッスン一覧
+                                <div class="card-header">テキスト一覧
                                     <div class="float-right">
                                         <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show">
                                             追加
@@ -119,7 +119,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{lessonText.lesson_text_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(lesson.id , lessonText.id)"
+                                                            :delete-action="getUriDelete(lesson.lesson_id , lessonText.lesson_text_id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>

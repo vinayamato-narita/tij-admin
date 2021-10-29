@@ -115,7 +115,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('id', $id)->with('lessonText')->first();
+        $lesson = Lesson::where('lesson_id', $id)->with('lessonText')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -205,7 +205,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_edit', $id]
         ]);
 
-        $lesson = Lesson::where('id', $id)->first();
+        $lesson = Lesson::where('lesson_id', $id)->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -224,7 +224,7 @@ class LessonController extends BaseController
     public function update(StoreUpdateLessonRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $lesson = Lesson::where('id', $id)->first();
+            $lesson = Lesson::where('lesson_id', $id)->first();
             if (!$lesson) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
@@ -267,7 +267,7 @@ class LessonController extends BaseController
     public function destroy($id)
     {
         try {
-            $lesson = Lesson::where('id', $id)->delete();
+            $lesson = Lesson::where('lesson_id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

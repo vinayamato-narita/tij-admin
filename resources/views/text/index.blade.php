@@ -57,11 +57,11 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('text.show', $text->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('text.show', $text->lesson_text_id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                                :delete-action="{{ json_encode(route('text.destroy',  $text->id)) }}"
+                                                                                :delete-action="{{ json_encode(route('text.destroy',  $text->lesson_text_id)) }}"
                                                                                 :message-confirm="{{ json_encode('このテキストを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

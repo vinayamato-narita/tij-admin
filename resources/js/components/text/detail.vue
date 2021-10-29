@@ -148,7 +148,7 @@
             };
         },
         props: ["listTextUrl", "createUrl", 'lessonText', 'editTextUrl'],
-        mounted() { console.log(this.lessonText)},
+        mounted() {},
         methods: {
         },
     }

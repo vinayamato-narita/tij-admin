@@ -490,7 +490,8 @@
                 this.convertTagIds();
                 formData.append("tagIds", this.tagIds);
                 formData.append("displayOrder", this.displayOrder);
-                formData.append("courseNameShort", this.courseNameShort);
+                if (this.courseNameShort !== null)
+                    formData.append("courseNameShort", this.courseNameShort);
                 formData.append("courseName", this.courseName);
                 formData.append("pointExpireDay", this.pointExpireDay);
                 formData.append("pointCount", this.pointCount);
@@ -498,8 +499,10 @@
                 formData.append("amount", this.amount);
                 formData.append("paypalItemNumber", this.paypalItemNumber);
                 formData.append("isCampaign", this.isCampaign);
-                formData.append("campaignCode", this.campaignCode);
-                formData.append("courseDescription", this.courseDescription);
+                if (this.campaignCode !== null)
+                    formData.append("campaignCode", this.campaignCode);
+                if (this.courseDescription !== null)
+                    formData.append("courseDescription", this.courseDescription);
                 formData.append("isScheduleLimit", this.isScheduleLimit);
                 formData.append("reverseEnd", this.reverseEnd);
                 formData.append("reverseStart", this.reverseStart);

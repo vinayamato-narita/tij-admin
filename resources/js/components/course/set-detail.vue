@@ -169,7 +169,8 @@
                                     <ol style="margin-left: -30px;list-style-type: none;">
                                         <li v-for="child in this.course.child_course">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text">{{child.course_name}}</div>
+                                                <div class="col-md-1 wrap-long-text">{{child.course_id}}</div>
+                                                <div class="col-md-9 wrap-long-text">{{child.course_name}}</div>
                                                 <div class="col-md-2">
                                                 </div>
 

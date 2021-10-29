@@ -424,7 +424,7 @@
             loadTags() {
                 let that = this;
                 this.tag.forEach(function (e) {
-                    that.options.push({name: e.tag_name, code: e.id})
+                    that.options.push({name: e.tag_name, code: e.tag_id})
                 });
             },
             convertTagIds() {

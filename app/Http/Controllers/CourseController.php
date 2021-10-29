@@ -148,7 +148,7 @@ class CourseController extends BaseController
                     $arrTagId = explode(',', $request->tagIds);
                     foreach ($arrTagId as $id) {
                         $ct = new  CourseTag();
-                        $ct->course_id = $course->id;
+                        $ct->course_id = $course->course_id;
                         $ct->tag_id = $id;
                         $ct->save();
                     }
@@ -237,7 +237,7 @@ class CourseController extends BaseController
                     $arrTagId = explode(',', $request->tagIds);
                     foreach ($arrTagId as $id) {
                         $ct = new  CourseTag();
-                        $ct->course_id = $course->id;
+                        $ct->course_id = $course->course_id;
                         $ct->tag_id = $id;
                         $ct->save();
                     }
@@ -247,7 +247,7 @@ class CourseController extends BaseController
                     $arrchildIds = explode(',', $request->childIds);
                     foreach ($arrchildIds as $id) {
                         $ct = new  CourseSetCourse();
-                        $ct->set_course_id = $course->id;
+                        $ct->set_course_id = $course->course_id;
                         $ct->course_id = $id;
                         $ct->save();
                     }
@@ -299,7 +299,7 @@ class CourseController extends BaseController
 
         try {
             $cl = CourseVideo::where([
-                'id' => $videoId
+                'course_video_id' => $videoId
             ])->delete();
 
         } catch (ModelNotFoundException $ex) {
@@ -427,7 +427,7 @@ class CourseController extends BaseController
         }
         $lessonHasAdded = CourseLesson::where('course_id', $id)->pluck('lesson_id');
 
-        $lessonList = $queryBuilder->whereNotIn('id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        $lessonList = $queryBuilder->whereNotIn('lesson_id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $lessonList

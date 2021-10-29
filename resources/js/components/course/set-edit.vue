@@ -293,7 +293,7 @@
             this.$validator.localize("en", messError);
             let  that = this;
             this.course.tags.forEach(function (e) {
-                that.tagValue.push({name: e.tag_name, code: e.id});
+                that.tagValue.push({name: e.tag_name, code: e.tag_id});
             })
         },
         components: {
@@ -329,7 +329,7 @@
             loadTags() {
                 let that = this;
                 this.tags.forEach(function (e) {
-                    that.options.push({name: e.tag_name, code: e.id})
+                    that.options.push({name: e.tag_name, code: e.tag_id})
                 });
             },
             convertTagIds() {

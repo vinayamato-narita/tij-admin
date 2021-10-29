@@ -385,7 +385,7 @@
                                         confirmButtonText: "閉じる"
                                     })
                                     .then(function () {
-                                        window.location.href = that.detail;
+                                        window.location.href = that.listTeacherUrl;
                                     });
                             })
                             .catch(error => {

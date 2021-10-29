@@ -186,7 +186,7 @@
                                                 <input class=" checkbox" id="isCampaign" name="isCampaign"
                                                        type="checkbox"
                                                        @input="changeInput()" v-model="isCampaign" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isShow">
+                                                <label class="" for="isCampaign">
                                                     キャンペーンコースに登録する
                                                 </label>
 
@@ -468,7 +468,7 @@
             loadTags() {
                 let that = this;
                 this.tag.forEach(function (e) {
-                    that.options.push({name: e.tag_name, code: e.id})
+                    that.options.push({name: e.tag_name, code: e.tag_id})
                 });
             },
             convertTagIds() {

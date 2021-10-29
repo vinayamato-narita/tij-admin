@@ -237,7 +237,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(course.course_id , lesson.id)"
+                                                            :delete-action="getUriDelete(course.course_id , lesson.lesson_id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>
@@ -280,7 +280,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDeleteVideo(course.course_id , video.id)"
+                                                            :delete-action="getUriDeleteVideo(course.course_id , video.course_video_id)"
                                                             :message-confirm="messageConfirmVideo"
                                                     >
                                                     </DeleteItem>

@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CourseTag extends Model
 {
     use HasFactory;
-    protected $table = 'course_tag';
+    protected $table = 'course_tags';
+
+    public $timestamps = false;
+    
+    protected $primaryKey = 'course_tag_id';
 }

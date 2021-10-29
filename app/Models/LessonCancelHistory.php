@@ -10,14 +10,20 @@ class LessonCancelHistory extends Model
 {
     use HasFactory, Sortable;
 
+    protected $table = 'lesson_cancel_history';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'lesson_cancel_history_id';
+
     public function teacher()
     {
-        return $this->belongsTo('App\Models\Teacher', 'teacher_id', 'id');
+        return $this->hasOne('App\Models\Teacher', 'teacher_id', 'teacher_id');
     }
 
     public function student()
     {
-        return $this->belongsTo('App\Models\Student', 'student_id', 'id');
+        return $this->hasOne('App\Models\Student', 'student_id', 'student_id');
     }
 
 }

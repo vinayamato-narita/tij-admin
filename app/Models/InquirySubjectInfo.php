@@ -9,5 +9,11 @@ class InquirySubjectInfo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'faq_id', 'inquiry_subject', 'lang_type'];
+    protected $table = 'inquiry_subject_info';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'inquiry_subject_info_id';
+    
+    protected $fillable = ['inquiry_subject_info_id', 'inquiry_subject_id', 'inquiry_subject', 'lang_type'];
 }

@@ -30,8 +30,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_name"
-                                                    v-model="adminInfoEx.admin_name"
+                                                    name="admin_user_name"
+                                                    v-model="adminInfoEx.admin_user_name"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -39,9 +39,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_name')"
+                                                    v-if="errors.has('admin_user_name')"
                                                 >
-                                                    {{ errors.first("admin_name") }}
+                                                    {{ errors.first("admin_user_name") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -57,8 +57,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_email"
-                                                    v-model="adminInfoEx.admin_email"
+                                                    name="admin_user_email"
+                                                    v-model="adminInfoEx.admin_user_email"
                                                     v-validate="
                                                         'required|email|max:255'
                                                     "
@@ -66,9 +66,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_email')"
+                                                    v-if="errors.has('admin_user_email')"
                                                 >
-                                                    {{ errors.first("admin_email") }}
+                                                    {{ errors.first("admin_user_email") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -133,8 +133,8 @@
                                                 <textarea
                                                     class="form-control"
                                                     rows = "5"
-                                                    name="description"
-                                                    v-model="adminInfoEx.description"
+                                                    name="admin_user_description"
+                                                    v-model="adminInfoEx.admin_user_description"
                                                     v-validate="
                                                         'max:2000'
                                                     "
@@ -142,9 +142,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('description')"
+                                                    v-if="errors.has('admin_user_description')"
                                                 >
-                                                    {{ errors.first("description") }}
+                                                    {{ errors.first("admin_user_description") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -155,7 +155,7 @@
                                                 <btn-delete :delete-action="deleteAction"
                                                             :message-confirm="messageConfirm" 
                                                             :url-redirect="urlRedirect"></btn-delete>
-                                                <a :href="urlAdminDetail" class="btn btn-default w-100">閉じる</a>
+                                                <a :href="urlAdminList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
                                     </div>
@@ -179,11 +179,11 @@ export default {
     created: function() {
         let messError = {
             custom: {
-                admin_name: {
+                admin_user_name: {
                     required: "ユーザ名を入力してください",
                     max: "ユーザ名は255文字以内で入力してください"
                 },
-                admin_email: {
+                admin_user_email: {
                     required: "メールアドレスを入力してください",
                     max: "メールアドレスは255文字以内で入力してください",
                     email: "メールアドレスを正確に入力してください"
@@ -197,7 +197,7 @@ export default {
                 password_confirm: {
                     confirmed: "確認が一致しません"
                 },
-                description: {
+                admin_user_description: {
                     max: "説明は2000文字以内で入力してください",
                 }
             }
@@ -215,7 +215,7 @@ export default {
         };
 
     },
-    props: ["urlAction", "urlAdminDetail", 'adminInfo', 'deleteAction', 'messageConfirm', 'urlRedirect'],
+    props: ["urlAction", "urlAdminList", 'adminInfo', 'deleteAction', 'messageConfirm', 'urlRedirect'],
     mounted() {},
     methods: {
         save() {
@@ -242,15 +242,15 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = that.urlAdminDetail;
+                            window.location = that.urlAdminList;
                         });
                     }
                 })
                 .catch(e => {
                     that.flagShowLoader = false;
                     that.errors.add({
-                        field: 'admin_email',
-                        msg: e.response.data.errors.admin_email[0]
+                        field: 'admin_user_email',
+                        msg: e.response.data.errors.admin_user_email[0]
                     });
                 });
         }

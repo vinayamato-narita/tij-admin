@@ -162,6 +162,11 @@
         props: ["updateUrl", 'category', 'detailCategoryUrl'],
         mounted() {},
         methods: {
+            checkLink(url) {
+                if (url != null) {
+                    window.open(url, '_blank');
+                }
+            },
             register() {
                 let that = this;
                 let formData = new FormData();

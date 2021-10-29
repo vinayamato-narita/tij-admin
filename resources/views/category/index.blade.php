@@ -67,7 +67,7 @@
                                                                 <ul class="dropdown-menu dropdown-menu-right ">
 
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('category.show', $c->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('category.show', $c->category_id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

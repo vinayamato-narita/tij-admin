@@ -112,7 +112,7 @@ class CategoryController extends BaseController
             ['name' => 'category_show', $id]
         ]);
 
-        $cat = Category::where('id', $id)->with(['courses'])->first();
+        $cat = Category::where('category_id', $id)->with(['courses'])->first();
         if (!$cat) return redirect()->route('text.index');
         return view('category.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -202,7 +202,7 @@ class CategoryController extends BaseController
             ['name' => 'category_edit', $id]
         ]);
 
-        $cat = Category::where('id', $id)->first();
+        $cat = Category::where('category_id', $id)->first();
         if (!$cat) return redirect()->route('category.index');
         return view('category.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -220,7 +220,7 @@ class CategoryController extends BaseController
     public function update(StoreUpdateCategoryRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $category = Category::where('id', $id)->first();
+            $category = Category::where('category_id', $id)->first();
             if (!$category) {
                 return response()->json([
                     'status' => 'NOT_FOUND',

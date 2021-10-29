@@ -31,7 +31,7 @@
                                         <label class="col-md-4 col-form-label text-md-right">カテゴリID:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.category.id}}
+                                            {{this.category.category_id}}
 
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{course.course_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(category.id , course.course_id)"
+                                                            :delete-action="getUriDelete(category.category_id , course.course_id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>

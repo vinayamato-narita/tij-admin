@@ -13,9 +13,9 @@ class CreateStudentEntryTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_entry_types', function (Blueprint $table) {
+        Schema::create('student_entry_type', function (Blueprint $table) {
             $table->unsignedInteger('student_entry_type_id')->primary();
-            $table->string('student_entry_type_name', 45);
+            $table->string('student_entry_type_name', 45)->comment('生徒登録状況名。０：利用中、１：仮登録、２：無効');
         });
     }
 
@@ -26,6 +26,6 @@ class CreateStudentEntryTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_entry_types');
+        Schema::dropIfExists('student_entry_type');
     }
 }

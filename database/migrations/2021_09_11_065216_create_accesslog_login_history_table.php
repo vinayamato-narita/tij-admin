@@ -13,16 +13,16 @@ class CreateAccesslogLoginHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('accesslog_login_histories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->dateTime('login_at')->nullable();
-            $table->integer('login_user_id')->nullable();
-            $table->string('login_user_name')->nullable();
-            $table->integer('accesslog_user_type_id')->nullable();
-            $table->string('ip_address')->nullable();
-            $table->text('brower_type')->nullable();
-            $table->string('os_name', 100)->nullable();
-            $table->string('browser_name', 100)->nullable();
+        Schema::create('accesslog_login_history', function (Blueprint $table) {
+            $table->increments('login_history_id')->comment('識別ID');
+            $table->dateTime('login_date')->nullable()->comment('ログイン日時');
+            $table->integer('login_user_id')->nullable()->comment('ログインユーザーID');
+            $table->string('login_user_name')->nullable()->comment('ユーザー名');
+            $table->integer('login_user_type_id')->nullable()->comment('ユーザータイプ');
+            $table->string('ipaddress')->nullable()->comment('IPアドレス');
+            $table->text('browertype')->nullable()->comment('User agent');
+            $table->string('os_name', 100)->nullable()->comment('OS名');
+            $table->string('browser_name', 100)->nullable()->comment('ブラウザ名');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateAccesslogLoginHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accesslog_login_histories');
+        Schema::dropIfExists('accesslog_login_history');
     }
 }

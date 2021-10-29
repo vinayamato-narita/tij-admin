@@ -13,17 +13,18 @@ class CreateLmsProjectStudentTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_project_students', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('lms_project_student', function (Blueprint $table) {
+            $table->increments('project_student_id');
             $table->integer('project_id')->index('project_id');
             $table->integer('company_id')->nullable();
             $table->integer('student_id')->index('student_id');
-            $table->boolean('buy_course_flag')->nullable()->default(1);
+            $table->tinyInteger('buy_course_flag')->nullable()->default(1)->comment('購入 0:不可 1:可');
             $table->string('department_name')->nullable();
             $table->string('employee_number', 100)->nullable();
             $table->string('department_number', 100)->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->dateTime('created')->nullable()->comment('作成日時');
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->smallInteger('delete_flag')->nullable()->default(0)->comment('論理削除。1:削除　0:有効');
         });
     }
 
@@ -34,6 +35,6 @@ class CreateLmsProjectStudentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_project_students');
+        Schema::dropIfExists('lms_project_student');
     }
 }

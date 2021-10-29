@@ -13,8 +13,8 @@ class CreateSystemSettingTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_settings', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('system_setting', function (Blueprint $table) {
+            $table->increments('system_setting_id');
             $table->unsignedInteger('student_lesson_reservable_day');
             $table->unsignedInteger('teacher_lesson_applicatinable_day');
             $table->unsignedInteger('admin_lesson_creatable_day');
@@ -33,9 +33,9 @@ class CreateSystemSettingTable extends Migration
             $table->unsignedInteger('before_day_y')->default(0);
             $table->unsignedInteger('before_day_z')->default(0);
             $table->unsignedInteger('lesson_just_before_cancel_time_lost100perPoint');
-            $table->integer('lesson_just_start_booking_time')->nullable()->default(0);
-            $table->integer('free_teacher_lesson_register_time')->nullable()->default(8);
-            $table->integer('free_teacher_lesson_cancel_time')->nullable()->default(60);
+            $table->integer('lesson_just_start_booking_time')->nullable()->default(0)->comment('time before can booking lesson');
+            $table->integer('free_teacher_lesson_register_time')->nullable()->default(8)->comment('XX週間前から登録可');
+            $table->integer('free_teacher_lesson_cancel_time')->nullable()->default(60)->comment('XX分前まで削除可');
         });
     }
 
@@ -46,6 +46,6 @@ class CreateSystemSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('system_settings');
+        Schema::dropIfExists('system_setting');
     }
 }

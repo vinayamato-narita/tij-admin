@@ -13,11 +13,9 @@ class CreateAdminGuideTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_guides', function (Blueprint $table) {
-            $table->increments('id');
-            $table->text('guide_step_1');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('admin_guide', function (Blueprint $table) {
+            $table->increments('admin_guide_id')->comment('識別ID');
+            $table->text('guide_step_1')->comment('ガイド内容');
         });
     }
 
@@ -28,6 +26,6 @@ class CreateAdminGuideTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_guides');
+        Schema::dropIfExists('admin_guide');
     }
 }

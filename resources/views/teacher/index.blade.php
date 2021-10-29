@@ -57,7 +57,7 @@
                                                         <td class="text-center">{{ $teacher->teacher_email }}</td>
                                                         <td class="text-center">{{ $teacher->last_login_date }}</td>
                                                         <td class="text-center"></td>
-                                                        <td>
+                                                        <td class="text-right">
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
@@ -71,11 +71,11 @@
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-book mr-2"></i> レッスン履歴</a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('teacher.show', $teacher->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('teacher.show', $teacher->teacher_id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                                :delete-action="{{ json_encode(route('teacher.destroy',  $teacher->id)) }}"
+                                                                                :delete-action="{{ json_encode(route('teacher.destroy',  $teacher->teacher_id)) }}"
                                                                                 :message-confirm="{{ json_encode('この講師を削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

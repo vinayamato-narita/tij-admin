@@ -76,7 +76,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">固定/自由:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.is_free_teacher ? '固定' : '自由'}}
+                                            {{this.teacher.is_free_teacher === '0' ? '固定' : '自由'}}
 
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">性別:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.teacher_sex ? '女性' : '男性'}}
+                                            {{this.teacher.teacher_sex === '0' ? '女性' : '男性'}}
 
                                         </div>
                                     </div>
@@ -157,7 +157,10 @@
                                         <label class="col-md-3 col-form-label text-md-right">イメージ画像::
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.photoSavepath}}
+                                            <a :href="this.teacher.photo_savepath" class="text-dark">
+                                                {{this.teacher.photo_savepath}}
+
+                                            </a>
 
                                         </div>
                                     </div>
@@ -182,7 +185,7 @@
                                                 <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDelete(teacher.id , lesson.id)"
+                                                            :delete-action="getUriDelete(teacher.teacher_id , lesson.lesson_id)"
                                                             :message-confirm="messageConfirm"
                                                     >
                                                     </DeleteItem>

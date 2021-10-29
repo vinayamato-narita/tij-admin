@@ -89,7 +89,7 @@ class TeacherController extends BaseController
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
                 $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
-                $teacher->teacher_university = $request->teacherUniversity　?? '';
+                $teacher->teacher_university = $request->teacherUniversity ?? "";
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
@@ -130,7 +130,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_show', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->with(['timeZone', 'lesson'])->first();
+        $teacher = Teacher::where('teacher_id', $id)->with(['timeZone', 'lesson'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
         return view('teacher.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -150,7 +150,7 @@ class TeacherController extends BaseController
         }
         $lessonHasAdded = TeacherLesson::where('teacher_id', $id)->pluck('lesson_id');
 
-        $dataList = $queryBuilder->whereNotIn('id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        $dataList = $queryBuilder->whereNotIn('lesson_id', $lessonHasAdded)->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $dataList
@@ -218,7 +218,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_edit', $id]
         ]);
 
-        $teacher = Teacher::where('id', $id)->first();
+        $teacher = Teacher::where('teacher_id', $id)->first();
         if (!$teacher) return redirect()->route('teacher.index');
         $timeZones = TimeZone::all()->toArray();
         return view('teacher.edit', [
@@ -238,7 +238,7 @@ class TeacherController extends BaseController
     public function update(UpdateTeacherRequest $request, $id)
     {
         if($request->isMethod('PUT')){
-            $teacher = Teacher::where('id', $id)->first();
+            $teacher = Teacher::where('teacher_id', $id)->first();
             if (!$teacher) {
                 return response()->json([
                     'status' => 'NOT_FOUND',
@@ -255,7 +255,7 @@ class TeacherController extends BaseController
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
                 $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
-                $teacher->teacher_university = $request->teacherUniversity　?? '';
+                $teacher->teacher_university = $request->teacherUniversity ?? "";
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
@@ -292,7 +292,7 @@ class TeacherController extends BaseController
     public function destroy($id)
     {
         try {
-            $teacher = Teacher::where('id', $id)->delete();
+            $teacher = Teacher::where('teacher_id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

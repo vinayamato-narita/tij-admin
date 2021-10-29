@@ -102,12 +102,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="is-free-teacher-0">
-                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" checked>
+                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" v-model="isFreeTeacher" type="radio" checked>
                                                         固定
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="is-free-teacher-1">
-                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  type="radio">
+                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  v-model="isFreeTeacher" type="radio">
                                                         自由
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">
@@ -124,12 +124,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" checked>
+                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" v-model="teacherSex" checked>
                                                         女性
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" >
+                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" v-model="teacherSex">
                                                         男性
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">

@@ -105,12 +105,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="is-free-teacher-0">
-                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" :checked="(isFreeTeacher == 0) ? true : false ">
+                                                        <input name="isFreeTeacher" id="is-free-teacher-0" value="0" type="radio" v-model="isFreeTeacher" :checked="(isFreeTeacher == 0) ? true : false ">
                                                         固定
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="is-free-teacher-1">
-                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  type="radio" :checked="(isFreeTeacher == 1) ? true : false ">
+                                                        <input name="isFreeTeacher" value="1" id="is-free-teacher-1"  type="radio" v-model="isFreeTeacher" :checked="(isFreeTeacher == 1) ? true : false ">
                                                         自由
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">
@@ -127,12 +127,12 @@
                                             <div class="col-md-6">
                                                 <div style="margin-top: 5px">
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" :checked="(teacherSex == 0) ? true : false ">
+                                                        <input name="teacherSex" id="teacher-sex-0" value="0" type="radio" v-model="teacherSex" :checked="(teacherSex == 0) ? true : false ">
                                                         女性
                                                     </label>
                                                     &nbsp;
                                                     <label class="radio" for="teacher-sex-0">
-                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" :checked="(teacherSex == 1) ? true : false " >
+                                                        <input name="teacherSex" value="1" id="teacher-sex-1"  type="radio" v-model="teacherSex" :checked="(teacherSex == 1) ? true : false " >
                                                         男性
                                                     </label>
                                                     <div class="input-group is-danger" role="alert">
@@ -334,7 +334,7 @@
         },
         data() {
             return {
-                id : this.teacher.id,
+                id : this.teacher.teacher_id,
                 csrfToken: Laravel.csrfToken,
                 teacherName: this.teacher.teacher_name,
                 displayOrder: this.teacher.display_order,
@@ -353,7 +353,7 @@
                 teacherIntroduction : this.teacher.teacher_introduction,
                 introduceFromAdmin : this.teacher.introduce_from_admin,
                 teacherNote : this.teacher.teacher_note,
-                photoSavepath : this.teacher.photo_save_path
+                photoSavepath : this.teacher.photo_savepath
 
             };
         },
@@ -413,9 +413,7 @@
                 formData.append("teacherNote", this.teacherNote);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.id);
-/*
                 formData.append('photoSavepath', this.photoSavepath);
-*/
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {

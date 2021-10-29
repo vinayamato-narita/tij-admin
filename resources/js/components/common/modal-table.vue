@@ -1,5 +1,5 @@
 <template>
-    <modal name="select-teacher-lesson-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" >
+    <modal name="select-teacher-lesson-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
             <div class="card-header">レッスン一覧
 
@@ -90,7 +90,7 @@
                             <tbody>
                             <tr v-for="lesson in dataList">
                                 <td class="text-center">
-                                    <input id="isTestLesson" v-on:click="checkedId(lesson.id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input id="isTestLesson" v-on:click="checkedId(lesson.lesson_id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </td>
                                 <td class="text-md-left" v-if="type == 'lesson'">{{  lesson.lesson_text_name }}</td>
                                 <td class="text-md-left" v-if="type == 'teacher'">{{ lesson.lesson_name  }}</td>

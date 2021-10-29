@@ -32,9 +32,9 @@ class UpdateTeacherRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('teachers', 'teacher_email')->where(function ($query) {
-                    return $query;
-                })->ignore($this->id)
+                Rule::unique('teacher', 'teacher_email')->where(function ($query) {
+                    return $query->where('teacher_id', '!=', $this->id);
+                })
             ],
             'timezone' => 'exists:timeZone,timezone_id',
             'teacherUniversity' => 'max:255',

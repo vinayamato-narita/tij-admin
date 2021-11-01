@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kyslik\ColumnSortable\Sortable;
 
-class LessonHistory extends Model
+class CourseLesson extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory;
+    protected $table = 'course_lesson';
+    public $timestamps = false;
 }

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kyslik\ColumnSortable\Sortable;
 
-class LessonHistory extends Model
+class CourseTag extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory;
+    protected $table = 'course_tag';
 }

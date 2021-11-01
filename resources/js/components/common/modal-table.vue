@@ -94,6 +94,7 @@
                                 </td>
                                 <td class="text-md-left" v-if="type == 'lesson'">{{  lesson.lesson_text_name }}</td>
                                 <td class="text-md-left" v-if="type != 'lesson'">{{ lesson.lesson_name  }}</td>
+                                <td class="text-md-left" v-if="type != 'course'">{{ lesson.lesson_name  }}</td>
 
                             </tr>
 
@@ -201,7 +202,6 @@
                     }
                 })
                     .then(function (response) {
-                        console.log(response.data);
                         that.from = response.data.dataList.from;
                         that.to = response.data.dataList.to;
                         that.total = response.data.dataList.total;
@@ -210,7 +210,6 @@
                         that.dataList = response.data.dataList.data;
                     })
                     .catch(function (error) {
-                        console.log(error);
                     });            },
             onChangePageSize(event) {
                 this.pageLimit = event.target.value;
@@ -244,7 +243,7 @@
                 axios
                     .post(that.registerUrl, that.checkedIds)
                     .then(response => {
-                        window.location = this.detailURI;
+                        window.location = this.detailUrl;
                     })
                     .catch(e => {
                     });

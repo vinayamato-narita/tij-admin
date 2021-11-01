@@ -13,6 +13,10 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ja';
 
+import Multiselect from 'vue-multiselect'
+
+Vue.component('multiselect', Multiselect)
+
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
@@ -69,6 +73,14 @@ import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
 import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
 import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
 import LessonStatusIndex from "./components/lessonStatus/lesson-status-index.vue"
+import InputSearchMulti from "./components/course/input-search-multi.vue"
+import CourseAdd from "./components/course/add"
+import CourseSetAdd from "./components/course/set-add.vue"
+import CourseShow from "./components/course/detail.vue"
+import CourseSetShow from "./components/course/set-detail.vue"
+import CourseEdit from "./components/course/edit.vue"
+import CourseSetEdit from "./components/course/set-edit.vue"
+
 
 import CsvExport from "./components/csv/csv-export.vue"
 
@@ -160,13 +172,19 @@ new Vue({
         LessonEdit,
         EditLangFaq,
         EditInquiry,
-        LessonEdit,
         ModalTable,
         CsvExport,
         EditLangInquirySubject,
         EditInquirySubject,
         CreateInquirySubject,
-        LessonStatusIndex
+        LessonStatusIndex,
+        CourseAdd,
+        CourseSetAdd,
+        CourseShow,
+        CourseSetShow,
+        InputSearchMulti,
+        CourseEdit,
+        CourseSetEdit
     },
     methods: {},
     mounted() {}

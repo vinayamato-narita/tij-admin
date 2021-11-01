@@ -66,4 +66,8 @@ Route::group([
     //lessonStatus
     Route::resource('lessonStatus', LessonStatusController::class);
     Route::post('getDataLessonStatus', 'LessonStatusController@getData')->name('getDataLessonStatus');
+    Route::post('/lessonStatus/lessonInfomationDetailExportCsv', 'LessonStatusController@lessoninfomationdetailexportcsv')->name('lessonInfomationDetailExportCsv');
+    Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');   
+    Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');   
+    Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');   
 });

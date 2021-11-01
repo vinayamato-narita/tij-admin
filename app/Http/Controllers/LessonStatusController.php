@@ -8,7 +8,9 @@ use App\Models\LessonSchedule;
 use Carbon\Carbon;
 use App\Enums\LessonTiming;
 use App\Enums\StatusCode;
+use App\Models\FreeTeacherLessonSetting;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class LessonStatusController extends BaseController
 {
@@ -48,19 +50,22 @@ class LessonStatusController extends BaseController
             'lessonTiming' => $lessonTiming,
             'nextLessonTime' => $nextLessonTime,
             'numRow' => $numRow,
-            'dataTime' => $dataTime
+            'startDate' => $startDate,
+            'endDate' => $endDate
         ]);
     }
 
 
     public function getData(Request $request) {
         $data = $request->all();
+
         if (empty($data['start_date'])) {
             return response()->json([
                 'status' => 'NG',
                 'message' => 'エラーが発生しました。もう一度出力してください'
             ], StatusCode::BAD_REQUEST);
         }
+        $data['start_date'] = "20160608";
 
         $startDate = date('Y-m-d', strtotime( 'monday this week' , strtotime($data['start_date'])));
         $endDate = date("Y-m-d", strtotime($startDate. " + 6 days"));
@@ -79,11 +84,11 @@ class LessonStatusController extends BaseController
         $lessonStatus = DB::table('lesson_schedules')
                             ->select(
                                 'lesson_schedules.lesson_starttime',
-                                DB::raw('DATE_FORMAT(lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
+                                DB::raw('DATE_FORMAT(lesson_schedules.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
                                 DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_histories.student_id, NULL)) as reverse_count_normal"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_schedules.lesson_schedule_id, NULL)) as lesson_count_normal"),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_schedules.id, NULL)) as lesson_count_normal"),
                                 DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_histories.student_id, NULL)) as reverse_count_free"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_schedules.lesson_schedule_id, NULL)) as lesson_count_free"),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_schedules.id, NULL)) as lesson_count_free"),
                                 'teachers.is_free_teacher',
                                 'lesson_histories.student_id'
                             )   
@@ -93,14 +98,15 @@ class LessonStatusController extends BaseController
                                 })
                             ->leftJoin('lesson_histories', function($join)
                                 {
-                                    $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.lesson_schedule_id')
+                                    $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
                                         ->where('lesson_histories.student_lesson_reserve_type','<>',2);
                                 })
-                            ->where('lesson_type_id','=',1)
-                            ->where('lesson_date', '>=' , $startDate)
-                            ->where('lesson_date', '<=', $endDate)
-                            ->groupBy('lesson_schedules.lesson_starttime','teachers.is_free_teacher','lesson_histories.student_id')
+                            ->where('lesson_schedules.lesson_type_id','=',1)
+                            ->where('lesson_schedules.lesson_date', '>=' , $startDate)
+                            ->where('lesson_schedules.lesson_date', '<=', $endDate)
+                            ->groupBy('lesson_schedules.lesson_starttime')
                         ->get();
+
         $lessonStatus = $lessonStatus->keyBy('lesson_starttime1');
         
 		$endTimeFreeTeacher = date("Y-m-d 23:59:59", strtotime($startDate. " + 6 days"));
@@ -116,16 +122,303 @@ class LessonStatusController extends BaseController
                         ->get();
         $freeTeacherLessonSetting = $freeTeacherLessonSetting->keyBy('lesson_starttime1');
 
-        
+        $lessonTiming = LessonTiming::LESSON_TIMING;
+        $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
+        $numRow = 24 * 60/ $nextLessonTime;
+        $dataTime = [];
+        $dataMaxFreeLesson = [];
 
+        for ($i = 0; $i < $numRow ; $i++) {
+            $curRowTime = date("Y-m-d H:i:s", strtotime($startDate. " +" .$i * $nextLessonTime . " minutes"));
+            $dataTime[$i] = [];
+            $dataTime[$i]['time'] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
+
+            for ($j = 0; $j < 7 ; $j++) {
+                $dataTime[$i][$j] = [];
+                $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
+
+                if (isset($lessonStatus[$curCellTime])) {
+                    $dataTime[$i][$j][] = (array) $lessonStatus[$curCellTime];
+                } else {
+                    $dataTime[$i][$j][] = [
+                        "lesson_starttime" => $curCellTime,
+                        "reverse_count_normal" => 0,
+                        "lesson_count_normal" => 0,
+                        "reverse_count_free" => 0, 
+                        "lesson_count_free" => 0,
+                        "is_free_teacher" => 1,
+                        "student_id" => null
+                    ];
+                }
+
+                if (isset($freeTeacherLessonSetting[$curCellTime])) {
+                    $dataTime[$i][$j]['free_schedule'] = ((array) $freeTeacherLessonSetting[$curCellTime])["max_free_lesson"] -  (isset($lessonStatus[$curCellTime]) ?  ((array) $lessonStatus[$curCellTime])["lesson_count_free"] : 0 ) ;
+                    $dataTime[$i][$j]['max_free_lesson'] = ((array) $freeTeacherLessonSetting[$curCellTime])["max_free_lesson"];
+                } else {
+                    $dataTime[$i][$j]['free_schedule'] = 0;
+                    $dataTime[$i][$j]['max_free_lesson'] = 0;
+                }
+
+                $dataMaxFreeLesson[$i][$j] = [];
+                $dataMaxFreeLesson[$i][$j]['max_free_lesson'] = $dataTime[$i][$j]['max_free_lesson'];
+                $dataMaxFreeLesson[$i][$j]['setting_id'] = 0;
+                if (isset($freeTeacherLessonSetting[$curCellTime])) {
+                    $dataMaxFreeLesson[$i][$j]['setting_id'] = ((array) $freeTeacherLessonSetting[$curCellTime])["setting_id"];
+                }
+            }
+
+            $dataTime[$i]['reverse_count_normal_1'] = $this->sum_of_lesson_by_time($curRowTime, 1, $lessonStatus);
+            $dataTime[$i]['lesson_count_normal_2'] = $this->sum_of_lesson_by_time($curRowTime, 2, $lessonStatus);
+            $dataTime[$i]['reverse_count_free_3'] = $this->sum_of_lesson_by_time($curRowTime, 3, $lessonStatus);
+            $dataTime[$i]['lesson_count_free_4'] = $this->sum_of_lesson_by_time($curRowTime, 4, $lessonStatus);
+        }
+
+        for ($j = 0; $j < 7 ; $j++) {
+            $curCellTime = date("Y-m-d", strtotime($startDate. " + $j days"));
+            $dataTime[$j]['reverse_count_normal_date_1'] = $this->sum_of_lesson_by_date($curCellTime, 1, $lessonStatus);
+            $dataTime[$j]['lesson_count_normal_date_2'] = $this->sum_of_lesson_by_date($curCellTime, 2, $lessonStatus);
+            $dataTime[$j]['reverse_count_free_date_3'] = $this->sum_of_lesson_by_date($curCellTime, 3, $lessonStatus);
+            $dataTime[$j]['lesson_count_free_date_4'] = $this->sum_of_lesson_by_date($curCellTime, 4, $lessonStatus);
+        }
+
+        $dataTime['reverse_count_normal'] = $lessonStatus->sum('reverse_count_normal');
+        $dataTime['lesson_count_normal'] = $lessonStatus->sum('lesson_count_normal');
+        $dataTime['reverse_count_free'] = $lessonStatus->sum('reverse_count_free');
+        $dataTime['lesson_count_free'] = $lessonStatus->sum('lesson_count_free');
+        
         return response()->json([
             'status' => 'OK',
             'lessonStatus' => $lessonStatus,
             'freeTeacherLessonSetting' => $freeTeacherLessonSetting,
             'startDate' => $startDate,
-            'date' => $date
+            'endDate' => $endDate,
+            'date' => $date,
+            'dataTime' => $dataTime,
+            'dataMaxFreeLesson' => $dataMaxFreeLesson
         ], StatusCode::OK);
     }
+
+
+    public function lessoninfomationdetailexportcsv(Request $request) {
+        $data = $request->all();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $startDate = empty($data["lesson_date_from"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_from"]));
+        $endDate = empty($data["lesson_date_to"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_to"]));
+        
+        $string = DB::select("CALL sp_get_lesson_schedule_info_for_export_csv('".$startDate."','".$endDate."')");
+        $fileName = 'lesson_info_detail_'. $startDate. "~". $endDate . date('_YmdHis' ).'.csv';
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = [
+            $this->convertShijis('レッスン日'),
+            $this->convertShijis('レッスン時間'),
+            $this->convertShijis('レッスン予約時間'),
+            $this->convertShijis('レッスン名'),
+            $this->convertShijis('テキスト名'),
+            $this->convertShijis('講師名'),
+            $this->convertShijis('生徒番号'),
+            $this->convertShijis('生徒ニックネーム'),
+            $this->convertShijis('生徒スカイプ名'),
+            $this->convertShijis('評価（生徒→先生）'),
+            $this->convertShijis('評価（先生→生徒）'),
+            $this->convertShijis('コメント（生徒→先生）'),
+            $this->convertShijis('コメント（先生→生徒）')
+        ];
+
+        if (!file_exists(public_path().'/csv_file/users')) {
+            mkdir(public_path().'/csv_file/users', 0777, true);
+        }
+        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $columns);
+
+        foreach ($string as $item) {
+            $row['レッスン日'] = $item->lesson_date;
+            $row['レッスン時間'] = $item->lesson_time;
+            $row['レッスン予約時間'] = $item->student_book_time;
+            $row['レッスン名'] = $this->convert_text($item->lesson_name);
+            $row['テキスト名'] = $this->convert_text($item->lesson_text_name);
+            $row['講師名'] = $this->convert_text($item->teacher_name);
+            $row['生徒番号'] = $item->student_id;
+            $row['生徒ニックネーム'] = $this->convert_text($item->student_nickname);
+            $row['生徒スカイプ名'] = $this->convert_text($item->student_skype_name);
+            $row['評価（生徒→先生）'] = $item->teacher_rating;
+            $row['評価（先生→生徒）'] = $item->student_rating;
+            $row['コメント（生徒→先生）'] = $this->convert_text($item->comment_from_student_to_teacher);
+            $row['コメント（先生→生徒）'] = $this->convert_text($item->comment_from_teacher_to_student);
+
+            fputcsv($file, array($row['レッスン日'],$row['レッスン時間'],$row['レッスン予約時間'],$row['レッスン名'],$row['テキスト名'],$row['講師名'],$row['生徒番号'],$row['生徒ニックネーム'],$row['生徒スカイプ名'],$row['評価（生徒→先生）'],$row['評価（先生→生徒）'],$row['コメント（生徒→先生）'],$row['コメント（先生→生徒）']));
+        }
+
+        fclose($file);
+        
+        return response()->json([
+            'path' => url('/csv_file/users/') .'/'. $fileName,
+            'file_name' => $fileName,
+            'status' => StatusCode::OK
+        ]);
+    }
+
+    public function lessoninfomationstatusexportcsv(Request $request) {
+        set_time_limit(1200);
+        $data = $request->all();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $startDate = empty($data["lesson_date_from"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_from"]));
+        $endDate = empty($data["lesson_date_to"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_to"]));
+
+        $lessonStatus = DB::table('lesson_schedules')
+                            ->select(
+                                'lesson_schedules.lesson_starttime',
+                                DB::raw('DATE_FORMAT(lesson_schedules.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_histories.student_id, NULL)) as reverse_count_normal"),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_schedules.id, NULL)) as lesson_count_normal"),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_histories.student_id, NULL)) as reverse_count_free"),
+                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_schedules.id, NULL)) as lesson_count_free"),
+                                'teachers.is_free_teacher',
+                                'lesson_histories.student_id'
+                            )   
+                            ->leftJoin('teachers', function($join)
+                                {
+                                    $join->on('teachers.id', '=', 'lesson_schedules.teacher_id');
+                                })
+                            ->leftJoin('lesson_histories', function($join)
+                                {
+                                    $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
+                                        ->where('lesson_histories.student_lesson_reserve_type','<>',2);
+                                })
+                            ->where('lesson_schedules.lesson_type_id','=',1)
+                            ->where('lesson_schedules.lesson_date', '>=' , $startDate)
+                            ->where('lesson_schedules.lesson_date', '<=', $endDate)
+                            ->groupBy('lesson_schedules.lesson_starttime')
+                        ->get();
+
+        $lessonStatus = $lessonStatus->keyBy('lesson_starttime1');
+        
+		$endTimeFreeTeacher = date("Y-m-d 23:59:59", strtotime($startDate. " + 6 days"));
+        $freeTeacherLessonSetting = DB::table('free_teacher_lesson_settings')
+                            ->select(
+                                'free_teacher_lesson_settings.lesson_starttime',
+                                DB::raw("DATE_FORMAT(free_teacher_lesson_settings.lesson_starttime, '%Y-%m-%d %T') as lesson_starttime1"),
+                                'free_teacher_lesson_settings.max_free_lesson',
+                                'free_teacher_lesson_settings.setting_id'
+                            )   
+                            ->where('lesson_starttime', '>=' , $startDate)
+                            ->where('lesson_starttime', '<=', $endTimeFreeTeacher)
+                        ->get();
+        $freeTeacherLessonSetting = $freeTeacherLessonSetting->keyBy('lesson_starttime1');
+
+        $lessonTiming = LessonTiming::LESSON_TIMING;
+        $nexLessonTine = LessonTiming::NEXT_LESSON_TIME;
+        $numRow = 24 * 60/ $nexLessonTine;
+        $dateDefine = array(
+            0 => "日", 1 => "月", 2 => "火",3 => "水", 4 => "木",5 => "金", 6 => "土"
+        );
+        
+        $fileName = 'lesson_info_'. $startDate. "~". $endDate . date('_YmdHis' ).'.csv';
+        $header1 = $header2 = $header3 = array("");
+        $curColDate = $startDate;
+        
+        while($curColDate <= $endDate) {
+            $header1[] = date("Y/m/d", strtotime($curColDate)) . "(" . $dateDefine[date("w", strtotime($curColDate))] .")";
+            $header1[] = "";
+            $header1[] = "";
+            $header1[] = "";
+            $header1[] = "";
+            $header1[] = "";
+            $header2[] = "固定枠";
+            $header2[] = "";
+            $header2[] = "自由枠";
+            $header2[] = "";
+            $header2[] = "";
+            $header2[] = "";
+            $header3[] = "予約数";
+            $header3[] = "登録数";
+            $header3[] = "予約数";
+            $header3[] = "登録数";
+            $header3[] = "残枠";
+            $header3[] = "枠数";
+            $curColDate = date("Y-m-d", strtotime($curColDate. " +1 days"));
+        }
+        $input_array[] = $header1;
+        $input_array[] = $header2;
+        $input_array[] = $header3;
+
+        if (!file_exists(public_path().'/csv_file/users')) {
+            mkdir(public_path().'/csv_file/users', 0777, true);
+        }
+        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $input_array[0]);
+        fputcsv($file, $input_array[1]);
+        fputcsv($file, $input_array[2]);
+
+        for ($i= 0; $i < $numRow; $i ++) {
+            $row = array();
+            $curRowTime = date("Y-m-d H:i:s", strtotime($startDate. " +" .$i * $nexLessonTine . " minutes"));
+            $row[] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
+
+            $curCellTime = $curRowTime;
+            $endTime = date ("Y-m-d 23:30:00", strtotime($endDate));
+            while($curCellTime <= $endTime) {
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->reverse_count_normal;
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->lesson_count_normal;
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->reverse_count_free;
+                $row[] = $freeSchedule = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->lesson_count_free;
+                $maxFreeSchedule = !isset($freeTeacherLessonSetting[$curCellTime]) ? 0:  $freeTeacherLessonSetting[$curCellTime]->max_free_lesson;
+                $row[] = $maxFreeSchedule - $freeSchedule;
+                $row[] = $maxFreeSchedule;
+                
+                $curCellTime = date("Y-m-d H:i:s", strtotime($curCellTime. " +1 days"));
+            }
+
+            fputcsv($file, $row);
+        }
+
+        // 合計
+        $row = array("合計");
+        $curColDate = $startDate;
+        while($curColDate <= $endDate) {
+            $row[] = $this->sum_of_lesson_by_date($curColDate, 1, $lessonStatus);
+            $row[] = $this->sum_of_lesson_by_date($curColDate, 2, $lessonStatus);
+            $row[] = $this->sum_of_lesson_by_date($curColDate, 3, $lessonStatus);
+            $row[] = $this->sum_of_lesson_by_date($curColDate, 4, $lessonStatus);
+            $row[] = "-";
+            $row[] = "-";
+            $curColDate = date("Y-m-d", strtotime($curColDate. " +1 days"));
+        }
+
+        fputcsv($file, $row);
+
+        fclose($file);
+        
+        return response()->json([
+            'path' => url('/csv_file/users/') .'/'. $fileName,
+            'file_name' => $fileName,
+            'status' => StatusCode::OK
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -190,5 +483,126 @@ class LessonStatusController extends BaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function updateLessonStatus(Request $request){
+        $data = $request->all();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 'BAD_REQUEST',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $dataMaxFreeLesson = $data['data_max_free_lesson'];
+
+        $startDate = date('Y-m-d', strtotime( 'monday this week' , strtotime($data['start_date'])));
+        $endDate = date("Y-m-d", strtotime($startDate. " + 6 days"));
+
+        $lessonTiming = LessonTiming::LESSON_TIMING;
+        $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
+        $numRow = 24 * 60/ $nextLessonTime;
+
+        for ($i = 0; $i < $numRow ; $i++) {
+            $curRowTime = date("Y-m-d H:i:s", strtotime($startDate. " +" .$i * $nextLessonTime . " minutes"));
+            for ($j = 0; $j < 7 ; $j++) {
+                $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
+                $freeTeacherLessonSetting = new FreeTeacherLessonSetting();
+
+                if ($dataMaxFreeLesson[$i][$j]['setting_id'] != 0) {
+                    $freeTeacherLessonSetting = FreeTeacherLessonSetting::where('setting_id' , $dataMaxFreeLesson[$i][$j]['setting_id'])->firstOrFail();;
+                }
+
+                $freeTeacherLessonSetting->max_free_lesson = (int) $dataMaxFreeLesson[$i][$j]['max_free_lesson'];
+                $freeTeacherLessonSetting->lesson_starttime = $curCellTime;
+                
+                if ($dataMaxFreeLesson[$i][$j]['setting_id'] != 0) {
+                    $freeTeacherLessonSetting->update();
+                } else {
+                    $freeTeacherLessonSetting->save();
+                }
+            }
+        }
+        
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function copySettingLessonFree(Request $request) {
+        $data = $request->all();
+
+        if (empty($data) || empty($data["start_date"])) {
+            return response()->json([
+                'status' => 'エラーが発生しました。再度お願いします。',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+
+        $startDate = empty($data["start_date"]) ? "" : date ("Y-m-d", strtotime($data["start_date"]));
+        
+        $ret = DB::select("CALL sp_copy_setting_lesson_free('".$startDate."')");
+
+        if ($ret !== false) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+    }
+
+    public function sum_of_lesson_by_time($lessonTime, $type, $data) {
+        $typeKeyArr = array(
+            1 => "reverse_count_normal",
+            2 => "lesson_count_normal",
+            3 => "reverse_count_free",
+            4 => "lesson_count_free"
+        );
+        $return = 0;
+        foreach ($data as $item) {
+            if (date("H:i:s", strtotime($item->lesson_starttime)) == date ("H:i:s", strtotime($lessonTime))) {
+                $return += ((array) $item)[$typeKeyArr[$type]];
+            }
+        }
+        return $return;
+    }
+
+    public function sum_of_lesson_by_date($lessonDate, $type, $data) {
+        $typeKeyArr = array(
+            1 => "reverse_count_normal",
+            2 => "lesson_count_normal",
+            3 => "reverse_count_free",
+            4 => "lesson_count_free"
+        );
+        $return = 0;
+        foreach ($data as $item) {
+            if (date("Y-m-d", strtotime($item->lesson_starttime)) == $lessonDate) {
+                $return += ((array) $item)[$typeKeyArr[$type]];
+            }
+        }
+        return $return;
+    }
+
+    private function convertShijis($text) {
+        return mb_convert_encoding($text, "SJIS", "UTF-8");
+    }
+
+    public  function convert_text($comment)
+    {
+        if (!isset($comment)) {
+            return $comment;
+        }
+        $comment = str_replace('"', '""', $comment);
+        if (isset($comment)) {
+            $comment = '"'.$comment.'"';
+        }
+        $comment = str_replace("\r", ' ', $comment);
+        $comment = str_replace("\n", ' ', $comment);
+        
+        return $comment;
     }
 }

@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-3 pt-7">
-                                                {{ studentInfoEx.id }}
+                                                {{ studentInfoEx.student_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -339,7 +339,7 @@ export default {
             paymentTypeList: this.studentInfo.payment_type_list,
             courseList: this.studentInfo.course_list,
             studentInfoEx: {
-                id: this.studentInfo.id,
+                student_id: this.studentInfo.student_id,
                 student_name: this.studentInfo.student_name,
                 payment_type: this.studentInfo.payment_type,
                 course_id: this.studentInfo.course_id,

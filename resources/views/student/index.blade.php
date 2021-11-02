@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="clear"></div>
-            <div class="fade-in">
+            <div class="fade-in" style="min-height: 1000px">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
@@ -61,7 +61,7 @@
                                                     <th class="text-center min-width-120">@sortablelink('all_project_company_name', '企業名')</th>
                                                     <th class="text-center min-width-120">@sortablelink('company_code', '法人コード')</th>
                                                     <th class="text-center min-width-120">@sortablelink('create_date', '初回登録日時')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('last_login_at', '最終ログイン日時')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('last_login_date', '最終ログイン日時')</th>
                                                     <th class="text-center min-width-120">@sortablelink('last_reserve_date', '最新予約日時')</th>
                                                     <th class="text-center min-width-120">@sortablelink('first_lesson_date', '初回受講日時')</th>
                                                     <th class="text-center min-width-120">@sortablelink('lesson_count', '通算受講数')</th>
@@ -82,7 +82,7 @@
                                                         <td class="text-center">{{ trim($student->all_project_company_name, '/') }}</td>
                                                         <td class="text-center">{{ trim($student->company_code, '/') }}</td>
                                                         <td class="text-center">{{ $student->create_date }}</td>
-                                                        <td class="text-center">{{ $student->last_login_at }}</td>
+                                                        <td class="text-center">{{ $student->last_login_date }}</td>
                                                         <td class="text-center">{{ $student->last_reserve_date }}</td>
                                                         <td class="text-center">{{ $student->first_lesson_date }}</td>
                                                         <td class="text-center">{{ $student->lesson_count }}</td>

@@ -15,7 +15,7 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('student.createComment', $studentInfo->id) }}" class="btn btn-primary pull-right"
+                    <a href="{{ route('student.createComment', $studentInfo->student_id) }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -32,14 +32,14 @@
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
                                         <label>生徒番号 : </label> 
-                                        {{ $studentInfo->id }}
+                                        {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
                                         <label>生徒名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
-                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.commentList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.commentList', $studentInfo->student_id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                     </div>
                                 </div>
                                 @if(!$commentList->isEmpty())
@@ -48,8 +48,8 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('teacher_nickname', '講師のニックネーム')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('created_at', '作成日')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('updated_at', '更新日')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('create_date', '作成日')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('update_date', '更新日')</th>
                                                     <th class="text-center min-width-120" style="width: 40%">@sortablelink('comment', 'コメント')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
@@ -58,8 +58,8 @@
                                                 @foreach ($commentList as $index => $comment)
                                                     <tr>
                                                         <td class="text-center">{{ $comment->teacher_nickname }}</td>
-                                                        <td class="text-center">{{ $comment->created_at }}</td>
-                                                        <td class="text-center">{{ $comment->updated_at }}</td>
+                                                        <td class="text-center">{{ $comment->create_date }}</td>
+                                                        <td class="text-center">{{ $comment->update_date }}</td>
                                                         <td class="text-center">{{ $comment->comment }}</td>
                                                         <td>
                                                             <div class="btn-group">

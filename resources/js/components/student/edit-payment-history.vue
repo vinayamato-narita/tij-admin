@@ -45,7 +45,7 @@
                                                 >受注番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ paymentInfoEx.id }}
+                                                {{ paymentInfoEx.point_subscription_history_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -388,7 +388,7 @@ export default {
             flagShowLoader: false,
             paymentTypeList: this.paymentInfo.payment_type_list,
             paymentInfoEx: {
-                id: this.paymentInfo.id,
+                point_subscription_history_id: this.paymentInfo.point_subscription_history_id,
                 student_id: this.paymentInfo.student_id,
                 student_name: this.paymentInfo.student_name,
                 payment_type: this.paymentInfo.payment_type,
@@ -495,7 +495,7 @@ export default {
             axios
                 .post(that.urlDestroyPaymentHistory, {
                     cancel_type: type,
-                    id: that.paymentInfoEx.id,
+                    point_subscription_history_id: that.paymentInfoEx.point_subscription_history_id,
                     _token: Laravel.csrfToken
                 })
                 .then(response => {

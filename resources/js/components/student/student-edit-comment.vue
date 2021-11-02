@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">コメント情報</h5>
                                     </div>
@@ -55,7 +55,7 @@
                                                 >作成日</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfoEx.created_at | formatDateTime }}
+                                               {{ commentInfoEx.create_date | formatDateTime }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -65,7 +65,7 @@
                                                 >更新日</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ commentInfoEx.updated_at | formatDateTime}}
+                                               {{ commentInfoEx.update_date | formatDateTime}}
                                             </div>
                                         </div>
                                         <div class="form-group row">

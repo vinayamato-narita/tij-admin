@@ -34,7 +34,7 @@
                                                         >生徒番号</label
                                                     >
                                                     <div class="col-md-9 pt-7">
-                                                        {{ studentInfoEx.id }}
+                                                        {{ studentInfoEx.student_id }}
                                                     </div>
                                                 </div>
 

@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">FAQ情報</h5>
                                     </div>
@@ -60,7 +60,7 @@
                                                     v-model="faqInfoEx.faq_category_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="category.id" v-for="category in faqCategories">
+                                                    <option :value="category.faq_category_id" v-for="category in faqCategories">
                                                         {{ category.faq_category_name }}</option
                                                     >
                                                 </select>

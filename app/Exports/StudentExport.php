@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\StudentList;
+use App\Models\Student;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Enums\StudentEntryType;
@@ -24,86 +24,85 @@ class StudentExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-    	$queryBuilder = StudentList::select('student_list.student_id as student_id',
-            'student_list.student_name as student_name',
-            'student_list.student_email as student_email',
-            DB::raw("(CASE WHEN student_list.is_lms_user = 0 THEN student_list.company_name ELSE '' END) AS custom_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_projects.project_code SEPARATOR '/'),'/') as all_project_code"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_companies.company_name SEPARATOR '/'),'/') as all_project_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_companies.legal_code, point_subscription_histories.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
-            'student_list.create_date as create_date',
-            DB::raw("COALESCE(MIN(IF(point_subscription_histories.course_id = 1 AND student_list.is_lms_user = 0, NULL, point_subscription_histories.payment_date)),'---') AS first_payment_date"), 
-            'student_list.last_login_at as last_login_at',  
-            DB::raw("MIN(CASE WHEN lesson_histories.student_lesson_reserve_type = 3 THEN lesson_schedules.lesson_starttime END) AS first_lesson_date"),  
-            DB::raw("COUNT(DISTINCT lesson_histories.id) AS lesson_count"),  
-            'student_list.is_tmp_entry as is_tmp_entry',  
-            DB::raw("IF(student_list.course_id > 1,'有料','無料') AS course_name"),  
-            'student_list.direct_mail_flag as direct_mail_flag',  
-            'student_list.student_comment_text as student_comment_text',  
+    	$queryBuilder = Student::select('student.student_id as student_id',
+            'student.student_name as student_name',
+            'student.student_email as student_email',
+            DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_project.project_code SEPARATOR '/'),'/') as all_project_code"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_company.company_name SEPARATOR '/'),'/') as all_project_company_name"),
+            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_company.legal_code, point_subscription_history.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
+            'student.create_date as create_date',
+            DB::raw("COALESCE(MIN(IF(point_subscription_history.course_id = 1 AND student.is_lms_user = 0, NULL, point_subscription_history.payment_date)),'---') AS first_payment_date"), 
+            'student.last_login_date as last_login_date',  
+            DB::raw("MIN(CASE WHEN lesson_history.student_lesson_reserve_type = 3 THEN lesson_schedule.lesson_starttime END) AS first_lesson_date"),  
+            DB::raw("COUNT(DISTINCT lesson_history.lesson_history_id) AS lesson_count"),  
+            'student.is_tmp_entry as is_tmp_entry',  
+            DB::raw("IF(student.course_id > 1,'有料','無料') AS course_name"),  
+            'student.direct_mail_flag as direct_mail_flag',  
+            'student.student_comment_text as student_comment_text',  
         )
-        ->leftJoin('point_subscription_histories', function($join) {
-            $join->on('student_list.student_id', '=', 'point_subscription_histories.student_id')
-                ->where('point_subscription_histories.del_flag', '=', 0);
+        ->leftJoin('point_subscription_history', function($join) {
+            $join->on('student.student_id', '=', 'point_subscription_history.student_id')
+                ->where('point_subscription_history.del_flag', '=', 0);
         })
-        ->leftJoin('lesson_histories', function($join) {
-            $join->on('student_list.student_id', '=', 'lesson_histories.student_id')
-                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
+        ->leftJoin('lesson_history', function($join) {
+            $join->on('student.student_id', '=', 'lesson_history.student_id')
+                ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
         })
-        ->leftJoin('lesson_schedules', function($join) {
-            $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
-                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
+        ->leftJoin('lesson_schedule', function($join) {
+            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
         })
-        ->leftJoin('lms_project_students', function($join) {
-            $join->on('student_list.student_id', '=', 'lms_project_students.student_id');
+        ->leftJoin('lms_project_student', function($join) {
+            $join->on('student.student_id', '=', 'lms_project_student.student_id');
         })
-        ->leftJoin('lms_projects', function($join) {
-            $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+        ->leftJoin('lms_project', function($join) {
+            $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
         })
-        ->leftJoin('lms_companies', function($join) {
-            $join->on('lms_projects.company_id', '=', 'lms_companies.id');
+        ->leftJoin('lms_company', function($join) {
+            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
         })
-        ->groupBy('student_list.student_id')
-        ->orderByDesc('student_list.student_id');
+        ->groupBy('student.student_id');
         	
         $request = $this->request;
        
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where('student_list.student_id', '=',$request['search_input'])
-                    ->orWhere($this->escapeLikeSentence('student_list.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_email', $request['search_input']));
+                $query->where('student.student_id', '=',$request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_email', $request['search_input']));
             });
         }
         if (isset($request['student_id'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student_list.student_name', $request['student_name']))
-                    ->where($this->escapeLikeSentence('student_list.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student_list.student_skypename', $request['student_skypename']))
-                    ->where($this->escapeLikeSentence('student_list.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('lms_companies.company_name', $request['all_project_company_name']))
-                    ->where($this->escapeLikeSentence('student_list.company_name', $request['custom_company_name']))
-                    ->where($this->escapeLikeSentence('lms_projects.project_code', $request['all_project_code']));
+                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
+                    ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
+                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
+                    ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
+                    ->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']))
+                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']))
+                    ->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
 
                     if(!isset($request['check_company_code'])) {
                         $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_companies.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_histories.corporation_code', $request['company_code']));
+                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
+                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
                         });
                     }
                     if(isset($request['check_company_code'])) {
                         $query->where(function($query) {
-                            $query->orWhere('lms_companies.legal_code', '=', '')
-                                ->orWhereNull('lms_companies.legal_code')
-                                ->orWhere('point_subscription_histories.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_histories.corporation_code');
+                            $query->orWhere('lms_company.legal_code', '=', '')
+                                ->orWhereNull('lms_company.legal_code')
+                                ->orWhere('point_subscription_history.corporation_code', '=', '')
+                                ->orWhereNull('point_subscription_history.corporation_code');
                         });
                     }
                     if ($request['student_id'] != "") {
-                        $query->where('student_list.student_id', '=', $request['student_id']);
+                        $query->where('student.student_id', '=', $request['student_id']);
                     }
                     if ($request['first_lesson_date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
+                        $query->where('student.create_date', '>=', $request['first_lesson_date']);
                     }
             });
         }

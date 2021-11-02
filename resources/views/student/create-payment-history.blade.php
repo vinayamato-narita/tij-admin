@@ -3,7 +3,7 @@
 @section('content')
     <create-payment-history
     	:url-action="{{json_encode(route('student.storePaymentHistory'))}}" 
-    	:url-payment-history-list="{{json_encode(route('student.paymentHistoryList', $studentInfo->id))}}" 
+    	:url-payment-history-list="{{json_encode(route('student.paymentHistoryList', $studentInfo->student_id))}}" 
     	:student-info="{{json_encode($studentInfo)}}" 
     ></create-payment-history>
 @endsection

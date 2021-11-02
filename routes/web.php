@@ -57,7 +57,7 @@ Route::group([
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
 
     //course course set
-    Route::resource('course', courseController::class);
+    Route::resource('course', CourseController::class);
     Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
     Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
     Route::get('course/set/get-course/{id}', 'CourseController@getCourse')->name('course.getCourse');

@@ -18,12 +18,12 @@ class LessonCancelHistory extends Model
     
     public function teacher()
     {
-        return $this->hasOne('App\Models\Teacher', 'teacher_id', 'teacher_id');
+        return $this->belongsTo('App\Models\Teacher', 'teacher_id', 'teacher_id');
     }
 
     public function student()
     {
-        return $this->hasOne('App\Models\Student', 'student_id', 'student_id');
+        return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
     }
 
 }

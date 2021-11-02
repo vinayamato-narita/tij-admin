@@ -24,7 +24,7 @@ class StudentEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
+            'student_id' => 'required|integer',
             'student_first_name' => 'required|max:100',
             'student_last_name' => 'required|max:100',
             'student_first_name_kata' => 'max:100',

@@ -105,7 +105,7 @@ class InquirySubjectController extends BaseController
             ['name' => 'inquiry_subject_index'],
             ['name' => 'show_inquiry_subject', $id],
         ]);
-        $inquirySubjectInfo = InquirySubject::where('id', $id)->firstOrFail();
+        $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
         $inquirySubjectVnInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => LangType::VN])->first();
         $inquirySubjectEnInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => LangType::EN])->first();
 
@@ -131,7 +131,7 @@ class InquirySubjectController extends BaseController
             ['name' => 'show_inquiry_subject', $id],
             ['name' => 'edit_inquiry_subject', $id],
         ]);
-        $inquirySubjectInfo = InquirySubject::where('id', $id)->firstOrFail();
+        $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
         $inquirySubjectInfo->_token = csrf_token();
         
         return view('inquirySubject.edit', [
@@ -148,11 +148,11 @@ class InquirySubjectController extends BaseController
             ['name' => 'show_inquiry_subject', $id],
             ['name' => 'edit_lang_inquiry_subject', $id, $langType],
         ]);
-        $inquirySubjectInfo = InquirySubject::where('id', $id)->firstOrFail();
+        $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
         
         $inquirySubjectLangInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => $langType])->first();
         $inquirySubjectInfo->_token = csrf_token();
-        $inquirySubjectInfo->inquiry_subject = $inquirySubjectLangInfo->inquiry_subject ?? "";
+        $inquirySubjectInfo->lang_inquiry_subject = $inquirySubjectLangInfo->inquiry_subject ?? "";
         $inquirySubjectInfo->lang = $langType;
 
         return view('inquirySubject.edit_lang', [
@@ -165,15 +165,15 @@ class InquirySubjectController extends BaseController
     public function updateLang(InquirySubjectLangRequest $request)
     {
         if($request->isMethod('POST')){
-            $faqInfo = InquirySubject::where('id', $request->id)->first();
-            if ($faqInfo == null) {
+            $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $request->inquiry_subject_id)->first();
+            if ($inquirySubjectInfo == null) {
                 return response()->json([
                     'status' => 'OK',
                 ], StatusCode::NOT_FOUND);
             }
 
             $inquirySubjectLangInfo = InquirySubjectInfo::updateOrCreate(
-                ['inquiry_subject_id' => $request->id, 'lang_type' => $request->lang],
+                ['inquiry_subject_id' => $request->inquiry_subject_id, 'lang_type' => $request->lang],
                 ['inquiry_subject' => $request->lang_inquiry_subject]
             );
         }
@@ -193,7 +193,7 @@ class InquirySubjectController extends BaseController
     {
         if($request->isMethod('PUT')){
             try {
-                $inquirySubjectInfo = InquirySubject::where('id', $id)->firstOrFail();
+                $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
                 $inquirySubjectInfo->inquiry_subject = $request->inquiry_subject;
                 $inquirySubjectInfo->last_update_date = Carbon::now();
                 $inquirySubjectInfo->save();
@@ -221,7 +221,7 @@ class InquirySubjectController extends BaseController
     public function destroy($id)
     {
         try {
-            $inquirySubject = InquirySubject::where('id', $id)->delete();
+            $inquirySubject = InquirySubject::where('inquiry_subject_id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

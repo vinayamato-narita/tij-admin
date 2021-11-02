@@ -53,7 +53,7 @@
                                             <tbody>
                                                 @foreach ($inquiryList as $index => $inquiry)
                                                     <tr class="eachRow">
-                                                        <td class="text-center">{{ $inquiry->id }}</td>
+                                                        <td class="text-center">{{ $inquiry->inquiry_id }}</td>
                                                         <td class="text-center">{{ $inquiry->inquiry_date }}</td>
                                                         <td class="text-center">{{ $inquiry->inquiry_subject }}</td>
                                                         <td class="text-center">{{ $inquiry->student_id }}</td>
@@ -65,7 +65,7 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('inquiry.edit', $inquiry->id) }}"><i class="fa fa-edit mr-2"></i>編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('inquiry.edit', $inquiry->inquiry_id) }}"><i class="fa fa-edit mr-2"></i>編集</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

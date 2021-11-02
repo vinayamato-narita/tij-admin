@@ -530,9 +530,9 @@ END";
         \DB::unprepared($procedure8);
 
         $procedure9 = "DROP PROCEDURE IF EXISTS `sp_disable_course_free`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_disable_course_free`(IN _student_id INT, IN _course_free_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_disable_course_free`(IN _student_id INT)
 BEGIN
-SET @point_count = (SELECT SUM(point_count) FROM student_point_history where student_id = _student_id AND course_id = _course_free_id);
+SET @point_count = (SELECT SUM(point_count) FROM student_point_history where student_id = _student_id AND course_id = 1);
 IF @point_count > 0 THEn
    INSERT INTO student_point_history(student_id,pay_date,pay_description,pay_type,point_count,expire_date,lesson_schedule_id,course_id,point_subscription_id)
               SELECT
@@ -543,9 +543,9 @@ IF @point_count > 0 THEn
                 ,-1
                 ,expire_date
                 ,0
-                ,_course_free_id
+                ,1
             ,point_subscription_id
-            FROM student_point_history WHERE student_id = _student_id AND course_id = _course_free_id LIMIT 1;
+            FROM student_point_history WHERE student_id = _student_id AND course_id = 1 LIMIT 1;
               
 END IF;
 END";

@@ -28,14 +28,14 @@
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
                                         <label>生徒番号 : </label> 
-                                        {{ $studentInfo->id }}
+                                        {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
                                         <label>生徒名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
-                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.lessonHistoryList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.lessonHistoryList', $studentInfo->student_id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                     </div>
                                 </div>
                                 @if(!$lessonHistoryList->isEmpty())
@@ -70,7 +70,7 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('student.showLessonHistory', $lesson->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('student.showLessonHistory', $lesson->lesson_history_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

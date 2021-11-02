@@ -24,7 +24,7 @@ class StudentCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
+            'student_id' => 'required|integer',
             'comment' => 'max:20000'
         ];
     }

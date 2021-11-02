@@ -24,47 +24,47 @@ class PointSubscriptionHistory extends Authenticatable
     }
 
     public static function getPaymentHistoryInfo($id) {
-    	return DB::table('point_subscription_histories')->select('point_subscription_histories.id as id',
-            'point_subscription_histories.student_id as student_id',
-            DB::raw('(CASE WHEN point_subscription_histories.payment_way = 2 THEN point_subscription_histories.payment_way + point_subscription_histories.paid_status ELSE point_subscription_histories.payment_way END) AS payment_type'),
-            'point_subscription_histories.point_count as point_count',
-            'point_subscription_histories.management_number as management_number',
-            'point_subscription_histories.payment_date as payment_date',
-            'point_subscription_histories.begin_date as begin_date',
-            'point_subscription_histories.point_expire_date as point_expire_date',
-            'point_subscription_histories.amount as amount',
-            'courses.course_id as course_id',
-            'courses.course_name as course_name',
-            'students.student_name as student_name',
-            'students.is_lms_user as is_lms_user',
-            'student_point_histories.start_date as start_date',
-            'lms_project_course_students.course_begin_month as course_begin_month',
-            'point_subscription_histories.tax as tax'
+    	return DB::table('point_subscription_history')->select('point_subscription_history.point_subscription_history_id as point_subscription_history_id',
+            'point_subscription_history.student_id as student_id',
+            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS payment_type'),
+            'point_subscription_history.point_count as point_count',
+            'point_subscription_history.management_number as management_number',
+            'point_subscription_history.payment_date as payment_date',
+            'point_subscription_history.begin_date as begin_date',
+            'point_subscription_history.point_expire_date as point_expire_date',
+            'point_subscription_history.amount as amount',
+            'course.course_id as course_id',
+            'course.course_name as course_name',
+            'student.student_name as student_name',
+            'student.is_lms_user as is_lms_user',
+            'student_point_history.start_date as start_date',
+            'lms_project_course_student.course_begin_month as course_begin_month',
+            'point_subscription_history.tax as tax'
         )
-            ->leftJoin('courses', function($join) {
-                $join->on('point_subscription_histories.course_id', '=', 'courses.course_id');
+            ->leftJoin('course', function($join) {
+                $join->on('point_subscription_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('students', function($join) {
-                $join->on('point_subscription_histories.student_id', '=', 'students.id');
+            ->leftJoin('student', function($join) {
+                $join->on('point_subscription_history.student_id', '=', 'student.student_id');
             })
-            ->leftJoin('orders', function($join) {
-                $join->on('point_subscription_histories.order_id', '=', 'orders.order_id');
+            ->leftJoin('order', function($join) {
+                $join->on('point_subscription_history.order_id', '=', 'order.order_id');
             })
-            ->leftJoin('student_point_histories', function($join) {
-                $join->on('point_subscription_histories.id', '=', 'student_point_histories.point_subscription_id');
+            ->leftJoin('student_point_history', function($join) {
+                $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
             })
-            ->leftJoin('lms_project_course_students', function($join) {
-                $join->on('point_subscription_histories.id', '=', 'lms_project_course_students.point_subscription_id');
+            ->leftJoin('lms_project_course_student', function($join) {
+                $join->on('point_subscription_history.point_subscription_history_id', '=', 'lms_project_course_student.point_subscription_id');
             })
-            ->leftJoin('lms_projects', function($join) {
-                $join->on('lms_project_course_students.project_id', '=', 'lms_projects.id');
+            ->leftJoin('lms_project', function($join) {
+                $join->on('lms_project_course_student.project_id', '=', 'lms_project.project_id');
             })
-            ->leftJoin('lms_companies', function($join) {
-                $join->on('lms_projects.company_id', '=', 'lms_companies.id');
+            ->leftJoin('lms_company', function($join) {
+                $join->on('lms_project.company_id', '=', 'lms_company.company_id');
             })
-            ->where('point_subscription_histories.id', $id)
-            ->where('point_subscription_histories.del_flag', 0)
-            ->groupBy('point_subscription_histories.id')
+            ->where('point_subscription_history.point_subscription_history_id', $id)
+            ->where('point_subscription_history.del_flag', 0)
+            ->groupBy('point_subscription_history.point_subscription_history_id')
             ->first();
     }
 }

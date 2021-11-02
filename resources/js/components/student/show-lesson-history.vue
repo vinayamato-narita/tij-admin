@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ lessonHistoryInfoEx.id }}
+                                               {{ lessonHistoryInfoEx.lesson_history_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -266,7 +266,7 @@ export default {
             axios
                 .post(that.urlCancelLessonHistory, {
                     cancel_type: type,
-                    id: that.lessonHistoryInfoEx.id,
+                    lesson_history_id: that.lessonHistoryInfoEx.lesson_history_id,
                     _token: Laravel.csrfToken
                 })
                 .then(response => {

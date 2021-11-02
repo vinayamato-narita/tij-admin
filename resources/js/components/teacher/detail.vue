@@ -198,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                <modal-table :detailUrl="detailTeacherUrl" :url="lessonListUrl"  :pageSizeLimit="pageSizeLimit" :id="teacher.id" :register-url="registerUrl">
+                <modal-table :type="type" :detailUrl="detailTeacherUrl" :url="lessonListUrl"  :pageSizeLimit="pageSizeLimit" :id="teacher.id" :register-url="registerUrl">
 
                 </modal-table>
             </div>
@@ -228,6 +228,7 @@
         },
         data() {
             return {
+                type: 'teacher',
                 showModal: false,
                 csrfToken: Laravel.csrfToken,
                 messageConfirm : 'このレッスンを解除しますか？',

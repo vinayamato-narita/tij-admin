@@ -95,6 +95,8 @@ class CsvController extends Controller
     }
 
     public function exportPayment(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
 
         if (empty($data)) {
@@ -170,6 +172,8 @@ class CsvController extends Controller
     }
 
     public function exportLessonHistory(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
         if (!isset($data["lesson_result_date1"]) || !isset($data["lesson_result_date2"])
         || empty($data["lesson_result_date1"]) || empty($data["lesson_result_date2"])) {
@@ -277,6 +281,8 @@ class CsvController extends Controller
     }
 
     public function exportSuperGrace(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
 
         if (empty($data["super_grace_date"])) {
@@ -606,6 +612,8 @@ class CsvController extends Controller
     }
 
     public function exportSuperGraceNormal(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
         if (empty($data["super_grace_date_normal"])) {
             return response()->json([
@@ -798,6 +806,8 @@ class CsvController extends Controller
     }
 
     public function exportStudentBoughtCourse(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
         if (empty($data["project_course_student_start_date"])
             || empty($data["project_course_student_end_date"])
@@ -927,6 +937,8 @@ class CsvController extends Controller
     }
 
     public function exportLessonSummaryProcess(Request $request) {
+        set_time_limit(600);
+        ini_set('memory_limit','2048M');
         $data = $request->all();
         if (!isset($data["sm_lesson_date_from"])
         || !isset($data["sm_lesson_date_to"]) || !isset($data["sm_expire_date_from"])

@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save" ref="formSubmit">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="adminInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" ref="formSubmit" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">管理ユーザ情報</h5>
                                     </div>
@@ -35,8 +30,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_name"
-                                                    v-model="adminInfo.admin_name"
+                                                    name="admin_user_name"
+                                                    v-model="adminInfoEx.admin_user_name"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -44,9 +39,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_name')"
+                                                    v-if="errors.has('admin_user_name')"
                                                 >
-                                                    {{ errors.first("admin_name") }}
+                                                    {{ errors.first("admin_user_name") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -62,8 +57,8 @@
                                                 <input
                                                     class="form-control"
                                                     type="text"
-                                                    name="admin_email"
-                                                    v-model="adminInfo.admin_email"
+                                                    name="admin_user_email"
+                                                    v-model="adminInfoEx.admin_user_email"
                                                     v-validate="
                                                         'required|email|max:255'
                                                     "
@@ -71,9 +66,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('admin_email')"
+                                                    v-if="errors.has('admin_user_email')"
                                                 >
-                                                    {{ errors.first("admin_email") }}
+                                                    {{ errors.first("admin_user_email") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -88,7 +83,7 @@
                                                     class="form-control"
                                                     type="password"
                                                     name="password"
-                                                    v-model="adminInfo.password"
+                                                    v-model="adminInfoEx.password"
                                                     ref="password"
                                                     v-validate="
                                                         'password_rule|min:8|max:32'
@@ -114,7 +109,7 @@
                                                     class="form-control"
                                                     type="password"
                                                     name="password_confirm"
-                                                    v-model="adminInfo.password_confirm"
+                                                    v-model="adminInfoEx.password_confirm"
                                                     v-validate="
                                                         'confirmed:password'
                                                     "
@@ -138,8 +133,8 @@
                                                 <textarea
                                                     class="form-control"
                                                     rows = "5"
-                                                    name="description"
-                                                    v-model="adminInfo.description"
+                                                    name="admin_user_description"
+                                                    v-model="adminInfoEx.admin_user_description"
                                                     v-validate="
                                                         'max:2000'
                                                     "
@@ -147,9 +142,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('description')"
+                                                    v-if="errors.has('admin_user_description')"
                                                 >
-                                                    {{ errors.first("description") }}
+                                                    {{ errors.first("admin_user_description") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -160,7 +155,7 @@
                                                 <btn-delete :delete-action="deleteAction"
                                                             :message-confirm="messageConfirm" 
                                                             :url-redirect="urlRedirect"></btn-delete>
-                                                <a :href="urlAdminDetail" class="btn btn-default w-100">閉じる</a>
+                                                <a :href="urlAdminList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
                                     </div>
@@ -184,11 +179,11 @@ export default {
     created: function() {
         let messError = {
             custom: {
-                admin_name: {
+                admin_user_name: {
                     required: "ユーザ名を入力してください",
                     max: "ユーザ名は255文字以内で入力してください"
                 },
-                admin_email: {
+                admin_user_email: {
                     required: "メールアドレスを入力してください",
                     max: "メールアドレスは255文字以内で入力してください",
                     email: "メールアドレスを正確に入力してください"
@@ -202,7 +197,7 @@ export default {
                 password_confirm: {
                     confirmed: "確認が一致しません"
                 },
-                description: {
+                admin_user_description: {
                     max: "説明は2000文字以内で入力してください",
                 }
             }
@@ -216,10 +211,11 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            adminInfoEx: this.adminInfo
         };
 
     },
-    props: ["urlAction", "urlAdminDetail", 'adminInfo', 'deleteAction', 'messageConfirm', 'urlRedirect'],
+    props: ["urlAction", "urlAdminList", 'adminInfo', 'deleteAction', 'messageConfirm', 'urlRedirect'],
     mounted() {},
     methods: {
         save() {
@@ -237,7 +233,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.adminInfo)
+                .put(that.urlAction, that.adminInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
@@ -246,15 +242,15 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = that.urlAdminDetail;
+                            window.location = that.urlAdminList;
                         });
                     }
                 })
                 .catch(e => {
                     that.flagShowLoader = false;
                     that.errors.add({
-                        field: 'admin_email',
-                        msg: e.response.data.errors.admin_email[0]
+                        field: 'admin_user_email',
+                        msg: e.response.data.errors.admin_user_email[0]
                     });
                 });
         }

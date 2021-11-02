@@ -13,8 +13,8 @@ class CreateLmsCompanyTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_companies', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('lms_company', function (Blueprint $table) {
+            $table->increments('company_id')->comment('識別ID');
             $table->string('company_code', 8)->nullable();
             $table->string('company_name')->nullable();
             $table->string('company_name_kana')->nullable();
@@ -36,8 +36,8 @@ class CreateLmsCompanyTable extends Migration
             $table->string('represent_person_email')->nullable();
             $table->string('company_tel', 20)->nullable();
             $table->string('home_tel', 20)->nullable();
-            $table->string('company_lecture_code')->nullable();
-            $table->integer('exported_object')->nullable();
+            $table->string('company_lecture_code')->nullable()->comment('AD2000受講企業コード');
+            $table->integer('exported_object')->nullable()->comment('AD2000出力対象');
             $table->string('classify_code')->nullable();
             $table->string('company_group_code')->nullable();
             $table->string('legal_code')->nullable();
@@ -45,8 +45,9 @@ class CreateLmsCompanyTable extends Migration
             $table->string('bill_address')->nullable();
             $table->string('common_mgt_no')->nullable();
             $table->text('note')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->dateTime('created')->nullable()->comment('作成日時');
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->smallInteger('delete_flag')->nullable()->default(0)->comment('削除フラグ');
         });
     }
 
@@ -57,6 +58,6 @@ class CreateLmsCompanyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_companies');
+        Schema::dropIfExists('lms_company');
     }
 }

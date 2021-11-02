@@ -1,19 +1,17 @@
 <template>
-    <div class="col-md-2">
-        <select
-            class="form-control page-size-select cursor-point"
-            name="limit"
-            @change="onChange($event)"
+    <select
+        class="form-control page-size-select cursor-point"
+        name="limit"
+        @change="onChange($event)"
+    >
+        <option
+            v-for="value in pageSize"
+            :value="value"
+            v-bind:selected="value == pageLimit"
         >
-            <option
-                v-for="value in pageSize"
-                :value="value"
-                v-bind:selected="value == pageLimit"
-            >
-                {{ value + "件" }}
-            </option>
-        </select>
-    </div>
+            {{ value + "件" }}
+        </option>
+    </select>
 </template>
 
 <script>

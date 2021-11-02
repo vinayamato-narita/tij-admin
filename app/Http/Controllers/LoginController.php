@@ -43,15 +43,14 @@ class LoginController extends BaseController
      */
     public function store(LoginRequest $request)
     {
-
         $credentials = $request->only('email', 'password');
         if (Auth::attempt([
-            'admin_email' => $credentials['email'],
+            'admin_user_email' => $credentials['email'],
             'password' => $credentials['password']
             ], $request->remember_me ?? false)) {
             try {
-                $account = AdminUser::where('id', Auth::user()->id)->firstOrFail();
-                $account->last_login_at = Carbon::now();
+                $account = AdminUser::where('admin_user_id', Auth::user()->admin_user_id)->firstOrFail();
+                $account->last_login_date = Carbon::now();
             }
             catch (\Exception $exception){
                 throw new \Exception($exception);

@@ -9,5 +9,11 @@ use Kyslik\ColumnSortable\Sortable;
 class InquirySubject extends Model
 {
     use HasFactory, Sortable;
+
+    protected $table = 'inquiry_subject';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'inquiry_subject_id';
 }
 

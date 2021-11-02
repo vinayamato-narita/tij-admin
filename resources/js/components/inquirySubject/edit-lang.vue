@@ -36,12 +36,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="inquirySubjectInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">英語版</h5>
                                     </div>
@@ -58,7 +53,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="lang_inquiry_subject"
-                                                    v-model="inquirySubjectInfo.lang_inquiry_subject"
+                                                    v-model="inquirySubjectInfoEx.lang_inquiry_subject"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -113,14 +108,14 @@ export default {
     },
     data() {
         return {
-            flagShowLoader: false
+            flagShowLoader: false,
+            inquirySubjectInfoEx: this.inquirySubjectInfo
         };
     },
     props: ["urlAction", "urlInquirySubjectDetail", "inquirySubjectInfo"],
     mounted() {},
     methods: {
         save() {
-            console.log('xxx')
             let that = this;
             this.$validator
                 .validateAll()
@@ -136,7 +131,7 @@ export default {
             console.log('yyy')
             let that = this;
             axios
-                .post(that.urlAction, that.inquirySubjectInfo)
+                .post(that.urlAction, that.inquirySubjectInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

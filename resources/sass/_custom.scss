@@ -385,3 +385,34 @@ input[type=number]::-webkit-outer-spin-button {
 .row-comment:hover {
     background-color: #ddd !important;
 }
+.fwb {
+    font-weight: bold;
+}
+input:disabled {
+   background-color: #eee !important; 
+}
+.changePassStudentModal {
+    max-width: 600px;
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    height: 200px;
+}
+.mx-datepicker {
+    width: auto !important;
+}
+.btn-drop-detail {
+    border-radius: 0;
+    height: 35px;
+    padding-right: 12px;
+    border: 1px solid #d8dbe0;
+}
+.clss_search_input {
+    border-radius: .25rem 0 0 .25rem;
+}
+.disabledSelect {
+    background-color: #eee !important;
+}

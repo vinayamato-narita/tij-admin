@@ -13,7 +13,7 @@ class CreateTextMapTable extends Migration
      */
     public function up()
     {
-        Schema::create('text_maps', function (Blueprint $table) {
+        Schema::create('text_map', function (Blueprint $table) {
             $table->integer('lesson_text_id')->nullable();
             $table->integer('togo_lesson_text_id')->nullable();
             $table->integer('new_text_id')->nullable();
@@ -29,6 +29,6 @@ class CreateTextMapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('text_maps');
+        Schema::dropIfExists('text_map');
     }
 }

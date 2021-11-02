@@ -13,12 +13,13 @@ class CreateLmsProjectDemandmailTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_project_demandmails', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('lms_project_demandmail', function (Blueprint $table) {
+            $table->increments('project_demandmail_id');
             $table->integer('project_id')->nullable();
             $table->integer('admin_demand_mail_id')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->dateTime('created')->nullable()->comment('作成日時');
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->smallInteger('delete_flag')->nullable()->default(0)->comment('削除フラグ');
         });
     }
 
@@ -29,6 +30,6 @@ class CreateLmsProjectDemandmailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_project_demandmails');
+        Schema::dropIfExists('lms_project_demandmail');
     }
 }

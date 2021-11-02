@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="newsInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">お知らせ情報</h5>
                                     </div>
@@ -38,7 +33,7 @@
                                                     v-model="newsInfo.news_subject_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="subject.id" v-for="subject in newsSubjects">
+                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
                                                         {{ subject.news_subject_ja }}</option
                                                     >
                                                 </select>

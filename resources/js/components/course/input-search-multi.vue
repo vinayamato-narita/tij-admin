@@ -39,8 +39,9 @@
                             <label>公開状況</label>
                             <div class="col-sm-12">
                                 <label class="radio-inline">
-                                    <input type="radio" name="is_show" id="is_show_2" value="2" v-if="dataQuery.is_show == 2 "  checked> 全て
-                                    <input type="radio" name="is_show" id="is_show_2" value="2" v-if="dataQuery.is_show != 2 ">
+                                    <input type="radio" name="is_show" id="is_show_2" value="2" v-if="dataQuery.is_show == 2 || dataQuery.is_show === undefined"  checked>
+                                    <input type="radio" name="is_show" id="is_show_2" value="2" v-if="dataQuery.is_show != 2 &&  dataQuery.is_show !== undefined">全て
+
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="is_show" id="is_show_1" value="1" v-if="dataQuery.is_show == 1" checked>

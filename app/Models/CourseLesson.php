@@ -10,4 +10,6 @@ class CourseLesson extends Model
     use HasFactory;
     protected $table = 'course_lesson';
     public $timestamps = false;
+
+    protected $primaryKey = 'course_lesson_id';
 }

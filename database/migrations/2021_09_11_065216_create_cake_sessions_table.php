@@ -14,9 +14,9 @@ class CreateCakeSessionsTable extends Migration
     public function up()
     {
         Schema::create('cake_sessions', function (Blueprint $table) {
-            $table->string('id')->default('')->primary();
-            $table->longText('data')->nullable();
-            $table->integer('expires')->nullable();
+            $table->string('id')->default('')->primary()->comment('セッションID');
+            $table->longText('data')->nullable()->comment('セッションデータ');
+            $table->integer('expires')->nullable()->comment('有効期限');
         });
     }
 

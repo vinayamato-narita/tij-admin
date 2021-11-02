@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="newsInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">お知らせ情報</h5>
                                     </div>
@@ -35,10 +30,10 @@
                                                 <select
                                                     class="form-control"
                                                     name="news_subject_id"
-                                                    v-model="newsInfo.news_subject_id"
+                                                    v-model="newsInfoEx.news_subject_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="subject.id" v-for="subject in newsSubjects">
+                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
                                                         {{ subject.news_subject_ja }}</option
                                                     >
                                                 </select>
@@ -63,7 +58,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="news_title"
-                                                    v-model="newsInfo.news_title"
+                                                    v-model="newsInfoEx.news_title"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -91,7 +86,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="news_body"
-                                                    v-model="newsInfo.news_body"
+                                                    v-model="newsInfoEx.news_body"
                                                     v-validate="
                                                         'required|max:20000'
                                                     "
@@ -159,6 +154,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            newsInfoEx: this.newsInfo
         };
     },
     props: ["urlAction", "urlNewsDetail", "newsSubjects", "newsInfo", 'deleteAction', 'messageConfirm', 'urlRedirect'],
@@ -179,7 +175,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.newsInfo)
+                .put(that.urlAction, that.newsInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

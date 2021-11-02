@@ -13,14 +13,12 @@ class CreateFaqInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('faq_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('faq_info', function (Blueprint $table) {
+            $table->increments('faq_info_id');
             $table->integer('faq_id');
             $table->string('question')->nullable();
             $table->text('answer')->nullable();
-            $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('lang_type', 10)->comment('言語タイプ。en:英語　vn:ベトナム語');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateFaqInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faq_infos');
+        Schema::dropIfExists('faq_info');
     }
 }

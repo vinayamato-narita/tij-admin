@@ -13,7 +13,7 @@ class CreateOrderTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('order', function (Blueprint $table) {
             $table->string('order_id', 27)->primary();
             $table->unsignedInteger('student_id')->default(0);
             $table->bigInteger('student_card_id')->nullable();
@@ -21,10 +21,10 @@ class CreateOrderTable extends Migration
             $table->string('product_code', 45);
             $table->string('campaign_code', 45)->nullable();
             $table->dateTime('order_date');
-            $table->unsignedTinyInteger('order_status')->default(0);
+            $table->unsignedTinyInteger('order_status')->default(0)->comment('購入ステータス。-3: exception-2: error occurred-1: fail0: pending1: completed2: refund');
             $table->string('order_ip', 100)->nullable();
             $table->string('gmo_error_code', 20)->nullable();
-            $table->unsignedTinyInteger('error_step')->nullable()->default(0);
+            $table->unsignedTinyInteger('error_step')->nullable()->default(0)->comment('GMOエラーステップ。step 1: payment access step 2: payment occure step 3: payment finish');
             $table->string('corporation_code', 45)->nullable();
             $table->string('access_id', 50)->nullable();
             $table->string('transaction_id', 50)->nullable();
@@ -44,6 +44,6 @@ class CreateOrderTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('order');
     }
 }

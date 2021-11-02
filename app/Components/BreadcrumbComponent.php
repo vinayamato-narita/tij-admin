@@ -179,6 +179,86 @@ class BreadcrumbComponent
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",
             ],
+            'student_list' => [
+                'text' => '生徒情報一覧',
+                'route_str' => "student.index",
+            ],
+            'student_comment_list' => [
+                'text' => 'コメント履歴一覧',
+                'route_str' => "student.commentList",
+            ],
+            'student_create_comment' => [
+                'text' => 'コメント新規作成',
+                'route_str' => "student.createComment",
+            ],
+            'student_edit_comment' => [
+                'text' => 'コメント編集',
+                'route_str' => "student.editComment",
+            ],
+            'lesson_cancel_history_list' => [
+                'text' => 'レッスンキャンセル履歴',
+                'route_str' => "lessonCancelHistory.index",
+            ],
+            'student_lesson_history_list' => [
+                'text' => 'レッスン履歴一覧',
+                'route_str' => "student.lessonHistoryList",
+            ],
+            'show_student_lesson_history' => [
+                'text' => 'レッスン履歴詳細',
+                'route_str' => "student.showLessonHistory",
+            ],
+            'remind_mail_list' => [
+                'text' => 'リマインドメール一覧',
+                'route_str' => "remindmail.index",
+            ],
+            'remind_mail_show' => [
+                'text' => 'リマインドメール情報表示',
+                'route_str' => "remindmail.show",
+            ],
+            'remind_mail_edit' => [
+                'text' => 'リマインドメール編集',
+                'route_str' => "remindmail.edit",
+            ],
+            'student_payment_history_list' => [
+                'text' => '支払い履歴一覧',
+                'route_str' => "student.paymentHistoryList",
+            ],
+            'create_student_payment_history' => [
+                'text' => '支払い履歴新規作成',
+                'route_str' => "student.createPaymentHistory",
+            ],
+            'edit_student_payment_history' => [
+                'text' => '支払い履歴編集',
+                'route_str' => "student.editPaymentHistory",
+            ],
+            'category_list' => [
+                'text' => 'コースカテゴリ一覧',
+                'route_str' => "category.index",
+            ],
+            'category_create' => [
+                'text' => 'コースカテゴリ新規作成',
+                'route_str' => "category.create",
+            ],
+            'category_show' => [
+                'text' => 'コースカテゴリ情報表示',
+                'route_str' => "category.show",
+            ],
+            'category_edit' => [
+                'text' => 'コースカテゴリ編集',
+                'route_str' => "category.edit",
+            ],
+            'edit_student' => [
+                'text' => '生徒情報編集',
+                'route_str' => "student.edit",
+            ],
+            'payment_history_list' => [
+                'text' => '支払い履歴一覧',
+                'route_str' => "paymentHistory.index",
+            ],
+            'edit_payment_history' => [
+                'text' => '支払い履歴編集',
+                'route_str' => "paymentHistory.edit",
+            ],
         ];
     }
 

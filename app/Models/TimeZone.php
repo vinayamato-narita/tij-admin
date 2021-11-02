@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class TimeZone extends Model
 {
     use HasFactory;
-    protected $table = 'timezones';
+    protected $table = 'timezone';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'timezone_id';
+    
     protected $fillable = [];
 }

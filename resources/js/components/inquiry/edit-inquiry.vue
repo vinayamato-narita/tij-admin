@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="inquiryInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">問い合わせ情報</h5>
                                     </div>
@@ -30,7 +25,7 @@
                                                 >問い合わせ番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_id }}
+                                                {{ inquiryInfoEx.inquiry_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -40,7 +35,7 @@
                                                 >日時</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_date }}
+                                                {{ inquiryInfoEx.inquiry_date }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -50,7 +45,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.user_id }}
+                                                {{ inquiryInfoEx.user_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -60,7 +55,7 @@
                                                 >名前</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.student_name }}
+                                                {{ inquiryInfoEx.student_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -70,7 +65,7 @@
                                                 >メールアドレス</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.user_mail }}
+                                                {{ inquiryInfoEx.student_email }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -80,7 +75,7 @@
                                                 >対応状況</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_flag_name }}
+                                                {{ inquiryInfoEx.inquiry_flag_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -90,7 +85,7 @@
                                                 >問い合わせ件名</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_subject }}
+                                                {{ inquiryInfoEx.inquiry_subject }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -100,7 +95,7 @@
                                                 >問い合わせ内容</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfo.inquiry_body }}
+                                                {{ inquiryInfoEx.inquiry_body }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -114,7 +109,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="inquiry_memo"
-                                                    v-model="inquiryInfo.inquiry_memo"
+                                                    v-model="inquiryInfoEx.inquiry_memo"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -133,7 +128,7 @@
                                         <div class="form-group">
                                             <div class="text-center display-flex">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2">保存</button>
-                                                <button v-if="inquiryInfo.inquiry_flag == notSupport" type="button" class="btn btn-success mr-2" v-on:click="changeInquiryFlag">対応済にする</button>
+                                                <button v-if="inquiryInfoEx.inquiry_flag == notSupport" type="button" class="btn btn-success mr-2" v-on:click="changeInquiryFlag">対応済にする</button>
                                                 <a :href="urlInquiryList" class="btn btn-default w-100">閉じる</a>
                                             </div>
                                         </div>
@@ -170,6 +165,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            inquiryInfoEx: this.inquiryInfo
         };
     },
     props: ["urlUpdateInquiry", "urlInquiryList", "inquiryInfo", "urlChangeInquiryFlag", "notSupport"],
@@ -190,7 +186,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlUpdateInquiry, that.inquiryInfo)
+                .put(that.urlUpdateInquiry, that.inquiryInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
@@ -211,7 +207,7 @@ export default {
             let that = this;
             that.flagShowLoader = true;
             axios
-                .post(that.urlChangeInquiryFlag, that.inquiryInfo)
+                .post(that.urlChangeInquiryFlag, that.inquiryInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

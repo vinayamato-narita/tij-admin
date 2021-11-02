@@ -13,8 +13,8 @@ class CreateTimezoneTable extends Migration
      */
     public function up()
     {
-        Schema::create('timezones', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('timezone', function (Blueprint $table) {
+            $table->increments('timezone_id');
             $table->text('timezone_name_english')->nullable();
             $table->text('timezone_name_native')->nullable();
             $table->unsignedInteger('display_no')->nullable();
@@ -29,6 +29,6 @@ class CreateTimezoneTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('timezones');
+        Schema::dropIfExists('timezone');
     }
 }

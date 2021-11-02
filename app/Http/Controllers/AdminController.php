@@ -31,12 +31,12 @@ class AdminController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('admin_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('admin_email', $request['search_input']));
+                $query->where($this->escapeLikeSentence('admin_user_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('admin_user_email', $request['search_input']));
             });
         }
 
-        $adminList = $queryBuilder->sortable(['updated_at' => 'desc'])->paginate($pageLimit);
+        $adminList = $queryBuilder->sortable(['last_login_date' => 'desc'])->paginate($pageLimit);
 
         return view('admin.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -71,16 +71,21 @@ class AdminController extends BaseController
      */
     public function store(CreateAdminRequest $request)
     {
-        if($request->isMethod('POST')) {
-            $admin = new AdminUser;
-            $admin->admin_name = $request->admin_name;
-            $admin->admin_email = $request->admin_email;
-            $admin->password = Hash::make($request->password);
-            $admin->description = $request->description;
-            $admin->save();            
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);              
         }
+        $admin = new AdminUser;
+        $admin->admin_user_name = $request->admin_user_name;
+        $admin->admin_user_email = $request->admin_user_email;
+        $admin->password = Hash::make($request->password);
+        $admin->admin_user_description = $request->admin_user_description;
+        $admin->save();  
+
         return response()->json([
             'status' => 'OK',
+            'id' => $admin->admin_user_id,
         ], StatusCode::OK);
     }
 
@@ -97,7 +102,7 @@ class AdminController extends BaseController
             ['name' => 'admin_list'],
             ['name' => 'show_admin', $id],
         ]);
-        $adminInfo = AdminUser::where('id', $id)->firstOrFail();
+        $adminInfo = AdminUser::where('admin_user_id', $id)->firstOrFail();
         return view('admin.show', [
             'breadcrumbs' => $breadcrumbs,
             'adminInfo' => $adminInfo,
@@ -115,10 +120,10 @@ class AdminController extends BaseController
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'admin_list'],
-            ['name' => 'show_admin', $id],
+            /*['name' => 'show_admin', $id],*/
             ['name' => 'edit_admin', $id],
         ]);
-        $adminInfo = AdminUser::where('id', $id)->firstOrFail();
+        $adminInfo = AdminUser::where('admin_user_id', $id)->firstOrFail();
         $adminInfo->_token = csrf_token();
         
         return view('admin.edit', [
@@ -136,17 +141,21 @@ class AdminController extends BaseController
      */
     public function update(EditAdminRequest $request, $id)
     {
-        if($request->isMethod('PUT')){
-            $adminInfo = AdminUser::where('id', $id)->firstOrFail();
-            $adminInfo->admin_name = $request->admin_name;
-            $adminInfo->admin_email = $request->admin_email;
-            if ($request->password != "") {
-                $adminInfo->password = Hash::make($request->password);
-            }
-            
-            $adminInfo->description = $request->description;
-            $adminInfo->save();            
+        if(!$request->isMethod('PUT')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);   
         }
+        $adminInfo = AdminUser::where('admin_user_id', $id)->firstOrFail();
+        $adminInfo->admin_user_name = $request->admin_user_name;
+        $adminInfo->admin_user_email = $request->admin_user_email;
+        if ($request->password != "") {
+            $adminInfo->password = Hash::make($request->password);
+        }
+        
+        $adminInfo->admin_user_description = $request->admin_user_description;
+        $adminInfo->save();  
+            
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);
@@ -161,7 +170,7 @@ class AdminController extends BaseController
     public function destroy($id)
     {
         try {
-            $user = AdminUser::where('id', $id)->delete();
+            $user = AdminUser::where('admin_user_id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([
@@ -177,7 +186,7 @@ class AdminController extends BaseController
     public function changeStatus(Request $request, $id)
     {
         try {
-            $user = AdminUser::where('id', $id)->firstOrFail();
+            $user = AdminUser::where('admin_user_id', $id)->firstOrFail();
             $user->is_online = $user->is_online == 0 ? 1 : 0;
             $user->save();
 

@@ -3,6 +3,7 @@
 @endphp
 
 @extends('layouts.default')
+@section('title', 'コース一覧')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">
@@ -31,8 +32,11 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-2">
-                                        <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                        <div class="col-md-2">
+                                            <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                        </div>
                                         <input-search-multi :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('course.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search-multi>
+
                                     </div>
                                     @if(!$courseList->isEmpty())
                                         <div class="tanemaki-table">

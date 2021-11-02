@@ -11,7 +11,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -94,7 +94,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportOrderHistory()"
                         >
@@ -111,7 +111,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -208,7 +208,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportLessonHistory()"
                         >
@@ -225,7 +225,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -407,7 +407,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportSuperGrace()"
                         >
@@ -424,7 +424,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -606,7 +606,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportSuperGraceNormal()"
                         >
@@ -623,7 +623,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -705,7 +705,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportStudentBoughtCourse()"
                         >
@@ -722,7 +722,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <form class="basic-form" @submit.prevent="save">
+                <form class="basic-form">
                   <input
                     name="_token"
                     type="hidden"
@@ -818,7 +818,7 @@
                     <div class="form-group">
                       <div class="text-center">
                         <button
-                          type="submit"
+                          type="button"
                           class="btn btn-default w-100 mr-2"
                           @click="exportLessonSummaryProcess()"
                         >
@@ -926,12 +926,11 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          if (res.data == '200') {
+          if (res.data.status == 200) {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();
@@ -960,12 +959,12 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          if (res.data == '200') {
+          console.log(res.data)
+          if (res.data.status == 200) {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();
@@ -997,12 +996,11 @@ export default {
         .then((res) => {
           this.flagShowLoader = false;
 
-          if (res.data == '200') {
+          if (res.data.status == 200) {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();
@@ -1034,12 +1032,11 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          if (res.data == '200') {
+          if (res.data.status == '200') {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();
@@ -1067,12 +1064,11 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          if (res.data == '200') {
+          if (res.data.status == 200) {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();
@@ -1101,12 +1097,11 @@ export default {
         })
         .then((res) => {
           this.flagShowLoader = false;
-          if (res.data == '200') {
+          if (res.data.status == 200) {
             var fileLink = document.createElement("a");
             fileLink.href = res.data.path;
             fileLink.setAttribute("download", res.data.file_name);
             document.body.appendChild(fileLink);
-            console.log(res.data.file_name);
 
             window.setTimeout(function () {
               fileLink.click();

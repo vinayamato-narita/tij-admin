@@ -25,7 +25,7 @@
                                             </label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ faqInfo.no_faq }}
+                                            {{ faqInfoEx.no_faq }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -35,7 +35,7 @@
                                             >質問・Q:</label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ faqInfo.question }}
+                                            {{ faqInfoEx.question }}
                                         </div>
                                     </div>
                                 </div>
@@ -46,12 +46,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="faqInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">英語版</h5>
                                     </div>
@@ -68,7 +63,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="lang_question"
-                                                    v-model="faqInfo.lang_question"
+                                                    v-model="faqInfoEx.lang_question"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -96,7 +91,7 @@
                                                     class="form-control"
                                                     rows = "5"
                                                     name="lang_answer"
-                                                    v-model="faqInfo.lang_answer"
+                                                    v-model="faqInfoEx.lang_answer"
                                                     v-validate="
                                                         'required|max:20000'
                                                     "
@@ -156,6 +151,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            faqInfoEx: this.faqInfo
         };
     },
     props: ["urlAction", "urlFaqDetail", "faqInfo"],
@@ -176,7 +172,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .post(that.urlAction, that.faqInfo)
+                .post(that.urlAction, that.faqInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

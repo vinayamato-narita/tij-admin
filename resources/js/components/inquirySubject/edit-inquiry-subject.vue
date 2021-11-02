@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="inquirySubjectInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">問い合わせ件名編集</h5>
                                     </div>
@@ -31,12 +26,12 @@
                                                     ></span
                                                 ></label
                                             >
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <input
                                                     class="form-control"
                                                     type="text"
                                                     name="inquiry_subject"
-                                                    v-model="inquirySubjectInfo.inquiry_subject"
+                                                    v-model="inquirySubjectInfoEx.inquiry_subject"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -82,8 +77,8 @@ export default {
         let messError = {
             custom: {
                 inquiry_subject: {
-                    required: "お問い合わせ件名を入力してください",
-                    max: "お問い合わせ件名は255文字以内で入力してください",
+                    required: "問い合わせ件名を入力してください",
+                    max: "問い合わせ件名は255文字以内で入力してください",
                 }
             }
         };
@@ -96,6 +91,7 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            inquirySubjectInfoEx: this.inquirySubjectInfo
         };
     },
     props: ["urlAction", "urlInquirySubjectDetail", "inquirySubjectInfo", 'deleteAction', 'messageConfirm', 'urlRedirect'],
@@ -116,7 +112,7 @@ export default {
         submit(e) {
             let that = this;
             axios
-                .put(that.urlAction, that.inquirySubjectInfo)
+                .put(that.urlAction, that.inquirySubjectInfoEx)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

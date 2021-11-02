@@ -10,6 +10,12 @@ class LessonSchedule extends Model
 {
     use HasFactory, Sortable;
 
+    protected $table = 'lesson_schedule';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'lesson_schedule_id';
+
     public function teacher() 
     {
     	return $this->belongsTo(Teacher::class);

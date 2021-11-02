@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'セットコース新規作成')
 @section('content')
     <course-set-add
             :create-url="{{json_encode(route('course.setStore'))}}"

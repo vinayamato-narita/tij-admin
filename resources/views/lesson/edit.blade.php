@@ -1,4 +1,5 @@
 @extends('layouts.default')
+@section('title', 'レッスン編集')
 @section('content')
     <lesson-edit
             :update-url = "{{json_encode(route('lesson.update', $lesson->id))}}"

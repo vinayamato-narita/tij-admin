@@ -13,13 +13,11 @@ class CreateInquirySubjectInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('inquiry_subject_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('inquiry_subject_info', function (Blueprint $table) {
+            $table->increments('inquiry_subject_info_id');
             $table->integer('inquiry_subject_id');
             $table->string('inquiry_subject')->nullable();
             $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateInquirySubjectInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inquiry_subject_infos');
+        Schema::dropIfExists('inquiry_subject_info');
     }
 }

@@ -27,8 +27,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-2">
-                                    <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
-                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('faq.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    <div class="col-md-2">
+                                        <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('faq.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    </div>
                                 </div>
                                 @if(!$faqList->isEmpty())
                                     <div class="tanemaki-table">
@@ -37,7 +41,7 @@
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('no_faq', ' No.')</th>
                                                     <th class="text-center min-width-150">@sortablelink('question', ' 質問・Q')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('question', ' 答え・A')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('answer', ' 答え・A')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -52,11 +56,11 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('faq.show', $faq->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('faq.show', $faq->faq_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                            :delete-action="{{ json_encode(route('faq.destroy', $faq->id)) }}"
+                                                                            :delete-action="{{ json_encode(route('faq.destroy', $faq->faq_id)) }}"
                                                                             :message-confirm="{{ json_encode('このFAQを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

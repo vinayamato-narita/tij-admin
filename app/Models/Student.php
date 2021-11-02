@@ -10,14 +10,14 @@ class Student extends Authenticatable
 {
     use HasFactory, Sortable;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    protected $table = 'student';
 
-    /**
-     * @var array
-     */
     public $timestamps = false;
+
+    protected $primaryKey = 'student_id';
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

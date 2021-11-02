@@ -13,11 +13,20 @@
             </a>
         </li>
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('paymentHistory.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                支払い履歴管理
+            </a>
+        </li>
+        
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{route('admin.index')}}">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
-                管理ユーザ管理
+                管理ユーザー管理
             </a>
         </li>
 
@@ -59,6 +68,16 @@
         </li>
 
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('lessonCancelHistory.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                レッスンキャンセル履歴
+
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" onclick="$('#learning-sub').hasClass('hidden') ?
             $('#learning-sub').removeClass('hidden') : $('#learning-sub').addClass('hidden')">
                 <svg class="c-sidebar-nav-icon">
@@ -96,7 +115,26 @@
                     </a>
                 </li>
 
+                <li class=" c-sidebar-nav-item ">
+                    <a class=" c-sidebar-nav-link " href="{{route('category.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        カテゴリ管理
+
+                    </a>
+                </li>
+
             </ul>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('remindmail.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                リマインドメール管理
+
+            </a>
         </li>
 
         <li class="c-sidebar-nav-item">
@@ -129,6 +167,14 @@
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 レッスン単位
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('student.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                生徒情報管理
             </a>
         </li>
     </ul>

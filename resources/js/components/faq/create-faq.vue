@@ -13,12 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
-                                    <input
-                                        name="_token"
-                                        type="hidden"
-                                        v-model="faqInfo._token"
-                                    />
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">FAQ情報</h5>
                                     </div>
@@ -34,13 +29,11 @@
                                             <div class="col-md-3">
                                                 <input
                                                     class="form-control"
-                                                    type="text"
+                                                    type="number"
                                                     name="no_faq"
-                                                    min="1"
-                                                    @keypress="validateNumber"
                                                     v-model="faqInfo.no_faq"
                                                     v-validate="
-                                                        'required|numeric|between:1,1000000000'
+                                                        'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
                                                 <div
@@ -67,7 +60,7 @@
                                                     v-model="faqInfo.faq_category_id"
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="category.id" v-for="category in faqCategories">
+                                                    <option :value="category.faq_category_id" v-for="category in faqCategories">
                                                         {{ category.faq_category_name }}</option
                                                     >
                                                 </select>
@@ -163,8 +156,9 @@ export default {
             custom: {
                 no_faq: {
                     required: "No.を入力してください",
-                    numeric: "No.は1～1000000000 を入力してください",
-                    between: "No.は1～1000000000 を入力してください",
+                    decimal: "No.は半角数字を入力してください",
+                    min_value: "No.は1～1000000000 を入力してください",
+                    max_value: "No.は1～1000000000 を入力してください",
                 },
                 faq_category_id: {
                     required: "カテゴリを入力してください",
@@ -219,19 +213,14 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlFaqList;
+                            let id = response.data.id;
+                            window.location.href = baseUrl + "/faq/" + id;
                         });
                     }
                 })
                 .catch(e => {
                     this.flagShowLoader = false;
                 });
-        },
-        validateNumber: (val) => {
-            let keyCode = event.keyCode;
-            if (keyCode < 48 || keyCode > 57) {
-                event.preventDefault();
-            }
         },
     }
 };

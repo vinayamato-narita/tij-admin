@@ -13,15 +13,15 @@ class CreateLessonHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_histories', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('lesson_history', function (Blueprint $table) {
+            $table->bigIncrements('lesson_history_id');
             $table->integer('lesson_schedule_id')->nullable();
             $table->integer('student_id')->nullable();
-            $table->text('comment_from_student_to_teacher')->nullable();
-            $table->text('comment_from_teacher_to_student')->nullable();
-            $table->text('comment_from_admin_to_student')->nullable();
-            $table->text('comment_from_admin_to_teacher')->nullable();
-            $table->text('note_from_student_to_teacher');
+            $table->text('comment_from_student_to_teacher')->nullable()->comment('生徒→講師のコメント');
+            $table->text('comment_from_teacher_to_student')->nullable()->comment('講師→生徒のコメント');
+            $table->text('comment_from_admin_to_student')->nullable()->comment('管理者→生徒のコメント');
+            $table->text('comment_from_admin_to_teacher')->nullable()->comment('管理者→講師のコメント');
+            $table->text('note_from_student_to_teacher')->comment('生徒のレッスンメモ');
             $table->integer('teacher_rating')->nullable()->default(0);
             $table->integer('student_rating')->nullable()->default(0);
             $table->text('note_from_teacher_to_student')->nullable();
@@ -39,8 +39,6 @@ class CreateLessonHistoryTable extends Migration
             $table->smallInteger('marks')->nullable();
             $table->index(['lesson_schedule_id', 'student_lesson_reserve_type'], 'lesson_schedule_id');
             $table->index(['student_id', 'student_lesson_reserve_type'], 'student_id');
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -51,6 +49,6 @@ class CreateLessonHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_histories');
+        Schema::dropIfExists('lesson_history');
     }
 }

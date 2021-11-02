@@ -93,8 +93,8 @@
                                     <input id="isTestLesson" v-on:click="checkedId(lesson.id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </td>
                                 <td class="text-md-left" v-if="type == 'lesson'">{{  lesson.lesson_text_name }}</td>
-                                <td class="text-md-left" v-if="type != 'lesson'">{{ lesson.lesson_name  }}</td>
-                                <td class="text-md-left" v-if="type != 'course'">{{ lesson.lesson_name  }}</td>
+                                <td class="text-md-left" v-if="type == 'teacher'">{{ lesson.lesson_name  }}</td>
+                                <td class="text-md-left" v-if="type == 'course'">{{ lesson.lesson_name  }}</td>
 
                             </tr>
 

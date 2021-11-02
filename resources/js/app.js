@@ -74,15 +74,28 @@ import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject
 import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
 import LessonStatusIndex from "./components/lessonStatus/lesson-status-index.vue"
 import InputSearchMulti from "./components/course/input-search-multi.vue"
+import CancelHistorySearchMulti from "./components/lessonCancelHistory/input-search-multi.vue"
 import CourseAdd from "./components/course/add"
 import CourseSetAdd from "./components/course/set-add.vue"
 import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
 import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
-
-
+import StudentCreateComment from "./components/student/student-create-comment.vue"
+import StudentEditComment from "./components/student/student-edit-comment.vue"
+import ShowLessonHistory from "./components/student/show-lesson-history.vue"
+import RemindMailShow from "./components/remindMailPatern/detail.vue"
+import RemindMailEdit from "./components/remindMailPatern/edit.vue"
+import CategoryAdd from "./components/category/add.vue"
+import CategoryShow from "./components/category/detail.vue"
+import CategoryEdit from "./components/category/edit.vue"
 import CsvExport from "./components/csv/csv-export.vue"
+import CreatePaymentHistory from "./components/student/create-payment-history.vue"
+import EditPaymentHistory from "./components/student/edit-payment-history.vue"
+import StudentSearch from "./components/student/student-search.vue"
+import EditStudent from "./components/student/edit-student.vue"
+import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
+import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
 
 new Vue({
     created() {
@@ -143,6 +156,43 @@ new Vue({
                 return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
             }
         });
+        this.$validator.extend("management_number", {
+            validate: function(value) {
+                return /^[!-~]+$/i.test(value);
+            }
+        });
+        this.$validator.extend("isKana", {
+            validate: function(value) {
+                var re = new RegExp(/^[A-Za-zア-ン゛゜ァ-ォャ-ョーヴ 　]+$/);
+                return re.test(value);
+            }
+        });
+        this.$validator.extend("skype", {
+            validate: function(value) {
+                var re = new RegExp(/^[a-zA-Z][a-zA-Z0-9\_\-\.\,\:]{5,31}$/i);
+                return re.test(value);
+            }
+        });
+        this.$validator.extend("login_id", {
+            validate: function(value) {
+                return /^[A-Za-z0-9]+$/i.test(value);
+            }
+        });
+        this.$validator.extend("isTelephone", {
+            validate: function(value) {
+                return /^[0-9-.()]{1,20}$/i.test(value);
+            }
+        });
+        this.$validator.extend("postcode", {
+            validate: function(value) {
+                return /^[0-9-ー]{0,10}$/.test(value);
+            }
+        });
+        this.$validator.extend("payment_checkHankaku", {
+            validate: function(value) {
+                return /^[0-9０-９-]+$/i.test(value);
+            }
+        });
     },
     el: "#app",
     components: {
@@ -184,7 +234,23 @@ new Vue({
         CourseSetShow,
         InputSearchMulti,
         CourseEdit,
-        CourseSetEdit
+        CourseSetEdit,
+        StudentCreateComment,
+        StudentEditComment,
+        CancelHistorySearchMulti,
+        ShowLessonHistory,
+        RemindMailShow,
+        CreatePaymentHistory,
+        EditPaymentHistory,
+        RemindMailEdit,
+        CategoryAdd,
+        CategoryShow,
+        CategoryEdit,
+        StudentSearch,
+        EditStudent,
+        PaymentHistorySearch,
+        EditHistoryPayment,
+
     },
     methods: {},
     mounted() {}

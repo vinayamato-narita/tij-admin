@@ -14,8 +14,8 @@ class CreatePaymentStatusTable extends Migration
     public function up()
     {
         Schema::create('payment_status', function (Blueprint $table) {
-            $table->integer('payment_status_id')->primary();
-            $table->string('payment_status_name', 45);
+            $table->integer('payment_status_id')->primary()->comment('ステータスID');
+            $table->string('payment_status_name', 45)->comment('ステータス名');
         });
     }
 

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+
+    protected $table = 'tags';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'tag_id';
 }

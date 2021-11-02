@@ -27,8 +27,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-2">
-                                    <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
-                                    <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('inquirySubject.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    <div class="col-md-2">
+                                        <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('inquirySubject.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                    </div>
                                 </div>
                                 @if(!$inquirySubjectList->isEmpty())
                                     <div class="tanemaki-table">
@@ -48,11 +52,11 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('inquirySubject.show', $inquirySubject->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('inquirySubject.show', $inquirySubject->inquiry_subject_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                            :delete-action="{{ json_encode(route('inquirySubject.destroy', $inquirySubject->id)) }}"
+                                                                            :delete-action="{{ json_encode(route('inquirySubject.destroy', $inquirySubject->inquiry_subject_id)) }}"
                                                                             :message-confirm="{{ json_encode('この問い合わせ件名を削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

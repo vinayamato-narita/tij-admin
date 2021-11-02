@@ -13,12 +13,10 @@ class CreateInquirySubjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('inquiry_subjects', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('inquiry_subject', function (Blueprint $table) {
+            $table->increments('inquiry_subject_id');
             $table->string('inquiry_subject');
             $table->dateTime('last_update_date');
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -29,6 +27,6 @@ class CreateInquirySubjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inquiry_subjects');
+        Schema::dropIfExists('inquiry_subject');
     }
 }

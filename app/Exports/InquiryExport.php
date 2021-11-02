@@ -22,17 +22,17 @@ class InquiryExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-    	$queryBuilder = AdminInquiry::leftJoin('students', 'students.id', '=', 'admin_inquiries.student_id')
-        	->select('admin_inquiries.id as id', 'inquiry_date', 'inquiry_subject', 'student_id', 'students.student_name as student_name', DB::raw('ifnull(admin_inquiries.student_email,students.student_email) as j_student_email'), 'inquiry_flag', 'inquiry_body');
+    	$queryBuilder = AdminInquiry::leftJoin('student', 'student.student_id', '=', 'admin_inquiry.user_id')
+        	->select('admin_inquiry.inquiry_id as inquiry_id', 'inquiry_date', 'inquiry_subject', 'admin_inquiry.user_id as student_id', 'student.student_name as student_name', DB::raw('ifnull(admin_inquiry.user_mail,student.student_email) as j_student_email'), 'inquiry_flag', 'inquiry_body');
         	
         $searchInput = $this->searchInput;
         
         if (isset($this->searchInput)) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($searchInput) {
-                $query->where($this->escapeLikeSentence('admin_inquiries.inquiry_subject', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('admin_inquiries.student_email', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('students.student_email', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('students.student_name', $searchInput));
+                $query->where($this->escapeLikeSentence('admin_inquiry.inquiry_subject', $searchInput))
+                    ->orWhere($this->escapeLikeSentence('admin_inquiry.student_email', $searchInput))
+                    ->orWhere($this->escapeLikeSentence('student.student_email', $searchInput))
+                    ->orWhere($this->escapeLikeSentence('student.student_name', $searchInput));
             });
         }
         $inquiryList = $queryBuilder->get()->map(function($item, $key) {

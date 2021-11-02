@@ -9,4 +9,8 @@ class CourseSetCourse extends Model
 {
     use HasFactory;
     protected $table = 'course_set_course';
+
+    public $timestamps = false;
+    
+    protected $primaryKey = 'course_set_course_id';
 }

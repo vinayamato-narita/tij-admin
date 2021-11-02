@@ -13,11 +13,12 @@ class CreateLmsPrefectureTable extends Migration
      */
     public function up()
     {
-        Schema::create('lms_prefectures', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('prefecture_name', 225);
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('lms_prefecture', function (Blueprint $table) {
+            $table->increments('prefecture_id');
+            $table->string('prefecture_name');
+            $table->dateTime('created')->nullable()->comment('作成日時');
+            $table->dateTime('modified')->nullable()->comment('更新日時');
+            $table->smallInteger('delete_flag')->nullable()->default(0)->comment('削除フラグ');
         });
     }
 
@@ -28,6 +29,6 @@ class CreateLmsPrefectureTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lms_prefectures');
+        Schema::dropIfExists('lms_prefecture');
     }
 }

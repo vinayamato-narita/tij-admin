@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class LessonHistoryOld extends Model
 {
     use HasFactory;
+
+    protected $table = 'lesson_history_old';
+
+    public $timestamps = false;
 }

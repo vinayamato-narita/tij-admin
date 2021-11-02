@@ -10,8 +10,14 @@ class Faq extends Model
 {
     use HasFactory, Sortable;
 
+    protected $table = 'faq';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'faq_id';
+
     public function faqCategory() 
     {
-    	return $this->belongsTo(FaqCategory::class);
+    	return $this->belongsTo(FaqCategory::class, 'faq_category_id');
     }
 }

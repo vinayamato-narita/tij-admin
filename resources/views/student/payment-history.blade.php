@@ -17,7 +17,7 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('student.createPaymentHistory', $studentInfo->id) }}" class="btn btn-primary pull-right"
+                    <a href="{{ route('student.createPaymentHistory', $studentInfo->student_id) }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -34,14 +34,14 @@
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
                                         <label>生徒番号 : </label> 
-                                        {{ $studentInfo->id }}
+                                        {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
                                         <label>生徒名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
-                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.paymentHistoryList', $studentInfo->id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
+                                        <input-search :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('student.paymentHistoryList', $studentInfo->student_id)) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></input-search>
                                     </div>
                                 </div>
                                 @if(!$paymentHistoryList->isEmpty())
@@ -49,7 +49,7 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('id', '受注番号')</th>
+                                                    <th class="text-center width-130">@sortablelink('point_subscription_history_id', '受注番号')</th>
                                                     <th class="text-center min-width-150">@sortablelink('management_number', '共通管理番号')</th>
                                                     <th class="text-center min-width-120">@sortablelink('course_name', 'コース名')</th>
                                                     <th class="text-center min-width-120">@sortablelink('corporation_code', '法人コード')</th>
@@ -67,7 +67,7 @@
                                             <tbody>
                                                 @foreach ($paymentHistoryList as $index => $payment)
                                                     <tr>
-                                                        <td class="text-center">{{ $payment->id }}</td>
+                                                        <td class="text-center">{{ $payment->point_subscription_history_id }}</td>
                                                         <td class="text-center">{{ $payment->management_number }}</td>
                                                         <td class="text-center">{{ $payment->course_name }}</td>
                                                         <td class="text-center">{{ $payment->corporation_code }}</td>
@@ -84,7 +84,7 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('student.editPaymentHistory', $payment->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('student.editPaymentHistory', $payment->point_subscription_history_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

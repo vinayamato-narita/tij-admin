@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">問い合わせ情報</h5>
                                     </div>
@@ -25,7 +25,7 @@
                                                 >問い合わせ番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfoEx.id }}
+                                                {{ inquiryInfoEx.inquiry_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -45,7 +45,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfoEx.student_id }}
+                                                {{ inquiryInfoEx.user_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">

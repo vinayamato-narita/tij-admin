@@ -55,12 +55,12 @@ class StudentController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $studentInfo = Student::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
-        $queryBuilder = StudentPublicCommentForTeacher::select('student_public_comment_for_teachers.id as id', 'student_public_comment_for_teachers.created_at as created_at', 'student_public_comment_for_teachers.updated_at as updated_at', 'comment', 'teachers.teacher_nickname as teacher_nickname')
-        ->leftJoin('teachers', function($join) {
-                $join->on('student_public_comment_for_teachers.teacher_id', '=', 'teachers.id');
-        })->where('student_public_comment_for_teachers.student_id', $id);
+        $queryBuilder = StudentPublicCommentForTeacher::select('student_public_comment_for_teacher.student_public_comment_for_teacher_id as id', 'student_public_comment_for_teacher.create_date as create_date', 'student_public_comment_for_teacher.update_date as update_date', 'comment', 'teacher.teacher_nickname as teacher_nickname')
+        ->leftJoin('teacher', function($join) {
+                $join->on('student_public_comment_for_teacher.teacher_id', '=', 'teacher.teacher_id');
+        })->where('student_public_comment_for_teacher.student_id', $id);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -70,10 +70,10 @@ class StudentController extends BaseController
         }
         if (isset($request['sort'])) {
             if ($request['sort'] == "teacher_nickname") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teachers.teacher_nickname','ASC') : $queryBuilder->orderBy('teachers.teacher_nickname','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher.teacher_nickname','ASC') : $queryBuilder->orderBy('teacher.teacher_nickname','DESC');
             }
         }
-        $commentList = $queryBuilder->sortable(['updated_at' => 'desc'])->paginate($pageLimit);
+        $commentList = $queryBuilder->sortable(['update_date' => 'desc'])->paginate($pageLimit);
 
         return view('student.comment', [
             'breadcrumbs' => $breadcrumbs,
@@ -98,7 +98,7 @@ class StudentController extends BaseController
             ['name' => 'student_create_comment', $id],
         ]);
 
-        $studentInfo = Student::select('id', 'student_name')->where('id', $id)->firstOrFail();
+        $studentInfo = Student::select('student_id', 'student_name')->where('student_id', $id)->firstOrFail();
         $studentInfo->_token = csrf_token();
         $studentInfo->comment = "";
 
@@ -121,7 +121,7 @@ class StudentController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);           
         }
-        $studentInfo = Student::select('id', 'student_name')->where('id', $request->id)->firstOrFail();
+        $studentInfo = Student::select('student_id', 'student_name')->where('student_id', $request->student_id)->firstOrFail();
         if ($studentInfo == null) {
             return response()->json([
                 'status' => 'NG',
@@ -129,8 +129,10 @@ class StudentController extends BaseController
         }
 
         $comment = new StudentPublicCommentForTeacher;
-        $comment->student_id = $request->id;
-        $comment->comment = $request->comment;
+        $comment->student_id = $request->student_id;
+        $comment->create_date = Carbon::now();
+        $comment->update_date = Carbon::now();
+        $comment->comment = $request->comment ?? "";
         $comment->save();     
 
         return response()->json([
@@ -152,17 +154,17 @@ class StudentController extends BaseController
             ['name' => 'student_comment_list', $id],
             ['name' => 'student_create_comment', $id],
         ]);
-        $commentInfo = StudentPublicCommentForTeacher::select('student_public_comment_for_teachers.id as id', 
-            'student_public_comment_for_teachers.student_id as student_id', 'students.student_name as student_name',
-            'teachers.teacher_nickname as teacher_nickname', 'student_public_comment_for_teachers.created_at as created_at',
-            'student_public_comment_for_teachers.updated_at as updated_at', 'student_public_comment_for_teachers.comment as comment')
-        ->leftJoin('teachers', function($join) {
-            $join->on('student_public_comment_for_teachers.teacher_id', '=', 'teachers.id');
+        $commentInfo = StudentPublicCommentForTeacher::select('student_public_comment_for_teacher.student_public_comment_for_teacher_id as id', 
+            'student_public_comment_for_teacher.student_id as student_id', 'student.student_name as student_name',
+            'teacher.teacher_nickname as teacher_nickname', 'student_public_comment_for_teacher.create_date as create_date',
+            'student_public_comment_for_teacher.update_date as update_date', 'student_public_comment_for_teacher.comment as comment')
+        ->leftJoin('teacher', function($join) {
+            $join->on('student_public_comment_for_teacher.teacher_id', '=', 'teacher.teacher_id');
         })
-        ->leftJoin('students', function($join) {
-            $join->on('student_public_comment_for_teachers.student_id', '=', 'students.id');
+        ->leftJoin('student', function($join) {
+            $join->on('student_public_comment_for_teacher.student_id', '=', 'student.student_id');
         })
-        ->where('student_public_comment_for_teachers.id', $id)->firstOrFail();
+        ->where('student_public_comment_for_teacher.student_public_comment_for_teacher_id', $id)->firstOrFail();
 
         $commentInfo->_token = csrf_token();
         
@@ -186,13 +188,14 @@ class StudentController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);          
         }
-        $commentInfo = StudentPublicCommentForTeacher::where('id', $request->id)->first();
+        $commentInfo = StudentPublicCommentForTeacher::where('student_public_comment_for_teacher_id', $request->id)->first();
         if ($commentInfo == null) {
             return response()->json([
                 'status' => 'NG',
             ], StatusCode::NOT_FOUND);
         }
         $commentInfo->comment = $request->comment;
+        $commentInfo->update_date = Carbon::now();
 
         $commentInfo->save();  
 
@@ -210,7 +213,7 @@ class StudentController extends BaseController
     public function destroyComment($id)
     {
         try {
-            StudentPublicCommentForTeacher::where('id', $id)->delete();
+            StudentPublicCommentForTeacher::where('student_public_comment_for_teacher_id', $id)->delete();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([
@@ -233,37 +236,37 @@ class StudentController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $studentInfo = Student::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
-        $queryBuilder = LessonHistory::select('lesson_histories.id as id', 'lessons.lesson_name as lesson_name',
-            'lesson_schedules.lesson_starttime as lesson_starttime', 'lesson_schedules.lesson_endtime as lesson_endtime',
-            'lesson_schedules.lesson_date as lesson_date', 'courses.course_name as course_name',
-            'lesson_texts.lesson_text_name as lesson_text_name', 'teachers.teacher_name as teacher_name',
-            'point_subscription_histories.set_course_id as set_course_id',
-            'lesson_histories.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher')
-            ->leftJoin('courses', function($join) {
-                $join->on('lesson_histories.course_id', '=', 'courses.course_id');
+        $queryBuilder = LessonHistory::select('lesson_history.lesson_history_id as lesson_history_id', 'lesson.lesson_name as lesson_name',
+            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime',
+            'lesson_schedule.lesson_date as lesson_date', 'course.course_name as course_name',
+            'lesson_text.lesson_text_name as lesson_text_name', 'teacher.teacher_name as teacher_name',
+            'point_subscription_history.set_course_id as set_course_id',
+            'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher')
+            ->leftJoin('course', function($join) {
+                $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('lesson_schedules', function($join) {
-                $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id');
+            ->leftJoin('lesson_schedule', function($join) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('lessons', function($join) {
-                $join->on('lesson_schedules.lesson_id', '=', 'lessons.id');
+            ->leftJoin('lesson', function($join) {
+                $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_texts', function($join) {
-                $join->on('lesson_schedules.lesson_text_id', '=', 'lesson_texts.id');
+            ->leftJoin('lesson_text', function($join) {
+                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
-            ->leftJoin('teachers', function($join) {
-                $join->on('lesson_schedules.teacher_id', '=', 'teachers.id');
+            ->leftJoin('teacher', function($join) {
+                $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
-            ->leftJoin('student_point_histories', function($join) {
-                $join->on('lesson_schedules.id', '=', 'student_point_histories.lesson_schedule_id');
+            ->leftJoin('student_point_history', function($join) {
+                $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
             })
-            ->leftJoin('point_subscription_histories', function($join) {
-                $join->on('student_point_histories.point_subscription_id', '=', 'point_subscription_histories.id');
+            ->leftJoin('point_subscription_history', function($join) {
+                $join->on('student_point_history.point_subscription_id', '=', 'point_subscription_history.point_subscription_history_id');
             })
-            ->where('lesson_histories.student_lesson_reserve_type', 3)
-            ->where('lesson_histories.student_id', $id);
+            ->where('lesson_history.student_lesson_reserve_type', 3)
+            ->where('lesson_history.student_id', $id);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -275,25 +278,25 @@ class StudentController extends BaseController
         }
         if (isset($request['sort'])) {
             if ($request['sort'] == "lesson_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_schedules.lesson_date','ASC') : $queryBuilder->orderBy('lesson_schedules.lesson_date','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_schedule.lesson_date','ASC') : $queryBuilder->orderBy('lesson_schedule.lesson_date','DESC');
             }
             if ($request['sort'] == "lesson_starttime") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_schedules.lesson_starttime','ASC') : $queryBuilder->orderBy('lesson_schedules.lesson_starttime','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_schedule.lesson_starttime','ASC') : $queryBuilder->orderBy('lesson_schedule.lesson_starttime','DESC');
             }
             if ($request['sort'] == "course_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('courses.course_name','ASC') : $queryBuilder->orderBy('courses.course_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course.course_name','ASC') : $queryBuilder->orderBy('course.course_name','DESC');
             }
             if ($request['sort'] == "lesson_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lessons.lesson_name','ASC') : $queryBuilder->orderBy('lessons.lesson_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson.lesson_name','ASC') : $queryBuilder->orderBy('lesson.lesson_name','DESC');
             }
             if ($request['sort'] == "lesson_text_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_texts.lesson_text_name','ASC') : $queryBuilder->orderBy('lesson_texts.lesson_text_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_text.lesson_text_name','ASC') : $queryBuilder->orderBy('lesson_text.lesson_text_name','DESC');
             }
             if ($request['sort'] == "teacher_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teachers.teacher_name','ASC') : $queryBuilder->orderBy('teachers.teacher_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher.teacher_name','ASC') : $queryBuilder->orderBy('teacher.teacher_name','DESC');
             }
             if ($request['sort'] == "set_course_id") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('point_subscription_histories.set_course_id','ASC') : $queryBuilder->orderBy('point_subscription_histories.set_course_id','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('point_subscription_history.set_course_id','ASC') : $queryBuilder->orderBy('point_subscription_history.set_course_id','DESC');
             }
         }
         $lessonHistoryList = $queryBuilder->sortable(['lesson_starttime' => 'desc'])->paginate($pageLimit);
@@ -311,35 +314,34 @@ class StudentController extends BaseController
     {
         $breadcrumbComponent = new BreadcrumbComponent();
         
-
-        $lessonHistoryInfo = LessonHistory::select('lesson_histories.id as id', 'lessons.lesson_name as lesson_name',
-            'lesson_schedules.lesson_starttime as lesson_starttime', 'lesson_schedules.lesson_endtime as lesson_endtime',
-            'courses.course_name as course_name', 'lesson_histories.student_id as student_id', 'students.student_name as student_name',
-            'lesson_texts.lesson_text_name as lesson_text_name', 'teachers.teacher_name as teacher_name',
-            'courses.course_id as course_id', 'lesson_histories.teacher_rating as teacher_rating',
-            'lesson_histories.teacher_attitude as teacher_attitude', 'lesson_histories.teacher_punctual as teacher_punctual',
-            'lesson_histories.skype_voice_rating_from_student as skype_voice_rating_from_student', 'lesson_histories.comment_from_student_to_office as comment_from_student_to_office',
-            'lesson_histories.comment_from_teacher_to_student as comment_from_teacher_to_student', 'lesson_histories.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher',
-            'lesson_histories.comment_from_admin_to_student as comment_from_admin_to_student')
-            ->leftJoin('courses', function($join) {
-                $join->on('lesson_histories.course_id', '=', 'courses.course_id');
+        $lessonHistoryInfo = LessonHistory::select('lesson_history.lesson_history_id as lesson_history_id', 'lesson.lesson_name as lesson_name',
+            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime',
+            'course.course_name as course_name', 'lesson_history.student_id as student_id', 'student.student_name as student_name',
+            'lesson_text.lesson_text_name as lesson_text_name', 'teacher.teacher_name as teacher_name',
+            'course.course_id as course_id', 'lesson_history.teacher_rating as teacher_rating',
+            'lesson_history.teacher_attitude as teacher_attitude', 'lesson_history.teacher_punctual as teacher_punctual',
+            'lesson_history.skype_voice_rating_from_student as skype_voice_rating_from_student', 'lesson_history.comment_from_student_to_office as comment_from_student_to_office',
+            'lesson_history.comment_from_teacher_to_student as comment_from_teacher_to_student', 'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher',
+            'lesson_history.comment_from_admin_to_student as comment_from_admin_to_student')
+            ->leftJoin('course', function($join) {
+                $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('lesson_schedules', function($join) {
-                $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id');
+            ->leftJoin('lesson_schedule', function($join) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('lessons', function($join) {
-                $join->on('lesson_schedules.lesson_id', '=', 'lessons.id');
+            ->leftJoin('lesson', function($join) {
+                $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_texts', function($join) {
-                $join->on('lesson_schedules.lesson_text_id', '=', 'lesson_texts.id');
+            ->leftJoin('lesson_text', function($join) {
+                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
-            ->leftJoin('teachers', function($join) {
-                $join->on('lesson_schedules.teacher_id', '=', 'teachers.id');
+            ->leftJoin('teacher', function($join) {
+                $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
-            ->leftJoin('students', function($join) {
-                $join->on('lesson_histories.student_id', '=', 'students.id');
+            ->leftJoin('student', function($join) {
+                $join->on('lesson_history.student_id', '=', 'student.student_id');
             })
-            ->where('lesson_histories.id', $id)->firstOrFail();
+            ->where('lesson_history.lesson_history_id', $id)->firstOrFail();
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'student_list'],
@@ -363,7 +365,7 @@ class StudentController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);          
         }
-        $lessonHistoryInfo = LessonHistory::where('id', $request->id)->first();
+        $lessonHistoryInfo = LessonHistory::where('lesson_history_id', $request->lesson_history_id)->first();
         if ($lessonHistoryInfo == null) {
             return response()->json([
                 'status' => 'NG',
@@ -385,13 +387,13 @@ class StudentController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);          
         }
-        $lessonHistoryInfo = LessonHistory::select('lesson_histories.*',
-            'lesson_schedules.lesson_starttime as lesson_starttime', 'lesson_schedules.lesson_date as lesson_date',
-            'lesson_schedules.teacher_id as teacher_id')
-            ->leftJoin('lesson_schedules', function($join) {
-                $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id');
+        $lessonHistoryInfo = LessonHistory::select('lesson_history.*',
+            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_date as lesson_date',
+            'lesson_schedule.teacher_id as teacher_id')
+            ->leftJoin('lesson_schedule', function($join) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->where('lesson_histories.id', $request->id)->first();
+            ->where('lesson_history.lesson_history_id', $request->lesson_history_id)->first();
         DB::beginTransaction();
         try {
 
@@ -411,7 +413,7 @@ class StudentController extends BaseController
             }
 
             $lessonOld = new LessonHistoryOld;
-            $lessonOld->lesson_history_id = $lessonHistoryInfo->id;
+            $lessonOld->lesson_history_id = $lessonHistoryInfo->lesson_history_id;
             $lessonOld->lesson_schedule_id = $lessonHistoryInfo->lesson_schedule_id;
             $lessonOld->student_id = $lessonHistoryInfo->student_id;
             $lessonOld->comment_from_student_to_teacher = $lessonHistoryInfo->comment_from_student_to_teacher;
@@ -437,9 +439,9 @@ class StudentController extends BaseController
 
             $lessonOld->save();   
 
-            LessonSchedule::where('id', $lessonHistoryInfo->lesson_schedule_id)->delete();
+            LessonSchedule::where('lesson_schedule_id', $lessonHistoryInfo->lesson_schedule_id)->delete();
             StudentPointHistory::where('lesson_schedule_id', $lessonHistoryInfo->lesson_schedule_id)->delete();
-            LessonHistory::where('id', $lessonHistoryInfo->id)->delete();
+            LessonHistory::where('lesson_history_id', $lessonHistoryInfo->lesson_history_id)->delete();
         
             DB::commit();
         } catch (\Exception $exception) {
@@ -463,30 +465,30 @@ class StudentController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $studentInfo = Student::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
-        $queryBuilder = PointSubscriptionHistory::select('point_subscription_histories.id as id', 
-            'point_subscription_histories.management_number as management_number', 
-            'point_subscription_histories.corporation_code as corporation_code', 
-            'point_subscription_histories.amount as amount', 
-            'point_subscription_histories.payment_date as payment_date',
-            'point_subscription_histories.begin_date as begin_date',
-            'point_subscription_histories.point_expire_date as point_expire_date',
-            'point_subscription_histories.receive_payment_date as receive_payment_date',
-            'point_subscription_histories.set_course_id as set_course_id',
-            'courses.course_name as course_name',
-            'student_point_histories.start_date as start_date',
-            DB::raw('(CASE WHEN point_subscription_histories.payment_way = 2 THEN point_subscription_histories.payment_way + point_subscription_histories.paid_status ELSE point_subscription_histories.payment_way END) AS j_paid_status')
+        $queryBuilder = PointSubscriptionHistory::select('point_subscription_history.point_subscription_history_id as point_subscription_history_id', 
+            'point_subscription_history.management_number as management_number', 
+            'point_subscription_history.corporation_code as corporation_code', 
+            'point_subscription_history.amount as amount', 
+            'point_subscription_history.payment_date as payment_date',
+            'point_subscription_history.begin_date as begin_date',
+            'point_subscription_history.point_expire_date as point_expire_date',
+            'point_subscription_history.receive_payment_date as receive_payment_date',
+            'point_subscription_history.set_course_id as set_course_id',
+            'course.course_name as course_name',
+            'student_point_history.start_date as start_date',
+            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
         )
-        ->leftJoin('courses', function($join) {
-            $join->on('point_subscription_histories.course_id', '=', 'courses.course_id');
+        ->leftJoin('course', function($join) {
+            $join->on('point_subscription_history.course_id', '=', 'course.course_id');
         })
-        ->leftJoin('student_point_histories', function($join) {
-            $join->on('point_subscription_histories.id', '=', 'student_point_histories.point_subscription_id');
+        ->leftJoin('student_point_history', function($join) {
+            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
         })
-        ->where('point_subscription_histories.del_flag', 0)
-        ->where('point_subscription_histories.student_id', $id)
-        ->groupBy('id');
+        ->where('point_subscription_history.del_flag', 0)
+        ->where('point_subscription_history.student_id', $id)
+        ->groupBy('point_subscription_history_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -495,13 +497,13 @@ class StudentController extends BaseController
         }
         if (isset($request['sort'])) {
             if ($request['sort'] == "start_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_histories.start_date','ASC') : $queryBuilder->orderBy('student_point_histories.start_date','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_history.start_date','ASC') : $queryBuilder->orderBy('student_point_history.start_date','DESC');
             }
             if ($request['sort'] == "j_paid_status") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_paid_status','ASC') : $queryBuilder->orderBy('j_paid_status','DESC');
             }
         }
-        $paymentHistoryList = $queryBuilder->sortable(['id' => 'desc'])->paginate($pageLimit);
+        $paymentHistoryList = $queryBuilder->sortable(['point_subscription_history_id' => 'desc'])->paginate($pageLimit);
 
         return view('student.payment-history', [
             'breadcrumbs' => $breadcrumbs,
@@ -521,14 +523,14 @@ class StudentController extends BaseController
             ['name' => 'create_student_payment_history', $id],
         ]);
 
-        $studentInfo = Student::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
         $paymentType = [];
         $courseList = [];
         if ($studentInfo->is_lms_user) {
             $studentInfo->course_begin_month = Carbon::now();
             $paymentType = PaidStatus::asSelectArray();
-            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->id, COURSE_FREE_ID));
+            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->student_id, COURSE_FREE_ID));
         }else {
             $paymentType = [
                 0 => 'G',
@@ -567,7 +569,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);           
         }
 
-        $studentInfo = Student::where('id', $request->id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $request->student_id)->firstOrFail();
 
         if ($studentInfo == null) {
             return response()->json([
@@ -576,12 +578,12 @@ class StudentController extends BaseController
         }
 
         if ($studentInfo->is_lms_user) {
-            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->id, COURSE_FREE_ID));
+            $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->student_id, COURSE_FREE_ID));
         }else {
             $courseList = DB::select('CALL sp_admin_get_course_list');
         }
 
-        $orderId = $studentInfo->id . "alc" . Carbon::now()->format("YmdHis");
+        $orderId = $studentInfo->student_id . "alc" . Carbon::now()->format("YmdHis");
 
         while(strlen($orderId) < 27) {
             $random = rand(0, 9);
@@ -597,15 +599,14 @@ class StudentController extends BaseController
 
         $listCourseBySetCourse = [];
         if($course && $course->is_set_course) {
-            $listCourseBySetCourse = CourseSetCourse::select('courses.course_name as course_name',
-                'courses.course_id as course_id', 'courses.amount as amount')
-            ->leftJoin('courses', function($join) {
-                $join->on('course_set_course.course_id', '=', 'courses.course_id');
-                $join->whereNull('courses.deleted_at');
+            $listCourseBySetCourse = CourseSetCourse::select('course.course_name as course_name',
+                'course.course_id as course_id', 'course.amount as amount')
+            ->leftJoin('course', function($join) {
+                $join->on('course_set_course.course_id', '=', 'course.course_id');
             })
             ->where('course_set_course.set_course_id', $request->course_id)
-            ->whereNull('course_set_course.deleted_at')
-            ->orderBy('courses.course_name','ASC') 
+            ->where('course_set_course.delete_flag', 0)
+            ->orderBy('course.course_name','ASC') 
             ->get()
             ->toArray();
         }
@@ -621,7 +622,7 @@ class StudentController extends BaseController
             DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                 array(
                     $orderId,
-                    $studentInfo->id,
+                    $studentInfo->student_id,
                     $request->course_id,
                     0,
                     $course->project_course_id,
@@ -639,7 +640,7 @@ class StudentController extends BaseController
                 DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                     array(
                         $orderId,
-                        $studentInfo->id,
+                        $studentInfo->student_id,
                         $courseSetCourse['course_id'],
                         $request->course_id,
                         $course->project_course_id,
@@ -713,7 +714,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);           
         }
 
-        $paymentInfo = PointSubscriptionHistory::getPaymentHistoryInfo($request->id);
+        $paymentInfo = PointSubscriptionHistory::getPaymentHistoryInfo($request->point_subscription_history_id);
 
         if ($paymentInfo == null) {
             return response()->json([
@@ -723,7 +724,7 @@ class StudentController extends BaseController
 
         $request->point_expire_date = (new Carbon($request->point_expire_date))->format('Y-m-d 23:59:59');
         if ($request->point_expire_date != $paymentInfo->point_expire_date) {
-            $studentPointHistoryIds = StudentPointHistory::where('point_subscription_id', $request->id)
+            $studentPointHistoryIds = StudentPointHistory::where('point_subscription_id', $request->point_subscription_history_id)
                 ->where('pay_type', 5)
                 ->pluck('id')
                 ->toArray();
@@ -739,7 +740,7 @@ class StudentController extends BaseController
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(
                 $paymentInfo->student_id,
-                $paymentInfo->id,
+                $paymentInfo->point_subscription_history_id,
                 $request->payment_type,
                 $request->payment_date,
                 $request->start_date,
@@ -763,7 +764,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);           
         }
 
-        DB::select('CALL sp_admin_delete_student_point_subscription(?,?)', array($request->id, $request->cancel_type));
+        DB::select('CALL sp_admin_delete_student_point_subscription(?,?)', array($request->point_subscription_history_id, $request->cancel_type));
         
         return response()->json([
                 'status' => 'OK',
@@ -778,141 +779,138 @@ class StudentController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $queryBuilder = StudentList::select('student_list.student_id as student_id',
-            'student_list.student_name as student_name',
-            'student_list.student_email as student_email',
-            'student_list.student_nickname as student_nickname',
-            'student_list.student_skypename as student_skypename',
-            'student_list.create_date as create_date',
-            'student_list.last_login_at as last_login_at',
-            'student_list.is_tmp_entry as is_tmp_entry',
-            'student_list.direct_mail_flag as direct_mail_flag',
-            'student_list.student_comment_text as student_comment_text',
-            DB::raw("(CASE WHEN student_list.is_lms_user = 0 THEN student_list.company_name ELSE '' END) AS custom_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_projects.project_code SEPARATOR '/'),'/') as all_project_code"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_companies.company_name SEPARATOR '/'),'/') as all_project_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_companies.legal_code, point_subscription_histories.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
-            DB::raw("MAX(lesson_histories.reserve_date) AS last_reserve_date"),
-            DB::raw("MIN(CASE WHEN lesson_histories.student_lesson_reserve_type = 3 THEN lesson_schedules.lesson_starttime END) AS first_lesson_date"),
-            DB::raw("COUNT(DISTINCT lesson_histories.id) AS lesson_count"),
-            DB::raw("IF(student_list.course_id > 1,'有料','無料') AS course_name"),
-            DB::raw("COALESCE(MIN(IF(point_subscription_histories.course_id = 1 AND student_list.is_lms_user = 0, NULL, point_subscription_histories.payment_date)),'---') AS first_payment_date"),
-        )
-        ->leftJoin('point_subscription_histories', function($join) {
-            $join->on('student_list.student_id', '=', 'point_subscription_histories.student_id')
-                ->where('point_subscription_histories.del_flag', '=', 0);
-        })
-        ->leftJoin('lesson_histories', function($join) {
-            $join->on('student_list.student_id', '=', 'lesson_histories.student_id')
-                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
-        })
-        ->leftJoin('lesson_schedules', function($join) {
-            $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
-                ->where('lesson_histories.student_lesson_reserve_type', '<>', 2);
-        })
-        ->leftJoin('lms_project_students', function($join) {
-            $join->on('student_list.student_id', '=', 'lms_project_students.student_id');
-        })
-        ->leftJoin('lms_projects', function($join) {
-            $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
-        })
-        ->leftJoin('lms_companies', function($join) {
-            $join->on('lms_projects.company_id', '=', 'lms_companies.id');
-        })
-        ->groupBy('student_list.student_id');
+        $queryBuilder = Student::select('student.student_id as student_id',
+                'student.student_name as student_name',
+                'student.student_nickname as student_nickname',
+                'student.student_email as student_email',
+                'student.student_skypename as student_skypename',
+                'student.last_login_date as last_login_date',
+                DB::raw("COUNT(DISTINCT lesson_history.lesson_history_id) AS lesson_count"),
+                'student.create_date as create_date',
+                DB::raw("MAX(lesson_history.reserve_date) AS last_reserve_date"),
+                'student.is_tmp_entry as is_tmp_entry',
+                DB::raw("IF(student.course_id > 1,'有料','無料') AS course_name"),
+                DB::raw("MIN(CASE WHEN lesson_history.student_lesson_reserve_type = 3 THEN lesson_schedule.lesson_starttime END) AS first_lesson_date"),
+                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_company.legal_code, point_subscription_history.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
+                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_company.company_name SEPARATOR '/'),'/') as all_project_company_name"),
+                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_project.project_code SEPARATOR '/'),'/') as all_project_code"),
+                DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
+            )
+            ->leftJoin('point_subscription_history', function($join) {
+                $join->on('student.student_id', '=', 'point_subscription_history.student_id')
+                    ->where('point_subscription_history.del_flag', 0);
+            })
+            ->leftJoin('lesson_history', function($join) {
+                $join->on('student.student_id', '=', 'lesson_history.student_id')
+                    ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
+            })
+            ->leftJoin('lesson_schedule', function($join) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                    ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
+            })
+            ->leftJoin('lms_project_student', function($join) {
+                $join->on('student.student_id', '=', 'lms_project_student.student_id');
+            })
+            ->leftJoin('lms_project', function($join) {
+                $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
+            })
+            ->leftJoin('lms_company', function($join) {
+                $join->on('lms_project.company_id', '=', 'lms_company.company_id');
+            })
+            ->groupBy('student.student_id');
 
-        $queryBuilderCount = DB::table('student_list')->leftJoin('point_subscription_histories', function($join) {
-            $join->on('student_list.student_id', '=', 'point_subscription_histories.student_id')
-                ->where('point_subscription_histories.del_flag', '=', 0);
+        $queryBuilderCount = Student::leftJoin('point_subscription_history', function($join) {
+            $join->on('student.student_id', '=', 'point_subscription_history.student_id')
+                ->where('point_subscription_history.del_flag', '=', 0);
         })
-        ->leftJoin('lms_project_students', function($join) {
-            $join->on('student_list.student_id', '=', 'lms_project_students.student_id');
+        ->leftJoin('lms_project_student', function($join) {
+            $join->on('student.student_id', '=', 'lms_project_student.student_id');
         })
-        ->leftJoin('lms_projects', function($join) {
-            $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+        ->leftJoin('lms_project', function($join) {
+            $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
         })
-        ->leftJoin('lms_companies', function($join) {
-            $join->on('lms_projects.company_id', '=', 'lms_companies.id');
+        ->leftJoin('lms_company', function($join) {
+            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
         })
-        ->where('student_list.course_id', '>', 1)
-        ->distinct('student_list.student_id');
+        ->where('student.course_id', '>', 1)
+        ->distinct('student.student_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where('student_list.student_id', '=',$request['search_input'])
-                    ->orWhere($this->escapeLikeSentence('student_list.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_email', $request['search_input']));
+                $query->where('student.student_id', '=',$request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_email', $request['search_input']));
             });
 
             $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {
-                $query->where('student_list.student_id', '=', $request['search_input'])
-                    ->orWhere($this->escapeLikeSentence('student_list.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student_list.student_email', $request['search_input']));
+                $query->where('student.student_id', '=', $request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_email', $request['search_input']));
             });
         }
         if (isset($request['student_id'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student_list.student_name', $request['student_name']))
-                    ->where($this->escapeLikeSentence('student_list.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student_list.student_skypename', $request['student_skypename']))
-                    ->where($this->escapeLikeSentence('student_list.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('lms_companies.company_name', $request['all_project_company_name']))
-                    ->where($this->escapeLikeSentence('student_list.company_name', $request['custom_company_name']))
-                    ->where($this->escapeLikeSentence('lms_projects.project_code', $request['all_project_code']));
+                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
+                    ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
+                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
+                    ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
+                    ->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']))
+                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']))
+                    ->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
 
                     if(!isset($request['check_company_code'])) {
                         $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_companies.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_histories.corporation_code', $request['company_code']));
+                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
+                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
                         });
                     }
                     if(isset($request['check_company_code'])) {
                         $query->where(function($query) {
-                            $query->orWhere('lms_companies.legal_code', '=', '')
-                                ->orWhereNull('lms_companies.legal_code')
-                                ->orWhere('point_subscription_histories.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_histories.corporation_code');
+                            $query->orWhere('lms_company.legal_code', '=', '')
+                                ->orWhereNull('lms_company.legal_code')
+                                ->orWhere('point_subscription_history.corporation_code', '=', '')
+                                ->orWhereNull('point_subscription_history.corporation_code');
                         });
                     }
                     if ($request['student_id'] != "") {
-                        $query->where('student_list.student_id', '=', $request['student_id']);
+                        $query->where('student.student_id', '=', $request['student_id']);
                     }
                     if ($request['first_lesson_date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
+                        $query->where('student.create_date', '>=', $request['first_lesson_date']);
                     }
             });
 
             $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student_list.student_name', $request['student_name']))
-                    ->where($this->escapeLikeSentence('student_list.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student_list.student_skypename', $request['student_skypename']))
-                    ->where($this->escapeLikeSentence('student_list.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('lms_companies.company_name', $request['all_project_company_name']))
-                    ->where($this->escapeLikeSentence('student_list.company_name', $request['custom_company_name']))
-                    ->where($this->escapeLikeSentence('lms_projects.project_code', $request['all_project_code']));
+                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
+                    ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
+                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
+                    ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
+                    ->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']))
+                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']))
+                    ->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
 
                     if(!isset($request['check_company_code'])) {
                         $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_companies.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_histories.corporation_code', $request['company_code']));
+                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
+                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
                         });
                     }
                     if(isset($request['check_company_code'])) {
                         $query->where(function($query) {
-                            $query->orWhere('lms_companies.legal_code', '=', '')
-                                ->orWhereNull('lms_companies.legal_code')
-                                ->orWhere('point_subscription_histories.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_histories.corporation_code');
+                            $query->orWhere('lms_company.legal_code', '=', '')
+                                ->orWhereNull('lms_company.legal_code')
+                                ->orWhere('point_subscription_history.corporation_code', '=', '')
+                                ->orWhereNull('point_subscription_history.corporation_code');
                         });
                     }
 
                     if ($request['student_id'] != "") {
-                        $query->where('student_list.student_id', '=', $request['student_id']);
+                        $query->where('student.student_id', '=', $request['student_id']);
                     }
                     if ($request['first_lesson_date'] != "") {
-                        $query->where('student_list.create_date', '>=', $request['first_lesson_date']);
+                        $query->where('student.create_date', '>=', $request['first_lesson_date']);
                     }
             });
 
@@ -946,7 +944,7 @@ class StudentController extends BaseController
 
         Session::put('sessionStudent', json_encode($request));
 
-        $studentList = $queryBuilder->sortable(['student_id' => 'desc'])->paginate($pageLimit);
+        $studentList = $queryBuilder->paginate($pageLimit);
         $number_published = $queryBuilderCount->count();
         $number_unpublished = $studentList->total() - $number_published;
         return view('student.index', [
@@ -974,35 +972,35 @@ class StudentController extends BaseController
             ['name' => 'edit_student', $id],
         ]);
 
-        $studentInfo = Student::where('id', $id)->firstOrFail();
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
         $studentInfo->student_entry_types = StudentEntryType::pluck('student_entry_type_name', 'student_entry_type_id')->toArray();
         $studentInfo->lang_types = LangTypeOption::asSelectArray();
-        $studentInfo->lms_prefectures = LmsPrefecture::whereNull('deleted_at')->pluck('prefecture_name', 'id')->toArray();
-        $studentInfo->time_zones = TimeZone::where('id', 1)->pluck('timezone_name_native', 'id')->toArray();
+        $studentInfo->lms_prefectures = LmsPrefecture::where('delete_flag', 0)->pluck('prefecture_name', 'prefecture_id')->toArray();
+        $studentInfo->time_zones = TimeZone::where('timezone_id', 1)->pluck('timezone_name_native', 'timezone_id')->toArray();
         if ($studentInfo->is_lms_user) {
-            $studentInfo->lms_project_students = LmsProjectStudent::select('lms_companies.company_name as company_name',
-                'lms_projects.project_code as project_code',
-                'lms_companies.legal_code as legal_code',
-                'lms_projects.corporation_flag as corporation_flag',
-                'lms_projects.buy_course_continue as buy_course_continue',
-                'lms_project_students.id as id',
-                'lms_project_students.buy_course_flag as buy_course_flag',
-                'lms_project_students.department_name as department_name',
-                'lms_project_students.employee_number as employee_number',
-                'lms_project_students.department_number as department_number',
+            $studentInfo->lms_project_students = LmsProjectStudent::select('lms_company.company_name as company_name',
+                'lms_project.project_code as project_code',
+                'lms_company.legal_code as legal_code',
+                'lms_project.corporation_flag as corporation_flag',
+                'lms_project.buy_course_continue as buy_course_continue',
+                'lms_project_student.project_student_id as project_student_id',
+                'lms_project_student.buy_course_flag as buy_course_flag',
+                'lms_project_student.department_name as department_name',
+                'lms_project_student.employee_number as employee_number',
+                'lms_project_student.department_number as department_number',
             )
-                ->Join('students', function($join) {
-                    $join->on('lms_project_students.student_id', '=', 'students.id');
+                ->Join('student', function($join) {
+                    $join->on('lms_project_student.student_id', '=', 'student.student_id');
                 })
-                ->Join('lms_projects', function($join) {
-                    $join->on('lms_project_students.project_id', '=', 'lms_projects.id');
+                ->Join('lms_project', function($join) {
+                    $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
                 })
-                ->leftJoin('lms_companies', function($join) {
-                    $join->on('lms_project_students.company_id', '=', 'lms_companies.id');
+                ->leftJoin('lms_company', function($join) {
+                    $join->on('lms_project_student.company_id', '=', 'lms_company.company_id');
                 })
-                ->where('lms_project_students.student_id', $id)
-                ->whereNull('lms_project_students.deleted_at')
+                ->where('lms_project_student.student_id', $id)
+                ->where('lms_project_student.delete_flag', 0)
                 ->get()
                 ->toArray();
         }
@@ -1023,7 +1021,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);          
         }
  
-        $studentInfo = Student::where('id', $request->id)->first();
+        $studentInfo = Student::where('student_id', $request->student_id)->first();
         if ($studentInfo == null) {
             return response()->json([
                 'status' => 'NG',
@@ -1062,7 +1060,7 @@ class StudentController extends BaseController
 
         if($studentInfo['is_lms_user']) {
             foreach($request->lms_project_students as $lmsProject) {
-                $lmsProjectInfo = LmsProjectStudent::where('id', $lmsProject['id'])->first();
+                $lmsProjectInfo = LmsProjectStudent::where('project_student_id', $lmsProject['project_student_id'])->first();
 
                 $lmsProjectInfo['department_name'] = $lmsProject['department_name'];
                 $lmsProjectInfo['employee_number'] = $lmsProject['employee_number'];

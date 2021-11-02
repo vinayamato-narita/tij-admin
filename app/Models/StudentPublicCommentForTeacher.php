@@ -10,13 +10,19 @@ class StudentPublicCommentForTeacher extends Authenticatable
 {
     use HasFactory, Sortable;
 
+    protected $table = 'student_public_comment_for_teacher';
+
+    public $timestamps = false;
+
+    protected $primaryKey = 'student_public_comment_for_teacher_id';
+    
     public function student() 
     {
-    	return $this->belongsTo(Student::class);
+    	return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function teacher() 
     {
-    	return $this->belongsTo(Teacher::class);
+    	return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 }

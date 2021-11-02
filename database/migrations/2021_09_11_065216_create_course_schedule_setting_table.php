@@ -13,14 +13,12 @@ class CreateCourseScheduleSettingTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_schedule_settings', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('course_schedule_setting', function (Blueprint $table) {
+            $table->increments('id')->comment('識別ID');
             $table->integer('course_id')->nullable();
             $table->string('date_type', 11)->nullable();
             $table->string('start_time', 10)->nullable();
             $table->string('end_time', 10)->nullable();
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateCourseScheduleSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_schedule_settings');
+        Schema::dropIfExists('course_schedule_setting');
     }
 }

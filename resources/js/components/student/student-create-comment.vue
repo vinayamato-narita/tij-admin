@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">コメント情報</h5>
                                     </div>
@@ -25,7 +25,7 @@
                                                 >生徒番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ studentInfoEx.id }}
+                                               {{ studentInfoEx.student_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">

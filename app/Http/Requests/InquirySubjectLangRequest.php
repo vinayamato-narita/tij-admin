@@ -25,7 +25,7 @@ class InquirySubjectLangRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
+            'inquiry_subject_id' => 'required|integer',
             'lang_inquiry_subject' => 'required|max:255',
             'lang' => 'required|enum_value:' . LangType::class . ',false'
         ];

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccesslogLoginHistoryTable extends Migration
+class CreateAccesslogLoginHistoryOldTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAccesslogLoginHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('accesslog_login_history', function (Blueprint $table) {
+        Schema::create('accesslog_login_history_old', function (Blueprint $table) {
             $table->increments('login_history_id')->comment('識別ID');
             $table->dateTime('login_date')->nullable()->comment('ログイン日時');
             $table->integer('login_user_id')->nullable()->comment('ログインユーザーID');
@@ -33,6 +33,6 @@ class CreateAccesslogLoginHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accesslog_login_history');
+        Schema::dropIfExists('accesslog_login_history_old');
     }
 }

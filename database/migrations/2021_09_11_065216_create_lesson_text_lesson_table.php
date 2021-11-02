@@ -14,10 +14,9 @@ class CreateLessonTextLessonTable extends Migration
     public function up()
     {
         Schema::create('lesson_text_lesson', function (Blueprint $table) {
+            $table->increments('lesson_text_lesson_id');
             $table->integer('lesson_id');
             $table->integer('lesson_text_id');
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 

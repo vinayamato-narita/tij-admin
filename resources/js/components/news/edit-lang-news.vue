@@ -25,7 +25,7 @@
                                             </label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ newsInfoEx.id }}
+                                            {{ newsInfoEx.news_id }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
                                         <h5 class="title-page">英語版</h5>
                                     </div>

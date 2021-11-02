@@ -40,8 +40,8 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('admin_name', ' ユーザ名')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('admin_email', ' メールアドレス')</th>
+                                                    <th class="text-center width-130">@sortablelink('admin_user_name', ' ユーザ名')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
                                                     <th class="text-center min-width-120">説明</th>
                                                     <th class="text-center min-width-150">業務優先度設定</th>
                                                     <th class="w-100"></th>
@@ -50,22 +50,22 @@
                                             <tbody>
                                                 @foreach ($adminList as $index => $user)
                                                     <tr>
-                                                        <td class="text-center">{{ $user->admin_name }}</td>
-                                                        <td class="text-center">{{ $user->admin_email }}</td>
-                                                        <td class="text-center">{{ $user->description }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_name }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_email }}</td>
+                                                        <td class="text-center">{{ $user->admin_user_description }}</td>
                                                         <td class="text-center">
-                                                            <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
+                                                            <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->admin_user_id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('admin.show', $user->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
+                                                                        <a class="dropdown-item" href="{{ route('admin.edit', $user->admin_user_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
                                                                         <delete-item
-                                                                            :delete-action="{{ json_encode(route('admin.destroy', $user->id)) }}"
+                                                                            :delete-action="{{ json_encode(route('admin.destroy', $user->admin_user_id)) }}"
                                                                             :message-confirm="{{ json_encode('この管理ユーザを削除しますか？') }}"
                                                                         >
                                                                         </delete-item>

@@ -10,7 +10,13 @@ use Illuminate\Support\Facades\DB;
 class SendRemindMailPattern extends Model
 {
     use HasFactory, Sortable;
+    
+    protected $table = 'send_remind_mail_pattern';
+
     public $timestamps = false;
+
+    protected $primaryKey = 'send_remind_mail_pattern_id';
+    
     public $sortable = ['timing_minutes'];
     public function sendRemindMailTiming() {
         return $this->hasOne('App\Models\SendRemindMailTiming', 'send_remind_mail_timing_type', 'send_remind_mail_timing_type');

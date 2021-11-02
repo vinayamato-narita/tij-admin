@@ -9,6 +9,10 @@ use Kyslik\ColumnSortable\Sortable;
 class LessonTextLesson extends Model
 {
     use HasFactory, Sortable;
+    
+    protected $table = 'lesson_text_lesson';
+
     public $timestamps = false;
 
-    protected $table = 'lesson_text_lesson';}
+    protected $primaryKey = 'lesson_text_lesson_id';
+}

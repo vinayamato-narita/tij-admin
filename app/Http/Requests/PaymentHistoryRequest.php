@@ -25,7 +25,7 @@ class PaymentHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
+            'student_id' => 'required|integer',
             'course_id' => 'required|integer',
             'management_number' => 'nullable|regex:/^[!-~]+$/i|max:10',
             'course_begin_month' => 'required_if:is_lms_user,1|nullable|date',

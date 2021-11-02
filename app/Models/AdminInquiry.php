@@ -11,9 +11,15 @@ class AdminInquiry extends Model
 {
     use HasFactory, Sortable;
 
+    protected $table = 'admin_inquiry';
+    
+    public $timestamps = false;
+
+    protected $primaryKey = 'inquiry_id';
+    
     public function student() 
     {
-    	return $this->belongsTo(Student::class);
+    	return $this->belongsTo(Student::class, 'student_id');
     }
     public function getInquiryFlagNameAttribute($value) {
         return InquiryFlag::getDescription($this->inquiry_flag);

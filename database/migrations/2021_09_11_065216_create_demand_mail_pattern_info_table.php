@@ -13,14 +13,12 @@ class CreateDemandMailPatternInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('demand_mail_pattern_infos', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('demand_mail_pattern_info', function (Blueprint $table) {
+            $table->increments('demand_mail_pattern_info_id');
             $table->integer('demand_mail_pattern_id');
             $table->string('mail_subject')->nullable();
             $table->text('mail_body')->nullable();
-            $table->string('lang_type', 10);
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('lang_type', 10)->comment('言語タイプ。en:英語　vn:ベトナム語');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateDemandMailPatternInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('demand_mail_pattern_infos');
+        Schema::dropIfExists('demand_mail_pattern_info');
     }
 }

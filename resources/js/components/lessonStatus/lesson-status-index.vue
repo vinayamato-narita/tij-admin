@@ -45,7 +45,7 @@
                                             <div class="row">
                                                 <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
                                                 <div class="col-sm-8 text-center">
-                                                    <a href="" class="btn btn-sm btn-default">今週に戻る</a>
+                                                    <button class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                                     <button type="button" id="lesson_free_setting" class="btn btn-sm btn-primary" v-if="!editFlg" @click="changeEditFlg()">
                                                         自由枠数設定
                                                     </button>
@@ -188,6 +188,13 @@
                                             </table>
                                             <table id="header-fixed" class="table table-bordered table-striped resize text-center"></table>
                                         </div>
+                                        <div class="row">
+                                            <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                            <div class="col-sm-8 text-center">
+                                                <button class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
+                                            </div>
+                                            <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -195,6 +202,7 @@
                     </div>
                 </div>
             </div>
+        <loader :flag-show="flagShowLoader"></loader>
         </main>
     </div>
 </template>
@@ -244,7 +252,6 @@ export default {
                 .validateAll()
                 .then(valid => {
                     if (valid) {
-                        that.flagShowLoader = true;
                         that.submit();
                     }
                 })
@@ -294,26 +301,38 @@ export default {
         },
         submit(e) {
             let that = this;
-            axios
-                .post(that.urlAction, {
-                    data_max_free_lesson : that.dataMaxFreeLesson,
-                    start_date : that.startDate
-                })
-                .then(response => {
-                    that.flagShowLoader = false;
-                    if (response.data.status == "OK") {
-                        that.$swal({
-                            text: "管理ユーザ編集が完了しました。",
-                            icon: "success",
-                            confirmButtonText: "OK"
-                        }).then(result => {
-                            window.location = that.urlAdminDetail;
+            this.$swal({
+                text: "自由可能枠数の設定を一括設定しますか？",
+                icon: false,
+                confirmButtonText: "設定する",
+                cancelButtonText: "キャンセル",
+                showCancelButton: true
+            }).then(result => {
+                if (result.value) {
+                    that.flagShowLoader = true;
+                    axios
+                        .post(that.urlAction, {
+                            data_max_free_lesson : that.dataMaxFreeLesson,
+                            start_date : that.startDate
+                        })
+                        .then(response => {
+                            that.flagShowLoader = false;
+                            if (response.data.status == "OK") {
+                                that.$swal({
+                                    text: "自由可能枠数の設定が完了しました。",
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                }).then(result => {
+                                    this.editFlg = false
+                                    this.getData()
+                                });
+                            }
+                        })
+                        .catch(e => {
+                            that.flagShowLoader = false;
                         });
-                    }
-                })
-                .catch(e => {
-                    that.flagShowLoader = false;
-                });
+                }
+            });
         },
         lessonInfomationDetailExportCsv() {
             this.flagShowLoader = true;
@@ -376,30 +395,44 @@ export default {
             });
         },
         copySettingLessonFree() {
-            this.flagShowLoader = true;
             let that = this;
 
-            axios
-            .post(that.urlCopySettingLessonFree, {
-                start_date: this.startDate,
-                _token: Laravel.csrfToken,
-            })
-            .then((res) => {
-                this.flagShowLoader = false;
-
-                if (response.data.status == "OK") {
-                    that.$swal({
-                        text: "管理ユーザ編集が完了しました。",
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    }).then(result => {
-                        window.location = that.urlAdminDetail;
-                    });
+            this.$swal({
+                text: "前の週の自由可能枠数の設定をコピーしますか？",
+                icon: false,
+                confirmButtonText: "コピーする",
+                cancelButtonText: "キャンセル",
+                showCancelButton: true
+            }).then(result => {
+                if (result.value) {
+                    that.flagShowLoader = true;
+                    axios
+                        .post(that.urlCopySettingLessonFree, {
+                            start_date: this.startDate,
+                            _token: Laravel.csrfToken,
+                        })
+                        .then((response) => {
+                            this.flagShowLoader = false;
+                            if (response.data.status == "OK") {
+                                that.$swal({
+                                    text: "前の週の自由可能枠数の設定をコピーしました。",
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                }).then(result => {
+                                    this.editFlg = false
+                                    this.getData()
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            this.flagShowLoader = false;
+                        });
                 }
-            })
-            .catch((error) => {
-                this.flagShowLoader = true;
             });
+        },
+        selectThisWeek() {
+            this.startDate = new Date()
+            getData()
         }
     }
 };

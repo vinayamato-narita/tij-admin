@@ -9,5 +9,9 @@ class FreeTeacherLessonSetting extends Model
 {
     use HasFactory;
 
+    protected $table = 'free_teacher_lesson_setting';
+
+    public $timestamps = false;
+
     protected $primaryKey = 'setting_id';
 }

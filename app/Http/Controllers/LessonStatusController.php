@@ -65,7 +65,7 @@ class LessonStatusController extends BaseController
                 'message' => 'エラーが発生しました。もう一度出力してください'
             ], StatusCode::BAD_REQUEST);
         }
-        $data['start_date'] = "20160608";
+        // $data['start_date'] = "20160606";
 
         $startDate = date('Y-m-d', strtotime( 'monday this week' , strtotime($data['start_date'])));
         $endDate = date("Y-m-d", strtotime($startDate. " + 6 days"));
@@ -81,41 +81,41 @@ class LessonStatusController extends BaseController
             $date[] = $colDate ."(" . $dateDefine[date("w", strtotime($colDate))] .")";
         }
 
-        $lessonStatus = DB::table('lesson_schedules')
+        $lessonStatus = DB::table('lesson_schedule')
                             ->select(
-                                'lesson_schedules.lesson_starttime',
-                                DB::raw('DATE_FORMAT(lesson_schedules.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_histories.student_id, NULL)) as reverse_count_normal"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_schedules.id, NULL)) as lesson_count_normal"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_histories.student_id, NULL)) as reverse_count_free"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_schedules.id, NULL)) as lesson_count_free"),
-                                'teachers.is_free_teacher',
-                                'lesson_histories.student_id'
+                                'lesson_schedule.lesson_starttime',
+                                DB::raw('DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 0, lesson_history.student_id, NULL)) as reverse_count_normal"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 0, lesson_schedule.lesson_schedule_id, NULL)) as lesson_count_normal"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 1, lesson_history.student_id, NULL)) as reverse_count_free"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 1, lesson_schedule.lesson_schedule_id, NULL)) as lesson_count_free"),
+                                'teacher.is_free_teacher',
+                                'lesson_history.student_id'
                             )   
-                            ->leftJoin('teachers', function($join)
+                            ->leftJoin('teacher', function($join)
                                 {
-                                    $join->on('teachers.id', '=', 'lesson_schedules.teacher_id');
+                                    $join->on('teacher.teacher_id', '=', 'lesson_schedule.teacher_id');
                                 })
-                            ->leftJoin('lesson_histories', function($join)
+                            ->leftJoin('lesson_history', function($join)
                                 {
-                                    $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
-                                        ->where('lesson_histories.student_lesson_reserve_type','<>',2);
+                                    $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                                        ->where('lesson_history.student_lesson_reserve_type','<>',2);
                                 })
-                            ->where('lesson_schedules.lesson_type_id','=',1)
-                            ->where('lesson_schedules.lesson_date', '>=' , $startDate)
-                            ->where('lesson_schedules.lesson_date', '<=', $endDate)
-                            ->groupBy('lesson_schedules.lesson_starttime')
+                            ->where('lesson_schedule.lesson_type_id','=',1)
+                            ->where('lesson_schedule.lesson_date', '>=' , $startDate)
+                            ->where('lesson_schedule.lesson_date', '<=', $endDate)
+                            ->groupBy('lesson_schedule.lesson_starttime')
                         ->get();
 
         $lessonStatus = $lessonStatus->keyBy('lesson_starttime1');
         
 		$endTimeFreeTeacher = date("Y-m-d 23:59:59", strtotime($startDate. " + 6 days"));
-        $freeTeacherLessonSetting = DB::table('free_teacher_lesson_settings')
+        $freeTeacherLessonSetting = DB::table('free_teacher_lesson_setting')
                             ->select(
-                                'free_teacher_lesson_settings.lesson_starttime',
-                                DB::raw("DATE_FORMAT(free_teacher_lesson_settings.lesson_starttime, '%Y-%m-%d %T') as lesson_starttime1"),
-                                'free_teacher_lesson_settings.max_free_lesson',
-                                'free_teacher_lesson_settings.setting_id'
+                                'free_teacher_lesson_setting.lesson_starttime',
+                                DB::raw("DATE_FORMAT(free_teacher_lesson_setting.lesson_starttime, '%Y-%m-%d %T') as lesson_starttime1"),
+                                'free_teacher_lesson_setting.max_free_lesson',
+                                'free_teacher_lesson_setting.setting_id'
                             )   
                             ->where('lesson_starttime', '>=' , $startDate)
                             ->where('lesson_starttime', '<=', $endTimeFreeTeacher)
@@ -152,7 +152,7 @@ class LessonStatusController extends BaseController
                 }
 
                 if (isset($freeTeacherLessonSetting[$curCellTime])) {
-                    $dataTime[$i][$j]['free_schedule'] = ((array) $freeTeacherLessonSetting[$curCellTime])["max_free_lesson"] -  (isset($lessonStatus[$curCellTime]) ?  ((array) $lessonStatus[$curCellTime])["lesson_count_free"] : 0 ) ;
+                    $dataTime[$i][$j]['free_schedule'] = ((array) $freeTeacherLessonSetting[$curCellTime])["max_free_lesson"] - (isset($lessonStatus[$curCellTime]) ?  ((array) $lessonStatus[$curCellTime])["lesson_count_free"] : 0 ) ;
                     $dataTime[$i][$j]['max_free_lesson'] = ((array) $freeTeacherLessonSetting[$curCellTime])["max_free_lesson"];
                 } else {
                     $dataTime[$i][$j]['free_schedule'] = 0;
@@ -287,41 +287,41 @@ class LessonStatusController extends BaseController
         $startDate = empty($data["lesson_date_from"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_from"]));
         $endDate = empty($data["lesson_date_to"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_to"]));
 
-        $lessonStatus = DB::table('lesson_schedules')
+        $lessonStatus = DB::table('lesson_schedule')
                             ->select(
-                                'lesson_schedules.lesson_starttime',
-                                DB::raw('DATE_FORMAT(lesson_schedules.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_histories.student_id, NULL)) as reverse_count_normal"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 0, lesson_schedules.id, NULL)) as lesson_count_normal"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_histories.student_id, NULL)) as reverse_count_free"),
-                                DB::raw("COUNT(IF(teachers.is_free_teacher = 1, lesson_schedules.id, NULL)) as lesson_count_free"),
-                                'teachers.is_free_teacher',
-                                'lesson_histories.student_id'
+                                'lesson_schedule.lesson_starttime',
+                                DB::raw('DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %T") as lesson_starttime1'),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 0, lesson_history.student_id, NULL)) as reverse_count_normal"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 0, lesson_schedule.lesson_schedule_id, NULL)) as lesson_count_normal"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 1, lesson_history.student_id, NULL)) as reverse_count_free"),
+                                DB::raw("COUNT(IF(teacher.is_free_teacher = 1, lesson_schedule.lesson_schedule_id, NULL)) as lesson_count_free"),
+                                'teacher.is_free_teacher',
+                                'lesson_history.student_id'
                             )   
-                            ->leftJoin('teachers', function($join)
+                            ->leftJoin('teacher', function($join)
                                 {
-                                    $join->on('teachers.id', '=', 'lesson_schedules.teacher_id');
+                                    $join->on('teacher.teacher_id', '=', 'lesson_schedule.teacher_id');
                                 })
-                            ->leftJoin('lesson_histories', function($join)
+                            ->leftJoin('lesson_history', function($join)
                                 {
-                                    $join->on('lesson_histories.lesson_schedule_id', '=', 'lesson_schedules.id')
-                                        ->where('lesson_histories.student_lesson_reserve_type','<>',2);
+                                    $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                                        ->where('lesson_history.student_lesson_reserve_type','<>',2);
                                 })
-                            ->where('lesson_schedules.lesson_type_id','=',1)
-                            ->where('lesson_schedules.lesson_date', '>=' , $startDate)
-                            ->where('lesson_schedules.lesson_date', '<=', $endDate)
-                            ->groupBy('lesson_schedules.lesson_starttime')
+                            ->where('lesson_schedule.lesson_type_id','=',1)
+                            ->where('lesson_schedule.lesson_date', '>=' , $startDate)
+                            ->where('lesson_schedule.lesson_date', '<=', $endDate)
+                            ->groupBy('lesson_schedule.lesson_starttime')
                         ->get();
 
         $lessonStatus = $lessonStatus->keyBy('lesson_starttime1');
         
 		$endTimeFreeTeacher = date("Y-m-d 23:59:59", strtotime($startDate. " + 6 days"));
-        $freeTeacherLessonSetting = DB::table('free_teacher_lesson_settings')
+        $freeTeacherLessonSetting = DB::table('free_teacher_lesson_setting')
                             ->select(
-                                'free_teacher_lesson_settings.lesson_starttime',
-                                DB::raw("DATE_FORMAT(free_teacher_lesson_settings.lesson_starttime, '%Y-%m-%d %T') as lesson_starttime1"),
-                                'free_teacher_lesson_settings.max_free_lesson',
-                                'free_teacher_lesson_settings.setting_id'
+                                'free_teacher_lesson_setting.lesson_starttime',
+                                DB::raw("DATE_FORMAT(free_teacher_lesson_setting.lesson_starttime, '%Y-%m-%d %T') as lesson_starttime1"),
+                                'free_teacher_lesson_setting.max_free_lesson',
+                                'free_teacher_lesson_setting.setting_id'
                             )   
                             ->where('lesson_starttime', '>=' , $startDate)
                             ->where('lesson_starttime', '<=', $endTimeFreeTeacher)

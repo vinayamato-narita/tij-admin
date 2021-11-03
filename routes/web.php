@@ -132,4 +132,6 @@ Route::group([
     Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
     Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
     Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
+
+    Route::resource('lessonSchedule', LessonScheduleController::class);
 });

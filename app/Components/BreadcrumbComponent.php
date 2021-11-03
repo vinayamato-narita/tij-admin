@@ -255,6 +255,10 @@ class BreadcrumbComponent
                 'text' => '支払い履歴編集',
                 'route_str' => "paymentHistory.edit",
             ],
+            'lesson_schedule_index' => [
+                'text' => 'スケジュール管理',
+                'route_str' => 'lessonSchedule.index'
+            ]
         ];
     }
 

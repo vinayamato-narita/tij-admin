@@ -38,6 +38,16 @@
                 講師情報管理
             </a>
         </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{route('lessonStatus.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                レッスン状況管理
+            </a>
+        </li>
+
         
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{route('inquirySubject.index')}}">

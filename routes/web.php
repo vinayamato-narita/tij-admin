@@ -96,6 +96,14 @@ Route::group([
     Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
     Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
 
+    //lessonStatus
+    Route::resource('lessonStatus', LessonStatusController::class);
+    Route::post('getDataLessonStatus', 'LessonStatusController@getData')->name('getDataLessonStatus');
+    Route::post('/lessonStatus/lessonInfomationDetailExportCsv', 'LessonStatusController@lessoninfomationdetailexportcsv')->name('lessonInfomationDetailExportCsv');
+    Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');   
+    Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');   
+    Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');   
+    Route::get('comment', 'CommentController@index')->name('comment.index');
     //comment list
     Route::get('/comment', 'CommentController@index')->name('comment.index');
 

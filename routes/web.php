@@ -81,6 +81,8 @@ Route::group([
     Route::delete('category/{id}/course/{courseId}/delete', 'CategoryController@courseDelete')->name('category.courseDelete');
     Route::post('category/{id}/course', 'CategoryController@registerCourse')->name('category.registerCourse');
     Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
+    Route::get('/category/{id}/edit-lang/{type}', 'CategoryController@editLang')->name('category.editLang');
+    Route::post('updateLangCategory', 'CategoryController@updateLang')->name('category.updateLang');
 
     //csvExport
     Route::resource('csv', CsvController::class);

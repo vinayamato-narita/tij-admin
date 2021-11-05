@@ -43,15 +43,6 @@
 
                                         </div>
                                     </div>
-                                    <div class="form-group row ">
-                                        <label class="col-md-4 col-form-label text-md-right">表示アイコン:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            <img  :src="`${this.category.category_icon}`" style="max-width: 100px"
-                                            >
-
-                                        </div>
-                                    </div>
 
 
                                     <div class="form-group row ">
@@ -68,6 +59,46 @@
                                     </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">英語版</h5>
+                                    <a :href="editLangEnUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                        >カテゴリ名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{categoryENName}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">中国語版</h5>
+                                    <a :href="editLangZhUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                        >カテゴリ名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{categoryZHName}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                         <div class="col-md-5">
                             <div class="card">
@@ -122,6 +153,16 @@
 
     export default {
         created: function () {
+            if (this.category.category_infos != null) {
+                var en = this.category.category_infos.filter(function (e) {
+                    return e.lang_type === 'en'
+                })[0];
+                var zh = this.category.category_infos.filter(function (e) {
+                    return e.lang_type === 'zh'
+                })[0];
+                this.categoryENName = typeof (en) !== 'undefined' ? en.category_name : '';
+                this.categoryZHName = typeof (zh) !== 'undefined' ? zh.category_name : '';
+            }
         },
         components: {
             Loader,
@@ -133,9 +174,11 @@
                 messageConfirm : 'このコースをコースカテゴリに解除しますか？',
                 type : 'category',
                 csrfToken: Laravel.csrfToken,
+                categoryENName : '',
+                categoryZHName : ''
             };
         },
-        props: ['category', 'editCategoryUrl', 'detailCategoryUrl', 'pageSizeLimit', 'registerUrl', 'listCourseUrl'],
+        props: ['category', 'editCategoryUrl', 'detailCategoryUrl', 'pageSizeLimit', 'registerUrl', 'listCourseUrl', 'editLangEnUrl', 'editLangZhUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, courseId) {

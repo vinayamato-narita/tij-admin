@@ -46,7 +46,6 @@
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('order_num', ' 表示順')</th>
                                                     <th class="text-center min-width-150">@sortablelink('category_name', ' カテゴリ名')</th>
-                                                    <th class="text-center min-width-120">表示アイコン</th>
                                                     <th class="text-center min-width-120"></th>
                                                 </tr>
                                                 </thead>
@@ -57,10 +56,6 @@
 
                                                         <td class="text-center ">
                                                             {{ $c->category_name }}</td>
-                                                        <td class="text-center" >
-                                                            <img src="{{$c->category_icon}}" style="max-width: 100px">
-
-                                                        </td>
                                                         <td class="text-right">
                                                             <div class="btn-group ">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

@@ -13,4 +13,5 @@ final class LangType extends Enum
 {
     const EN = 'en';
     const VN = 'vn';
+    const ZH = 'zh';
 }

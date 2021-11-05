@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Http\Requests\CategoryLangRequest;
 use App\Http\Requests\StoreUpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\CategoryCourse;
+use App\Models\CategoryInfo;
 use App\Models\Course;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -77,7 +79,6 @@ class CategoryController extends BaseController
             try {
                 $category = new Category();
                 $category->order_num = $request->orderNum;
-                $category->category_icon = $request->categoryIcon;
                 $category->category_name = $request->categoryName;
 
                 $category->save();
@@ -112,8 +113,8 @@ class CategoryController extends BaseController
             ['name' => 'category_show', $id]
         ]);
 
-        $cat = Category::where('category_id', $id)->with(['courses'])->first();
-        if (!$cat) return redirect()->route('text.index');
+        $cat = Category::where('category_id', $id)->with(['courses', 'category_infos'])->first();
+        if (!$cat) return redirect()->route('category.index');
         return view('category.show', [
             'breadcrumbs' => $breadcrumbs,
             'category' => $cat
@@ -208,6 +209,49 @@ class CategoryController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'category' => $cat
         ]);
+    }
+
+    public function editLang($id, $langType)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'category_list'],
+            ['name' => 'category_show', $id],
+            ['name' => 'edit_lang_category', $id, $langType],
+        ]);
+        $category = Category::where('category_id', $id)->first();
+        if (!$category) return redirect()->route('category.index');
+        $categoryInfo = CategoryInfo::where(['category_id' => $id, 'lang_type' => $langType])->first();
+
+        return view('category.edit_lang', [
+            'breadcrumbs' => $breadcrumbs,
+            'categoryInfo' => $categoryInfo,
+            'category' => $category,
+            'lang' => $langType
+        ]);
+    }
+
+    public function updateLang(CategoryLangRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $category = Category::where('category_id', $request->category_id)->first();
+        if ($category == null) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::NOT_FOUND);
+        }
+        $categoryLangInfo = CategoryInfo::updateOrCreate(
+            ['category_id' => $request->category_id, 'lang_type' => $request->lang],
+            ['category_name' => $request->category_name]
+        );
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 
     /**

@@ -247,6 +247,10 @@ class BreadcrumbComponent
                 'text' => 'コースカテゴリ編集',
                 'route_str' => "category.edit",
             ],
+            'edit_lang_category' => [
+                'text' => 'コースカテゴリ多言語編集',
+                'route_str' => "category.editLang",
+            ],
             'edit_student' => [
                 'text' => '生徒情報編集',
                 'route_str' => "student.edit",

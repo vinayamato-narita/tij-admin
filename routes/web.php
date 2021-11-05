@@ -136,10 +136,16 @@ Route::group([
     Route::post('/student/update-payment-history', 'StudentController@updatePaymentHistory')->name('student.updatePaymentHistory');
     Route::post('/student/destroy-payment-history', 'StudentController@destroyPaymentHistory')->name('student.destroyPaymentHistory');
 
-    Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
-
     Route::get('/payment-history', 'PaymentHistoryController@index')->name('paymentHistory.index');
     Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
     Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
     Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
+
+    Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
+    Route::get('/student/show-point-history/{id}', 'StudentController@showPointHistory')->name('student.showPointHistory');
+    Route::post('/student/update-point-history', 'StudentController@updatePointHistory')->name('student.updatePointHistory');
+    Route::post('/student/cancel-point-history', 'StudentController@cancelPointHistory')->name('student.cancelPointHistory');
+
+    Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
+    Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 });

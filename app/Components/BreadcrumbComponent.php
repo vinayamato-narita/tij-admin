@@ -263,6 +263,18 @@ class BreadcrumbComponent
                 'text' => '支払い履歴編集',
                 'route_str' => "paymentHistory.edit",
             ],
+            'student_point_history_list' => [
+                'text' => 'ポイント履歴一覧',
+                'route_str' => "student.pointHistoryList",
+            ],
+            'show_student_point_history' => [
+                'text' => 'ポイント履歴詳細',
+                'route_str' => "student.showPointHistory",
+            ],
+            'edit_role' => [
+                'text' => '権限編集',
+                'route_str' => "admin.editRole",
+            ],
         ];
     }
 

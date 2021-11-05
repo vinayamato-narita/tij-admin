@@ -180,7 +180,8 @@ return [
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
         LaravelMigrationGenerator\LaravelMigrationGeneratorProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class
+        Barryvdh\Debugbar\ServiceProvider::class,
+        Mavinoo\Batch\BatchServiceProvider::class,
     ],
 
     /*

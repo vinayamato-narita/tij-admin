@@ -1133,4 +1133,129 @@ class StudentController extends BaseController
             'status' => 'OK',
         ], StatusCode::OK);
     }
+
+    public function pointHistory(Request $request, $id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'student_point_history_list', $id],
+        ]);
+        $pageLimit = $this->newListLimit($request);
+
+        $studentInfo = Student::where('student_id', $id)->firstOrFail();
+
+        $queryBuilder = StudentPointHistory::select('student_point_history.student_point_history_id', 
+            'student_point_history.point_subscription_id',
+            'student_point_history.pay_date',
+            'student_point_history.pay_description',
+            'student_point_history.point_count',
+            'student_point_history.expire_date',
+            'point_subscription_history.set_course_id',
+            'course.course_name'
+        )
+            ->leftJoin('course', function($join) {
+                $join->on('student_point_history.course_id', '=', 'course.course_id');
+            })
+            ->leftJoin('point_subscription_history', function($join) {
+                $join->on('student_point_history.point_subscription_id', '=', 'point_subscription_history.point_subscription_history_id');
+            })
+            ->where('student_point_history.student_id', $id);
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
+            });
+        }
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "course_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course.course_name','ASC') : $queryBuilder->orderBy('course.course_name','DESC');
+            }
+            if ($request['sort'] == "set_course_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('point_subscription_history.set_course_id','ASC') : $queryBuilder->orderBy('point_subscription_history.set_course_id','DESC');
+            }
+        }
+        $pointHistoryList = $queryBuilder->sortable(['pay_date' => 'desc'])->paginate($pageLimit);
+
+        return view('student.point-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'pointHistoryList' => $pointHistoryList,
+            'studentInfo' => $studentInfo,
+        ]);
+    }
+
+    public function showPointHistory($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        
+        $pointHistoryInfo = StudentPointHistory::select('student_point_history.student_point_history_id', 
+            'student_point_history.student_id',
+            'student_point_history.point_subscription_id',
+            'student_point_history.pay_date',
+            'student_point_history.expire_date',
+            'student_point_history.pay_description',
+            'student_point_history.point_count',
+            'student_point_history.admin_note',
+            'student.student_name',
+            'course.course_name')
+            ->leftJoin('course', function($join) {
+                $join->on('student_point_history.course_id', '=', 'course.course_id');
+            })
+            ->leftJoin('student', function($join) {
+                $join->on('student_point_history.student_id', '=', 'student.student_id');
+            })
+            ->where('student_point_history.student_point_history_id', $id)->firstOrFail();
+
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'student_list'],
+            ['name' => 'student_point_history_list', $pointHistoryInfo->student_id],
+            ['name' => 'show_student_point_history', $id],
+        ]);
+
+        $pointHistoryInfo->_token = csrf_token();
+       
+        return view('student.show-point-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'pointHistoryInfo' => $pointHistoryInfo,
+        ]);
+    }
+
+    public function updatePointHistory(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+        $pointHistoryInfo = StudentPointHistory::where('student_point_history_id', $request->student_point_history_id)->first();
+        if ($pointHistoryInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $pointHistoryInfo->admin_note = $request->admin_note;
+
+        $pointHistoryInfo->save();  
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function cancelPointHistory(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+        
+        StudentPointHistory::where('student_point_history_id', $request->student_point_history_id)->delete();
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
 }

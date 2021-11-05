@@ -95,6 +95,8 @@ import StudentSearch from "./components/student/student-search.vue"
 import EditStudent from "./components/student/edit-student.vue"
 import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
 import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
+import ShowPointHistory from "./components/student/show-point-history.vue"
+import EditRole from "./components/admin/edit-role.vue"
 
 new Vue({
     created() {
@@ -248,6 +250,8 @@ new Vue({
         EditStudent,
         PaymentHistorySearch,
         EditHistoryPayment,
+        ShowPointHistory,
+        EditRole,
 
     },
     methods: {},

@@ -64,6 +64,9 @@
                                                                         <a class="dropdown-item" href="{{ route('admin.edit', $user->admin_user_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
+                                                                        <a class="dropdown-item" href="{{ route('admin.editRole', $user->admin_user_id) }}"><i class="fa fa-cog mr-2"></i>権限編集</a>
+                                                                    </li>
+                                                                    <li>
                                                                         <delete-item
                                                                             :delete-action="{{ json_encode(route('admin.destroy', $user->admin_user_id)) }}"
                                                                             :message-confirm="{{ json_encode('この管理ユーザを削除しますか？') }}"

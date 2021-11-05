@@ -142,4 +142,6 @@ Route::group([
     Route::get('/payment-history/export', 'PaymentHistoryController@export')->name('paymentHistory.export');
 
     Route::resource('lessonSchedule', LessonScheduleController::class);
+    Route::post('lessonSchedule/getData', 'LessonScheduleController@getData')->name('getDataLessonSchedule');
+    Route::post('lessonSchedule/registerMultiLesson', 'LessonScheduleController@registerMultiLesson')->name('registerMultiLesson');
 });

@@ -9,6 +9,7 @@ use App\Models\Teacher;
 use App\Models\Lesson;
 use App\Models\LessonText;
 use Illuminate\Support\Facades\DB;
+use App\Enums\LessonTiming;
 
 class LessonScheduleController extends BaseController
 {
@@ -24,11 +25,49 @@ class LessonScheduleController extends BaseController
             ['name' => 'lesson_schedule_index']
         ]);
 
+        $lessonStart = date('Ymd');
+
+        $header = array(
+            date('M d (D)', strtotime($lessonStart)),
+            date('M d (D)', strtotime($lessonStart. ' +1 day')),
+            date('M d (D)', strtotime($lessonStart. ' +2 day')),
+            date('M d (D)', strtotime($lessonStart. ' +3 day')),
+            date('M d (D)', strtotime($lessonStart. ' +4 day')),
+            date('M d (D)', strtotime($lessonStart. ' +5 day')),
+            date('M d (D)', strtotime($lessonStart. ' +6 day')),
+        );
+       
+        $lessonTiming = LessonTiming::LESSON_TIMING;
+        $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
+        $numRow = 24 * 60/ $nextLessonTime;
+        
+        $lessonList = Lesson::select('lesson_id', 'lesson_name')->get();
+        $lessonTextList = LessonText::select('lesson_text_id', 'lesson_text_name')->get();
+
+        return view('lessonSchedule.index', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'header' => $header,
+            'lessonList' => $lessonList,
+            'lessonTextList' => $lessonTextList,
+            'lessonTiming' => $lessonTiming,
+            'nextLessonTime' => $nextLessonTime,
+            'numRow' => $numRow
+        ]);
+    }
+
+    public function getData(Request $request) {
         $data = $request->all();
 
-        $teacherQueryBuilder = Teacher::select('teacher_name', 'teacher_nickname');
+        if (empty($data['week'])) {
+            return;
+        }
 
-        if (isset($data['search_input'])) {
+        $data = $request->all();
+
+        $teacherQueryBuilder = Teacher::select('teacher_id', 'teacher_name', 'teacher_nickname');
+
+        if (isset($data['search_input']) && !empty($data['search_input'])) {
             $teacherQueryBuilder = $teacherQueryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('teacher_name', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('teacher_nickname', $request['search_input']));
@@ -53,32 +92,93 @@ class LessonScheduleController extends BaseController
             date('M d (D)', strtotime($lessonStart. ' +5 day')),
             date('M d (D)', strtotime($lessonStart. ' +6 day')),
         );
-        $data['teacher_id'] = 16;
+
         $lessonSchedule = [];
 
         if (!empty($data['teacher_id']) && is_numeric($data['teacher_id'])) {
             $lessonSchedule = DB::select("CALL sp_admin_get_lesson_schedule_list('".(int) $data['teacher_id']."','".$lessonStart."')");
         }
 
+        $lessonTiming = LessonTiming::LESSON_TIMING;
+        $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
+        $numRow = 24 * 60/ $nextLessonTime;
+        $dataLessonSchedule = [];
+        $dataSelected = [];
+
         if (!empty($lessonSchedule)) {
             $lessonSchedule = $lessonSchedule->keyBy('lesson_starttime');
         }
 
-        // $lessonTiming = LESSON_TIMING;
-        // $nexLessonTime = NEXT_LESSON_TIME != 0 ? NEXT_LESSON_TIME : 60;
-        // $numRow = 24 * 60/ $nexLessonTime;
-
-        $lessonList = Lesson::select('lesson_id', 'lesson_name')->get();
-        $lessonTextList = LessonText::select('lesson_text_id', 'lesson_text_name')->get();
+        $currentIndex = 0;
         
-dd($lessonTextList);
-        return view('lessonSchedule.index', [
-            'breadcrumbs' => $breadcrumbs,
-            'request' => $request,
+        for ($j = 0; $j < 7; $j++) {
+            if (date("Y-m-d", strtotime($lessonStart. " + $j days")) == date("Y-m-d")) {
+                $currentIndex = $j;
+                break;
+            }
+        }
+
+        for($i = 0; $i < $numRow; $i++) {
+            $curRowTime = date("Y-m-d H:i:s", strtotime($lessonStart. " +" .$i * $nextLessonTime . " minutes"));
+
+            $dataLessonSchedule[$i]['time'] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
+            
+            for($j = 0; $j < 7; $j++) {
+                $dataLessonSchedule[$i][$j] = [];
+                $dataSelected[$i][$j] = false;
+                $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
+
+                if (isset($lessonSchedule[$curCellTime])) {
+                    $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
+                } else {
+                    $dataLessonSchedule[$i][$j][] = [
+                        'lesson_schedule_id' => 0,
+                        'lesson_type_id' => 0,
+                        'lesson_id' => 0,
+                        'lesson_text_id' => 0,
+                        'lesson_name' => '-(-)'
+                    ];
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'OK',
+            'preWeek' => $preWeek,
+            'nextWeek' => $nextWeek,
+            'header' => $header,
             'teacherList' => $teacherList,
-            'lessonList' => $lessonList,
-            'lessonTextList' => $lessonTextList
-        ]);
+            'dataLessonSchedule' => $dataLessonSchedule,
+            'numRow' => $numRow,
+            'dataSelected' => $dataSelected,
+            'currentIndex' => $currentIndex,
+            'lessonTiming' => $lessonTiming
+        ], StatusCode::OK);
+    }
+
+    public function registerMultiLesson(Request $request) {
+        $data = $request->all();
+        dd($data['data_bulk_resistration']);
+
+        if (empty($data) || !isset($data['teacher_id']) || !is_numeric($data['teacher_id'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+        foreach ($data['data_bulk_resistration'] as $value) {
+            $lessonScheduleId =  !empty($value['0']) ? $value['0'] : -1;
+            $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["3"]. "+". $data['lesson_timing'] ."minutes"));
+            dd($value['end_time']);
+            // $ret = $this->LessonSchedule->callProcedure('sp_admin_register_lesson_for_teacher', array(
+            //     '_schedule_id' => (int) $lessonScheduleId,
+            //     '_teacher_id' => (int) $data['teacher_id'],
+            //     '_start_time' => $value['3'],
+            //     '_end_time' => $value['end_time'],
+            //     '_brand_id' => (int) BRAND_ID
+            // ));
+        }
+        return;
     }
 
     /**

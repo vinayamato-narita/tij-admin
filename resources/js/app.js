@@ -72,6 +72,7 @@ import ModalTable from "./components/common/modal-table.vue"
 import EditLangInquirySubject from "./components/inquirySubject/edit-lang.vue"
 import EditInquirySubject from "./components/inquirySubject/edit-inquiry-subject.vue"
 import CreateInquirySubject from "./components/inquirySubject/create-inquiry-subject.vue"
+import LessonStatusIndex from "./components/lessonStatus/lesson-status-index.vue"
 import InputSearchMulti from "./components/course/input-search-multi.vue"
 import CancelHistorySearchMulti from "./components/lessonCancelHistory/input-search-multi.vue"
 import CourseAdd from "./components/course/add"
@@ -97,6 +98,7 @@ import PaymentHistorySearch from "./components/payment-history/payment-history-s
 import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
 import ShowPointHistory from "./components/student/show-point-history.vue"
 import EditRole from "./components/admin/edit-role.vue"
+import EditLangCategory from "./components/category/edit-lang-category.vue"
 
 new Vue({
     created() {
@@ -228,6 +230,7 @@ new Vue({
         EditLangInquirySubject,
         EditInquirySubject,
         CreateInquirySubject,
+        LessonStatusIndex,
         CourseAdd,
         CourseSetAdd,
         CourseShow,
@@ -252,6 +255,7 @@ new Vue({
         EditHistoryPayment,
         ShowPointHistory,
         EditRole,
+        EditLangCategory
 
     },
     methods: {},

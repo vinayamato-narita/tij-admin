@@ -81,6 +81,8 @@ Route::group([
     Route::delete('category/{id}/course/{courseId}/delete', 'CategoryController@courseDelete')->name('category.courseDelete');
     Route::post('category/{id}/course', 'CategoryController@registerCourse')->name('category.registerCourse');
     Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
+    Route::get('/category/{id}/edit-lang/{type}', 'CategoryController@editLang')->name('category.editLang');
+    Route::post('updateLangCategory', 'CategoryController@updateLang')->name('category.updateLang');
 
     //csvExport
     Route::resource('csv', CsvController::class);
@@ -96,6 +98,14 @@ Route::group([
     Route::get('/inquirySubject/{id}/edit-lang/{type}', 'InquirySubjectController@editLang')->name('editLangInquirySubject');
     Route::post('updateLangInquirySubject', 'InquirySubjectController@updateLang')->name('updateLangInquirySubject');
 
+    //lessonStatus
+    Route::resource('lessonStatus', LessonStatusController::class);
+    Route::post('getDataLessonStatus', 'LessonStatusController@getData')->name('getDataLessonStatus');
+    Route::post('/lessonStatus/lessonInfomationDetailExportCsv', 'LessonStatusController@lessoninfomationdetailexportcsv')->name('lessonInfomationDetailExportCsv');
+    Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');   
+    Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');   
+    Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');   
+    Route::get('comment', 'CommentController@index')->name('comment.index');
     //comment list
     Route::get('/comment', 'CommentController@index')->name('comment.index');
 

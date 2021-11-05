@@ -163,6 +163,10 @@ class BreadcrumbComponent
                 'text' => '問い合わせ件名新規作成',
                 'route_str' => "inquirySubject.create",
             ],
+            'lesson_status_index' => [
+                'text' => 'レッスン状況',
+                'route_str' => "lessonStatus.create",
+            ],
             'comment_list' => [
                 'text' => 'コメント一覧',
                 'route_str' => "comment.index",
@@ -242,6 +246,10 @@ class BreadcrumbComponent
             'category_edit' => [
                 'text' => 'コースカテゴリ編集',
                 'route_str' => "category.edit",
+            ],
+            'edit_lang_category' => [
+                'text' => 'コースカテゴリ多言語編集',
+                'route_str' => "category.editLang",
             ],
             'edit_student' => [
                 'text' => '生徒情報編集',

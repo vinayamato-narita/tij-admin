@@ -9,9 +9,8 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class LangType extends Enum
+final class LessonTiming extends Enum
 {
-    const EN = 'en';
-    const VN = 'vn';
-    const ZH = 'zh';
+    const LESSON_TIMING = 25;
+    const NEXT_LESSON_TIME = 30;
 }

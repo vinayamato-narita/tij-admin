@@ -39,28 +39,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="categoryIcon">表示アイコン:
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6" style="display: flex">
-                                                <input style="" class="form-control col-md-8 " id="categoryIcon" type="text" name="categoryIcon" @input="changeInput()"  v-model="categoryIcon"  v-validate="'required|max:255|url'" />
-                                                <div class="col-md-1"></div>
-                                                <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(categoryIcon)">チェック</button>
-
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group row " style="margin-top: -15px">
-                                            <div class="col-md-3">
-
-                                            </div>
-                                            <div class="col-md-6 input-group is-danger" role="alert">
-                                                {{ errors.first("categoryIcon") }}
-                                            </div>
-                                        </div>
-
 
 
 
@@ -127,12 +105,6 @@
                         min_value: "表示順は1～1000000000 を入力してください",
                         max_value: "表示順は1～1000000000 を入力してください"
                     },
-                    categoryIcon: {
-                        required: "コース名表示アイコンを入力してください",
-                        max: "コース名表示アイコンは255文字以内で入力してください。",
-                        url: "コース名表示アイコンをURL形で入力してください。",
-
-                    },
                     categoryName: {
                         required: "カテゴリ名を入力してください",
                         max: "カテゴリ名は255文字以内で入力してください。",
@@ -162,16 +134,10 @@
         props: ["updateUrl", 'category', 'detailCategoryUrl'],
         mounted() {},
         methods: {
-            checkLink(url) {
-                if (url != null) {
-                    window.open(url, '_blank');
-                }
-            },
             register() {
                 let that = this;
                 let formData = new FormData();
                 formData.append("orderNum", this.orderNum);
-                formData.append("categoryIcon", this.categoryIcon);
                 formData.append("categoryName", this.categoryName);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.id);

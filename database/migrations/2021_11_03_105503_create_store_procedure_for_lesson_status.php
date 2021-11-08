@@ -15,7 +15,7 @@ class CreateStoreProcedureForLessonStatus extends Migration
     {
         $procedure1 = "
         DROP PROCEDURE IF EXISTS `sp_get_lesson_schedule_info_for_export_csv`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_lesson_schedule_info_for_export_csv`(IN _date_from VARCHAR(20),
+        CREATE PROCEDURE `sp_get_lesson_schedule_info_for_export_csv`(IN _date_from VARCHAR(20),
 IN _date_to VARCHAR(20))
 BEGIN
    SELECT
@@ -57,7 +57,7 @@ END
 
         $procedure2 = "
         DROP PROCEDURE IF EXISTS `sp_copy_setting_lesson_free`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_copy_setting_lesson_free`(
+        CREATE PROCEDURE `sp_copy_setting_lesson_free`(
             IN _start_date VARCHAR(50)
            )
            BEGIN

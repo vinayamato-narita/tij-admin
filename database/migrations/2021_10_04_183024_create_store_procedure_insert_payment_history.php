@@ -14,7 +14,7 @@ class CreateStoreProcedureInsertPaymentHistory extends Migration
     public function up()
     {
         $procedure1 = "DROP PROCEDURE IF EXISTS `lms_insert_project_course_student`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `lms_insert_project_course_student`(IN _project_course_id INT,
+CREATE PROCEDURE `lms_insert_project_course_student`(IN _project_course_id INT,
             IN _project_id INT,
             IN _course_id INT,
             IN _student_id INT,
@@ -109,7 +109,7 @@ END";
         \DB::unprepared($procedure1);
 
         $procedure2 = "DROP PROCEDURE IF EXISTS `sp_admin_delete_student_point_subscription`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_delete_student_point_subscription`(IN _point_subscription_history_id INT,
+CREATE PROCEDURE `sp_admin_delete_student_point_subscription`(IN _point_subscription_history_id INT,
     IN _cancel_history_save_flag INT)
 BEGIN
     IF _cancel_history_save_flag = 1 THEN
@@ -163,7 +163,7 @@ END";
         \DB::unprepared($procedure2);
 
         $procedure3 = "DROP PROCEDURE IF EXISTS `sp_admin_get_course_list`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_get_course_list`()
+CREATE PROCEDURE `sp_admin_get_course_list`()
 BEGIN
     SELECT
         course_id
@@ -195,7 +195,7 @@ END";
         \DB::unprepared($procedure3);
 
         $procedure4 = "DROP PROCEDURE IF EXISTS `sp_admin_get_course_list_lms`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_get_course_list_lms`(IN _student_id INT(11),
+CREATE PROCEDURE `sp_admin_get_course_list_lms`(IN _student_id INT(11),
     IN _course_free_id INT)
 BEGIN
   SELECT 
@@ -236,7 +236,7 @@ END";
         \DB::unprepared($procedure4);
 
         $procedure5 = "DROP PROCEDURE IF EXISTS `sp_admin_insert_order`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_insert_order`(IN _order_id VARCHAR(27),
+CREATE PROCEDURE `sp_admin_insert_order`(IN _order_id VARCHAR(27),
 IN _student_id INT,
 IN _student_card_id BIGINT,
 IN _course_id INT,
@@ -279,7 +279,7 @@ END";
         \DB::unprepared($procedure5);
 
         $procedure6 = "DROP PROCEDURE IF EXISTS `sp_admin_insert_payment_history`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_insert_payment_history`(IN _order_id VARCHAR(50),
+CREATE PROCEDURE `sp_admin_insert_payment_history`(IN _order_id VARCHAR(50),
         IN _student_id INT,
         IN _course_id INT,
         IN _set_course_id INT,
@@ -368,7 +368,7 @@ END";
         \DB::unprepared($procedure6);
 
         $procedure7 = "DROP PROCEDURE IF EXISTS `sp_admin_insert_point_subscription`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_insert_point_subscription`(IN _student_id INT,
+CREATE PROCEDURE `sp_admin_insert_point_subscription`(IN _student_id INT,
 IN _course_id INT,
 IN _set_course_id INT,
 IN _amount VARCHAR(45),
@@ -477,7 +477,7 @@ END";
         \DB::unprepared($procedure7);
 
         $procedure8 = "DROP PROCEDURE IF EXISTS `sp_admin_update_payment_history`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_admin_update_payment_history`(IN _student_id INT,
+CREATE PROCEDURE `sp_admin_update_payment_history`(IN _student_id INT,
 IN _payment_id INT,
 IN _payment_type VARCHAR(255),
 IN _payment_date VARCHAR(255),
@@ -530,7 +530,7 @@ END";
         \DB::unprepared($procedure8);
 
         $procedure9 = "DROP PROCEDURE IF EXISTS `sp_disable_course_free`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_disable_course_free`(IN _student_id INT)
+CREATE PROCEDURE `sp_disable_course_free`(IN _student_id INT)
 BEGIN
 SET @point_count = (SELECT SUM(point_count) FROM student_point_history where student_id = _student_id AND course_id = 1);
 IF @point_count > 0 THEn

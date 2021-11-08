@@ -84,7 +84,7 @@
                                                 <div class="subtitle-side-table"></div>
                                                 <div class="wrapper-btn-bulk">
                                                     <input id="bulk-resistration" @click="bulkResistration()" class="btn active" type="button" value="一括登録">
-                                                    <input id="bulk-remove" class="btn active" type="reset" value="一括削除">
+                                                    <input id="bulk-remove" @click="bulkRemove()" class="btn active" type="reset" value="一括削除">
                                                 </div>
                                                 <div class="wrapper-lesson-detail fixHeight lesson-detail" style="height : 300px">
                                                     <ul class="lesson-detail">
@@ -131,7 +131,7 @@ export default {
     components: {
         Loader,
     },
-    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming'],
+    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming', 'urlRemoveMultiLesson'],
     mounted() {
         this.getData()
     },
@@ -154,7 +154,8 @@ export default {
             dataSelected : [],
             kkk : 7,
             submitFlgConds : false,
-            currentIndex : 0
+            currentIndex : 0,
+            removeFlgConds : false
         }
     },
     methods :{
@@ -165,7 +166,7 @@ export default {
                 .post(that.urlGetData, {
                     week : this.startDate,
                     search_input : this.searchInput,
-                    teacherId : this.teacherId
+                    teacher_id : this.teacherId
                 })
                 .then(response => {
                     that.flagShowLoader = false;
@@ -179,6 +180,8 @@ export default {
                         that.numRow = response.data.numRow
                         that.dataSelected = response.data.dataSelected
                         that.currentIndex = response.data.currentIndex
+                        this.submitFlgConds = false
+                        this.removeFlgConds = false
                     } else {
                         this.$swal({
                             text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
@@ -204,6 +207,7 @@ export default {
             this.dataSelected[i][j] = !this.dataSelected[i][j]
             this.$set(this.dataSelected[i], j, this.dataSelected[i][j])
             this.checkConditionSubmit()
+            this.checkConditionRemove()
         },
         checkConditionSubmit() {
             this.submitFlgConds = false;
@@ -215,12 +219,24 @@ export default {
                 }
             }
         },
+        checkConditionRemove() {
+            this.removeFlgConds = false;
+            for (let i = 0; i < this.numRow; i++ ) {
+                for (let j = 0; j < 7; j++) {
+                    if (this.dataSelected[i][j] == true) {
+                        this.removeFlgConds = true;
+                    }
+                }
+            }
+        },
         bulkResistration() {
             if (!this.submitFlgConds) {
                 this.$swal({
-                    text: "登録可能レッスンを選択してください",
+                    text: "レッスンを登録しますか？",
                     icon: "error",
-                    confirmButtonText: "OK"
+                    confirmButtonText: "OK",
+                    showCancelButton : true,
+                    cancelButtonText : "閉じる"
                 }).then(result => {
                 });
             }
@@ -232,16 +248,16 @@ export default {
             for (let i = 0; i < this.numRow; i++ ) {
                 for (let j = this.currentIndex; j < 7; j++) {
                     if (this.dataSelected[i][j] == true) {
-                        dataBulkResistration[idx] = new Array()
-                        dataBulkResistration[idx]['lesson_schedule_id'] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
-                        dataBulkResistration[idx]['lesson_name'] = this.dataLessonSchedule[i][j][0]['lesson_name']
-                        dataBulkResistration[idx]['lesson_type_id'] = this.dataLessonSchedule[i][j][0]['lesson_type_id']
-                        dataBulkResistration[idx]['starttime'] = this.dataLessonSchedule[i]['time']
+                        dataBulkResistration[idx] = new Object()
+                        dataBulkResistration[idx].lesson_schedule_id = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
+                        dataBulkResistration[idx].lesson_name = this.dataLessonSchedule[i][j][0]['lesson_name']
+                        dataBulkResistration[idx].lesson_type_id = this.dataLessonSchedule[i][j][0]['lesson_type_id']
+                        dataBulkResistration[idx].start_time = this.dataLessonSchedule[i][j][0]['start_time']
                         idx++
                     }
                 }
             }
-            console.log(dataBulkResistration)
+            
             axios
                 .post(that.urlRegisterMultiLesson, {
                     data_bulk_resistration : dataBulkResistration,
@@ -251,6 +267,88 @@ export default {
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
+                        this.getData()
+                    } else {
+                        this.$swal({
+                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            icon: "warning",
+                            confirmButtonText: "OK"
+                        }).then(result => {
+                        });
+                    }
+                })
+                .catch(e => {
+                    this.flagShowLoader = false;
+                }); 
+        },
+        bulkRemove() {
+            if (!this.removeFlgConds) {
+                this.$swal({
+                    text: "レッスンを登録しますか？",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    showCancelButton : true,
+                    cancelButtonText : "閉じる"
+                }).then(result => {
+                });
+            }
+
+            let dataBulkResistration = new Array()
+            let idx = 0
+            let that = this
+
+            for (let i = 0; i < this.numRow; i++ ) {
+                for (let j = this.currentIndex; j < 7; j++) {
+                    if (this.dataSelected[i][j] == true) {
+                        dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
+                        idx++
+                    }
+                }
+            }
+            
+            axios
+                .post(that.urlRemoveMultiLesson, {
+                    lesson_schedule_ids : dataBulkResistration,
+                })
+                .then(response => {
+                    that.flagShowLoader = false;
+                    if (response.data.status == "OK") {
+                        this.getData()
+                    } else {
+                        this.$swal({
+                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            icon: "warning",
+                            confirmButtonText: "OK"
+                        }).then(result => {
+                        });
+                    }
+                })
+                .catch(e => {
+                    this.flagShowLoader = false;
+                }); 
+        },
+        resistration() {
+            if (!this.submitFlgConds) {
+                this.$swal({
+                    text: "レッスンを登録しますか？",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    showCancelButton : true,
+                    cancelButtonText : "閉じる"
+                }).then(result => {
+                });
+            }
+
+            axios
+                .post(that.urlRegisterMultiLesson, {
+                    data_bulk_resistration : dataBulkResistration,
+                    teacher_id : this.teacherId,
+                    lesson_timing : this.lessonTiming
+                })
+                .then(response => {
+                    that.flagShowLoader = false;
+                    if (response.data.status == "OK") {
+                        this.getData()
                     } else {
                         this.$swal({
                             text: "問い合わせ件の作成が失敗しました。再度お願いいたします",

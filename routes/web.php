@@ -144,4 +144,5 @@ Route::group([
     Route::resource('lessonSchedule', LessonScheduleController::class);
     Route::post('lessonSchedule/getData', 'LessonScheduleController@getData')->name('getDataLessonSchedule');
     Route::post('lessonSchedule/registerMultiLesson', 'LessonScheduleController@registerMultiLesson')->name('registerMultiLesson');
+    Route::post('lessonSchedule/removeMultiLesson', 'LessonScheduleController@removeMultiLesson')->name('removeMultiLesson');
 });

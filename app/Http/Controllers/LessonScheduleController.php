@@ -75,7 +75,7 @@ class LessonScheduleController extends BaseController
         }
 
         $teacherList = $teacherQueryBuilder->get();
-
+        
         $lessonStart = !empty($data['week']) ? $data['week']: date('Ymd');
         $w = date('w', strtotime($lessonStart));
         if ($w == 0) $w = 7;
@@ -106,7 +106,7 @@ class LessonScheduleController extends BaseController
         $dataSelected = [];
 
         if (!empty($lessonSchedule)) {
-            $lessonSchedule = $lessonSchedule->keyBy('lesson_starttime');
+            $lessonSchedule = collect($lessonSchedule)->keyBy('lesson_starttime');
         }
 
         $currentIndex = 0;
@@ -129,6 +129,7 @@ class LessonScheduleController extends BaseController
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
 
                 if (isset($lessonSchedule[$curCellTime])) {
+                    $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
@@ -136,7 +137,8 @@ class LessonScheduleController extends BaseController
                         'lesson_type_id' => 0,
                         'lesson_id' => 0,
                         'lesson_text_id' => 0,
-                        'lesson_name' => '-(-)'
+                        'lesson_name' => '-(-)',
+                        'start_time' => $curCellTime
                     ];
                 }
             }
@@ -158,7 +160,6 @@ class LessonScheduleController extends BaseController
 
     public function registerMultiLesson(Request $request) {
         $data = $request->all();
-        dd($data['data_bulk_resistration']);
 
         if (empty($data) || !isset($data['teacher_id']) || !is_numeric($data['teacher_id'])) {
             return response()->json([
@@ -167,18 +168,33 @@ class LessonScheduleController extends BaseController
             ]);
         }
         foreach ($data['data_bulk_resistration'] as $value) {
-            $lessonScheduleId =  !empty($value['0']) ? $value['0'] : -1;
-            $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["3"]. "+". $data['lesson_timing'] ."minutes"));
-            dd($value['end_time']);
-            // $ret = $this->LessonSchedule->callProcedure('sp_admin_register_lesson_for_teacher', array(
-            //     '_schedule_id' => (int) $lessonScheduleId,
-            //     '_teacher_id' => (int) $data['teacher_id'],
-            //     '_start_time' => $value['3'],
-            //     '_end_time' => $value['end_time'],
-            //     '_brand_id' => (int) BRAND_ID
-            // ));
+            $lessonScheduleId =  !empty($value['lesson_schedule_id']) ? $value['lesson_schedule_id'] : -1;
+            $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
+            $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."')");
         }
-        return;
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function removeMultiLesson(Request $request) {
+        $data = $request->all();
+
+        if (empty($data) || !isset($data['lesson_schedule_ids'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        foreach($data['lesson_schedule_ids'] as $lessonScheduleId) {
+            $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$lessonScheduleId."')");
+        }
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 
     /**

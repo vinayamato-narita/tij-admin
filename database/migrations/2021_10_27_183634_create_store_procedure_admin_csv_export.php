@@ -14,7 +14,7 @@ class CreateStoreProcedureAdminCsvExport extends Migration
     public function up()
     {
         $procedure1 = "DROP PROCEDURE IF EXISTS `lms_sp_get_lesson_history_for_export_csv_supergrace`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `lms_sp_get_lesson_history_for_export_csv_supergrace`(IN _expire_date VARCHAR(20),
+        CREATE PROCEDURE `lms_sp_get_lesson_history_for_export_csv_supergrace`(IN _expire_date VARCHAR(20),
     IN _corporation_code VARCHAR(255) ,
     IN _course_code VARCHAR(255),
     IN _customer_code VARCHAR(255),
@@ -86,7 +86,7 @@ END";
         \DB::unprepared($procedure1);
 
         $procedure2 = "DROP PROCEDURE IF EXISTS `lms_sp_get_payment_for_export_csv_supergrace`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `lms_sp_get_payment_for_export_csv_supergrace`(IN _expire_date VARCHAR(20),
+        CREATE PROCEDURE `lms_sp_get_payment_for_export_csv_supergrace`(IN _expire_date VARCHAR(20),
 IN _corporation_code VARCHAR(255),
 IN _product_code VARCHAR(255),
 IN _customer_code VARCHAR(255),
@@ -167,7 +167,7 @@ END";
         \DB::unprepared($procedure2);
 
         $procedure3 = "DROP PROCEDURE IF EXISTS `lms_sp_get_student_bought_course`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `lms_sp_get_student_bought_course`(IN _date_from VARCHAR(10),
+        CREATE PROCEDURE `lms_sp_get_student_bought_course`(IN _date_from VARCHAR(10),
     IN _date_to VARCHAR(10),
     IN _payment_date_from VARCHAR(20),
     IN _payment_date_to VARCHAR(20),
@@ -228,7 +228,7 @@ BEGIN
         \DB::unprepared($procedure3);
 
         $procedure4 = "DROP PROCEDURE IF EXISTS `sp_get_lesson_history_for_export_csv`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_lesson_history_for_export_csv`(IN _dateFrom VARCHAR(10),
+        CREATE PROCEDURE `sp_get_lesson_history_for_export_csv`(IN _dateFrom VARCHAR(10),
     IN _dateTo VARCHAR(10),
     IN _payment_id VARCHAR(10),
     IN _corporation_code VARCHAR(255) ,
@@ -295,7 +295,7 @@ END";
         \DB::unprepared($procedure4);
 
         $procedure5 = "DROP PROCEDURE IF EXISTS `sp_get_lesson_history_for_export_csv_supergrace`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_lesson_history_for_export_csv_supergrace`(IN _student_id VARCHAR (2000),
+        CREATE PROCEDURE `sp_get_lesson_history_for_export_csv_supergrace`(IN _student_id VARCHAR (2000),
      IN _expire_date VARCHAR(20),
     IN _corporation_code VARCHAR(255) ,
     IN _course_code VARCHAR(255),
@@ -346,7 +346,7 @@ END";
         \DB::unprepared($procedure5);
 
         $procedure6 = "DROP PROCEDURE IF EXISTS `sp_get_lesson_summary_for_export_csv`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_lesson_summary_for_export_csv`(IN _dateFrom VARCHAR(255),
+        CREATE PROCEDURE `sp_get_lesson_summary_for_export_csv`(IN _dateFrom VARCHAR(255),
     IN _dateTo VARCHAR(255),
     IN _expireDateFrom VARCHAR(255),
     IN _expireDateTo VARCHAR(255),
@@ -427,7 +427,7 @@ END";
         \DB::unprepared($procedure6);
 
         $procedure7 = "DROP PROCEDURE IF EXISTS `sp_get_payment_for_export_csv`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_payment_for_export_csv`(IN _payment_date_1 VARCHAR(12),
+        CREATE PROCEDURE `sp_get_payment_for_export_csv`(IN _payment_date_1 VARCHAR(12),
     IN _payment_date_2 VARCHAR(12),
     IN _corporation_code VARCHAR(255),
     IN _product_code VARCHAR(255),
@@ -475,7 +475,7 @@ END";
         \DB::unprepared($procedure7);
 
         $procedure8 = "DROP PROCEDURE IF EXISTS `sp_get_payment_for_export_csv_supergrace`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_payment_for_export_csv_supergrace`(IN _student_id VARCHAR (2000),
+        CREATE PROCEDURE `sp_get_payment_for_export_csv_supergrace`(IN _student_id VARCHAR (2000),
 IN _expire_date VARCHAR(20),
 IN _corporation_code VARCHAR(255),
 IN _product_code VARCHAR(255),

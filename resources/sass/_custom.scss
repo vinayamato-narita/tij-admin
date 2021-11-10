@@ -819,3 +819,24 @@ td.ui-selectee.ui-selected, td.ui-selectee.ui-selecting {
 #teacher_name {
     padding : 5px !important;
 }
+
+.wrapper-lesson-detail.fixHeight ul {
+    list-style: none;
+}
+
+.lesson-detail {
+    height: 100px;
+}
+
+.col-side-table .lesson-detail {
+    padding: 15px 10px 0;
+}
+
+.col-side-table .lesson-detail-item {
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.lessonCell {
+    cursor: default;
+}

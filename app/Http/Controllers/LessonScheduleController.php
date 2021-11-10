@@ -127,9 +127,11 @@ class LessonScheduleController extends BaseController
                 $dataLessonSchedule[$i][$j] = [];
                 $dataSelected[$i][$j] = false;
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
+                $timeFormat = date('M d (D) ', strtotime($curRowTime. " + $j days")).$dataLessonSchedule[$i]['time'];
 
                 if (isset($lessonSchedule[$curCellTime])) {
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
+                    $lessonSchedule[$curCellTime]->time_format = $timeFormat;
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
@@ -138,7 +140,8 @@ class LessonScheduleController extends BaseController
                         'lesson_id' => 0,
                         'lesson_text_id' => 0,
                         'lesson_name' => '-(-)',
-                        'start_time' => $curCellTime
+                        'start_time' => $curCellTime,
+                        'time_format' => $timeFormat
                     ];
                 }
             }
@@ -190,6 +193,33 @@ class LessonScheduleController extends BaseController
 
         foreach($data['lesson_schedule_ids'] as $lessonScheduleId) {
             $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$lessonScheduleId."')");
+        }
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+
+    public function registerLesson(Request $request) {
+        $data = $request->all();
+        $lessonScheduleId =  !empty($data['lesson_schedule_id']) ? $data['lesson_schedule_id'] : -1;
+        $data['end_time'] = date("Y-m-d H:i:s" , strtotime($data["start_time"]. "+". $data['lesson_timing'] ."minutes"));
+
+        if(!is_numeric($data['teacher_id'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$data['start_time']."','".$data['end_time']."')");
+        
+        if ($string[0]->result != 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
         }
 
         return response()->json([

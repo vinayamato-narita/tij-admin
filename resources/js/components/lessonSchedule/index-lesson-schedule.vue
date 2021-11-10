@@ -89,6 +89,7 @@
                                                 <div class="wrapper-lesson-detail fixHeight lesson-detail" style="height : 300px">
                                                     <ul class="lesson-detail">
                                                         <li class="lesson-detail-item" id="lessonDateTime">
+                                                            {{ itemSelected['time_format'] }}
                                                         </li>
                                                         <li class="lesson-detail-item" id="lessonName">
                                                         </li>
@@ -103,7 +104,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="wrapper-btn-single">
-                                                        <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" type="button" value="登録">
+                                                        <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" @click="resistration()" type="button" value="登録">
                                                         <input id="remove" class="btn" type="reset" value="レッスン削除">
                                                         <input id="cancel_lesson" class="btn" type="reset" value="レッスンキャンセル">
                                                 </div>
@@ -131,7 +132,7 @@ export default {
     components: {
         Loader,
     },
-    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming', 'urlRemoveMultiLesson'],
+    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming', 'urlRemoveMultiLesson', 'urlRegisterLesson'],
     mounted() {
         this.getData()
     },
@@ -152,10 +153,10 @@ export default {
             nextWeek : new Date(),
             flgShowTable : false,
             dataSelected : [],
-            kkk : 7,
             submitFlgConds : false,
             currentIndex : 0,
-            removeFlgConds : false
+            removeFlgConds : false,
+            itemSelected : []
         }
     },
     methods :{
@@ -206,6 +207,8 @@ export default {
         changeSelected(i,j) {
             this.dataSelected[i][j] = !this.dataSelected[i][j]
             this.$set(this.dataSelected[i], j, this.dataSelected[i][j])
+            this.itemSelected = this.dataLessonSchedule[i][j][0]
+            console.log('xxx :' + this.itemSelected['time_format'])
             this.checkConditionSubmit()
             this.checkConditionRemove()
         },
@@ -339,10 +342,13 @@ export default {
                 });
             }
 
+            let that = this
+
             axios
-                .post(that.urlRegisterMultiLesson, {
-                    data_bulk_resistration : dataBulkResistration,
+                .post(that.urlRegisterLesson, {
+                    lesson_schedule_id : this.itemSelected['lesson_schedule_id'],
                     teacher_id : this.teacherId,
+                    start_time : this.itemSelected['start_time'],
                     lesson_timing : this.lessonTiming
                 })
                 .then(response => {

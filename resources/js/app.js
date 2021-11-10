@@ -97,6 +97,9 @@ import EditStudent from "./components/student/edit-student.vue"
 import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
 import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
 import LessonSchedule from "./components/LessonSchedule/index-lesson-schedule.vue"
+import ShowPointHistory from "./components/student/show-point-history.vue"
+import EditRole from "./components/admin/edit-role.vue"
+import EditLangCategory from "./components/category/edit-lang-category.vue"
 
 new Vue({
     created() {
@@ -251,7 +254,11 @@ new Vue({
         EditStudent,
         PaymentHistorySearch,
         EditHistoryPayment,
-        LessonSchedule
+        LessonSchedule,
+        ShowPointHistory,
+        EditRole,
+        EditLangCategory
+
     },
     methods: {},
     mounted() {}

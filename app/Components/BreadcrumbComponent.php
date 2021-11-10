@@ -247,6 +247,10 @@ class BreadcrumbComponent
                 'text' => 'コースカテゴリ編集',
                 'route_str' => "category.edit",
             ],
+            'edit_lang_category' => [
+                'text' => 'コースカテゴリ多言語編集',
+                'route_str' => "category.editLang",
+            ],
             'edit_student' => [
                 'text' => '生徒情報編集',
                 'route_str' => "student.edit",
@@ -262,7 +266,19 @@ class BreadcrumbComponent
             'lesson_schedule_index' => [
                 'text' => 'スケジュール管理',
                 'route_str' => 'lessonSchedule.index'
-            ]
+            ],
+            'student_point_history_list' => [
+                'text' => 'ポイント履歴一覧',
+                'route_str' => "student.pointHistoryList",
+            ],
+            'show_student_point_history' => [
+                'text' => 'ポイント履歴詳細',
+                'route_str' => "student.showPointHistory",
+            ],
+            'edit_role' => [
+                'text' => '権限編集',
+                'route_str' => "admin.editRole",
+            ],
         ];
     }
 

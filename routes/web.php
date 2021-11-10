@@ -81,6 +81,8 @@ Route::group([
     Route::delete('category/{id}/course/{courseId}/delete', 'CategoryController@courseDelete')->name('category.courseDelete');
     Route::post('category/{id}/course', 'CategoryController@registerCourse')->name('category.registerCourse');
     Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
+    Route::get('/category/{id}/edit-lang/{type}', 'CategoryController@editLang')->name('category.editLang');
+    Route::post('updateLangCategory', 'CategoryController@updateLang')->name('category.updateLang');
 
     //csvExport
     Route::resource('csv', CsvController::class);
@@ -134,8 +136,6 @@ Route::group([
     Route::post('/student/update-payment-history', 'StudentController@updatePaymentHistory')->name('student.updatePaymentHistory');
     Route::post('/student/destroy-payment-history', 'StudentController@destroyPaymentHistory')->name('student.destroyPaymentHistory');
 
-    Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
-
     Route::get('/payment-history', 'PaymentHistoryController@index')->name('paymentHistory.index');
     Route::get('/payment-history/edit/{id}', 'PaymentHistoryController@edit')->name('paymentHistory.edit');
     Route::put('/payment-history/update', 'PaymentHistoryController@update')->name('paymentHistory.update');
@@ -146,4 +146,11 @@ Route::group([
     Route::post('lessonSchedule/registerMultiLesson', 'LessonScheduleController@registerMultiLesson')->name('registerMultiLesson');
     Route::post('lessonSchedule/removeMultiLesson', 'LessonScheduleController@removeMultiLesson')->name('removeMultiLesson');
     Route::post('lessonSchedule/registerLesson', 'LessonScheduleController@registerLesson')->name('registerLesson');
+    Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
+    Route::get('/student/show-point-history/{id}', 'StudentController@showPointHistory')->name('student.showPointHistory');
+    Route::post('/student/update-point-history', 'StudentController@updatePointHistory')->name('student.updatePointHistory');
+    Route::post('/student/cancel-point-history', 'StudentController@cancelPointHistory')->name('student.cancelPointHistory');
+
+    Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
+    Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 });

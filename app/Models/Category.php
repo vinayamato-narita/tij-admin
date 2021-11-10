@@ -21,4 +21,8 @@ class Category extends Model
         return $this->belongsToMany('App\Models\course', 'category_course' ,
             'category_id', 'course_id', 'category_id', 'course_id');
     }
+
+    public function category_infos() {
+        return $this->hasMany('App\Models\CategoryInfo', 'category_id', 'category_id');
+    }
 }

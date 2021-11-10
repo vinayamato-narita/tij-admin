@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminUser;
+use App\Models\AdminRight;
+use App\Models\AdminUserRight;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Components\BreadcrumbComponent;
@@ -195,6 +197,78 @@ class AdminController extends BaseController
                 'status' => 'NG',
             ], StatusCode::NOT_FOUND);
         }
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function editRole($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'admin_list'],
+            ['name' => 'edit_role', $id],
+        ]);
+        $adminInfo = AdminUser::where('admin_user_id', $id)->firstOrFail();
+        
+        $adminRole = AdminRight::with(['adminUserRights' => function ($query) use ($id) {
+            $query->where('admin_user_id', '=', $id);
+        }])
+        ->sortable(['admin_rights_menu_order' => 'asc'])
+        ->get()->toArray();
+        foreach($adminRole as &$role)
+        {
+            if ($role['admin_user_rights'] == null) {
+                $role['admin_user_id'] = $id;
+                $role['admin_rights_id'] = $role['admin_rights_id'];
+                $role['is_permitted'] = 0;
+                $role['can_edit'] = 0;
+            }else {
+                $role['admin_user_rights_id'] = $role['admin_user_rights']['admin_user_rights_id'];
+                $role['admin_user_id'] = $role['admin_user_rights']['admin_user_id'];
+                $role['is_permitted'] = $role['admin_user_rights']['is_permitted'];
+                $role['can_edit'] = $role['admin_user_rights']['can_edit'];
+            }
+        }
+
+        return view('admin.edit-role', [
+            'breadcrumbs' => $breadcrumbs,
+            'adminInfo' => $adminInfo,
+            'adminRole' => $adminRole,
+        ]);
+    }
+
+    public function updateRole(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);   
+        }
+        $roles = $request->roles;
+        
+        $dataUpdate = [];
+        $dataInsert = [];
+        foreach($roles as $key => $data) {
+            if (isset($data['admin_user_rights_id'])) {
+                $dataUpdate[] = [
+                    'admin_user_rights_id' => $data['admin_user_rights_id'],
+                    'is_permitted' => $data['is_permitted'],
+                    'can_edit' => $data['can_edit'],
+                ];
+            }else {
+                $dataInsert[] = [
+                    'admin_user_id' => $data['admin_user_id'],
+                    'admin_rights_id' => $data['admin_rights_id'],
+                    'is_permitted' => $data['is_permitted'],
+                    'can_edit' => $data['can_edit'],
+                ];
+            }
+        }
+
+        AdminUserRight::insert($dataInsert);
+        \Batch::update(new AdminUserRight, $dataUpdate, 'admin_user_rights_id');
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

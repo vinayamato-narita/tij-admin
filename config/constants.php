@@ -75,3 +75,135 @@ const PAGE_SIZE_DEFAULT = 20;
 
 const COURSE_FREE_ID = 1;
 
+const STUDENT = 1;
+const TEACHER = 2;
+const LESSON = 3;
+const INQUIRY = 5;
+const PAYMENTHISTORY = 6;
+const NEWS = 7;
+const LESSONCOURSE = 8;
+const SCHEDULE = 10;
+const TEXT = 12;
+const REMINDMAIL = 14;
+const ACCESSLOG = 17;
+const ADMINUSER = 18;
+const INQUIRYSUBJECT = 19;
+const FAQ = 24;
+const LESSONSTATUS = 26;
+const COMMENT = 27;
+const GUIDE = 29;
+const CSV = 30;
+const CSVEXPORT = 31;
+const LMSCSV = 33;
+const GMO = 37;
+const DEMANDMAIL = 38;
+const ADMINDEMAND = 41;
+const LESSONCANCEL = 43;
+const CANEDIT = 'can_edit';
+const ISPERMITTED = 'is_permitted';
+const CATEGORY = 'CATEGORY';
+const COURSE = 'COURSE';
+
+const MENU = [
+	PAYMENTHISTORY => [
+		'paymentHistory.index',
+		'paymentHistory.edit',
+	],
+	STUDENT => [
+		'student.index',
+		'student.edit',
+		'student.commentList',
+		'student.createComment',
+		'student.editComment',
+		'student.lessonHistoryList',
+		'student.showLessonHistory',
+		'student.paymentHistoryList',
+		'student.createPaymentHistory',
+		'student.editPaymentHistory',
+		'student.pointHistoryList',
+		'student.showPointHistory',
+	],
+	TEACHER => [
+		'teacher.index',
+		'teacher.create',
+		'teacher.show',
+		'teacher.edit',
+	],
+	COMMENT => [
+		'comment.index'
+	],
+	CATEGORY => [
+		'category.index',
+		'category.create',
+		'category.show',
+		'category.edit',
+		'category.course',
+		'category.editLang',
+	],
+	COURSE => [
+		'course.index',
+		'course.create',
+		'course.show',
+		'course.edit',
+		'course.setCreate',
+		'course.getCourse',
+		'course.lesson',
+		'course.setShow',
+		'course.setEdit',
+	],
+	LESSON => [
+		'lesson.index',
+		'lesson.create',
+		'lesson.show',
+		'lesson.edit',
+		'lesson.textLesson',
+	],
+	TEXT => [
+		'text.index',
+		'text.create',
+		'text.show',
+		'text.edit',
+	],
+	REMINDMAIL => [
+		'remindmail.index',
+		'remindmail.create',
+		'remindmail.show',
+		'remindmail.edit',
+	],
+	INQUIRY => [
+		'inquiry.index',
+		'inquiry.create',
+		'inquiry.show',
+		'inquiry.edit',
+	],
+	INQUIRYSUBJECT => [
+		'inquirySubject.index',
+		'inquirySubject.create',
+		'inquirySubject.show',
+		'inquirySubject.edit',
+		'editLangInquirySubject',
+	],
+	FAQ => [
+		'faq.index',
+		'faq.create',
+		'faq.show',
+		'faq.edit',
+		'editLangFaq',
+	],
+	NEWS => [
+		'news.index',
+		'news.create',
+		'news.show',
+		'news.edit',
+		'editLangNews',
+	],
+	ADMINUSER => [
+		'admin.index',
+		'admin.create',
+		'admin.show',
+		'admin.edit',
+		'admin.editRole',
+	]
+];
+
+

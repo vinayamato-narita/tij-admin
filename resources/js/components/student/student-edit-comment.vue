@@ -96,7 +96,7 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled = "commentInfoEx.admin_can_edit == 0">登録</button>
                                                 <a :href="urlStudentCommentList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>

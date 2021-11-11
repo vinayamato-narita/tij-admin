@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\AdminUserRight;
 use Log;
 
 class BaseController extends Controller
@@ -106,5 +108,17 @@ class BaseController extends Controller
             'data' => $request->all(),
             'message' => $message,
         ]);
+    }
+
+    public function adminCanEdit($view) 
+    {
+        $adminUser = Auth::user();
+        $adminCanEdit = AdminUserRight::select(CANEDIT)->where('admin_user_id', $adminUser->admin_user_id)
+            ->where('admin_rights_id', $view)
+            ->first();
+
+        $adminCanEdit = $adminCanEdit->can_edit ?? 0;
+
+        return $adminCanEdit;
     }
 }

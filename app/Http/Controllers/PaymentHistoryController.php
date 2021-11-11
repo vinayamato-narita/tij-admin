@@ -243,7 +243,7 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.point_count as point_count',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
-            DB::raw('(CASE WHEN point_subscription_history.amount.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
+            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
         )
         ->leftJoin('order', function($join) {
             $join->on('point_subscription_history.order_id', '=', 'order.order_id');
@@ -271,10 +271,13 @@ class PaymentHistoryController extends BaseController
 
         $paymentInfo->_token = csrf_token();
         $paymentInfo->payment_types = PaidStatus::asSelectArray();
-       
+        
+        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
+
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
             'paymentInfo' => $paymentInfo,
+            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -284,6 +287,13 @@ class PaymentHistoryController extends BaseController
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::BAD_REQUEST);  
+        }
+        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
+
+        if ($adminCanEdit == 0) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
         }
 
         $paymentInfo = PointSubscriptionHistory::where('point_subscription_history.del_flag', 0)

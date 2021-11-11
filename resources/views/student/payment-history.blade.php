@@ -17,7 +17,7 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('student.createPaymentHistory', $studentInfo->student_id) }}" class="btn btn-primary pull-right"
+                    <a href="{{ $adminCanEdit == 1 ? route('student.createPaymentHistory', $studentInfo->student_id) : 'javascript:void(0)' }}" class="btn btn-primary pull-right {{ $adminCanEdit == 1 ? "" : "disabled-link" }}"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>

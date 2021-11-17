@@ -58,6 +58,9 @@ Route::group([
 
     //course course set
     Route::resource('course', CourseController::class);
+    Route::get('/course/{id}/edit-lang/{type}', 'CourseController@editLang')->name('course.editLang');
+    Route::get('course/{id}/lesson_attach', 'CourseController@lessonAttach')->name('course.lessonAttach');
+    Route::post('update_lang_course', 'CourseController@updateLang')->name('course.updateLang');
     Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
     Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
     Route::get('course/set/get-course/{id}', 'CourseController@getCourse')->name('course.getCourse');

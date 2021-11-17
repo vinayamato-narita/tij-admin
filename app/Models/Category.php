@@ -18,7 +18,7 @@ class Category extends Model
     
     public function courses()
     {
-        return $this->belongsToMany('App\Models\course', 'category_course' ,
+        return $this->belongsToMany('App\Models\Course', 'category_course' ,
             'category_id', 'course_id', 'category_id', 'course_id');
     }
 

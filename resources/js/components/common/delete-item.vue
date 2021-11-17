@@ -1,6 +1,6 @@
 <template>
 <div>
-  <a class="dropdown-item cursor-pointer" @click="showAlert">
+  <a class="dropdown-item cursor-pointer" @click="showAlert" style="width: fit-content">
     <font-awesome-icon icon="trash" />削除
   </a>
   <loader :flag-show="flagShowLoader"></loader>

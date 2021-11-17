@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Enums\CourseTypeEnum;
 use App\Enums\StatusCode;
+use App\Http\Requests\CourseLangRequest;
 use App\Http\Requests\CourseRegisterVideoRequest;
 use App\Http\Requests\StoreUpdateCourseRequest;
 use App\Http\Requests\StoreUpdateCourseSetRequest;
 use App\Models\Course;
+use App\Models\CourseInfo;
 use App\Models\CourseLesson;
 use App\Models\CourseSetCourse;
 use App\Models\CourseTag;
 use App\Models\CourseVideo;
 use App\Models\Lesson;
 use App\Models\Tag;
+use Carbon\Carbon;
 use function Doctrine\Common\Cache\Psr6\get;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -56,11 +60,6 @@ class CourseController extends BaseController
             });
         }
 
-        if (!empty($request['campaign_code'])) {
-            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('campaign_code', $request['campaign_code']));
-            });
-        }
 
         if (!empty($request['paypal_item_number'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -68,11 +67,6 @@ class CourseController extends BaseController
             });
         }
 
-        if (!empty($request['is_show']) && $request['is_show'] != 2) {
-            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where('is_show', $request['is_show']);
-            });
-        }
 
         $coureList = $queryBuilder->with(['childCourse'])->sortable(['course_name' => 'desc'])->paginate($pageLimit);
 
@@ -123,37 +117,29 @@ class CourseController extends BaseController
             DB::beginTransaction();
             try {
                 $course = new Course();
+                $course->publish_date_from = Carbon::createFromFormat('H:i:s, d/m/Y', $request->fromDate);
+                $course->publish_date_to =  Carbon::createFromFormat('H:i:s, d/m/Y', $request->toDate);
                 $course->display_order = $request->displayOrder;
-                $course->is_show = $request->isShow == true ? 1 : 0;
-                $course->course_name_short = $request->courseNameShort;
+                $course->course_name_short = $request->courseNameShort ?? ' ';
                 $course->course_name = $request->courseName;
-                $course->point_expire_day = $request->pointExpireDay;
                 $course->point_count = $request->pointCount;
-                $course->max_reserve_count = $request->maxReverseCount;
                 $course->amount = $request->amount;
-                $course->paypal_item_number = $request->paypalItemNumber == true ? 1 : 0;
-                $course->is_campaign = $request->isCampaign == true ? 1 : 0;
-                $course->campaign_code = $request->campaignCode;
-                $course->course_description = $request->courseDescription;
-                $course->is_schedule_limit = $request->isScheduleLimit == true ? 1 : 0;
-                $course->reserve_end = $request->reverseEnd;
-                $course->reserve_start = $request->reverseStart;
-                $course->cancel_end = $request->cancelEnd;
-                $course->is_for_lms = $request->isForLMS == true ? 1 : 0;
-                $course->is_set_course = false;
-
-                $course->save();
-
-                if (isset($request->tagIds)) {
-                    $arrTagId = explode(',', $request->tagIds);
-                    foreach ($arrTagId as $id) {
-                        $ct = new  CourseTag();
-                        $ct->course_id = $course->course_id;
-                        $ct->tag_id = $id;
-                        $ct->save();
-                    }
+                $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
+                $course->course_description = $request->courseDescription ?? ' ';
+                $course->is_for_lms = $request->isForLMS;
+                $course->course_type = $request->courseType;
+                if (in_array($request->courseType , [CourseTypeEnum::REGULAR_COURSE , CourseTypeEnum::ABILITY_TEST_COURSE])) {
+                    $course->expire_day = $request->expireDay ?? 1;
+                }
+                if ($request->courseType == CourseTypeEnum::GROUP_COURSE) {
+                    $course->min_reserve_count = $request->minReserveCount;
+                    $course->max_reserve_count = $request->maxReserveCount;
+                    $course->decide_date =   Carbon::createFromFormat('H:i:s, d/m/Y', $request->decideDate);
+                    $course->reserve_end_date =   Carbon::createFromFormat('H:i:s, d/m/Y',$request->reverseEndDate);
+                    $course->course_start_date =  Carbon::createFromFormat('H:i:s, d/m/Y', $request->courseStartDate);
                 }
 
+                $course->save();
 
                 DB::commit();
                 return response()->json([
@@ -333,8 +319,7 @@ class CourseController extends BaseController
 
         $course = Course::where([
             'course_id' => $id,
-            'is_set_course' => false
-        ])->with(['childCourse', 'tags', 'lesson'])->first();
+        ])->with(['lesson', 'course_infos'])->first();
 
         $courseVideo = CourseVideo::where('course_id', $id)->get();
         if (!$course) return redirect()->route('course.index');
@@ -343,6 +328,49 @@ class CourseController extends BaseController
             'course' => $course,
             'courseVideo' => $courseVideo
         ]);
+    }
+
+    public function editLang($id, $langType)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'course_list'],
+            ['name' => 'course_show', $id],
+            ['name' => 'edit_lang_course', $id, $langType],
+        ]);
+        $course = Course::where('course_id', $id)->first();
+        if (!$course) return redirect()->route('course.index');
+        $courseInfo = CourseInfo::where(['course_id' => $id, 'lang_type' => $langType])->first();
+
+        return view('course.edit_lang', [
+            'breadcrumbs' => $breadcrumbs,
+            'courseInfo' => $courseInfo,
+            'course' => $course,
+            'lang' => $langType
+        ]);
+    }
+
+    public function updateLang(CourseLangRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $course = Course::where('course_id', $request->course_id)->first();
+        if ($course == null) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::NOT_FOUND);
+        }
+        $courseLangInfo = CourseInfo::updateOrCreate(
+            ['course_id' => $request->course_id, 'lang_type' => $request->lang],
+            ['course_name' => $request->course_name, 'course_description' => $request->course_description]
+        );
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 
     public function registerVideo(CourseRegisterVideoRequest $request, $id)
@@ -435,6 +463,20 @@ class CourseController extends BaseController
 
     }
 
+    public function lessonAttach(Request $request, $id)
+    {
+        $queryBuilder = new Lesson();
+        $lessonHasAdded = CourseLesson::where('course_id', $id)->pluck('lesson_id');
+
+
+        $lessonList = $queryBuilder->whereIn('lesson_id', $lessonHasAdded)->get()->toArray();
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $lessonList
+        ], StatusCode::OK);
+
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -450,17 +492,14 @@ class CourseController extends BaseController
             ['name' => 'course_show', $id],
             ['name' => 'course_edit', $id]
         ]);
-        $tag = Tag::all()->toArray();
 
         $course = Course::where([
             'course_id' => $id,
-            'is_set_course' => false
-        ])->with(['tags'])->first();
+        ])->first();
         if (!$course) return redirect()->route('course.index');
         return view('course.edit', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,
-            'tag' => $tag
         ]);
     }
 
@@ -502,7 +541,6 @@ class CourseController extends BaseController
         }
         $course = Course::where([
             'course_id' => $id,
-            'is_set_course' => false
         ])->first();
         if (!$course)
         return response()->json([
@@ -512,41 +550,29 @@ class CourseController extends BaseController
         if($request->isMethod('PUT')){
             DB::beginTransaction();
             try {
+                $course->publish_date_from =  Carbon::createFromFormat('H:i:s, d/m/Y', $request->fromDate);
+                $course->publish_date_to =  Carbon::createFromFormat('H:i:s, d/m/Y', $request->toDate);
                 $course->display_order = $request->displayOrder;
-                $course->is_show = $request->isShow == true ? 1 : 0;
-                $course->course_name_short = $request->courseNameShort;
+                $course->course_name_short = $request->courseNameShort ?? ' ';
                 $course->course_name = $request->courseName;
-                $course->point_expire_day = $request->pointExpireDay;
                 $course->point_count = $request->pointCount;
-                $course->max_reserve_count = $request->maxReverseCount;
                 $course->amount = $request->amount;
-                $course->paypal_item_number = $request->paypalItemNumber == true ? 1 : 0;
-                $course->is_campaign = $request->isCampaign == true ? 1 : 0;
-                $course->campaign_code = $request->campaignCode;
-                $course->course_description = $request->courseDescription;
-                $course->is_schedule_limit = $request->isScheduleLimit == true ? 1 : 0;
-                $course->reserve_end = $request->reverseEnd;
-                $course->reserve_start = $request->reverseStart;
-                $course->cancel_end = $request->cancelEnd;
-                $course->is_for_lms = $request->isForLMS == true ? 1 : 0;
-                $course->is_set_course = false;
-
-                $course->save();
-
-                CourseTag::where([
-                    'course_id' => $id,
-                ])->delete();
-
-                if (isset($request->tagIds)) {
-                    $arrTagId = explode(',', $request->tagIds);
-                    foreach ($arrTagId as $id) {
-                        $ct = new  CourseTag();
-                        $ct->course_id = $course->course_id;
-                        $ct->tag_id = $id;
-                        $ct->save();
-                    }
+                $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
+                $course->course_description = $request->courseDescription ?? ' ';
+                $course->is_for_lms = $request->isForLMS;
+                $course->course_type = $request->courseType;
+                if (in_array($request->courseType , [CourseTypeEnum::REGULAR_COURSE , CourseTypeEnum::ABILITY_TEST_COURSE])) {
+                    $course->expire_day = $request->expireDay ?? 1;
+                }
+                if ($request->courseType == CourseTypeEnum::GROUP_COURSE) {
+                    $course->min_reserve_count = $request->minReserveCount;
+                    $course->max_reserve_count = $request->maxReserveCount;
+                    $course->decide_date =   Carbon::createFromFormat('H:i:s, d/m/Y', $request->decideDate);
+                    $course->reserve_end_date =   Carbon::createFromFormat('H:i:s, d/m/Y', $request->reverseEndDate);
+                    $course->course_start_date =   Carbon::createFromFormat('H:i:s, d/m/Y', $request->courseStartDate);
                 }
 
+                $course->save();
 
                 DB::commit();
                 return response()->json([

@@ -175,6 +175,10 @@ class BreadcrumbComponent
                 'text' => 'コース編集',
                 'route_str' => "course.edit",
             ],
+            'edit_lang_course' => [
+                'text' => 'コース多言語編集',
+                'route_str' => "course.editLang",
+            ],
             'course_set_edit' => [
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",

@@ -20,9 +20,9 @@
                         ><i class="las la-plus"></i> コース作成
                         </a>
                         &nbsp;
-                        <a href="{{ route('course.setCreate') }}" class="btn btn-primary pull-right"
+{{--                        <a href="{{ route('course.setCreate') }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>  セットコース作成
-                        </a>
+                        </a>--}}
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -43,16 +43,13 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('is_show', ' 公開状況')</th>
                                                     <th class="text-center min-width-150">@sortablelink('course_id', ' コースID')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('course_id', ' セットコード')</th>
                                                     <th class="text-center min-width-120">@sortablelink('display_order', ' 表示順')</th>
                                                     <th class="text-center min-width-120">@sortablelink('course_name', ' コース名')</th>
                                                     <th class="text-center min-width-120">@sortablelink('course_name_short', ' 短縮名')</th>
                                                     <th class="text-center min-width-120">@sortablelink('course_description', ' コース概要')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('campaign_code', ' キャンペーンコード')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('point_count', ' 付与チケット数')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('point_expire_day', ' 有効日数')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('point_count', ' 受講回数')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('expire_day', ' 有効日数')</th>
                                                     <th class="text-center min-width-120">@sortablelink('sum_amount', ' 価格（税抜）')</th>
                                                     <th class="text-center min-width-120"></th>
                                                 </tr>
@@ -60,16 +57,15 @@
                                                 <tbody>
                                                 @foreach ($courseList as $index => $course)
                                                     <tr>
-                                                        <td class="text-center">{{ $course->is_show ? '公開中' : '非公開'}}</td>
-                                                        <td class="text-center">{{ $course->is_set_course ? '' : $course->course_id }}</td>
-                                                        <td class="text-center">{{ $course->is_set_course ? $course->course_id : ''}}</td>
+                                                        <td class="text-center">{{ $course->course_id }}</td>
                                                         <td class="text-center">{{ $course->display_order }}</td>
                                                         <td class="text-center">{{ $course->course_name }}</td>
                                                         <td class="text-center">{{ $course->course_name_short }}</td>
-                                                        <td class="text-center">{{ $course->course_description }}</td>
-                                                        <td class="text-center">{{ $course->campaign_code }}</td>
+                                                        <td class="text-center">
+                                                            <nl2br tag="span" :text="{{json_encode($course->course_description)}}"
+                                                            /></td>
                                                         <td class="text-center">{{ $course->point_count }}</td>
-                                                        <td class="text-center">{{ $course->point_expire_day }}</td>
+                                                        <td class="text-center">{{ $course->有効日数 }}</td>
                                                         <td class="text-center">{{ $course->sumamount }}</td>
 
                                                         <td class="text-center "></td>

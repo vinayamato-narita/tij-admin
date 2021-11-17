@@ -33,6 +33,10 @@ class Course extends Model
             'course_id', 'lesson_id', 'course_id', 'lesson_id');
     }
 
+    public function course_infos() {
+        return $this->hasMany('App\Models\CourseInfo', 'course_id', 'course_id');
+    }
+
 
     public function getSumAmountAttribute(){
         if (!$this->is_set_course) return $this->amount;

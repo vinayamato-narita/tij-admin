@@ -5,5 +5,6 @@
     	:url-action="{{ json_encode(route('paymentHistory.update')) }}" 
     	:url-payment-history-list="{{json_encode(route('paymentHistory.index'))}}"
     	:payment-info="{{ json_encode($paymentInfo) }}"
+    	:admin-can-edit="{{ json_encode($adminCanEdit) }}"
     ></edit-history-payment>
 @endsection

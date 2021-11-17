@@ -21,7 +21,8 @@
                                         <div class="form-group row">
                                             <div class="col-md-6">
                                                 <label style="margin-right: 20px">基本情報</label>
-                                                <a data-toggle="modal" data-target="#student_change_password" href="" class="student-change-password" style="text-decoration: underline">+パスワード変更</a>
+                                                <a data-toggle="modal" data-target="#student_change_password" href="" class="student-change-password" style="text-decoration: underline"
+                                                v-if = "studentInfoEx.admin_can_edit == 1">+パスワード変更</a>
                                             </div>
                                             
                                         </div>
@@ -782,10 +783,12 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center display-flex">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled = "studentInfoEx.admin_can_edit == 0">登録</button>
                                                 <btn-delete :delete-action="deleteAction"
                                                             :message-confirm="messageConfirm" 
-                                                            :url-redirect="urlStudentList"></btn-delete>
+                                                            :url-redirect="urlStudentList"
+                                                            v-if = "studentInfoEx.admin_can_edit == 1"></btn-delete>
+                                                <button type="button" class="btn btn-danger w-100 mr-2 cursor-pointer" disabled v-if= "studentInfoEx.admin_can_edit == 0">登録</button>
                                                 <a :href="urlStudentList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>

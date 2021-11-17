@@ -105,7 +105,6 @@ Route::group([
     Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');   
     Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');   
     Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');   
-    Route::get('comment', 'CommentController@index')->name('comment.index');
     //comment list
     Route::get('/comment', 'CommentController@index')->name('comment.index');
 

@@ -328,7 +328,7 @@
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
-                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('insert-video-modal')">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('ability-test-modal')">
                                                     追加
                                                 </a>
                                             </div>
@@ -418,6 +418,9 @@
                 <dragable-item :detailUrl="detailCourseUrl" :listLessonAttachUrl="listLessonAttachUrl"   :id="course.course_id" :register-url="registerUrl">
 
                 </dragable-item>
+                <ability-test :detailUrl="detailCourseUrl" :id="course.course_id" :register-url="registerUrl">
+
+                </ability-test>
                 <insert-video :id="this.course.course_id" :register-url="registerVideoUrl">
 
                 </insert-video>
@@ -435,6 +438,7 @@
     import InsertVideo from "../course/insert-video";
     import DragableItem from "../course/dragable-item";
     import DeleteItem from "./../../components/common/delete-item";
+    import AbilityTest from "./../../components/course/ability-test";
 
 
 
@@ -458,7 +462,8 @@
             ModalTable,
             DeleteItem,
             InsertVideo,
-            DragableItem
+            DragableItem,
+            AbilityTest
         },
         data() {
             return {

@@ -20,4 +20,9 @@ class Lesson extends Model
     {
         return $this->belongsToMany('App\Models\LessonText', 'lesson_text_lesson' ,'lesson_id', 'lesson_text_id', 'lesson_id', 'lesson_text_id');
     }
+    public function courseLesson()
+    {
+        return $this->hasOne('App\Models\CourseLesson', 'lesson_id', 'lesson_id');
+    }
+
 }

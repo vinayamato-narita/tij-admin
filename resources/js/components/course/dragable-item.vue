@@ -30,7 +30,7 @@
                             該当データがありません
 
                         </div>
-                        <table v-if="dataList.length !=  0" class="table table-responsive-sm table-striped border">
+                        <table v-if="dataList.length > 0" class="table table-responsive-sm table-striped border">
                             <thead>
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
@@ -40,12 +40,12 @@
                                 <th class="text-center text-md-left bg-gray-100">レッスン名</th>
                             </tr>
                             </thead>
-                            <draggable v-model="dataList" tag="tbody">
-                                <tr v-for="lesson in dataList" :key="lesson.lesson_id">
+                            <draggable v-model="dataList" tag="tbody" >
+                                <tr v-for="course_lesson in dataList" >
                                     <td class="text-center">
                                         <input type="checkbox" class=" checkbox" style="display: none;">
                                     </td>
-                                    <td class="text-md-left">{{ lesson.lesson_name }}</td>
+                                    <td class="text-md-left">{{ course_lesson.lesson.lesson_name }}</td>
                                 </tr>
                             </draggable>
                             <tbody>
@@ -93,13 +93,12 @@
         },
         data() {
             return {
-                dataList: [{}],
+                dataList: [],
                 auto: 'auto',
-                checkedIds: [],
-
+                courseLessonIds: []
             };
         },
-        props: ['id', 'registerUrl', 'detailUrl', 'listLessonAttachUrl'],
+        props: ['id', 'registerUrl', 'detailUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl'],
         mounted() {
         },
         created: function () {
@@ -130,8 +129,13 @@
             },
             submit() {
                 let that = this;
+                that.courseLessonIds = [];
+                that.dataList.forEach(function (e) {
+                    that.courseLessonIds.push(e.course_lesson_id)
+                });
+                console.log(that.courseLessonIds)
                 axios
-                    .post(that.registerUrl, that.checkedIds)
+                    .post(that.listLessonAttachUpdateUrl, that.courseLessonIds)
                     .then(response => {
                         window.location = this.detailUrl;
                     })

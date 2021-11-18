@@ -37,10 +37,10 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">生徒に公開する:
+                                        <label class="col-md-3 col-form-label text-md-right">公開日時:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{isPublicCourse ? '公開' : '非公開'}}
+                                            {{this.course.publish_date_from | formatDateCourse}} ～ {{this.course.publish_date_to | formatDateCourse}}
 
                                         </div>
                                     </div>
@@ -338,29 +338,20 @@
                                 </div>
                                 <div class="card-body">
                                     <ol style="margin-left: -30px;list-style-type: none;">
-<!--                                        <li v-for="video in this.courseVideo">
+                                        <li v-for="test in this.course.test_abilities">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-2" >
-                                                    <img :src="video.image_url" style="max-width: 50px;max-height: 50px">
-
-                                                </div>
-                                                <div class="col-md-8 wrap-long-text text-left">
-                                                    <a :href="video.video_url">
-                                                        {{video.video_name}}
-
-                                                    </a>
-                                                </div>
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/test/' + test.test_id" target="_blank" class="wrap-long-text" style="color: inherit">{{test.test_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDeleteVideo(course.course_id , video.course_video_id)"
-                                                            :message-confirm="messageConfirmVideo"
+                                                            :delete-action="getUriTestDelete(course.course_id , test.test_id)"
+                                                            :message-confirm="messageConfirmTest"
                                                     >
                                                     </DeleteItem>
                                                 </div>
 
 
                                             </div>
-                                        </li>-->
+                                        </li>
                                     </ol>
 
                                 </div>
@@ -371,7 +362,7 @@
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
-                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('insert-video-modal')">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-end-test-modal')">
                                                     追加
                                                 </a>
                                             </div>
@@ -381,29 +372,20 @@
                                 </div>
                                 <div class="card-body">
                                     <ol style="margin-left: -30px;list-style-type: none;">
-<!--                                        <li v-for="video in this.courseVideo">
+                                        <li v-for="test in this.course.test_course_ends">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-2" >
-                                                    <img :src="video.image_url" style="max-width: 50px;max-height: 50px">
-
-                                                </div>
-                                                <div class="col-md-8 wrap-long-text text-left">
-                                                    <a :href="video.video_url">
-                                                        {{video.video_name}}
-
-                                                    </a>
-                                                </div>
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/test/' + test.test_id" target="_blank" class="wrap-long-text" style="color: inherit">{{test.test_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDeleteVideo(course.course_id , video.course_video_id)"
-                                                            :message-confirm="messageConfirmVideo"
+                                                            :delete-action="getUriTestDelete(course.course_id , test.test_id)"
+                                                            :message-confirm="messageConfirmTest"
                                                     >
                                                     </DeleteItem>
                                                 </div>
 
 
                                             </div>
-                                        </li>-->
+                                        </li>
                                     </ol>
 
                                 </div>
@@ -415,12 +397,15 @@
                 <modal-table  :detailUrl="detailCourseUrl" :url="listLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="course.course_id" :register-url="registerUrl" :type="type">
 
                 </modal-table>
-                <dragable-item :detailUrl="detailCourseUrl" :listLessonAttachUrl="listLessonAttachUrl"   :id="course.course_id" :register-url="registerUrl">
+                <dragable-item :detailUrl="detailCourseUrl" :listLessonAttachUrl="listLessonAttachUrl"   :id="course.course_id" :register-url="registerUrl" :listLessonAttachUpdateUrl="listLessonAttachUpdateUrl">
 
                 </dragable-item>
-                <ability-test :detailUrl="detailCourseUrl" :id="course.course_id" :register-url="registerUrl">
+                <ability-test :detailUrl="detailCourseUrl" :pageSizeLimit="pageSizeLimit" :id="course.course_id" :url="listTestAbilityUrl" :register-url="registerAbilityTestUrl">
 
                 </ability-test>
+                <course-end-test :detailUrl="detailCourseUrl" :pageSizeLimit="pageSizeLimit" :id="course.course_id" :url="listTestCourseEndUrl" :register-url="registerCourseEndTestUrl">
+
+                </course-end-test>
                 <insert-video :id="this.course.course_id" :register-url="registerVideoUrl">
 
                 </insert-video>
@@ -439,6 +424,7 @@
     import DragableItem from "../course/dragable-item";
     import DeleteItem from "./../../components/common/delete-item";
     import AbilityTest from "./../../components/course/ability-test";
+    import CourseEndTest from "./../../components/course/course-end-test";
 
 
 
@@ -463,15 +449,16 @@
             DeleteItem,
             InsertVideo,
             DragableItem,
-            AbilityTest
+            AbilityTest,
+            CourseEndTest
         },
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
                 type : 'course',
                 messageConfirm : 'このレッスンをコースに解除しますか？',
+                messageConfirmTest : 'このテストをコースに解除しますか？',
                 messageConfirmVideo: 'この動画を削除しますか？',
-                isPublicCourse: new Date(this.course.publish_date_from) <= new Date()  && new Date() <= new Date(this.course.publish_date_to),
                 courseENName : '',
                 courseENDes : '',
                 courseZHName : '',
@@ -480,11 +467,16 @@
 
             };
         },
-        props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl', 'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl'],
+        props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
+            'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, lessonId) {
                 return '/course/'+ id + '/lesson/' + lessonId + '/delete';
+
+            },
+            getUriTestDelete(id, testId) {
+                return '/course/'+ id + '/test/' + testId + '/delete';
 
             },
             getUriDeleteVideo(id, videoId) {

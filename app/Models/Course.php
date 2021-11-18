@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TestTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
@@ -41,6 +42,18 @@ class Course extends Model
     public function getSumAmountAttribute(){
         if (!$this->is_set_course) return $this->amount;
         return $this->childCourse()->sum('amount');
+    }
+
+    public function testAbilities()
+    {
+        return $this->belongsToMany('App\Models\Test', 'course_test' ,
+            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestTypeEnum::ABILITY_TEST);
+    }
+
+    public function testCourseEnds()
+    {
+        return $this->belongsToMany('App\Models\Test', 'course_test' ,
+            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestTypeEnum::COURSE_END_TEST);
     }
 
 

@@ -23,7 +23,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" > 生徒に公開する :
+                                            <label class="col-md-3 col-form-label text-md-right" > 公開日時 :
                                                 <span class="glyphicon glyphicon-star"
                                             ></span>
                                                 </label>

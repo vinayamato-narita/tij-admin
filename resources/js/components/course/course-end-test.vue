@@ -1,7 +1,7 @@
 <template>
-    <modal name="ability-test-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
+    <modal name="course-end-test-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header"> 実力テスト
+            <div class="card-header"> コース終了テスト
 
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -187,7 +187,7 @@
 
             },
             hide () {
-                this.$modal.hide('ability-test-modal');
+                this.$modal.hide('course-end-test-modal');
             },
             getData(){
                 let that = this;

@@ -283,6 +283,22 @@ class BreadcrumbComponent
                 'text' => '権限編集',
                 'route_str' => "admin.editRole",
             ],
+            'preparation_list' => [
+                'text' => '予習一覧',
+                'route_str' => "preparation.index",
+            ],
+            'preparation_add' => [
+                'text' => '予習新規作成',
+                'route_str' => "preparation.create",
+            ],
+            'preparation_show' => [
+                'text' => '予習情報表示',
+                'route_str' => "preparation.show",
+            ],
+            'preparation_edit' => [
+                'text' => '予習編集',
+                'route_str' => "preparation.edit",
+            ]
         ];
     }
 

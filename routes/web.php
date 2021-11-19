@@ -94,6 +94,10 @@ Route::group([
     Route::get('/category/{id}/edit-lang/{type}', 'CategoryController@editLang')->name('category.editLang');
     Route::post('updateLangCategory', 'CategoryController@updateLang')->name('category.updateLang');
 
+    //preparation
+    Route::resource('preparation', PreparationController::class);
+
+
     //csvExport
     Route::resource('csv', CsvController::class);
     Route::post('/csv/exportPayment', 'CsvController@exportPayment')->name('csvExportPayment');

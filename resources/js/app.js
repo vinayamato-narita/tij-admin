@@ -109,6 +109,9 @@ import LessonSchedule from "./components/LessonSchedule/index-lesson-schedule.vu
 import ShowPointHistory from "./components/student/show-point-history.vue"
 import EditRole from "./components/admin/edit-role.vue"
 import EditLangCategory from "./components/category/edit-lang-category.vue"
+import PreparationAdd from "./components/preparation/add"
+import PreparationShow from "./components/preparation/detail.vue"
+import PreparationEdit from "./components/preparation/edit.vue"
 
 new Vue({
     created() {
@@ -267,7 +270,10 @@ new Vue({
         ShowPointHistory,
         EditRole,
         EditLangCategory,
-        EditLangCourse
+        EditLangCourse,
+        PreparationAdd,
+        PreparationShow,
+        PreparationEdit
 
     },
     methods: {},

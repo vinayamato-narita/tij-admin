@@ -99,6 +99,8 @@ const GMO = 37;
 const DEMANDMAIL = 38;
 const ADMINDEMAND = 41;
 const LESSONCANCEL = 43;
+const PREPARATION = 44;
+
 const CANEDIT = 'can_edit';
 const ISPERMITTED = 'is_permitted';
 const CATEGORY = 'CATEGORY';

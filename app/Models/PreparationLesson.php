@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class File extends Model
+class PreparationLesson extends Model
 {
     use HasFactory, Sortable;
 
-    protected $table = 'file';
-
     public $timestamps = false;
+    protected $primaryKey = 'preparation_lesson_id';
 
-    protected $primaryKey = 'file_id';
+    protected $table = 'preparation_lesson';
 }

@@ -46,10 +46,13 @@
 
                                             </label>
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-primary w-100 mr-2">ファイル選択</button>
+                                                <button type="button" class="btn btn-primary w-100 mr-2" v-on:click="show('add-files-modal')">ファイル選択</button>
+                                                <span class="text-nowrap">
+                                                    {{fileNameAttached}}
+                                                </span>
                                                 <button type="button" v-on:click="newFile" class="btn btn-primary  mr-2">新規ファイル追加</button>
                                                 <input type="file" name="newFile" id="newFile" ref="newFile" v-on:change="changeFile" class="hidden">
-                                                <span>
+                                                <span class="text-nowrap">
                                                     {{fileName}}
 
                                                 </span>
@@ -115,6 +118,9 @@
                     </div>
                 </div>
             </div>
+            <add-files :pageSizeLimit="pageSizeLimit" :url="getFilesUrl">
+
+            </add-files>
         </main>
         <loader :flag-show="flagShowLoader"></loader>
     </div>
@@ -125,6 +131,7 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
+    import AddFiles from "./add-files.vue"
 
     export default {
         created: function () {
@@ -146,6 +153,7 @@
         },
         components: {
             Loader,
+            AddFiles
         },
         data() {
             return {
@@ -155,19 +163,36 @@
                 preparationName: '',
                 fileSelected : null,
                 fileName: '',
+                fileNameAttached : '',
                 messageText: this.message,
                 preparationDescription: '',
                 errorsData: {},
+                fileId : null
             };
         },
-        props: ["listPreparationUrl", "createUrl"],
+        props: ["listPreparationUrl", "createUrl", "pageSizeLimit", "getFilesUrl", "fileType"],
         mounted() {
         },
         methods: {
+            show (modalName) {
+                this.$modal.show(modalName ,{
+                    fileType : this.fileType,
+                    fileId: this.fileId,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.fileId = args[0].fileId;
+                            this.fileNameAttached = args[0].selectedFileName;
+                            this.fileSelected = null;
+                            this.fileName = null;
+                        }
+                    }});
+            },
             newFile() {
                 this.$refs.newFile.click();
             },
             changeFile(e) {
+                this.fileId = null;
+                this.fileNameAttached = '';
                 this.fileSelected =  e.target.files[0];
                 this.fileName = e.target.files[0].name;
             },
@@ -176,8 +201,12 @@
                 let formData = new FormData();
                 formData.append("displayOrder", this.displayOrder);
                 formData.append("preparationName", this.preparationName);
-                formData.append("preparationDescription", this.preparationDescription);
+                if (this.preparationDescription)
+                    formData.append("preparationDescription", this.preparationDescription);
+                if (this.fileSelected) 
                 formData.append('fileSelected', this.fileSelected);
+                if (this.fileId) 
+                formData.append('fileId', this.fileId);
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {

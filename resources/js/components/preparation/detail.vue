@@ -40,7 +40,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.preparation.file == null ? '' : this.preparation.file.file_name}}
+                                            {{this.preparation.file == null ? '' : this.preparation.file.file_name_original}}
 
                                         </div>
                                     </div>

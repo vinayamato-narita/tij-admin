@@ -25,4 +25,9 @@ class Lesson extends Model
         return $this->hasOne('App\Models\CourseLesson', 'lesson_id', 'lesson_id');
     }
 
+    public function preparations()
+    {
+        return $this->belongsToMany('App\Models\Preparation', 'preparation_lesson' ,'lesson_id', 'preparation_id', 'lesson_id', 'preparation_id');
+    }
+
 }

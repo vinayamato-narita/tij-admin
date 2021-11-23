@@ -6,7 +6,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            予習新規作成
+                            予習編集
 
                         </h5>
                     </div>
@@ -40,16 +40,29 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label text-md-right" for="displayOrder">予習ID:
+
+                                            </label>
+                                            <div class="col-md-6 text-md-left p-2">
+                                                {{this.preparation.preparation_id}}
+
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right">予習動画:
 
                                             </label>
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-primary w-100 mr-2">ファイル選択</button>
+                                                <button type="button" class="btn btn-primary w-100 mr-2" v-on:click="show('add-files-modal')">ファイル選択</button>
+                                                <span class="text-nowrap">
+                                                    {{fileNameAttached}}
+                                                </span>
                                                 <button type="button" v-on:click="newFile" class="btn btn-primary  mr-2">新規ファイル追加</button>
                                                 <input type="file" name="newFile" id="newFile" ref="newFile" v-on:change="changeFile" class="hidden">
-                                                <span>
+                                                <span class="text-nowrap">
                                                     {{fileName}}
 
                                                 </span>
@@ -116,6 +129,9 @@
                         </div>
                     </div>
                 </div>
+                <add-files :pageSizeLimit="pageSizeLimit" :url="getFilesUrl">
+
+                </add-files>
             </div>
         </main>
         <loader :flag-show="flagShowLoader"></loader>
@@ -127,6 +143,8 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
+    import AddFiles from "./add-files.vue"
+
 
     export default {
         created: function () {
@@ -148,6 +166,7 @@
         },
         components: {
             Loader,
+            AddFiles
         },
         data() {
             return {
@@ -156,16 +175,32 @@
                 flagShowLoader: false,
                 preparationName: this.preparation.preparation_name,
                 fileSelected : null,
-                fileName: this.preparation.file === null ? '' : this.preparation.file.file_name,
+                fileName: '',
                 messageText: this.message,
                 preparationDescription: this.preparation.preparation_description,
                 errorsData: {},
+                fileNameAttached : this.preparation.file === null ? '' : this.preparation.file.file_name_original,
+                fileId :  this.preparation.file === null ? '' : this.preparation.file.file_id
             };
         },
-        props: ["detailPreparationUrl", "updateUrl", 'preparation', 'deleteAction', 'listPreparationUrl'],
+        props: ["detailPreparationUrl", "updateUrl", 'preparation', 'deleteAction', 'listPreparationUrl', 'pageSizeLimit', 'getFilesUrl', 'fileType'],
         mounted() {
         },
         methods: {
+            show (modalName) {
+                this.$modal.show(modalName ,{
+                    fileType : this.fileType,
+                    fileId: this.fileId,
+                    preparationId : this.preparation.preparation_id,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.fileId = args[0].fileId;
+                            this.fileNameAttached = args[0].selectedFileName;
+                            this.fileSelected = null;
+                            this.fileName = null;
+                        }
+                    }});
+            },
             showAlert() {
                 let that = this;
                 this.$swal({
@@ -204,6 +239,8 @@
                 this.$refs.newFile.click();
             },
             changeFile(e) {
+                this.fileId = null;
+                this.fileNameAttached = '';
                 this.fileSelected =  e.target.files[0];
                 this.fileName = e.target.files[0].name;
             },
@@ -212,8 +249,12 @@
                 let formData = new FormData();
                 formData.append("displayOrder", this.displayOrder);
                 formData.append("preparationName", this.preparationName);
-                formData.append("preparationDescription", this.preparationDescription);
-                formData.append('fileSelected', this.fileSelected);
+                if (this.preparationDescription)
+                    formData.append("preparationDescription", this.preparationDescription);
+                if (this.fileSelected)
+                    formData.append('fileSelected', this.fileSelected);
+                if (this.fileId)
+                    formData.append('fileId', this.fileId);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.preparation.preparation_id);
 

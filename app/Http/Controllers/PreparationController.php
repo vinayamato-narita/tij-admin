@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
+use App\Enums\FileTypeEnum;
 use App\Enums\StatusCode;
 use App\Http\Requests\StoreUpdatePreparationRequest;
+use App\Models\File;
 use App\Models\Preparation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PreparationController extends BaseController
 {
@@ -76,6 +81,25 @@ class PreparationController extends BaseController
                 $preparation->display_order = $request->displayOrder;
                 $preparation->preparation_name = $request->preparationName;
                 $preparation->preparation_description = $request->preparationDescription;
+
+                if (isset($request->fileSelected)) {
+                   $name = TIJAdminAzureComponent::upload(AzureFolderEnum::PREPARATION, $request->fileSelected);
+                   if ($name) {
+                       $file = new File();
+                       $file->file_name = $name;
+                       $file->file_name_original = $request->fileSelected->getClientOriginalName();
+                       $file->file_path = AzureFolderEnum::PREPARATION . '/' . $name;
+                       $file->file_type = FileTypeEnum::PREPARATION_VIDEO;
+                       $file->save();
+                       $preparation->file_id = $file->file_id;
+                   }
+                }
+                if (isset($request->fileId)) {
+                    $storedFile = File::query()->find($request->fileId);
+                    if ($storedFile)
+                    $preparation->file_id = $storedFile->file_id;
+
+                }
                 $preparation->save();
                 DB::commit();
                 return response()->json([
@@ -160,6 +184,24 @@ class PreparationController extends BaseController
                 $preparation->display_order = $request->displayOrder;
                 $preparation->preparation_name = $request->preparationName;
                 $preparation->preparation_description = $request->preparationDescription;
+                if (isset($request->fileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::PREPARATION, $request->fileSelected);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $request->fileSelected->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::PREPARATION . '/' . $name;
+                        $file->file_type = FileTypeEnum::PREPARATION_VIDEO;
+                        $file->save();
+                        $preparation->file_id = $file->file_id;
+                    }
+                }
+                if (isset($request->fileId)) {
+                    $storedFile = File::query()->find($request->fileId);
+                    if ($storedFile)
+                        $preparation->file_id = $storedFile->file_id;
+
+                }
 
                 $preparation->save();
                 DB::commit();

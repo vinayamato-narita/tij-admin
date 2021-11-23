@@ -8,6 +8,8 @@ use App\Http\Requests\StoreUpdateLessonRequest;
 use App\Models\Lesson;
 use App\Models\LessonText;
 use App\Models\LessonTextLesson;
+use App\Models\Preparation;
+use App\Models\PreparationLesson;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,7 +117,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->with('lessonText')->first();
+        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -157,12 +159,75 @@ class LessonController extends BaseController
         }
         $lessonTextHasAdded = LessonTextLesson::where('lesson_id', $id)->pluck('lesson_text_id');
 
-        $lessonTextList = $queryBuilder->whereNotIn('id', $lessonTextHasAdded)->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        $lessonTextList = $queryBuilder->whereNotIn('lesson_text_id', $lessonTextHasAdded)->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $lessonTextList
         ], StatusCode::OK);
 
+    }
+
+    public function preparation(Request $request)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Preparation();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('preparation_name', $request['inputSearch']));
+            });
+        }
+
+        $preparationList = $queryBuilder->sortable(['preparation_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $preparationList
+        ], StatusCode::OK);
+
+    }
+
+    public function registerPreparation(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $pl = new PreparationLesson();
+            $pl->preparation_id = $request->preparationId;
+            $pl->lesson_id = $request->lessonId;
+            $pl->save();
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function preparationDelete($id, $preparationId)
+    {
+
+        try {
+            $preparationLesson = PreparationLesson::where([
+                'lesson_id' => $id,
+                'preparation_id' => $preparationId
+            ])->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' 予習の解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
     }
 
 

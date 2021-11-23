@@ -23,8 +23,18 @@ class FileController extends BaseController
         if (isset($request->preparationId)) {
             $preparation = Preparation::find($request->preparationId);
             $selected = File::where('file_id', '=', $preparation->file_id);
+            if (isset($request['inputSearch'])) {
+                $selected = $selected->where(function ($query) use ($request) {
+                    $query->where($this->escapeLikeSentence('file_name_original', $request['inputSearch']));
+                });
+            }
 
             $later = File::where('file_id', '!=', $preparation->file_id)->sortable(['file_id' => 'asc']);
+            if (isset($request['inputSearch'])) {
+                $later = $later->where(function ($query) use ($request) {
+                    $query->where($this->escapeLikeSentence('file_name_original', $request['inputSearch']));
+                });
+            }
 
             $fileList = $selected->union($later)->paginate($pageLimit);
         }

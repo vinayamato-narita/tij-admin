@@ -12,6 +12,7 @@ use App\Models\File;
 use App\Models\Preparation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PreparationController extends BaseController
@@ -106,6 +107,7 @@ class PreparationController extends BaseController
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
+                Log::error($exception);
                 DB::rollBack();
                 return response()->json([
                     'status' => 'INTERNAL_ERR',

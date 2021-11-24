@@ -2,6 +2,7 @@
 use App\Enums\InquiryFlag;
 use App\Enums\StudentEntryType;
 use App\Enums\LangTypeOption;
+use App\Enums\TestType;
 return [
     InquiryFlag::class => [
         InquiryFlag::SUPPORTED => '対応済',
@@ -16,5 +17,10 @@ return [
     ],
     LangTypeOption::class => [
         LangTypeOption::JAPANESE => '日本語',
+    ],
+    TestType::class => [
+        TestType::CONFIRMED => '確認テスト',
+        TestType::ABILITY => '実力テスト',
+        TestType::ENDCOURSE => 'コース終了テスト',
     ],
 ];

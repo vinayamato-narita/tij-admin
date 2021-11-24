@@ -6,7 +6,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            予習新規作成
+                            復習新規作成
 
                         </h5>
                     </div>
@@ -17,7 +17,7 @@
                             <div class="card">
                                 <form class="form-horizontal " style="width: 100%" method="POST" ref="registerForm"
                                       @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">予習情報
+                                    <div class="card-header">復習情報
                                     </div>
                                     <div class="card-body">
 
@@ -42,7 +42,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right">予習動画:
+                                            <label class="col-md-3 col-form-label text-md-right">復習動画:
 
                                             </label>
                                             <div class="col-md-6">
@@ -67,17 +67,17 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="preparationName">予習名:
+                                            <label class="col-md-3 col-form-label text-md-right" for="preparationName">復習名:
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="preparationName" type="text"
-                                                       name="preparationName" @input="changeInput()"
-                                                       v-model="preparationName" v-validate="'required|max:255'"/>
+                                                <input class="form-control" id="reviewName" type="text"
+                                                       name="reviewName" @input="changeInput()"
+                                                       v-model="reviewName" v-validate="'required|max:255'"/>
 
                                                 <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("preparationName") }}
+                                                    {{ errors.first("reviewName") }}
                                                 </div>
 
 
@@ -87,17 +87,17 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right"
-                                                   for="preparationDescription"> 説明: </label>
+                                                   for="reviewDescription"> 説明: </label>
 
                                             <div class="col-md-6">
-                                                            <textarea class="form-control" id="preparationDescription"
-                                                                      name="preparationDescription"
+                                                            <textarea class="form-control" id="reviewDescription"
+                                                                      name="reviewDescription"
                                                                       @input="changeInput()"
-                                                                      v-model="preparationDescription">
+                                                                      v-model="reviewDescription">
                                                             </textarea>
 
                                                 <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("preparationDescription") }}
+                                                    {{ errors.first("reviewDescription") }}
                                                 </div>
 
                                             </div>
@@ -109,7 +109,7 @@
                                             <div class="form-group">
                                                 <div class="text-center">
                                                     <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                    <a :href="listPreparationUrl" class="btn btn-default w-100">閉じる</a>
+                                                    <a :href="listReviewUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
 
@@ -147,9 +147,9 @@
                         min_value: "表示順は1～1000000000 を入力してください",
                         max_value: "表示順は1～1000000000 を入力してください"
                     },
-                    preparationName: {
-                        required: "予習名を入力してください",
-                        max: "予習名は255文字以内で入力してください。",
+                    reviewName: {
+                        required: "復習名を入力してください",
+                        max: "復習名は255文字以内で入力してください。",
                     },
 
                 },
@@ -165,17 +165,17 @@
                 csrfToken: Laravel.csrfToken,
                 displayOrder: 1,
                 flagShowLoader: false,
-                preparationName: '',
+                reviewName: '',
                 fileSelected: null,
                 fileName: '',
                 fileNameAttached: '',
                 messageText: this.message,
-                preparationDescription: '',
+                reviewDescription: '',
                 errorsData: {},
                 fileId: null
             };
         },
-        props: ["listPreparationUrl", "createUrl", "pageSizeLimit", "getFilesUrl", "fileType"],
+        props: ["listReviewUrl", "createUrl", "pageSizeLimit", "getFilesUrl", "fileType"],
         mounted() {
         },
         methods: {
@@ -206,9 +206,9 @@
                 let that = this;
                 let formData = new FormData();
                 formData.append("displayOrder", this.displayOrder);
-                formData.append("preparationName", this.preparationName);
+                formData.append("reviewName", this.reviewName);
                 if (this.preparationDescription)
-                    formData.append("preparationDescription", this.preparationDescription);
+                    formData.append("reviewDescription", this.reviewDescription);
                 if (this.fileSelected)
                     formData.append('fileSelected', this.fileSelected);
                 if (this.fileId)
@@ -225,14 +225,14 @@
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "予習新規作成が完了しました。",
+                                    title: "復習新規作成が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listPreparationUrl;
+                                window.location.href = this.listReviewUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

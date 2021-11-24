@@ -112,6 +112,9 @@ import EditLangCategory from "./components/category/edit-lang-category.vue"
 import PreparationAdd from "./components/preparation/add"
 import PreparationShow from "./components/preparation/detail.vue"
 import PreparationEdit from "./components/preparation/edit.vue"
+import ReviewAdd from "./components/review/add"
+import ReviewShow from "./components/review/detail.vue"
+import ReviewEdit from "./components/review/edit.vue"
 
 new Vue({
     created() {
@@ -273,7 +276,10 @@ new Vue({
         EditLangCourse,
         PreparationAdd,
         PreparationShow,
-        PreparationEdit
+        PreparationEdit,
+        ReviewAdd,
+        ReviewShow,
+        ReviewEdit
 
     },
     methods: {},

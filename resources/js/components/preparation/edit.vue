@@ -171,7 +171,7 @@
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
-                displayOrder: 1,
+                displayOrder: this.preparation.display_order,
                 flagShowLoader: false,
                 preparationName: this.preparation.preparation_name,
                 fileSelected : null,

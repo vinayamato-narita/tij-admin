@@ -54,6 +54,9 @@ Route::group([
     Route::get('lesson/preparation', 'LessonController@preparation')->name('lesson.preparation');
     Route::post('lesson/preparation', 'LessonController@registerPreparation')->name('lesson.registerPreparation');
     Route::delete('lesson/{id}/preparation/{preparationId}/delete', 'LessonController@preparationDelete')->name('lesson.preparationDelete');
+    Route::get('lesson/review', 'LessonController@review')->name('lesson.review');
+    Route::post('lesson/review', 'LessonController@registerReview')->name('lesson.registerReview');
+    Route::delete('lesson/{id}/review/{reviewId}/delete', 'LessonController@reviewDelete')->name('lesson.reviewDelete');
     Route::resource('lesson', LessonController::class);
     Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
@@ -99,6 +102,9 @@ Route::group([
 
     //preparation
     Route::resource('preparation', PreparationController::class);
+    
+    //review
+    Route::resource('review', ReviewController::class);
 
     //file
     Route::get('files/get_files', 'FileController@getFiles')->name('files.getFiles');

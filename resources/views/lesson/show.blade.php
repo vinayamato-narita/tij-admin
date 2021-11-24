@@ -11,6 +11,8 @@
             :list-text-lesson-url ="{{json_encode(route('lesson.textLesson', $lesson->lesson_id))}}"
             :list-preparation-url ="{{json_encode(route('lesson.preparation'))}}"
             :register-preparation-url ="{{json_encode(route('lesson.registerPreparation'))}}"
+            :list-review-url ="{{json_encode(route('lesson.review'))}}"
+            :register-review-url ="{{json_encode(route('lesson.registerReview'))}}"
 
     >
 

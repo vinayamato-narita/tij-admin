@@ -150,6 +150,15 @@
                       予習管理
                     </a>
                 </li>
+
+                <li class=" c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([REVIEW], $adminUserRights) }}">
+                    <a class=" c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(REVIEW) }}" href="{{route('review.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        復習管理
+                    </a>
+                </li>
             </ul>
         </li>
 

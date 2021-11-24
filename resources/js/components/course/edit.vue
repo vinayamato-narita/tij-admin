@@ -17,7 +17,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">コース情報
+                                    <div class="card-header">コース編集
 
 
                                     </div>
@@ -25,46 +25,77 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="isShow"> 生徒に公開する :
+                                            <label class="col-md-3 col-form-label text-md-right" > 公開日時 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
                                             </label>
 
-                                            <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="isShow" name="isShow"
-                                                       type="checkbox"
-                                                       @input="changeInput()" v-model="isShow" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isShow">
-                                                    公開する
-                                                </label>
+                                            <div class="col-md-9 col-form-label row">
+                                                <div class="row ml-0">
+                                                    <div class="col-md-2 pr-0">
+                                                        <date-picker
+                                                                v-model="publish_date_from_date"
+                                                                :format="'YYYY/MM/DD'"
+                                                                type="date"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="publish_date_from_date" v-validate="'required|compare_publish_date'" v-model="publish_date_from_date">
 
 
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("isShow") }}
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("publish_date_from_date") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 pr-0">
+                                                        <date-picker
+                                                                v-model="publish_date_from_time"
+                                                                :format="'HH:mm'"
+                                                                type="time"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="publish_date_from_date" v-validate="'required'" v-model="publish_date_from_time">
+
+                                                    </div>
+                                                    <div class="d-flex align-items-center" style="padding: 0px 10px;height: 34px">
+                                                        ～
+                                                    </div>
+
+
+                                                    <div class="col-md-2 pl-0 pr-0">
+                                                        <date-picker
+                                                                v-model="publish_date_to_date"
+                                                                :format="'YYYY/MM/DD'"
+                                                                type="date"
+                                                        ></date-picker>
+
+                                                        <input type="hidden" name="publish_date_to_date" v-validate="'required'" v-model="publish_date_to_date">
+
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("publish_date_to_date") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 ">
+                                                        <date-picker
+                                                                v-model="publish_date_to_time"
+                                                                :format="'HH:mm'"
+                                                                type="time"
+                                                        ></date-picker>
+
+                                                        <input type="hidden" name="publish_date_to_date" v-validate="'required'" v-model="publish_date_to_time">
+
+                                                    </div>
+
                                                 </div>
 
-                                            </div>
-                                        </div>
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="tagValue">タグ :
-
-                                            </label>
-                                            <div class="col-md-6">
-
-                                                <multiselect class="" v-model="tagValue"   placeholder="" id="tagValue" name="tagValue" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" ></multiselect>
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("tagValue") }}
-                                                </div>
 
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
+                                            <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder"  onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -74,7 +105,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="courseName">コース名:
+                                            <label class="col-md-3 col-form-label text-md-right" for="courseName">コース名 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
@@ -89,7 +120,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="courseNameShort">短縮名              :
+                                            <label class="col-md-3 col-form-label text-md-right" for="courseNameShort">短縮名 :
 
                                             </label>
                                             <div class="col-md-6">
@@ -104,7 +135,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="pointCount">付与チケット数:
+                                            <label class="col-md-3 col-form-label text-md-right" for="pointCount">受講回数 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
@@ -118,39 +149,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="pointExpireDay">チケット有効日数 :
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="pointExpireDay" type="number" name="pointExpireDay" @input="changeInput()" style="max-width: 100px" v-model="pointExpireDay" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("pointExpireDay") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
 
 
                                         <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="maxReverseCount">レッスン予約可能最大数  :
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="maxReverseCount" type="number" name="maxReverseCount" @input="changeInput()" style="max-width: 100px" v-model="maxReverseCount" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("maxReverseCount") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="amount">価格（税抜）  :
+                                            <label class="col-md-3 col-form-label text-md-right" for="amount">価格（税抜）:
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
@@ -166,7 +168,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">商品コード
+                                            <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">商品コード :
                                             </label>
                                             <div class="col-md-6">
                                                 <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="'max:45'" />
@@ -179,41 +181,6 @@
                                             </div>
                                         </div>
 
-
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="isCampaign"> キャンペーンコース :
-                                            </label>
-
-                                            <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="isCampaign" name="isCampaign"
-                                                       type="checkbox"
-                                                       @input="changeInput()" v-model="isCampaign" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isShow">
-                                                    キャンペーンコースに登録する
-                                                </label>
-
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("isShow") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="campaignCode">キャンペーンコード              :
-                                                :
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="campaignCode" type="text" name="campaignCode" @input="changeInput()"  v-model="campaignCode"  v-validate="'max:8'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("campaignCode") }}
-                                                </div>
-
-
-                                            </div>
-                                        </div>
 
 
                                         <div class="form-group row ">
@@ -233,94 +200,23 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right">
-                                                レッスン時間制限:
+                                                法人・個人 :
                                             </label>
                                             <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="isScheduleLimit_0" name="isScheduleLimit"
+                                                <input class=" checkbox" id="isForlms_0" name="isForLMS"
                                                        type="radio"
                                                        value="0"
-                                                       @input="changeInput()" v-model="isScheduleLimit" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isScheduleLimit_0">
-                                                    制限なし
+                                                       @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="isForlms_0">
+                                                    個人
                                                 </label>
-                                                <input class=" checkbox" id="isScheduleLimit_1" name="isScheduleLimit"
+                                                &nbsp;
+                                                <input class=" checkbox" id="isForlms_1" name="isForLMS"
                                                        type="radio"
                                                        value="1"
-                                                       @input="changeInput()" v-model="isScheduleLimit" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isScheduleLimit_1">
-                                                    制限あり
-                                                </label>
-
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("isScheduleLimit") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="reverseStart">レッスン予約制限  :
-
-                                            </label>
-                                            <div class="col-md-6 col-sm-6">
-                                                <div class="row">
-                                                    <input class="form-control col-md-3 col-sm-3" id="reverseStart" type="number" name="reverseStart" @input="changeInput()" style="max-width: 100px" v-model="reverseStart" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000|custom_compare'" />
-
-                                                    <div class="col-md-2 text-center p-2 col-sm-2 ">分前 ~</div>
-
-                                                    <input class="form-control col-md-3 col-sm-3" id="reverseEnd" type="number" name="reverseEnd" @input="changeInput()" style="max-width: 100px" v-model="reverseEnd" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000|custom_compare'" />
-
-                                                    <div class="col-md-2 text-center p-2 col-sm-2">分前 </div>
-
-                                                </div>
-
-
-
-
-                                                <div class="input-group is-danger" role="alert" v-if="errors.first('reverseStart')">
-                                                    {{ errors.first("reverseStart") }}
-
-                                                </div>
-                                                <div class="input-group is-danger" role="alert" v-if="errors.first('reverseEnd')">
-
-                                                    {{ errors.first("reverseEnd") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="cancelEnd">キャンセル時間制限    :
-
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 row">
-                                                <input class="form-control col-md-3 col-sm-3" id="cancelEnd" type="number" name="cancelEnd" @input="changeInput()" style="max-width: 100px" v-model="cancelEnd" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
-
-                                                <div class="col-md-2 text-center p-2 col-sm-2 ">分前まで</div>
-
-
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("cancelEnd") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="isCampaign"> LMS表示用 :
-
-                                            </label>
-
-                                            <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="isForLMS" name="isForLMS"
-                                                       type="checkbox"
                                                        @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isForLMS">
-                                                    LMS表示用
+                                                <label class="" for="isForlms_1">
+                                                    法人
                                                 </label>
 
 
@@ -331,6 +227,214 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right">
+                                                コースタイプ :
+                                            </label>
+                                            <div class="col-md-6 col-form-label">
+
+                                                <input class=" checkbox" id="courseType_0" name="courseType"
+                                                       disabled=""
+                                                       type="radio"
+                                                       value="0"
+                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="courseType_0">
+                                                    通常コース
+                                                </label>
+                                                &nbsp;
+                                                &nbsp;
+                                                <input class=" checkbox" id="courseType_1" name="courseType"
+                                                       disabled=""
+                                                       type="radio"
+                                                       value="1"
+                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="courseType_1">
+                                                    実力テスト用コース
+                                                </label>
+                                                &nbsp;
+                                                &nbsp;
+
+                                                <input class=" checkbox" id="courseType_2" name="courseType"
+                                                       disabled=""
+                                                       type="radio"
+                                                       value="2"
+                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="courseType_2">
+                                                    グループコース
+                                                </label>
+
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("courseType") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row " v-if="courseType == 0 || courseType == 1">
+                                            <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" style="max-width: 100px" id="expireDay" type="number" name="expireDay" @input="changeInput()"  v-model="expireDay"  />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("expireDay") }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row " v-if="courseType == 2">
+                                            <label class="col-md-3 col-form-label text-md-right" for="minReserveCount">最小開催人数 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+
+                                                <input class="form-control" id="minReserveCount" type="number" name="minReserveCount" style="max-width: 100px"  onKeyDown="return false" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" @input="changeInput()" @change="validateDepend('maxReserveCount')"  v-model="minReserveCount"  />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("minReserveCount") }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row " v-if="courseType == 2">
+                                            <label class="col-md-3 col-form-label text-md-right" for="maxReserveCount">最大申込人数 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="maxReserveCount" style="max-width: 100px" onKeyDown="return false" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" type="number" name="maxReserveCount" @input="changeInput()" @change="validateDepend('minReserveCount')"  v-model="maxReserveCount"  />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("maxReserveCount") }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row " v-if="courseType == 2">
+                                            <label class="col-md-3 col-form-label text-md-right" > 開催決定日時 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+
+                                            <div class="col-md-9 col-form-label row">
+                                                <div class="row ml-0">
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="decideDateDate"
+                                                                :format="'YYYY/MM/DD'"
+                                                                type="date"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateDate">
+
+
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("decideDateDate") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="decideDateTime"
+                                                                :format="'HH:mm'"
+                                                                type="time"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateTime">
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row " v-if="courseType == 2">
+                                            <label class="col-md-3 col-form-label text-md-right" > 申込期限 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+
+                                            <div class="col-md-9 col-form-label row">
+                                                <div class="row ml-0">
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="reverseEndDateDate"
+                                                                :format="'YYYY/MM/DD'"
+                                                                type="date"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateDate">
+
+
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("reverseEndDateDate") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="reverseEndDateTime"
+                                                                :format="'HH:mm'"
+                                                                type="time"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateTime">
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row " v-if="courseType == 2">
+                                            <label class="col-md-3 col-form-label text-md-right" > 開講日時 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+
+                                            <div class="col-md-9 col-form-label row">
+                                                <div class="row ml-0">
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="courseStartDateDate"
+                                                                :format="'YYYY/MM/DD'"
+                                                                type="date"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateDate">
+
+
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("courseStartDateDate") }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pr-0">
+                                                        <date-picker
+                                                                v-model="courseStartDateTime"
+                                                                :format="'HH:mm'"
+                                                                type="time"
+                                                        ></date-picker>
+                                                        <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateTime">
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+
+
+
 
 
                                         <div class="form-actions text-center">
@@ -338,7 +442,7 @@
                                             <div class="form-group">
                                                 <div class="text-center">
                                                     <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                    <a :href="listCourseUrl" class="btn btn-default w-100">閉じる</a>
+                                                    <a :href="detailCourseUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
 
@@ -366,11 +470,16 @@
 
     export default {
         created: function () {
-            this.loadTags();
-
 
             let messError = {
                 custom: {
+                    publish_date_from_date : {
+                        required :  "公開開始日時を選択してください",
+                        compare_publish_date : "公開開始日時は公開終了日時より小さくなければなりません"
+                    },
+                    publish_date_to_date : {
+                        required :  "公開終了日時を選択してください"
+                    },
                     displayOrder : {
                         require: "表示順を入力してください",
                         min_value: "表示順は1～1000000000 を入力してください",
@@ -384,19 +493,9 @@
                         max: "短縮名は255文字以内で入力してください。",
                     },
                     pointCount : {
-                        require: "付与チケット数はを入力してください",
-                        min_value: "付与チケット数は1～1000000000 を入力してください",
-                        max_value: "付与チケット数は1～1000000000 を入力してください"
-                    },
-                    pointExpireDay : {
-                        require: "チケット有効日数はを入力してください",
-                        min_value: "チケット有効日数は1～1000000000 を入力してください",
-                        max_value: "チケット有効日数は1～1000000000 を入力してください"
-                    },
-                    maxReverseCount : {
-                        require: "レッスン予約可能最大数はを入力してください",
-                        min_value: "レッスン予約可能最大数は1～1000000000 を入力してください",
-                        max_value: "レッスン予約可能最大数は1～1000000000 を入力してください"
+                        require: "受講回数はを入力してください",
+                        min_value: "受講回数は1～1000000000 を入力してください",
+                        max_value: "受講回数は1～1000000000 を入力してください"
                     },
                     amount : {
                         require: "価格（税抜）はを入力してください",
@@ -406,19 +505,29 @@
                     paypalItemNumber : {
                         max: "商品コードは45文字以内で入力してください。"
                     },
-                    campaignCode : {
-                        max: "キャンペーンコードは8文字以内で入力してください。"
+                    minReserveCount : {
+                        require: "最小開催人数はを入力してください",
+                        min_value: "最小開催人数は1～1000000000 を入力してください",
+                        max_value: "最小開催人数は1～1000000000 を入力してください",
+                        custom_compare: "最小開催人数は最大申込人数より小さくなければなりません"
                     },
-                    reverseStart : {
-                        min_value: "レッスン予約制限は1～1000000000 を入力してください",
-                        max_value: "レッスン予約制限は1～1000000000 を入力してください",
-                        custom_compare: "ToはFromを超えないで設定してください"
+                    maxReserveCount : {
+                        require: "最大申込人数を入力してください",
+                        min_value: "最大申込人数は1～1000000000 を入力してください",
+                        max_value: "最大申込人数は1～1000000000 を入力してください",
+                        custom_compare: "最小開催人数は最大申込人数より小さくなければなりません"
                     },
-                    reverseEnd : {
-                        min_value: "レッスン予約制限は1～1000000000 を入力してください",
-                        max_value: "レッスン予約制限は1～1000000000 を入力してください",
-                        custom_compare: "ToはFromを超えないで設定してください"
+                    decideDateDate : {
+                        required :  "開催決定日時 を選択してください",
                     },
+                    reverseEndDateDate : {
+                        required :  "申込期限を選択してください"
+                    },
+                    courseStartDateDate : {
+                        required :  "開講日時を選択してください"
+                    },
+
+
 
                 },
             };
@@ -426,92 +535,91 @@
             let that = this;
             this.$validator.extend("custom_compare", {
                 validate(value, args) {
-                    if (that.reverseStart != '' && that.reverseStart < that.reverseEnd) return {valid: false }
+                    if (that.maxReserveCount < that.minReserveCount) return {valid: false }
                     return {valid: true}
                 }
             });
-            this.course.tags.forEach(function (e) {
-                that.tagValue.push({name: e.tag_name, code: e.id});
+            this.$validator.extend("compare_publish_date", {
+                validate(value, args) {
+                    if (!(that.publish_date_from_date && that.publish_date_from_time && that.publish_date_to_date && that.publish_date_to_time)) return {valid: true };
+                    var fromDate = that.publish_date_from_date.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
+                    var toDate = that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
+                    return {valid: (fromDate - toDate) < 0 ? true : false}
+                }
             });
         },
         components: {
             Loader,
-
-        },
-        computed : {
         },
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
-                isShow : this.course.is_show,
-                tagValue: [],
-                tagIds: [],
-                options: [],
+                publish_date_from_date : new Date(this.course.publish_date_from),
+                publish_date_from_time : new Date(this.course.publish_date_from),
+                publish_date_to_date : new Date(this.course.publish_date_to),
+                publish_date_to_time : new Date(this.course.publish_date_to),
+                decideDateTime : this.course.decide_date === null ? null : new Date(this.course.decide_date),
+                decideDateDate : this.course.decide_date === null ? null : new Date(this.course.decide_date),
+                reverseEndDateTime : this.course.reserve_end_date == null ? null : new Date(this.course.reserve_end_date),
+                reverseEndDateDate : this.course.reserve_end_date == null ? null : new Date(this.course.reserve_end_date),
+                courseStartDateTime : this.course.course_start_date == null ? null : new Date(this.course.course_start_date),
+                courseStartDateDate : this.course.course_start_date == null ? null : new Date(this.course.course_start_date),
+                maxReserveCount : this.course.max_reserve_count,
+                minReserveCount : this.course.min_reserve_count,
+                expireDay : this.course.expire_day,
                 displayOrder: this.course.display_order,
+                courseDescription : this.course.course_description,
                 courseName : this.course.course_name,
                 courseNameShort: this.course.course_name_short,
-                pointExpireDay: this.course.point_expire_day,
                 pointCount: this.course.point_count,
-                maxReverseCount : this.course.max_reserve_count,
                 amount : this.course.amount,
                 paypalItemNumber : this.course.paypal_item_number,
-                isCampaign : this.course.is_campaign,
-                campaignCode : this.course.campaign_code,
-                courseDescription : this.course.course_description,
-                isScheduleLimit : this.course.is_schedule_limit,
-                reverseEnd : this.course.reserve_end,
-                reverseStart : this.course.reserve_start,
-                cancelEnd : this.course.cancel_end,
+                courseType: this.course.course_type,
                 isForLMS : this.course.is_for_lms,
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
             };
         },
-        props: ["listCourseUrl", "updateUrl", "tags", 'course', 'detailUrl'],
+        props: ["listCourseUrl", "updateUrl", 'detailCourseUrl', 'course', ],
         mounted() {},
+        computed : {
+        },
         methods: {
-            loadTags() {
-                let that = this;
-                this.tags.forEach(function (e) {
-                    that.options.push({name: e.tag_name, code: e.id})
-                });
-            },
-            convertTagIds() {
-                let that = this;
-                this.tagValue.forEach(function (e) {
-                    that.tagIds.push(e.code)
-                });
-            },
             register() {
                 let that = this;
                 let formData = new FormData();
-                formData.append("isShow", this.isShow);
-                this.convertTagIds();
-                formData.append("tagIds", this.tagIds);
                 formData.append("displayOrder", this.displayOrder);
-                if (this.courseNameShort !== null)
-                    formData.append("courseNameShort", this.courseNameShort);
+                formData.append("courseNameShort", this.courseNameShort);
                 formData.append("courseName", this.courseName);
-                formData.append("pointExpireDay", this.pointExpireDay);
                 formData.append("pointCount", this.pointCount);
-                formData.append("maxReverseCount", this.maxReverseCount);
+                formData.append("maxReserveCount", this.maxReserveCount);
+                formData.append("minReserveCount", this.minReserveCount);
                 formData.append("amount", this.amount);
                 formData.append("paypalItemNumber", this.paypalItemNumber);
-                formData.append("isCampaign", this.isCampaign);
-                if (this.campaignCode !== null)
-                    formData.append("campaignCode", this.campaignCode);
-                if (this.courseDescription !== null)
-                    formData.append("courseDescription", this.courseDescription);
-                formData.append("isScheduleLimit", this.isScheduleLimit);
-                formData.append("reverseEnd", this.reverseEnd);
-                formData.append("reverseStart", this.reverseStart);
-                formData.append("cancelEnd", this.cancelEnd);
+                formData.append("courseDescription", this.courseDescription);
                 formData.append("isForLMS", this.isForLMS);
+                formData.append("courseType", this.courseType);
+                formData.append("expireDay", this.expireDay);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.course.course_id);
+
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
+                        that.publish_date_from_date.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
+                        formData.append("fromDate", that.publish_date_from_date.toLocaleString());
+                        that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
+                        formData.append("toDate", that.publish_date_to_date.toLocaleString());
+                        if (that.courseType == 2) {
+                            formData.append("minReserveCount", this.minReserveCount);
+                            formData.append("maxReserveCount", this.maxReserveCount);
+                            that.decideDateDate.setHours(that.decideDateTime.getHours(), that.decideDateTime.getMinutes())
+                            formData.append("decideDate", that.decideDateDate.toLocaleString());
+                            that.reverseEndDateDate.setHours(that.reverseEndDateTime.getHours(), that.reverseEndDateTime.getMinutes())
+                            formData.append("reverseEndDate", that.reverseEndDateDate.toLocaleString());
+                            that.courseStartDateDate.setHours(that.courseStartDateTime.getHours(), that.courseStartDateTime.getMinutes())
+                            formData.append("courseStartDate", that.courseStartDateDate.toLocaleString());
+                        }
                         that.flagShowLoader = true;
                         axios
                             .post(that.updateUrl , formData, {
@@ -521,14 +629,14 @@
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "コース新規作成が完了しました。",
+                                    title: "コース編集が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.detailUrl;
+                                window.location.href = this.detailCourseUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {
@@ -539,7 +647,7 @@
                                         break;
                                     case 500:
                                         this.$swal({
-                                            title: "失敗したデータを追加しました",
+                                            title: "失敗したデータを編集しました",
                                             icon: "error",
                                             confirmButtonText: "OK",
                                         }).then(function (confirm) {});
@@ -558,9 +666,9 @@
                 this.errorsData = [];
                 this.messageText = "";
             },
+            validateDepend(depend) {
+                this.$validator.validate(depend)
+            }
         },
     }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
-<style>

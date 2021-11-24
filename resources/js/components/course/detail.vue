@@ -37,26 +37,14 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">生徒に公開する:
+                                        <label class="col-md-3 col-form-label text-md-right">公開日時:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.course.is_show ? '公開' : '非公開'}}
+                                            {{this.course.publish_date_from | formatDateCourse}} ～ {{this.course.publish_date_to | formatDateCourse}}
 
                                         </div>
                                     </div>
 
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">タグ:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            <div v-for="tag in this.course.tags">
-                                                {{tag.tag_name}}
-
-                                            </div>
-
-                                        </div>
-                                    </div>
 
                                     <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">表示順:
@@ -91,31 +79,11 @@
 
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">付与チケット数:
+                                        <label class="col-md-3 col-form-label text-md-right">受講回数 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
                                             {{this.course.point_count}}
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">チケット有効日数:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.point_expire_day}}
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">レッスン予約可能最大数:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.max_reserve_count}}
 
                                         </div>
                                     </div>
@@ -130,6 +98,9 @@
                                         </div>
                                     </div>
 
+
+
+
                                     <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">商品コード:
                                         </label>
@@ -143,71 +114,107 @@
 
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">キャンペーンコース:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.is_campain ? 'キャンペーンコースに登録する' : ''}}
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">キャンペーンコード:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.campaign_code }}
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">コース概要:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
+                                            <nl2br tag="p" :text="this.course.course_description">
 
-                                            {{this.course.course_description }}
+                                            </nl2br>
 
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">レッスン時間制限:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.is_schedule_limit ?  '制限あり' : '制限なし'}}
 
                                         </div>
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">レッスン予約制限:
+                                        <label class="col-md-3 col-form-label text-md-right">法人・個人 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.reserve_start}}分前～{{this.course.reserve_end}}分前
+                                            {{this.course.is_for_lms ?  '法人' : '個人'}}
 
                                         </div>
                                     </div>
 
+
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">キャンセル時間制限:
+                                        <label class="col-md-3 col-form-label text-md-right">コースタイプ :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
+                                            <span v-if="this.course.course_type === 0">
+                                                通常コース
 
-                                            {{this.course.cancel_end}}分前まで
+                                            </span>
+
+                                            <span v-if="this.course.course_type === 1">
+                                                実力テスト用コース
+
+                                            </span>
+
+                                            <span v-if="this.course.course_type === 2">
+                                                グループコース
+
+                                            </span>
 
                                         </div>
                                     </div>
 
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">LMS表示用:
+                                    <div class="form-group row " v-if="this.course.course_type === 0 || this.course.course_type === 1">
+                                        <label class="col-md-3 col-form-label text-md-right">有効日数 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.is_for_lms ? 'LMS表示用' : ''}}
+                                            {{this.course.expire_day}}
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                        <label class="col-md-3 col-form-label text-md-right">最小開催人数 :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.min_reserve_count}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                        <label class="col-md-3 col-form-label text-md-right">開講日時  :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.max_reserve_count}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                        <label class="col-md-3 col-form-label text-md-right">開催決定日時 :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.decide_date | formatDateCourse}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                        <label class="col-md-3 col-form-label text-md-right">申込期限 :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.reserve_end_date | formatDateCourse}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                        <label class="col-md-3 col-form-label text-md-right">開講日時 :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.course_start_date | formatDateCourse}}
 
                                         </div>
                                     </div>
@@ -215,15 +222,80 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">英語版</h5>
+                                    <a :href="editLangEnUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{courseENName}}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース概要:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br tag="p" :text="courseENDes"></nl2br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">中国語版</h5>
+                                    <a :href="editLangZhUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{courseZHName}}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース概要:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br tag="p" :text="courseZHDes"></nl2br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="card">
+                            <div class="card" v-if="this.course.course_type === 0 || this.course.course_type === 2">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
-                                        <div style="min-height: 38px">
-                                            <div class="float-right">
+                                        <div style="min-height: 38px;">
+                                            <div class="float-right" >
                                                 <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('select-teacher-lesson-modal')">
                                                     追加
+                                                </a>
+                                            </div>
+                                            <div class="float-right" style="margin-right: 5px">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('drag-teacher-lesson-modal')">
+                                                    編集
                                                 </a>
                                             </div>
 
@@ -234,7 +306,7 @@
                                     <ol style="margin-left: -30px;list-style-type: none;">
                                         <li v-for="lesson in this.course.lesson">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text">{{lesson.lesson_name}}</div>
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/lesson/' + lesson.lesson_id" target="_blank" class="wrap-long-text" style="color: inherit">{{lesson.lesson_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriDelete(course.course_id , lesson.lesson_id)"
@@ -251,12 +323,12 @@
                                 </div>
 
                             </div>
-                            <div class="card">
-                                <div class="card-header">動画一覧
+                            <div class="card" v-if="this.course.course_type === 1">
+                                <div class="card-header">実力テスト
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
-                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('insert-video-modal')">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('ability-test-modal')">
                                                     追加
                                                 </a>
                                             </div>
@@ -266,22 +338,47 @@
                                 </div>
                                 <div class="card-body">
                                     <ol style="margin-left: -30px;list-style-type: none;">
-                                        <li v-for="video in this.courseVideo">
+                                        <li v-for="test in this.course.test_abilities">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-2" >
-                                                    <img :src="video.image_url" style="max-width: 50px;max-height: 50px">
-
-                                                </div>
-                                                <div class="col-md-8 wrap-long-text text-left">
-                                                    <a :href="video.video_url">
-                                                        {{video.video_name}}
-
-                                                    </a>
-                                                </div>
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/test/' + test.test_id" target="_blank" class="wrap-long-text" style="color: inherit">{{test.test_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
-                                                            :delete-action="getUriDeleteVideo(course.course_id , video.course_video_id)"
-                                                            :message-confirm="messageConfirmVideo"
+                                                            :delete-action="getUriTestDelete(course.course_id , test.test_id)"
+                                                            :message-confirm="messageConfirmTest"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+                            <div class="card" v-if="this.course.course_type === 2">
+                                <div class="card-header">コース終了テスト
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+                                            <div class="float-right">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-end-test-modal')">
+                                                    追加
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="test in this.course.test_course_ends">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/test/' + test.test_id" target="_blank" class="wrap-long-text" style="color: inherit">{{test.test_name}}</a></div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriTestDelete(course.course_id , test.test_id)"
+                                                            :message-confirm="messageConfirmTest"
                                                     >
                                                     </DeleteItem>
                                                 </div>
@@ -300,6 +397,15 @@
                 <modal-table  :detailUrl="detailCourseUrl" :url="listLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="course.course_id" :register-url="registerUrl" :type="type">
 
                 </modal-table>
+                <dragable-item :detailUrl="detailCourseUrl" :listLessonAttachUrl="listLessonAttachUrl"   :id="course.course_id" :register-url="registerUrl" :listLessonAttachUpdateUrl="listLessonAttachUpdateUrl">
+
+                </dragable-item>
+                <ability-test :detailUrl="detailCourseUrl" :pageSizeLimit="pageSizeLimit" :id="course.course_id" :url="listTestAbilityUrl" :register-url="registerAbilityTestUrl">
+
+                </ability-test>
+                <course-end-test :detailUrl="detailCourseUrl" :pageSizeLimit="pageSizeLimit" :id="course.course_id" :url="listTestCourseEndUrl" :register-url="registerCourseEndTestUrl">
+
+                </course-end-test>
                 <insert-video :id="this.course.course_id" :register-url="registerVideoUrl">
 
                 </insert-video>
@@ -315,33 +421,62 @@
     import Loader from "./../../components/common/loader";
     import ModalTable from "../common/modal-table";
     import InsertVideo from "../course/insert-video";
+    import DragableItem from "../course/dragable-item";
     import DeleteItem from "./../../components/common/delete-item";
+    import AbilityTest from "./../../components/course/ability-test";
+    import CourseEndTest from "./../../components/course/course-end-test";
 
 
 
     export default {
         created: function () {
+            if (this.course.course_infos != null) {
+                var en = this.course.course_infos.filter(function (e) {
+                    return e.lang_type === 'en'
+                })[0];
+                var zh = this.course.course_infos.filter(function (e) {
+                    return e.lang_type === 'zh'
+                })[0];
+                this.courseENName = typeof (en) !== 'undefined' ? en.course_name : '';
+                this.courseENDes = typeof (en) !== 'undefined' ? en.course_description : '';
+                this.courseZHName = typeof (zh) !== 'undefined' ? zh.course_name : '';
+                this.courseZHDes = typeof (zh) !== 'undefined' ? zh.course_description : '';
+            }
         },
         components: {
             Loader,
             ModalTable,
             DeleteItem,
-            InsertVideo
+            InsertVideo,
+            DragableItem,
+            AbilityTest,
+            CourseEndTest
         },
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
                 type : 'course',
                 messageConfirm : 'このレッスンをコースに解除しますか？',
-                messageConfirmVideo: 'この動画を削除しますか？'
+                messageConfirmTest : 'このテストをコースに解除しますか？',
+                messageConfirmVideo: 'この動画を削除しますか？',
+                courseENName : '',
+                courseENDes : '',
+                courseZHName : '',
+                courseZHDes : ''
+
 
             };
         },
-        props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl', 'registerVideoUrl', 'courseVideo'],
+        props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
+            'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, lessonId) {
                 return '/course/'+ id + '/lesson/' + lessonId + '/delete';
+
+            },
+            getUriTestDelete(id, testId) {
+                return '/course/'+ id + '/test/' + testId + '/delete';
 
             },
             getUriDeleteVideo(id, videoId) {

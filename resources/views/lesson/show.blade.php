@@ -9,6 +9,8 @@
             :page-size-limit  ="{{json_encode(PAGE_SIZE_LIMIT)}}"
             :register-url ="{{json_encode(route('lesson.registerTextLesson', $lesson->lesson_id))}}"
             :list-text-lesson-url ="{{json_encode(route('lesson.textLesson', $lesson->lesson_id))}}"
+            :list-preparation-url ="{{json_encode(route('lesson.preparation'))}}"
+            :register-preparation-url ="{{json_encode(route('lesson.registerPreparation'))}}"
 
     >
 

@@ -64,6 +64,15 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'azure' => [
+            'driver'    => 'azure',
+            'sasToken'  => env('AZURE_STORAGE_SAS_TOKEN'),
+            'container' => env('AZURE_STORAGE_CONTAINER'),
+            'url'       => env('AZURE_STORAGE_URL'),
+            'prefix'    => null,
+            'endpoint'  => env('AZURE_STORAGE_ENDPOINT'),
+        ],
+
     ],
 
 ];

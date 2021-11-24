@@ -51,6 +51,9 @@ Route::group([
     Route::get('exportInquiry/{searchInput?}', 'InquiryController@exportInquiry')->name('exportInquiry');
 
     // lesson
+    Route::get('lesson/preparation', 'LessonController@preparation')->name('lesson.preparation');
+    Route::post('lesson/preparation', 'LessonController@registerPreparation')->name('lesson.registerPreparation');
+    Route::delete('lesson/{id}/preparation/{preparationId}/delete', 'LessonController@preparationDelete')->name('lesson.preparationDelete');
     Route::resource('lesson', LessonController::class);
     Route::delete('lesson/{id}/text/{textId}/delete', 'LessonController@textLessonDelete')->name('lesson.textLessonDelete');
     Route::post('lesson/{id}/textLesson', 'LessonController@registerTextLesson')->name('lesson.registerTextLesson');
@@ -58,6 +61,16 @@ Route::group([
 
     //course course set
     Route::resource('course', CourseController::class);
+    Route::get('course/{id}/test/ability', 'CourseController@testAbility')->name('course.test.ability');
+    Route::delete('course/{id}/test/{testId}/delete', 'CourseController@testDelete')->name('course.testDelete');
+    Route::post('course/{id}/test/ability', 'CourseController@testAbilityUpdate')->name('course.test.abilityUpdate');
+    Route::get('course/{id}/test/course_end', 'CourseController@testCourseEnd')->name('course.test.courseEnd');
+    Route::post('course/{id}/test/course_end', 'CourseController@testCourseEndUpdate')->name('course.test.courseEndUpdate');
+    Route::get('course/{id}/lesson', 'CourseController@lesson')->name('course.lesson');
+    Route::get('/course/{id}/edit-lang/{type}', 'CourseController@editLang')->name('course.editLang');
+    Route::get('course/{id}/lesson_attach', 'CourseController@lessonAttach')->name('course.lessonAttach');
+    Route::post('course/{id}/lesson_attach', 'CourseController@lessonAttachUpdate')->name('course.lessonAttachUpdate');
+    Route::post('update_lang_course', 'CourseController@updateLang')->name('course.updateLang');
     Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
     Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
     Route::get('course/set/get-course/{id}', 'CourseController@getCourse')->name('course.getCourse');
@@ -83,6 +96,13 @@ Route::group([
     Route::get('category/{id}/course', 'CategoryController@course')->name('category.course');
     Route::get('/category/{id}/edit-lang/{type}', 'CategoryController@editLang')->name('category.editLang');
     Route::post('updateLangCategory', 'CategoryController@updateLang')->name('category.updateLang');
+
+    //preparation
+    Route::resource('preparation', PreparationController::class);
+
+    //file
+    Route::get('files/get_files', 'FileController@getFiles')->name('files.getFiles');
+
 
     //csvExport
     Route::resource('csv', CsvController::class);

@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            コースカテゴリ多言語編集
+                            コース多言語編集
                         </h5>
                     </div>
                 </div>
@@ -14,7 +14,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="title-page">コースカテゴリ情報
+                                    <h5 class="title-page">コース情報
                                     </h5>
                                 </div>
                                 <div class="card-body">
@@ -22,21 +22,21 @@
                                         <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                        >カテゴリID :
+                                        >コースID :
                                         </label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ category.category_id }}
+                                            {{ course.course_id }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                        >カテゴリ名:</label
+                                        >コース名:</label
                                         >
                                         <div class="col-md-6 pt-7">
-                                            {{ category.category_name }}
+                                            {{ course.course_name }}
                                         </div>
                                     </div>
                                 </div>
@@ -57,15 +57,15 @@
                                             <label
                                                     class="col-md-3 col-form-label text-md-right"
                                                     for="text-input"
-                                            >カテゴリ名:<span class="glyphicon glyphicon-star"
+                                            >コース名:<span class="glyphicon glyphicon-star"
                                             ></span
                                             ></label
                                             >
                                             <div class="col-md-6">
                                                 <input
                                                         class="form-control"
-                                                        name="category_name"
-                                                        v-model="categoryInfoEx.category_name"
+                                                        name="course_name"
+                                                        v-model="courseInfoEx.course_name"
                                                         v-validate="
                                                         'required|max:255'
                                                     "
@@ -74,9 +74,32 @@
                                                 <div
                                                         class="input-group is-danger"
                                                         role="alert"
-                                                        v-if="errors.has('category_name')"
+                                                        v-if="errors.has('course_name')"
                                                 >
-                                                    {{ errors.first("category_name") }}
+                                                    {{ errors.first("course_name") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                                    for="text-input"
+                                            >コース概要</label
+                                            >
+                                            <div class="col-md-6">
+                                                <textarea
+                                                        class="form-control"
+                                                        name="course_description"
+                                                        v-model="courseInfoEx.course_description"
+                                                        rows="5"
+                                                />
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('course_description')"
+                                                >
+                                                    {{ errors.first("course_description") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -84,7 +107,7 @@
                                         <div class="form-group">
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                <a :href="urlCategoryDetail" class="btn btn-default w-100">閉じる</a>
+                                                <a :href="urlCourseDetail" class="btn btn-default w-100">閉じる</a>
                                             </div>
                                         </div>
                                     </div>
@@ -107,9 +130,9 @@
         created: function() {
             let messError = {
                 custom: {
-                    category_name: {
-                        required: "カテゴリ名を入力してください。",
-                        max: "カテゴリ名は255文字以内で入力してください。",
+                    course_name: {
+                        required: "コース名を入力してください。",
+                        max: "コース名は255文字以内で入力してください。",
                     },
                 }
             };
@@ -121,14 +144,15 @@
         data() {
             return {
                 flagShowLoader: false,
-                categoryInfoEx: {
-                    category_name : this.categoryInfo ? this.categoryInfo.category_name : '',
-                    category_id : this.category.category_id,
+                courseInfoEx: {
+                    course_name : this.courseInfo ? this.courseInfo.course_name : '',
+                    course_description :  this.courseInfo ? this.courseInfo.course_description : '',
+                    course_id : this.course.course_id,
                     lang : this.lang
                 }
             };
         },
-        props: ["urlAction", "urlCategoryDetail", "categoryInfo", "category", "lang"],
+        props: ["urlAction", "urlCourseDetail", "courseInfo", "course", "lang"],
         mounted() {},
         methods: {
             save() {
@@ -146,16 +170,16 @@
             submit(e) {
                 let that = this;
                 axios
-                    .post(that.urlAction, that.categoryInfoEx)
+                    .post(that.urlAction, that.courseInfoEx)
                     .then(response => {
                         that.flagShowLoader = false;
                         if (response.data.status == "OK") {
                             this.$swal({
-                                text: "コースカテゴリ多言語編集が完了しました。",
+                                text: "コース多言語編集が完了しました。",
                                 icon: "success",
                                 confirmButtonText: "OK"
                             }).then(result => {
-                                window.location.href = that.urlCategoryDetail;
+                                window.location.href = that.urlCourseDetail;
                             });
                         }
                     })

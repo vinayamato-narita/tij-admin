@@ -12,10 +12,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ja';
+import Draggable from 'vuedraggable'
+
 
 import Multiselect from 'vue-multiselect'
 
 Vue.component('multiselect', Multiselect)
+Vue.component('draggable', Draggable)
 
 library.add(faUserSecret, faPlus, faTrash)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -34,6 +37,11 @@ Vue.filter("formatDateTime", function(value) {
   Vue.filter("formatDate", function(value) {
     if (value) {
       return moment(String(value)).tz("Asia/Tokyo").format("YYYY-MM-DD");
+    }
+  });
+  Vue.filter("formatDateCourse", function(value) {
+    if (value) {
+      return moment(String(value)).tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm");
     }
   });
 Vue.config.productionTip = false
@@ -81,6 +89,7 @@ import CourseShow from "./components/course/detail.vue"
 import CourseSetShow from "./components/course/set-detail.vue"
 import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
+import EditLangCourse from "./components/course/edit-lang-course.vue"
 import StudentCreateComment from "./components/student/student-create-comment.vue"
 import StudentEditComment from "./components/student/student-edit-comment.vue"
 import ShowLessonHistory from "./components/student/show-lesson-history.vue"
@@ -96,12 +105,15 @@ import StudentSearch from "./components/student/student-search.vue"
 import EditStudent from "./components/student/edit-student.vue"
 import PaymentHistorySearch from "./components/payment-history/payment-history-search.vue"
 import EditHistoryPayment from "./components/payment-history/edit-history-payment.vue"
-import LessonSchedule from "./components/LessonSchedule/index-lesson-schedule.vue"
+import LessonSchedule from "./components/lessonSchedule/index-lesson-schedule.vue"
 import ShowPointHistory from "./components/student/show-point-history.vue"
 import EditRole from "./components/admin/edit-role.vue"
 import EditLangCategory from "./components/category/edit-lang-category.vue"
 import CreateTest from "./components/test/create-test.vue"
 import EditTest from "./components/test/edit-test.vue"
+import PreparationAdd from "./components/preparation/add"
+import PreparationShow from "./components/preparation/detail.vue"
+import PreparationEdit from "./components/preparation/edit.vue"
 
 new Vue({
     created() {
@@ -261,7 +273,11 @@ new Vue({
         EditRole,
         EditLangCategory,
         CreateTest,
-        EditTest
+        EditTest,
+        EditLangCourse,
+        PreparationAdd,
+        PreparationShow,
+        PreparationEdit
 
     },
     methods: {},

@@ -104,9 +104,41 @@
                         </div>
                         <div class="col-md-5">
                             <div class="card">
+                                <div class="card-header">予習
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary', this.lesson.preparations.length === 0 ? '' : 'disabled']" v-on:click="show('add-preparation-modal')" >
+                                            追加
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+
+                                        <li v-for="preparation in this.lesson.preparations">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{preparation.preparation_name}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriPreparationDelete(lesson.lesson_id , preparation.preparation_id)"
+                                                            :message-confirm="messageConfirmPreparation"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+
+                                    </ol>
+                                </div>
+
+                            </div>
+
+                            <div class="card">
                                 <div class="card-header">テキスト一覧
                                     <div class="float-right">
-                                        <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show">
+                                        <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('select-teacher-lesson-modal')">
                                             追加
                                         </a>
                                     </div>
@@ -138,6 +170,9 @@
                 <modal-table :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl" :type="type">
 
                 </modal-table>
+                <add-preparation :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listPreparationUrl" :register-url="registerPreparationUrl">
+
+                </add-preparation>
             </div>
         </main>
     </div>
@@ -150,6 +185,7 @@
     import Loader from "./../../components/common/loader";
     import DeleteItem from "./../../components/common/delete-item";
     import ModalTable from "../common/modal-table";
+    import  AddPreparation from "../lesson/add-preparation.vue"
 
 
     export default {
@@ -158,24 +194,30 @@
         components: {
             Loader,
             DeleteItem,
-            ModalTable
+            ModalTable,
+            AddPreparation
         },
         data() {
             return {
                 messageConfirm : 'このテキストをレッスンに解除しますか？',
+                messageConfirmPreparation : 'この予習をレッスンに解除しますか？',
                 type : 'lesson',
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl'],
+        props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl', 'listPreparationUrl', 'registerPreparationUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, textId) {
                 return  id + '/text/' + textId + '/delete';
 
             },
-            show () {
-                this.$modal.show('select-teacher-lesson-modal');
+            getUriPreparationDelete(id, preparationId) {
+                return  id + '/preparation/' + preparationId + '/delete';
+
+            },
+            show ($modalName) {
+                this.$modal.show($modalName);
             },
             hide () {
                 this.$modal.hide('select-teacher-lesson-modal');

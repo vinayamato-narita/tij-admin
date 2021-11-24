@@ -298,7 +298,23 @@ class BreadcrumbComponent
             'preparation_edit' => [
                 'text' => '予習編集',
                 'route_str' => "preparation.edit",
-            ]
+            ],
+            'review_list' => [
+                'text' => '復習一覧',
+                'route_str' => "review.index",
+            ],
+            'review_add' => [
+                'text' => '復習新規作成',
+                'route_str' => "review.create",
+            ],
+            'review_show' => [
+                'text' => '復習情報表示',
+                'route_str' => "review.show",
+            ],
+            'review_edit' => [
+                'text' => '復習編集',
+                'route_str' => "review.edit",
+            ],
         ];
     }
 

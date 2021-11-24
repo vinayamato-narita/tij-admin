@@ -117,7 +117,8 @@ class PreparationController extends BaseController
         }
         return response()->json([
             'status' => 'METHOD_NOT_ALLOWED',
-        ], StatusCode::METHOD_NOT_ALLOWED);    }
+        ], StatusCode::METHOD_NOT_ALLOWED);
+    }
 
     /**
      * Display the specified resource.
@@ -244,5 +245,6 @@ class PreparationController extends BaseController
             'status' => 'OK',
             'message' => ' 予習が削除されました',
             'data' => [],
-        ], StatusCode::OK);    }
+        ], StatusCode::OK);
+    }
 }

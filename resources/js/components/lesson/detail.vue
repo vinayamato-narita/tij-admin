@@ -134,6 +134,37 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">復習
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary', this.lesson.reviews.length === 0 ? '' : 'disabled']" v-on:click="show('add-review-modal')" >
+                                            追加
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+
+                                        <li v-for="review in this.lesson.reviews">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{review.review_name}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriReviewDelete(lesson.lesson_id , review.review_id)"
+                                                            :message-confirm="messageConfirmReview"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+
+                                    </ol>
+                                </div>
+
+                            </div>
 
                             <div class="card">
                                 <div class="card-header">テキスト一覧
@@ -173,6 +204,10 @@
                 <add-preparation :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listPreparationUrl" :register-url="registerPreparationUrl">
 
                 </add-preparation>
+
+                <add-review :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listReviewUrl" :register-url="registerReviewUrl">
+
+                </add-review>
             </div>
         </main>
     </div>
@@ -186,6 +221,7 @@
     import DeleteItem from "./../../components/common/delete-item";
     import ModalTable from "../common/modal-table";
     import  AddPreparation from "../lesson/add-preparation.vue"
+    import  AddReview from "../lesson/add-review.vue"
 
 
     export default {
@@ -195,17 +231,20 @@
             Loader,
             DeleteItem,
             ModalTable,
-            AddPreparation
+            AddPreparation,
+            AddReview
         },
         data() {
             return {
                 messageConfirm : 'このテキストをレッスンに解除しますか？',
                 messageConfirmPreparation : 'この予習をレッスンに解除しますか？',
+                messageConfirmReview : 'この復習をレッスンに解除しますか？',
                 type : 'lesson',
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl', 'listPreparationUrl', 'registerPreparationUrl'],
+        props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl', 'listPreparationUrl', 'registerPreparationUrl',
+            'listReviewUrl', 'registerReviewUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, textId) {
@@ -214,7 +253,9 @@
             },
             getUriPreparationDelete(id, preparationId) {
                 return  id + '/preparation/' + preparationId + '/delete';
-
+            },
+            getUriReviewDelete(id, reviewId) {
+                return  id + '/review/' + reviewId + '/delete';
             },
             show ($modalName) {
                 this.$modal.show($modalName);

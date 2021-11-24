@@ -10,6 +10,8 @@ use App\Models\LessonText;
 use App\Models\LessonTextLesson;
 use App\Models\Preparation;
 use App\Models\PreparationLesson;
+use App\Models\Review;
+use App\Models\ReviewLesson;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -117,7 +119,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations')->first();
+        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -226,6 +228,69 @@ class LessonController extends BaseController
         return response()->json([
             'status' => 'OK',
             'message' => ' 予習の解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
+    }
+
+    public function review(Request $request)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Review();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('review_name', $request['inputSearch']));
+            });
+        }
+
+        $reviewList = $queryBuilder->sortable(['review_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $reviewList
+        ], StatusCode::OK);
+
+    }
+
+    public function registerReview(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $rl = new ReviewLesson();
+            $rl->review_id = $request->reviewId;
+            $rl->lesson_id = $request->lessonId;
+            $rl->save();
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function reviewDelete($id, $reviewId)
+    {
+
+        try {
+            $reviewLesson = ReviewLesson::where([
+                'lesson_id' => $id,
+                'review_id' => $reviewId
+            ])->delete();
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' 復習の解除が完了しました。',
             'data' => [],
         ], StatusCode::OK);
     }

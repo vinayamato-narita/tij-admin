@@ -16,7 +16,8 @@ class Preparation extends Model
 
     protected $primaryKey = 'preparation_id';
 
-    public function file() {
+    public function file()
+    {
         return $this->hasOne('App\Models\File', 'file_id', 'file_id');
     }
 }

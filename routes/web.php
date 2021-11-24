@@ -172,4 +172,6 @@ Route::group([
 
     Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
     Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
+
+    Route::resource('test', TestController::class);
 });

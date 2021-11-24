@@ -117,6 +117,8 @@ import PreparationEdit from "./components/preparation/edit.vue"
 import ReviewAdd from "./components/review/add"
 import ReviewShow from "./components/review/detail.vue"
 import ReviewEdit from "./components/review/edit.vue"
+import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
+
 
 new Vue({
     created() {
@@ -283,7 +285,8 @@ new Vue({
         PreparationEdit,
         ReviewAdd,
         ReviewShow,
-        ReviewEdit
+        ReviewEdit,
+        EditLangLesson
 
     },
     methods: {},

@@ -1,3 +1,6 @@
+<?php
+use App\Enums\LangType;
+?>
 @extends('layouts.default')
 @section('title', 'レッスン情報表示')
 @section('content')
@@ -13,6 +16,8 @@
             :register-preparation-url ="{{json_encode(route('lesson.registerPreparation'))}}"
             :list-review-url ="{{json_encode(route('lesson.review'))}}"
             :register-review-url ="{{json_encode(route('lesson.registerReview'))}}"
+            :edit-lang-en-url ="{{json_encode(route('lesson.editLang', [$lesson->lesson_id, LangType::EN]))}}"
+            :edit-lang-zh-url ="{{json_encode(route('lesson.editLang', [$lesson->lesson_id, LangType::ZH]))}}"
 
     >
 

@@ -239,9 +239,19 @@
                                                 </label>
                                                 &nbsp;
                                                 &nbsp;
-                                                <input class=" checkbox" id="courseType_1" name="courseType"
+
+                                                <input class=" checkbox" id="courseType_2" name="courseType"
                                                        type="radio"
                                                        value="1"
+                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                <label class="" for="courseType_2">
+                                                    グループコース
+                                                </label>
+                                                &nbsp;
+                                                &nbsp;
+                                                <input class=" checkbox" id="courseType_1" name="courseType"
+                                                       type="radio"
+                                                       value="2"
                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                 <label class="" for="courseType_1">
                                                     実力テスト用コース
@@ -249,13 +259,7 @@
                                                 &nbsp;
                                                 &nbsp;
 
-                                                <input class=" checkbox" id="courseType_2" name="courseType"
-                                                       type="radio"
-                                                       value="2"
-                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="courseType_2">
-                                                    グループコース
-                                                </label>
+
 
 
                                                 <div class="input-group is-danger" role="alert">

@@ -101,6 +101,66 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">英語版</h5>
+                                    <a :href="editLangEnUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >レッスン名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{lessonENName}}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >レッスン概要:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br tag="p" :text="lessonENDes"></nl2br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">中国語版</h5>
+                                    <a :href="editLangZhUrl" class="btn btn-primary">編集</a>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >レッスン名:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            {{lessonZHName}}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >レッスン概要:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br tag="p" :text="lessonZHDes"></nl2br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="card">
@@ -226,6 +286,18 @@
 
     export default {
         created: function () {
+            if (this.lesson.lesson_infos != null) {
+                var en = this.lesson.lesson_infos.filter(function (e) {
+                    return e.lang_type === 'en'
+                })[0];
+                var zh = this.lesson.lesson_infos.filter(function (e) {
+                    return e.lang_type === 'zh'
+                })[0];
+                this.lessonENName = typeof (en) !== 'undefined' ? en.lesson_name : '';
+                this.lessonENDes = typeof (en) !== 'undefined' ? en.lesson_description : '';
+                this.lessonZHName = typeof (zh) !== 'undefined' ? zh.lesson_name : '';
+                this.lessonZHDes = typeof (zh) !== 'undefined' ? zh.lesson_description : '';
+            }
         },
         components: {
             Loader,
@@ -241,10 +313,14 @@
                 messageConfirmReview : 'この復習をレッスンに解除しますか？',
                 type : 'lesson',
                 csrfToken: Laravel.csrfToken,
+                lessonENName : '',
+                lessonENDes : '',
+                lessonZHName : '',
+                lessonZHDes : ''
             };
         },
         props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl', 'listPreparationUrl', 'registerPreparationUrl',
-            'listReviewUrl', 'registerReviewUrl'],
+            'listReviewUrl', 'registerReviewUrl', 'editLangEnUrl', 'editLangZhUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, textId) {

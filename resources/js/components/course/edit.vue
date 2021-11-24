@@ -249,7 +249,8 @@
                                                        value="1"
                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                 <label class="" for="courseType_1">
-                                                    実力テスト用コース
+                                                    グループコース
+
                                                 </label>
                                                 &nbsp;
                                                 &nbsp;
@@ -260,7 +261,7 @@
                                                        value="2"
                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                 <label class="" for="courseType_2">
-                                                    グループコース
+                                                    実力テスト用コース
                                                 </label>
 
 

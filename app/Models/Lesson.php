@@ -35,4 +35,8 @@ class Lesson extends Model
         return $this->belongsToMany('App\Models\Review', 'review_lesson' ,'lesson_id', 'review_id', 'lesson_id', 'review_id');
     }
 
+    public function lesson_infos() {
+        return $this->hasMany('App\Models\LessonInfo', 'lesson_id', 'lesson_id');
+    }
+
 }

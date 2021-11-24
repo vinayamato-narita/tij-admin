@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Http\Requests\LessonLangRequest;
 use App\Http\Requests\StoreUpdateLessonRequest;
 use App\Models\Lesson;
+use App\Models\LessonInfo;
 use App\Models\LessonText;
 use App\Models\LessonTextLesson;
 use App\Models\Preparation;
@@ -119,7 +121,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews')->first();
+        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews', 'lesson_infos')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -409,6 +411,49 @@ class LessonController extends BaseController
             'status' => 'OK',
             'message' => ' レッスンが削除されました',
             'data' => [],
+        ], StatusCode::OK);
+    }
+
+    public function editLang($id, $langType)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'lesson_list'],
+            ['name' => 'lesson_show', $id],
+            ['name' => 'edit_lang_lesson', $id, $langType],
+        ]);
+        $lesson = Lesson::where('lesson_id', $id)->first();
+        if (!$lesson) return redirect()->route('lesson.index');
+        $lessonInfo = LessonInfo::where(['lesson_id' => $id, 'lang_type' => $langType])->first();
+
+        return view('lesson.editLang', [
+            'breadcrumbs' => $breadcrumbs,
+            'lessonInfo' => $lessonInfo,
+            'lesson' => $lesson,
+            'lang' => $langType
+        ]);
+    }
+
+    public function updateLang(LessonLangRequest $request)
+    {
+        if (!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $lesson = Lesson::where('lesson_id', $request->lesson_id)->first();
+        if ($lesson == null) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::NOT_FOUND);
+        }
+        $lessonLangInfo = LessonInfo::updateOrCreate(
+            ['lesson_id' => $request->lesson_id, 'lang_type' => $request->lang],
+            ['lesson_name' => $request->lesson_name, 'lesson_description' => $request->lesson_description]
+        );
+        return response()->json([
+            'status' => 'OK',
         ], StatusCode::OK);
     }
 

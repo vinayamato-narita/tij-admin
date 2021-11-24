@@ -146,14 +146,15 @@
                                             </span>
 
                                             <span v-if="this.course.course_type === 1">
-                                                実力テスト用コース
+                                                グループコース
 
                                             </span>
 
                                             <span v-if="this.course.course_type === 2">
-                                                グループコース
+                                                実力テスト用コース
 
                                             </span>
+
 
                                         </div>
                                     </div>

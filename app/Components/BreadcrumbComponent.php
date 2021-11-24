@@ -279,6 +279,14 @@ class BreadcrumbComponent
                 'text' => '権限編集',
                 'route_str' => "admin.editRole",
             ],
+            'test_list' => [
+                'text' => 'Test list',
+                'route_str' => "test.index",
+            ],
+            'create_test' => [
+                'text' => 'create test',
+                'route_str' => "test.create",
+            ],
         ];
     }
 

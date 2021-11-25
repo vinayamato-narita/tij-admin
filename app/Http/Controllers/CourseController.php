@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\BreadcrumbComponent;
 use App\Enums\CourseTypeEnum;
 use App\Enums\StatusCode;
-use App\Enums\TestTypeEnum;
+use App\Enums\TestType;
 use App\Http\Requests\CourseLangRequest;
 use App\Http\Requests\CourseRegisterVideoRequest;
 use App\Http\Requests\StoreUpdateCourseRequest;
@@ -535,7 +535,7 @@ class CourseController extends BaseController
         }
         $testHasAdded = CourseTest::where('course_id', $id)->pluck('test_id');
 
-        $testList = $queryBuilder->where('test_type', TestTypeEnum::ABILITY_TEST)->whereNotIn('test_id', $testHasAdded)->sortable(['display_order' => 'asc', 'test_name' => 'asc'])->paginate($pageLimit);
+        $testList = $queryBuilder->where('test_type', TestType::ABILITY)->whereNotIn('test_id', $testHasAdded)->sortable(['display_order' => 'asc', 'test_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $testList
@@ -600,7 +600,7 @@ class CourseController extends BaseController
         }
         $testHasAdded = CourseTest::where('course_id', $id)->pluck('test_id');
 
-        $testList = $queryBuilder->where('test_type', TestTypeEnum::COURSE_END_TEST)->whereNotIn('test_id', $testHasAdded)->sortable(['display_order' => 'asc', 'test_name' => 'asc'])->paginate($pageLimit);
+        $testList = $queryBuilder->where('test_type', TestType::ENDCOURSE)->whereNotIn('test_id', $testHasAdded)->sortable(['display_order' => 'asc', 'test_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $testList

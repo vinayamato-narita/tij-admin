@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\TestTypeEnum;
+use App\Enums\TestType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
@@ -47,13 +47,13 @@ class Course extends Model
     public function testAbilities()
     {
         return $this->belongsToMany('App\Models\Test', 'course_test' ,
-            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestTypeEnum::ABILITY_TEST);
+            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestType::ABILITY);
     }
 
     public function testCourseEnds()
     {
         return $this->belongsToMany('App\Models\Test', 'course_test' ,
-            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestTypeEnum::COURSE_END_TEST);
+            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestType::ENDCOURSE);
     }
 
 

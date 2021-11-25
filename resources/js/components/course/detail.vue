@@ -159,7 +159,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="this.course.course_type === 0 || this.course.course_type === 1">
+                                    <div class="form-group row " v-if="this.course.course_type === 0 || this.course.course_type === 2">
                                         <label class="col-md-3 col-form-label text-md-right">有効日数 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -170,7 +170,7 @@
                                     </div>
 
 
-                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                    <div class="form-group row " v-if="this.course.course_type === 1">
                                         <label class="col-md-3 col-form-label text-md-right">最小開催人数 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -180,7 +180,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                    <div class="form-group row " v-if="this.course.course_type === 1">
                                         <label class="col-md-3 col-form-label text-md-right">開講日時  :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -190,7 +190,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                    <div class="form-group row " v-if="this.course.course_type === 1">
                                         <label class="col-md-3 col-form-label text-md-right">開催決定日時 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -200,7 +200,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                    <div class="form-group row " v-if="this.course.course_type === 1">
                                         <label class="col-md-3 col-form-label text-md-right">申込期限 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -210,7 +210,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="this.course.course_type === 2">
+                                    <div class="form-group row " v-if="this.course.course_type === 1">
                                         <label class="col-md-3 col-form-label text-md-right">開講日時 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -285,7 +285,7 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="card" v-if="this.course.course_type === 0 || this.course.course_type === 2">
+                            <div class="card" v-if="this.course.course_type === 0 || this.course.course_type === 1">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
                                         <div style="min-height: 38px;">
@@ -324,7 +324,7 @@
                                 </div>
 
                             </div>
-                            <div class="card" v-if="this.course.course_type === 1">
+                            <div class="card" v-if="this.course.course_type === 2">
                                 <div class="card-header">実力テスト
                                     <div class="float-right">
                                         <div style="min-height: 38px">
@@ -358,7 +358,7 @@
                                 </div>
 
                             </div>
-                            <div class="card" v-if="this.course.course_type === 2">
+                            <div class="card" v-if="this.course.course_type === 1">
                                 <div class="card-header">コース終了テスト
                                     <div class="float-right">
                                         <div style="min-height: 38px">

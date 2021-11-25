@@ -20,7 +20,7 @@ class LessonCancelHistoryController extends BaseController
             ['name' => 'lesson_cancel_history_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = LessonCancelHistory::with(['teacher', 'student']);
+        $queryBuilder = LessonCancelHistory::with(['teacher', 'student'])->has('teacher')->has('student');
 
        if (!empty($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

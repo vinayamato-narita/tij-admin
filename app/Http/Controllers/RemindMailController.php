@@ -80,7 +80,7 @@ class RemindMailController extends BaseController
         ]);
 
         $remindMail = SendRemindMailPattern::where([
-            'id' => $id,
+            'send_remind_mail_pattern_id' => $id,
         ])->with(['sendRemindMailTiming'])->first();
 
         if (!$remindMail) return redirect()->route('SendRemindMailPattern.index');
@@ -106,7 +106,7 @@ class RemindMailController extends BaseController
         ]);
 
         $remindMail = SendRemindMailPattern::where([
-            'id' => $id,
+            'send_remind_mail_pattern_id' => $id,
         ])->with(['sendRemindMailTiming'])->first();
         $enum = RemindMailTimmingMinutesEnum::getValues();
 
@@ -128,7 +128,7 @@ class RemindMailController extends BaseController
     public function update(Request $request, $id)
     {
         if($request->isMethod('PUT')){
-            $remindMail = SendRemindMailPattern::where('id', $id)->first();
+            $remindMail = SendRemindMailPattern::where('send_remind_mail_pattern_id', $id)->first();
             if (!$remindMail) {
                 return response()->json([
                     'status' => 'NOT_FOUND',

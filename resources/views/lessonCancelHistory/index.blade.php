@@ -36,26 +36,26 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('cancel_date', ' キャンセル日時')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('lesson_date', ' レッスン日')</th>
-                                                    <th class="text-center min-width-120">レッスン開始時間    </th>
-                                                    <th class="text-center min-width-120">@sortablelink('teacher.teacher_name', ' 講師名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student_id', ' 生徒番号')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student.student_name', ' 生徒名')</th>
-                                                    <th class="text-center min-width-120"></th>
+                                                    <th class="text-left width-130">@sortablelink('cancel_date', ' キャンセル日時')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('lesson_date', ' レッスン日')</th>
+                                                    <th class="text-left min-width-120">レッスン開始時間    </th>
+                                                    <th class="text-left min-width-120">@sortablelink('teacher.teacher_name', ' 講師名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_id', ' 生徒番号')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student.student_name', ' 生徒名')</th>
+                                                    <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 @foreach ($historyList as $index => $history)
                                                     <tr>
-                                                        <td class="text-center">{{ $history->cancel_date }}</td>
-                                                        <td class="text-center">{{ $history->lesson_date }}</td>
-                                                        <td class="text-center">{{ $history->lesson_starttime }}</td>
-                                                        <td class="text-center">{{ $history->teacher->teacher_name }}</td>
-                                                        <td class="text-center">{{ $history->student_id }}</td>
-                                                        <td class="text-center">{{ $history->student->student_name }}</td>
+                                                        <td class="text-left">{{ $history->cancel_date }}</td>
+                                                        <td class="text-left">{{ $history->lesson_date }}</td>
+                                                        <td class="text-left">{{ $history->lesson_starttime }}</td>
+                                                        <td class="text-left">{{ $history->teacher->teacher_name }}</td>
+                                                        <td class="text-left">{{ $history->student_id }}</td>
+                                                        <td class="text-left">{{ $history->student->student_name }}</td>
 
-                                                        <td class="text-center "></td>
+                                                        <td class="text-left "></td>
 
                                                     </tr>
                                                 @endforeach

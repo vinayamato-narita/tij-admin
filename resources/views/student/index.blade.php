@@ -52,43 +52,43 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('student_name', '生徒名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student_nickname', 'ニックネーム')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student_skypename', 'スカイプ名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('custom_company_name', '法人名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('all_project_code', '企業ID')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('all_project_company_name', '企業名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('company_code', '法人コード')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('create_date', '初回登録日時')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('last_login_date', '最終ログイン日時')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('last_reserve_date', '最新予約日時')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('first_lesson_date', '初回受講日時')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('lesson_count', '通算受講数')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('is_tmp_entry', '登録状態')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('course_name', '有料/無料')</th>
+                                                    <th class="text-left width-130">@sortablelink('student_id', '生徒番号')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('student_name', '生徒名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_nickname', 'ニックネーム')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_skypename', 'スカイプ名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('custom_company_name', '法人名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('all_project_code', '企業ID')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('all_project_company_name', '企業名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('company_code', '法人コード')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('create_date', '初回登録日時')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('last_login_date', '最終ログイン日時')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('last_reserve_date', '最新予約日時')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('first_lesson_date', '初回受講日時')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('lesson_count', '通算受講数')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('is_tmp_entry', '登録状態')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('course_name', '有料/無料')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($studentList as $index => $student)
                                                     <tr>
-                                                        <td class="text-center">{{ $student->student_id }}</td>
-                                                        <td class="text-center">{{ $student->student_name }}</td>
-                                                        <td class="text-center">{{ $student->student_nickname }}</td>
-                                                        <td class="text-center">{{ $student->student_skypename }}</td>
-                                                        <td class="text-center">{{ $student->custom_company_name }}</td>
-                                                        <td class="text-center">{{ trim($student->all_project_code, '/') }}</td>
-                                                        <td class="text-center">{{ trim($student->all_project_company_name, '/') }}</td>
-                                                        <td class="text-center">{{ trim($student->company_code, '/') }}</td>
-                                                        <td class="text-center">{{ $student->create_date }}</td>
-                                                        <td class="text-center">{{ $student->last_login_date }}</td>
-                                                        <td class="text-center">{{ $student->last_reserve_date }}</td>
-                                                        <td class="text-center">{{ $student->first_lesson_date }}</td>
-                                                        <td class="text-center">{{ $student->lesson_count }}</td>
-                                                        <td class="text-center">{{ StudentEntryType::getDescription($student->is_tmp_entry) }}</td>
-                                                        <td class="text-center">{{ $student->course_name }}</td>
-                                                        <td>
+                                                        <td class="text-left">{{ $student->student_id }}</td>
+                                                        <td class="text-left">{{ $student->student_name }}</td>
+                                                        <td class="text-left">{{ $student->student_nickname }}</td>
+                                                        <td class="text-left">{{ $student->student_skypename }}</td>
+                                                        <td class="text-left">{{ $student->custom_company_name }}</td>
+                                                        <td class="text-left">{{ trim($student->all_project_code, '/') }}</td>
+                                                        <td class="text-left">{{ trim($student->all_project_company_name, '/') }}</td>
+                                                        <td class="text-left">{{ trim($student->company_code, '/') }}</td>
+                                                        <td class="text-left">{{ $student->create_date }}</td>
+                                                        <td class="text-left">{{ $student->last_login_date }}</td>
+                                                        <td class="text-left">{{ $student->last_reserve_date }}</td>
+                                                        <td class="text-left">{{ $student->first_lesson_date }}</td>
+                                                        <td class="text-left">{{ $student->lesson_count }}</td>
+                                                        <td class="text-left">{{ StudentEntryType::getDescription($student->is_tmp_entry) }}</td>
+                                                        <td class="text-left">{{ $student->course_name }}</td>
+                                                        <td class="text-left">
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">

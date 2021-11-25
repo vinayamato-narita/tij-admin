@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Enums\TestType;
+use Carbon\Carbon;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
@@ -14,7 +17,15 @@ class Course extends Model
     protected $table = 'course';
     
     public $timestamps = false;
-    
+    protected $appends = ['publication_status'];
+
+    public $sortable = ['publication_status', 'course_id', 'display_order', 'course_name', 'course_description', 'point_count', 'amount'];
+    public function publicationStatusSortable(Builder $query, $direction)
+    {
+        return $query->selectRaw("course_id, display_order, course_name, course_name_short, course_description, point_count, amount, publish_date_to, publish_date_from,
+        (CASE WHEN course.publish_date_from <= CURDATE() AND course.publish_date_to >= CURDATE() THEN 1 ELSE 0 END) AS publication_status_num")->orderBy('publication_status_num', $direction);
+    }
+
     protected $primaryKey = 'course_id';
     public function childCourse()
     {
@@ -42,6 +53,15 @@ class Course extends Model
     public function getSumAmountAttribute(){
         if (!$this->is_set_course) return $this->amount;
         return $this->childCourse()->sum('amount');
+    }
+
+    public function getPublicationStatusAttribute():string
+    {
+        $status = '非公開';
+        if (Carbon::parse($this->publish_date_from) <= Carbon::now() && Carbon::parse($this->publish_date_to) >= Carbon::now())
+            $status = '公開中';
+        return $status;
+
     }
 
     public function testAbilities()

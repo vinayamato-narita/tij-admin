@@ -41,22 +41,24 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('display_order', ' 表示順')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('teacher_name', ' 講師名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('teacher_nickname', ' ニックネーム')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('teacher_email', ' メールアドレス')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('last_login_date', ' 最終ログイン日時')</th>
+                                                    <th class="text-left width-130">@sortablelink('display_order', ' 表示順')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('teacher_name', ' 講師名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('teacher_nickname', ' ニックネーム')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('teacher_email', ' メールアドレス')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('last_login_date', ' 最終ログイン日時')</th>
+                                                    <th class="text-left min-width-150"></th>
+                                                    <th class="text-left min-width-150"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 @foreach ($teacherList as $index => $teacher)
                                                     <tr>
-                                                        <td class="text-center">{{ $teacher->display_order }}</td>
-                                                        <td class="text-center">{{ $teacher->teacher_name }}</td>
-                                                        <td class="text-center">{{ $teacher->teacher_nickname }}</td>
-                                                        <td class="text-center">{{ $teacher->teacher_email }}</td>
-                                                        <td class="text-center">{{ $teacher->last_login_date }}</td>
-                                                        <td class="text-center"></td>
+                                                        <td class="text-left">{{ $teacher->display_order }}</td>
+                                                        <td class="text-left">{{ $teacher->teacher_name }}</td>
+                                                        <td class="text-left">{{ $teacher->teacher_nickname }}</td>
+                                                        <td class="text-left">{{ $teacher->teacher_email }}</td>
+                                                        <td class="text-left">{{ $teacher->last_login_date }}</td>
+                                                        <td class="text-left"></td>
                                                         <td class="text-right">
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

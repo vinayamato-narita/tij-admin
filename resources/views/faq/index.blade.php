@@ -39,18 +39,18 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('no_faq', ' No.')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('question', ' 質問・Q')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('answer', ' 答え・A')</th>
+                                                    <th class="text-left width-130">@sortablelink('no_faq', ' No.')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('question', ' 質問・Q')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('answer', ' 答え・A')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($faqList as $index => $faq)
                                                     <tr>
-                                                        <td class="text-center">{{ $faq->no_faq }}</td>
-                                                        <td class="text-center">{{ $faq->question }}</td>
-                                                        <td class="text-center">{{ $faq->answer }}</td>
+                                                        <td class="text-left">{{ $faq->no_faq }}</td>
+                                                        <td class="text-left">{{ $faq->question }}</td>
+                                                        <td class="text-left">{{ $faq->answer }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

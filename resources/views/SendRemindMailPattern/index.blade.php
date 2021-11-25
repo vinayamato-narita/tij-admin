@@ -41,18 +41,18 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('sendRemindMailTiming.send_remind_mail_timing_type_name', ' メール種類')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('timing_minutes', ' 送信タイミング')</th>
-                                                    <th class="text-center min-width-120"></th>
-                                                    <th class="text-center min-width-120"></th>
+                                                    <th class="text-left width-130">@sortablelink('sendRemindMailTiming.send_remind_mail_timing_type_name', ' メール種類')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('timing_minutes', ' 送信タイミング')</th>
+                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 @foreach ($remindMailList as $index => $rm)
                                                     <tr>
-                                                        <td class="text-center">{{ $rm->sendRemindMailTiming->send_remind_mail_timing_type_name }}</td>
+                                                        <td class="text-left">{{ $rm->sendRemindMailTiming->send_remind_mail_timing_type_name }}</td>
 
-                                                        <td class="text-center ">
+                                                        <td class="text-left ">
                                                             {{ $rm->timing_minutes == 0 ? '-' : $rm->timing_minutes }}</td>
                                                         <td></td>
                                                         <td class="text-right">
@@ -61,7 +61,7 @@
                                                                 <ul class="dropdown-menu dropdown-menu-right ">
 
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('remindmail.show', $rm->id) }}"><i class="fa fa-info mr-2"></i>情報</a>
+                                                                        <a class="dropdown-item" href="{{ route('remindmail.show', $rm->send_remind_mail_pattern_id) }}"><i class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>

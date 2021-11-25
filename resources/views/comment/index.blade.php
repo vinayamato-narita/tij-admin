@@ -38,20 +38,20 @@
                                         <table class="table table-responsive-sm table-striped border" id="fontSize">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center">レッスン日時</th>
-                                                    <th class="text-center">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-center">@sortablelink('student_nickname', '生徒のニックネーム')</th>
-                                                    <th class="text-center">講師のニックネーム</th>
-                                                    <th class="text-center">@sortablelink('course_name', 'コース')</th>
-                                                    <th class="text-center">@sortablelink('teacher_rating', '教え方')</th>
-                                                    <th class="text-center">@sortablelink('teacher_attitude', '態度')</th>
-                                                    <th class="text-center">@sortablelink('teacher_punctual', 'わかりやすさ')</th>
-                                                    <th class="text-center">@sortablelink('skype_voice_rating_from_student', 'Skypeの音声')</th>
-                                                    <th class="text-center">@sortablelink('comment_from_student_to_office', 'レッスンに対する感想')</th>
-                                                    <th class="text-center">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
-                                                    <th class="text-center">@sortablelink('comment_from_teacher_to_student', '生徒へのコメント')</th>
-                                                    <th class="text-center">@sortablelink('comment_from_teacher_to_office', '事務局へのコメント')</th>
-                                                    <th class="text-center">@sortablelink('note_from_student_to_teacher', '講義メモ')</th>
+                                                    <th class="text-left">レッスン日時</th>
+                                                    <th class="text-left">@sortablelink('student_id', '生徒番号')</th>
+                                                    <th class="text-left">@sortablelink('student_nickname', '生徒のニックネーム')</th>
+                                                    <th class="text-left">講師のニックネーム</th>
+                                                    <th class="text-left">@sortablelink('course_name', 'コース')</th>
+                                                    <th class="text-left">@sortablelink('teacher_rating', '教え方')</th>
+                                                    <th class="text-left">@sortablelink('teacher_attitude', '態度')</th>
+                                                    <th class="text-left">@sortablelink('teacher_punctual', 'わかりやすさ')</th>
+                                                    <th class="text-left">@sortablelink('skype_voice_rating_from_student', 'Skypeの音声')</th>
+                                                    <th class="text-left">@sortablelink('comment_from_student_to_office', 'レッスンに対する感想')</th>
+                                                    <th class="text-left">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
+                                                    <th class="text-left">@sortablelink('comment_from_teacher_to_student', '生徒へのコメント')</th>
+                                                    <th class="text-left">@sortablelink('comment_from_teacher_to_office', '事務局へのコメント')</th>
+                                                    <th class="text-left">@sortablelink('note_from_student_to_teacher', '講義メモ')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -65,20 +65,20 @@
                                                     }
                                                 @endphp
                                                     <tr class="row-comment" data-time="{{ $lessonTime }}" data-comment="{{ $item }}">
-                                                        <td class="text-center">{{ $lessonTime }}</td>
-                                                        <td class="text-center">{{ $item['student_id'] }}</td>
-                                                        <td class="text-center">{{ $item['student_nickname'] }}</td>
-                                                        <td class="text-center">{{ $item['teacher_nickname'] }}</td>
-                                                        <td class="text-center">{{ $item['course_name'] }}</td>
-                                                        <td class="text-center">{{ $item['teacher_rating'] }}</td>
-                                                        <td class="text-center">{{ $item['teacher_attitude'] }}</td>
-                                                        <td class="text-center">{{ $item['teacher_punctual'] }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['skype_voice_rating_from_student'], 20) }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['comment_from_student_to_office'], 20) }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['skype_voice_rating_from_teacher'], 20) }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['comment_from_teacher_to_student'], 20) }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['comment_from_teacher_to_office'], 20) }}</td>
-                                                        <td class="text-center">{{ Str::limit($item['note_from_student_to_teacher'], 20) }}</td>
+                                                        <td class="text-left">{{ $lessonTime }}</td>
+                                                        <td class="text-left">{{ $item['student_id'] }}</td>
+                                                        <td class="text-left">{{ $item['student_nickname'] }}</td>
+                                                        <td class="text-left">{{ $item['teacher_nickname'] }}</td>
+                                                        <td class="text-left">{{ $item['course_name'] }}</td>
+                                                        <td class="text-left">{{ $item['teacher_rating'] }}</td>
+                                                        <td class="text-left">{{ $item['teacher_attitude'] }}</td>
+                                                        <td class="text-left">{{ $item['teacher_punctual'] }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['skype_voice_rating_from_student'], 20) }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['comment_from_student_to_office'], 20) }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['skype_voice_rating_from_teacher'], 20) }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_student'], 20) }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_office'], 20) }}</td>
+                                                        <td class="text-left">{{ Str::limit($item['note_from_student_to_teacher'], 20) }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>

@@ -40,22 +40,22 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('display_order', ' 表示順')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('preparation_id', '予習ID')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('preparation_name', ' 予習名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('preparation_description', ' 説明')</th>
-                                                    <th class="text-center min-width-120"></th>
-                                                    <th class="text-center min-width-120"></th>
+                                                    <th class="text-left width-130">@sortablelink('display_order', ' 表示順')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('preparation_id', '予習ID')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('preparation_name', ' 予習名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('preparation_description', ' 説明')</th>
+                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 @foreach ($preparationList as $index => $preparation)
                                                     <tr>
-                                                        <td class="text-center">{{ $preparation->display_order }}</td>
-                                                        <td class="text-center">{{ $preparation->preparation_id }}</td>
-                                                        <td class="text-center">{{ $preparation->preparation_name }}</td>
-                                                        <td class="text-center">{{ $preparation->preparation_description }}</td>
-                                                        <td class="text-center "></td>
+                                                        <td class="text-left">{{ $preparation->display_order }}</td>
+                                                        <td class="text-left">{{ $preparation->preparation_id }}</td>
+                                                        <td class="text-left">{{ $preparation->preparation_name }}</td>
+                                                        <td class="text-left">{{ $preparation->preparation_description }}</td>
+                                                        <td class="text-left "></td>
                                                         <td>
                                                             <div class="btn-group" style="float:right;">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

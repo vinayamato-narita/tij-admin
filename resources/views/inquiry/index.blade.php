@@ -40,26 +40,26 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('id', '問合せ番号')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('inquiry_date', '日時')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('student_name', '名前')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('j_student_email', 'メールアドレス')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('inquiry_flag', '対応状況')</th>
+                                                    <th class="text-left width-130">@sortablelink('id', '問合せ番号')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('inquiry_date', '日時')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_id', '生徒番号')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_name', '名前')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('j_student_email', 'メールアドレス')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('inquiry_flag', '対応状況')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($inquiryList as $index => $inquiry)
                                                     <tr class="eachRow">
-                                                        <td class="text-center">{{ $inquiry->inquiry_id }}</td>
-                                                        <td class="text-center">{{ $inquiry->inquiry_date }}</td>
-                                                        <td class="text-center">{{ $inquiry->inquiry_subject }}</td>
-                                                        <td class="text-center">{{ $inquiry->student_id }}</td>
-                                                        <td class="text-center">{{ $inquiry->student_name ?? "" }}</td>
-                                                        <td class="text-center">{{ $inquiry->j_student_email }}</td>
-                                                        <td class="text-center">{{ InquiryFlag::getDescription($inquiry->inquiry_flag) }}</td>
+                                                        <td class="text-left">{{ $inquiry->inquiry_id }}</td>
+                                                        <td class="text-left">{{ $inquiry->inquiry_date }}</td>
+                                                        <td class="text-left">{{ $inquiry->inquiry_subject }}</td>
+                                                        <td class="text-left">{{ $inquiry->student_id }}</td>
+                                                        <td class="text-left">{{ $inquiry->student_name ?? "" }}</td>
+                                                        <td class="text-left">{{ $inquiry->j_student_email }}</td>
+                                                        <td class="text-left">{{ InquiryFlag::getDescription($inquiry->inquiry_flag) }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

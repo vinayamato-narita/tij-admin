@@ -273,7 +273,7 @@
                                         </div>
 
 
-                                        <div class="form-group row " v-if="courseType == 0 || courseType == 1">
+                                        <div class="form-group row " v-if="courseType == 0 || courseType == 2">
                                             <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :
                                             </label>
                                             <div class="col-md-6">
@@ -287,7 +287,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row " v-if="courseType == 2">
+                                        <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" for="minReserveCount">最小開催人数 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -304,7 +304,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row " v-if="courseType == 2">
+                                        <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" for="maxReserveCount">最大申込人数 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -320,7 +320,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row " v-if="courseType == 2">
+                                        <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" > 開催決定日時 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -357,7 +357,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="form-group row " v-if="courseType == 2">
+                                        <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" > 申込期限 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -394,7 +394,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="form-group row " v-if="courseType == 2">
+                                        <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" > 開講日時 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -611,14 +611,14 @@
                         formData.append("fromDate", that.publish_date_from_date.toLocaleString());
                         that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
                         formData.append("toDate", that.publish_date_to_date.toLocaleString());
-                        if (that.courseType == 2) {
+                        if (that.courseType === 1) {
                             formData.append("minReserveCount", this.minReserveCount);
                             formData.append("maxReserveCount", this.maxReserveCount);
-                            that.decideDateDate.setHours(that.decideDateTime.getHours(), that.decideDateTime.getMinutes())
+                            that.decideDateDate.setHours(that.decideDateTime.getHours(), that.decideDateTime.getMinutes());
                             formData.append("decideDate", that.decideDateDate.toLocaleString());
-                            that.reverseEndDateDate.setHours(that.reverseEndDateTime.getHours(), that.reverseEndDateTime.getMinutes())
+                            that.reverseEndDateDate.setHours(that.reverseEndDateTime.getHours(), that.reverseEndDateTime.getMinutes());
                             formData.append("reverseEndDate", that.reverseEndDateDate.toLocaleString());
-                            that.courseStartDateDate.setHours(that.courseStartDateTime.getHours(), that.courseStartDateTime.getMinutes())
+                            that.courseStartDateDate.setHours(that.courseStartDateTime.getHours(), that.courseStartDateTime.getMinutes());
                             formData.append("courseStartDate", that.courseStartDateDate.toLocaleString());
                         }
                         that.flagShowLoader = true;

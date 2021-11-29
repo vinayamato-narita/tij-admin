@@ -159,6 +159,16 @@
                         復習管理
                     </a>
                 </li>
+
+
+                <li class=" c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([TEST], $adminUserRights) }}">
+                    <a class=" c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(TEST) }}" href="{{route('test.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        テスト管理
+                    </a>
+                </li>
             </ul>
         </li>
 

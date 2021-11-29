@@ -111,6 +111,8 @@ import EditRole from "./components/admin/edit-role.vue"
 import EditLangCategory from "./components/category/edit-lang-category.vue"
 import CreateTest from "./components/test/create-test.vue"
 import EditTest from "./components/test/edit-test.vue"
+import TestShow from "./components/test/detail.vue"
+import TestAddQuestion from "./components/test/test-add-question.vue"
 import PreparationAdd from "./components/preparation/add"
 import PreparationShow from "./components/preparation/detail.vue"
 import PreparationEdit from "./components/preparation/edit.vue"
@@ -286,7 +288,9 @@ new Vue({
         ReviewAdd,
         ReviewShow,
         ReviewEdit,
-        EditLangLesson
+        EditLangLesson,
+        TestShow,
+        TestAddQuestion,
 
     },
     methods: {},

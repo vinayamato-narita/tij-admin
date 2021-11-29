@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
+use App\Enums\FileTypeEnum;
 use App\Enums\StatusCode;
+use App\Http\Requests\AddQuestionRequest;
+use App\Models\File;
 use App\Models\Test;
+use App\Models\TestQuestion;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +27,29 @@ class TestController extends BaseController
      */
     public function index(Request $request)
     {
-        
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'test_list']
+        ]);
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Test();
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('test_name', $request['search_input']))
+                    ->orWhere('test_id', $request['search_input'])
+                    ->orWhere($this->escapeLikeSentence('test_description', $request['search_input']));
+            });
+        }
+
+        $testList = $queryBuilder->sortable(['test_id' => 'asc'])->paginate($pageLimit);
+
+        return view('test.index', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'testList' => $testList,
+        ]);
     }
 
     /**
@@ -123,4 +151,120 @@ class TestController extends BaseController
             'status' => 'OK',
         ], StatusCode::OK);
     }
+
+    public function destroy($id) {
+        try {
+            $test = Test::where('test_id', $id)->delete();
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' テストが削除されました',
+            'data' => [],
+        ], StatusCode::OK);
+    }
+
+    public function show($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'test_list'],
+            ['name' => 'test_show', $id]
+        ]);
+
+        $test = Test::where('test_id', $id)->first();
+        if (!$test) return redirect()->route('test.index');
+        return view('test.show', [
+            'breadcrumbs' => $breadcrumbs,
+            'test' => $test
+        ]);
+    }
+
+    public function addQuestion($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'test_list'],
+            ['name' => 'test_show', $id],
+            ['name' => 'test_add_question', $id],
+
+        ]);
+
+        $test = Test::where('test_id', $id)->first();
+        if (!$test) return redirect()->route('test.index');
+        return view('test.addQuestion', [
+            'breadcrumbs' => $breadcrumbs,
+            'test' => $test
+        ]);
+
+    }
+
+    public function addQuestionPost(AddQuestionRequest $request, $id)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $test = Test::find($id);
+        if (!$test)
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        DB::beginTransaction();
+
+        try {
+            $testQuestion = new TestQuestion();
+            $testQuestion->navigation = $request->navigation  ?? '';
+            $testQuestion->display_order = $request->displayOrder  ?? 0;
+            $testQuestion->question_content = $request->questionContent  ?? '';
+
+            if (isset($request->fileSelected)) {
+                $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $request->fileSelected);
+                if ($name) {
+                    $file = new File();
+                    $file->file_name = $name;
+                    $file->file_name_original = $request->fileSelected->getClientOriginalName();
+                    $file->file_path = AzureFolderEnum::TEST . '/' . $name;
+                    $file->file_type = FileTypeEnum::TEST_RELATED;
+                    $file->save();
+                    $testQuestion->file_id = $file->file_id;
+                }
+            }
+            if (isset($request->fileId)) {
+                $storedFile = File::query()->find($request->fileId);
+                if ($storedFile)
+                    $testQuestion->file_id = $file->file_id;
+
+            }
+            $testQuestion->save();
+
+            DB::commit();
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'NG',
+                'exception' => $exception->getMessage(),
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+
+
+
+
+        return response()->json([
+            'status' => 'OK',
+            'id' => $test->test_id,
+        ], StatusCode::OK);
+
+    }
+
 }

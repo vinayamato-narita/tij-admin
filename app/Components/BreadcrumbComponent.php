@@ -288,12 +288,24 @@ class BreadcrumbComponent
                 'route_str' => "admin.editRole",
             ],
             'test_list' => [
-                'text' => 'Test list',
+                'text' => 'テスト一覧',
                 'route_str' => "test.index",
             ],
+            'test_show' => [
+                'text' => 'テスト情報表示',
+                'route_str' => "test.show",
+            ],
+            'test_add_question' => [
+                'text' => 'テスト問題追加',
+                'route_str' => "test.addQuestion",
+            ],
             'create_test' => [
-                'text' => 'create test',
+                'text' => 'テスト新規作成',
                 'route_str' => "test.create",
+            ],
+            'edit_test' => [
+                'text' => 'テスト編集',
+                'route_str' => "test.edit",
             ],
             'preparation_list' => [
                 'text' => '予習一覧',

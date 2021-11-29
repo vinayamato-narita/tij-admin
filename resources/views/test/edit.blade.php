@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', 'edit test')
+@section('title', 'テスト編集')
 @section('content')
     <edit-test
     	:url-action="{{json_encode(route('test.update', $testInfo->test_id))}}" 

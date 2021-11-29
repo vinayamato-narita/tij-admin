@@ -25,14 +25,19 @@ class TestRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $validate = [
             'test_type' => 'required|enum_value:' . TestType::class . ',false',
             'test_name' => 'required|max:255',
             'test_description' => 'max:20000',
-            'execution_time' => 'nullable|integer',
-            'expire_count' => 'nullable|integer',
             'passing_score' => 'required|integer',
             'total_score' => 'nullable|integer',
         ];
+
+        if ($this->request->get('test_type') === TestType::ENDCOURSE) {
+            $validate['execution_time'] = 'required|integer';
+            $validate['expire_count'] = 'required|integer';
+        }
+
+        return $validate;
     }
 }

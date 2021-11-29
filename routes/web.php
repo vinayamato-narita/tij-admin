@@ -36,6 +36,8 @@ Route::group([
     Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
 
+
+    //-------------------------- 学習管理--------------------------------//
     //text
     Route::resource('text', TextController::class);
 
@@ -88,7 +90,18 @@ Route::group([
     Route::get('course/set/{id}/edit', 'CourseController@setEdit')->name('course.setEdit');
     Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
 
-   //lesson cancel history
+    //TEST
+    Route::get('test/demo', 'TestController@demo')->name('test.demo');
+    Route::resource('test', TestController::class);
+    Route::get('test/{id}/add_question', 'TestController@addQuestion')->name('test.addQuestion');
+    Route::post('test/{id}/add_question', 'TestController@addQuestionPost')->name('test.addQuestionPost');
+    Route::get('test/demo', 'TestController@demo')->name('test.demo');
+
+
+    //-------------------------- 学習管理--------------------------------//
+
+
+    //lesson cancel history
     Route::resource('lessonCancelHistory', LessonCancelHistoryController::class);
 
     //remind mail
@@ -181,5 +194,4 @@ Route::group([
     Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
     Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 
-    Route::resource('test', TestController::class);
 });

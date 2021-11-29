@@ -1,0 +1,478 @@
+<template>
+
+    <div class="c-body">
+        <main class="c-main pt-0">
+            <div class="container-fluid info-screen">
+                <div class="page-heading">
+                    <div class="page-heading-left">
+                        <h5>
+                            テスト問題追加
+
+
+                        </h5>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <form class="form-horizontal " style="width: 100%" method="POST" ref="registerForm"
+                                      @submit.prevent="register" autocomplete="off">
+                                    <div class="card-body pl-5 mr-5 col-md-4">　
+
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-4 col-form-label text-md-left"><b>テストID:</b>
+                                            </label>
+                                            <div class="col-md-6 text-md-left p-2">
+                                                {{this.test.test_id}}
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-4 col-form-label text-md-left"><b>テスト名:</b>
+                                            </label>
+                                            <div class="col-md-6 text-md-left p-2">
+
+                                                {{this.test.test_name}}
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-4 col-form-label text-md-left"><b>テスト種別:</b>
+                                            </label>
+                                            <div class="col-md-6 text-md-left p-2">
+
+                                                {{testTypes[this.test.test_type]}}
+
+
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <div class="div-deco">
+                                        <h5>
+                                            大問
+                                        </h5>
+
+
+                                    </div>
+                                    <div class="card-body pl-5 pr-5">　
+
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>ナビゲーション :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        name="navigation"
+                                                        v-model="navigation"
+                                                        v-validate="
+                                                        'max:255'
+                                                    "
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('navigation')"
+                                                >
+                                                    {{ errors.first("navigation") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>問題文 :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                            <textarea
+                                                    class="form-control"
+                                                    name="questionContent"
+                                                    v-model="questionContent"
+                                                    rows="5"
+                                            >
+
+
+                                            </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>添付ファイル :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <button type="button" class="btn btn-primary w-100 mr-2" v-on:click="show('add-files-modal')">ファイル選択</button>
+                                                <span class="text-nowrap">
+                                                    {{fileNameAttached}}
+                                                </span>
+                                                <button type="button" v-on:click="newFile" class="btn btn-primary  mr-2">新規ファイル追加</button>
+                                                <input type="file" name="newFile" id="newFile" ref="newFile" v-on:change="changeFile" class="hidden">
+                                                <span class="text-nowrap">
+                                                    {{fileName}}
+
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="div-deco answer-bg" v-for="(item, index) in subQuestion">
+                                        <h5>
+                                            設問{{++index}}
+                                        </h5>
+
+
+                                    </div>
+
+                                    <div class="card-body pl-5 pr-5" v-for="(item, index) in subQuestion">　
+
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>問題文 :</b>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][question]'"
+                                                        v-model="item.question"
+                                                        v-validate="
+                                                        'required|max:255'
+                                                    "
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('subQuestion['+ index +'][question]')"
+                                                >
+                                                    {{ errors.first("subQuestion["+ index + "][question]") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>選択肢1(正解) :</b>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][answer1]'"
+                                                        v-model="item.answer1"
+                                                        v-validate="
+                                                        'required'
+                                                    "
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('subQuestion['+ index +'][answer1]')"
+                                                >
+                                                    {{ errors.first("subQuestion["+ index +"][answer1]") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>選択肢2 :</b>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][answer2]'"
+                                                        v-model="item.answer2"
+                                                        v-validate="
+                                                        'required'
+                                                    "
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('subQuestion['+ index +'][answer2]')"
+                                                >
+                                                    {{ errors.first("subQuestion["+ index +"][answer2]") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>選択肢3 :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][answer3]'"
+                                                        v-model="item.answer3"
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('subQuestion['+ index +'][answer3]')"
+                                                >
+                                                    {{ errors.first("subQuestion["+ index +"][answer3]") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row ">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>選択肢4 :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <input
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][answer4]'"
+                                                        v-model="item.answer4"
+                                                />
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('subQuestion['+ index +'][answer4]')"
+                                                >
+                                                    {{ errors.first("subQuestion["+ index +"][answer4]") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row " v-if="test.test_type === 0">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>解説 :</b>
+
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <textarea
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][explanation]'"
+                                                        v-model="item.explanation"
+                                                >
+
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row "  v-if="test.test_type === 0">
+                                            <label class="col-md-2 col-form-label text-md-left"><b>添付ファイル :</b>
+                                            </label>
+                                            <div class="col-md-10 text-md-left p-2">
+                                                <button type="button" class="btn btn-primary w-100 mr-2" v-on:click="showModalSubQuestion('add-files-modal', index)">ファイル選択</button>
+                                                <span class="text-nowrap">
+                                                    {{ subQuestion[index].fileNameAttached}}
+                                                </span>
+                                                <button type="button" v-on:click="newFileQuestion('subQuestion[' + index +']newFile')" class="btn btn-primary  mr-2">新規ファイル追加</button>
+                                                <input type="file" :name="'subQuestion[' + index +']newFile'" id="newFile" :ref="'subQuestion[' + index + ']newFile'" v-on:change="changeFileSubQuestion($event, index)" class="hidden">
+                                                <span class="text-nowrap">
+                                                    {{ subQuestion[index].fileName}}
+
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="line"></div>
+                                        <div class="form-group">
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
+                                                <a :href="urlTestDetail" class="btn btn-default w-100">閉じる</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <add-files :pageSizeLimit="pageSizeLimit" :url="getFilesUrl">
+
+            </add-files>
+        </main>
+    </div>
+
+
+</template>
+
+<script>
+    import axios from 'axios';
+    import Loader from "./../../components/common/loader";
+    import AddFiles from "./add-files"
+
+
+
+    export default {
+        created: function () {
+            let messError = {
+                custom: {
+                    navigation: {
+                        max: "復習名は255文字以内で入力してください。",
+                    },
+                    'subQuestion[0][question]' : {
+                        required: "問題文を入力してください",
+                        max: "問題文は255文字以内で入力してください。",
+
+                    },
+                    'subQuestion[0][answer1]' : {
+                        required: "選択肢1(正解)を入力してください"
+                    },
+                    'subQuestion[0][answer2]' : {
+                        required: "選択肢2(正解)を入力してください"
+                    }
+
+
+
+                },
+            };
+            this.$validator.localize("en", messError);
+        },
+        components: {
+            Loader,
+            AddFiles
+        },
+        data() {
+            return {
+                csrfToken: Laravel.csrfToken,
+                fileSelected: null,
+                fileName: '',
+                fileNameAttached: '',
+                navigation: '',
+                questionContent : '',
+                subQuestion: [{
+                        question : '',
+                        answer1 : '',
+                        answer2 : '',
+                        answer3 : '',
+                        answer4 : '',
+                    explanation : '',
+                    fileId : null,
+                    fileSelected: null,
+                    fileName: '',
+                    fileNameAttached: '',
+
+
+                    }]
+
+            };
+        },
+        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail', 'createQuestionUrl'],
+        mounted() {},
+        methods: {
+            show(modalName) {
+                this.$modal.show(modalName, {
+                    fileType: this.fileType,
+                    fileId: this.fileId,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.fileId = args[0].fileId;
+                            this.fileNameAttached = args[0].selectedFileName;
+                            this.fileSelected = null;
+                            this.fileName = null;
+                        }
+                    }
+                });
+            },
+            showModalSubQuestion(modalName, index) {
+                this.$modal.show(modalName, {
+                    fileType: this.fileType,
+                    fileId: null,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.subQuestion[index].fileId = args[0].fileId;
+                            this.subQuestion[index].fileNameAttached = args[0].selectedFileName;
+                            this.subQuestion[index].fileSelected = null;
+                            this.subQuestion[index].fileName = null;
+                        }
+                    }
+                });
+            },
+            changeFile(e) {
+                this.fileId = null;
+                this.fileNameAttached = '';
+                this.fileSelected = e.target.files[0];
+                this.fileName = e.target.files[0].name;
+            },
+            changeFileSubQuestion(e, index) {
+                this.subQuestion[index].fileId = null;
+                this.subQuestion[index].fileNameAttached = '';
+                this.subQuestion[index].fileSelected = e.target.files[0];
+                this.subQuestion[index].fileName = e.target.files[0].name;
+            },
+            newFile() {
+                this.$refs.newFile.click();
+            },
+            newFileQuestion(refName) {
+                this.$refs[refName][0].click();
+            },
+            register() {
+                let that = this;
+                let formData = new FormData();
+                formData.append("navigation", this.navigation);
+                formData.append("questionContent", this.questionContent);
+                if (this.fileId)
+                    formData.append('fileId', this.fileId);
+                if (this.fileSelected)
+                    formData.append('fileSelected', this.fileSelected);
+                this.subQuestion.forEach(function (e) {
+                    e.fileSelected = JSON.stringify(e.fileSelected)
+                });
+
+                formData.append('subQuestion', JSON.stringify(this.subQuestion))
+                this.$validator.validateAll().then((valid) => {
+                    if (valid) {
+                        that.flagShowLoader = true;
+                        axios
+                            .post(that.createQuestionUrl, formData, {
+                                header: {
+                                    "Content-Type": "multipart/form-data",
+                                },
+                            })
+                            .then((res) => {
+                                this.$swal({
+                                    title: "テスト問題新規作成が完了しました。",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(function (confirm) {
+                                    that.flagShowLoader = false;
+                                });
+                                that.flagShowLoader = false;
+                                window.location.href = this.urlTestDetail;
+                            })
+                            .catch((err) => {
+                                switch (err.response.status) {
+                                    case 422:
+                                    case 400:
+                                        this.errorsData = err.response.data;
+                                        that.flagShowLoader = false;
+                                        break;
+                                    case 500:
+                                        this.$swal({
+                                            title: "失敗したデータを追加しました",
+                                            icon: "error",
+                                            confirmButtonText: "OK",
+                                        }).then(function (confirm) {
+                                        });
+                                        that.flagShowLoader = false;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                    }
+                });
+
+            },
+        },
+    }
+</script>

@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            edit test
+                            テスト編集
                         </h5>
                     </div>
                 </div>
@@ -15,7 +15,7 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
-                                        <h5 class="title-page">edit test</h5>
+                                        <h5 class="title-page">テスト情報</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
@@ -99,11 +99,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" v-if="testInfoEx.test_type === 2">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >制限時間</label
+                                                >制限時間<span class="glyphicon glyphicon-star"
+                                            ></span></label
                                             >
                                             <div class="col-md-3">
                                                 <input
@@ -111,8 +112,9 @@
                                                     class="form-control"
                                                     name="execution_time"
                                                     v-model="testInfoEx.execution_time"
+                                                    style="width: 100px"
                                                     v-validate="
-                                                        'decimal|min_value:0|max_value:1000000000'
+                                                        'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
                                                 <div
@@ -124,11 +126,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" v-if="testInfoEx.test_type === 2">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >受講回数</label
+                                                >受講回数<span class="glyphicon glyphicon-star"
+                                            ></span></label
                                             >
                                             <div class="col-md-3">
                                                 <input
@@ -136,8 +139,9 @@
                                                     class="form-control"
                                                     name="expire_count"
                                                     v-model="testInfoEx.expire_count"
+                                                    style="width: 100px"
                                                     v-validate="
-                                                        'decimal|min_value:0|max_value:1000000000'
+                                                        'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
                                                 <div
@@ -154,14 +158,14 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
                                                 >合格点<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
+                                                    ></span></label
                                             >
                                             <div class="col-md-3">
                                                 <input
                                                     type="number"
                                                     class="form-control"
                                                     name="passing_score"
+                                                    style="width: 100px"
                                                     v-model="testInfoEx.passing_score"
                                                     v-validate="
                                                         'required|decimal|min_value:0|max_value:1000000000'
@@ -226,11 +230,13 @@ export default {
                     max: "説明は20000文字以内で入力してください",
                 },
                 execution_time: {
+                    required: "制限時間を入力してください",
                     decimal: "制限時間は半角数字を入力してください",
                     min_value: "制限時間は1～1000000000 を入力してください",
                     max_value: "制限時間は1～1000000000 を入力してください",
                 },
                 expire_count: {
+                    required: "受講回数を入力してください",
                     decimal: "受講回数は半角数字を入力してください",
                     min_value: "受講回数は1～1000000000 を入力してください",
                     max_value: "受講回数は1～1000000000 を入力してください",
@@ -279,7 +285,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "update test success",
+                            text: "テスト編集が完了しました",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -288,6 +294,24 @@ export default {
                     }
                 })
                 .catch(e => {
+                    switch (err.response.status) {
+                        case 422:
+                        case 400:
+                            this.errorsData = err.response.data;
+                            that.flagShowLoader = false;
+                            break;
+                        case 500:
+                            this.$swal({
+                                title: "失敗したデータを追加しました",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            }).then(function (confirm) {});
+
+                            that.flagShowLoader = false;
+                            break;
+                        default:
+                            break;
+                    }
                     this.flagShowLoader = false;
                 });
         }

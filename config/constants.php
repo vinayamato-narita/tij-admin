@@ -101,6 +101,7 @@ const ADMINDEMAND = 41;
 const LESSONCANCEL = 43;
 const PREPARATION = 44;
 const REVIEW = 45;
+const TEST = 46;
 
 const CANEDIT = 'can_edit';
 const ISPERMITTED = 'is_permitted';

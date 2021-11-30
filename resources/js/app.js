@@ -7,7 +7,7 @@ import VeeValidate from "vee-validate";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faPlus, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
@@ -20,7 +20,7 @@ import Multiselect from 'vue-multiselect'
 Vue.component('multiselect', Multiselect)
 Vue.component('draggable', Draggable)
 
-library.add(faUserSecret, faPlus, faTrash)
+library.add(faUserSecret, faPlus, faTrash, faPlusCircle)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
     locale: "ja"

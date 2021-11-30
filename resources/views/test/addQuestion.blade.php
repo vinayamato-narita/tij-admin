@@ -9,6 +9,8 @@
             :file-type ="{{json_encode(\App\Enums\FileTypeEnum::asArray())}}"
             :url-test-detail="{{json_encode(route('test.show', $test->test_id))}}"
             :create-question-url="{{json_encode(route('test.addQuestionPost', $test->test_id))}}"
+            :tags="{{json_encode($tags)}}"
+            :create-tag-url="{{json_encode(route('test.createTag', $test->test_id))}}"
 
     ></test-add-question>
 @endsection

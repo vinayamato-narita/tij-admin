@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class TestSubQuestionTag extends Model
 {
     use HasFactory;
-
-    protected $table = 'tag';
-
     public $timestamps = false;
+    protected $primaryKey = 'test_sub_question_tag_id';
 
-    protected $primaryKey = 'tag_id';
+    protected $table = 'test_sub_question_tag';
 }

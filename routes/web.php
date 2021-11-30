@@ -96,6 +96,10 @@ Route::group([
     Route::get('test/{id}/add_question', 'TestController@addQuestion')->name('test.addQuestion');
     Route::post('test/{id}/add_question', 'TestController@addQuestionPost')->name('test.addQuestionPost');
     Route::get('test/demo', 'TestController@demo')->name('test.demo');
+    //tag
+    Route::post('test/{id}/add_tag', 'TestController@addTag')->name('test.createTag');
+
+
 
 
     //-------------------------- 学習管理--------------------------------//

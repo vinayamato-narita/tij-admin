@@ -96,10 +96,8 @@ class CourseController extends BaseController
         ]);
 
 
-        $tag = Tag::all()->toArray();
         return view('course.create', [
             'breadcrumbs' => $breadcrumbs,
-            'tag' => $tag
         ]);
     }
 
@@ -170,10 +168,8 @@ class CourseController extends BaseController
         ]);
 
 
-        $tag = Tag::all()->toArray();
         return view('course.setCreate', [
             'breadcrumbs' => $breadcrumbs,
-            'tag' => $tag
         ]);
     }
 

@@ -13,5 +13,10 @@ class TestQuestion extends Model
     protected $primaryKey = 'test_question_id';
 
     protected $table = 'test_question';
+    public function testSubQuestions()
+    {
+        return $this->hasMany('App\Models\TestSubQuestion', 'test_question_id', 'test_question_id');
+    }
+
 
 }

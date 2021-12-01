@@ -7,7 +7,7 @@ import VeeValidate from "vee-validate";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faPlus, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faPlus, faTrash, faPlusCircle , faMinusCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
@@ -20,7 +20,7 @@ import Multiselect from 'vue-multiselect'
 Vue.component('multiselect', Multiselect)
 Vue.component('draggable', Draggable)
 
-library.add(faUserSecret, faPlus, faTrash, faPlusCircle)
+library.add(faUserSecret, faPlus, faTrash, faPlusCircle, faMinusCircle)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
     locale: "ja"
@@ -44,6 +44,16 @@ Vue.filter("formatDateTime", function(value) {
       return moment(String(value)).tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm");
     }
   });
+
+var filter = function(text, length, clamp){
+    clamp = clamp || '...';
+    var node = document.createElement('div');
+    node.innerHTML = text;
+    var content = node.textContent;
+    return content.length > length ? content.slice(0, length) + clamp : content;
+};
+
+Vue.filter('truncate', filter);
 Vue.config.productionTip = false
 //Nl2br
 import Nl2br from 'vue-nl2br'
@@ -113,6 +123,7 @@ import CreateTest from "./components/test/create-test.vue"
 import EditTest from "./components/test/edit-test.vue"
 import TestShow from "./components/test/detail.vue"
 import TestAddQuestion from "./components/test/test-add-question.vue"
+import TestEditQuestion from "./components/test/test-edit-question.vue"
 import PreparationAdd from "./components/preparation/add"
 import PreparationShow from "./components/preparation/detail.vue"
 import PreparationEdit from "./components/preparation/edit.vue"
@@ -291,6 +302,7 @@ new Vue({
         EditLangLesson,
         TestShow,
         TestAddQuestion,
+        TestEditQuestion,
 
     },
     methods: {},

@@ -13,9 +13,27 @@ class TestQuestion extends Model
     protected $primaryKey = 'test_question_id';
 
     protected $table = 'test_question';
+    protected $appends = ['total_score'];
+
+
     public function testSubQuestions()
     {
         return $this->hasMany('App\Models\TestSubQuestion', 'test_question_id', 'test_question_id');
+    }
+
+    public function file()
+    {
+        return $this->hasOne('App\Models\File', 'file_id', 'file_id');
+    }
+
+    public function getTotalScoreAttribute()
+    {
+        $totalScore = 0;
+        foreach ($this->testSubQuestions as  $testSubQuestion) {
+            $totalScore += $testSubQuestion->score;
+
+        }
+        return $totalScore;
     }
 
 

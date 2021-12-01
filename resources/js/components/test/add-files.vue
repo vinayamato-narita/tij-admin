@@ -178,7 +178,8 @@
                 event : null,
                 fileType : null,
                 selectedFileName: '',
-                reviewId : null
+                testQuestionId : null,
+                testSubQuestionId: null
 
             };
         },
@@ -201,7 +202,8 @@
                     this.event = e;
                     this.fileType = e.params.fileType;
                     this.fileId = e.params.fileId;
-                    this.reviewId = e.params.reviewId;
+                    this.testQuestionId = e.params.testQuestionId === undefined ? null : e.params.testQuestionId,
+                    this.testSubQuestionId = e.params.testSubQuestionId === undefined ? null : e.params.testSubQuestionId
 
                 }
                 let that = this;
@@ -211,7 +213,8 @@
                         inputSearch : that.inputSearch,
                         page : that.currentPage,
                         id : that.id,
-                        reviewId: this.reviewId
+                        testQuestionId: this.testQuestionId,
+                        testSubQuestionId : this.testSubQuestionId
                     }
                 })
                     .then(function (response) {

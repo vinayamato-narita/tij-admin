@@ -299,6 +299,10 @@ class BreadcrumbComponent
                 'text' => 'テスト問題追加',
                 'route_str' => "test.addQuestion",
             ],
+            'test_edit_question' => [
+                'text' => 'テスト問題編集',
+                'route_str' => "test.editQuestion",
+            ],
             'create_test' => [
                 'text' => 'テスト新規作成',
                 'route_str' => "test.create",

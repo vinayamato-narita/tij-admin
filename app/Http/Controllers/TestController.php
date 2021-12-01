@@ -266,7 +266,8 @@ class TestController extends BaseController
         try {
             $testQuestion = new TestQuestion();
             $testQuestion->navigation = $request->navigation ?? '';
-            $testQuestion->display_order = $request->displayOrder ?? 0;
+            $displayOrder = TestQuestion::where('test_id', $id)->max('display_order') + 1;
+            $testQuestion->display_order = $displayOrder;
             $testQuestion->question_content = $request->questionContent ?? '';
 
             if (isset($request->fileSelected)) {
@@ -284,7 +285,7 @@ class TestController extends BaseController
             if (isset($request->fileId)) {
                 $storedFile = File::query()->find($request->fileId);
                 if ($storedFile)
-                    $testQuestion->file_id = $file->file_id;
+                    $testQuestion->file_id = $storedFile->file_id;
 
             }
             $testQuestion->test_id = $test->test_id;
@@ -295,8 +296,8 @@ class TestController extends BaseController
             $files = $request->allFiles();
             $convertFiles = [];
             foreach ($files as $indexFile => $f) {
-                if (strpos('pushedQuestionFile', $indexFile))
-                    $convertFiles[str_replace('pushedQuestionFile_', $indexFile)] = $f;
+                if (strpos($indexFile,'pushedQuestionFile') !== false)
+                    $convertFiles[str_replace('pushedQuestionFile_', '', $indexFile)] = $f;
             }
 
             foreach ($subQuestions as $index => $subQuestion) {
@@ -309,13 +310,13 @@ class TestController extends BaseController
                 $testSubQuestion->answer3 = $subQuestion->answer3;
                 $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
-                if (!empty($request->fileId)) {
+                if (!empty($subQuestion->fileId)) {
                     $storedFile = File::query()->find($request->fileId);
                     if ($storedFile)
-                        $testSubQuestion->file_id = $storedFile->file_id;
+                        $testSubQuestion->explanation_file_id = $storedFile->file_id;
                 }
                 if (!empty($convertFiles[$index])) {
-                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::asSelectArray(), $convertFiles[$index]);
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $convertFiles[$index]);
                     if ($name) {
                         $file = new File();
                         $file->file_name = $name;
@@ -323,7 +324,7 @@ class TestController extends BaseController
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                         $file->file_type = FileTypeEnum::TEST_RELATED;
                         $file->save();
-                        $testSubQuestion->file_id = $file->file_id;
+                        $testSubQuestion->explanation_file_id = $file->file_id;
                     }
 
                 }
@@ -342,12 +343,12 @@ class TestController extends BaseController
                     }
                 }
 
-                $test->total_score = $totalScore;
-                $test->save();
-
-
-                DB::commit();
             }
+            $test->total_score = $totalScore;
+            $test->save();
+
+
+            DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
 
@@ -363,6 +364,190 @@ class TestController extends BaseController
             'id' => $test->test_id,
         ], StatusCode::OK);
 
+    }
+
+    public function editQuestion($id, $testQuestionId)
+    {
+
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'test_list'],
+            ['name' => 'test_show', $id],
+            ['name' => 'test_edit_question', $id, $testQuestionId],
+
+        ]);
+
+        $test = Test::where('test_id', $id)->first();
+        $testQuestion = TestQuestion::with(['testSubQuestions', 'file', 'testSubQuestions.file', 'testSubQuestions.tags'])->where('test_question_id', $testQuestionId)->first();
+        if (!$test || !$testQuestion) return redirect()->route('test.index');
+
+        $tags = Tag::all();
+        return view('test.editQuestion', [
+            'breadcrumbs' => $breadcrumbs,
+            'test' => $test,
+            'testQuestion' => $testQuestion,
+            'tags' => $tags
+        ]);
+
+    }
+
+    public function QuestionUpdate(AddQuestionRequest $request, $id, $testQuestionId)
+    {
+        if (!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $test = Test::find($id);
+        $testQuestion = TestQuestion::find($testQuestionId);
+
+        if (!$test || !$testQuestion)
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        $totalScore = $test->total_score - $testQuestion->total_score;
+
+        DB::beginTransaction();
+
+        try {
+            $testQuestion->navigation = $request->navigation ?? '';
+            $testQuestion->question_content = $request->questionContent ?? '';
+
+            if (isset($request->fileSelected)) {
+                $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $request->fileSelected);
+                if ($name) {
+                    $file = new File();
+                    $file->file_name = $name;
+                    $file->file_name_original = $request->fileSelected->getClientOriginalName();
+                    $file->file_path = AzureFolderEnum::TEST . '/' . $name;
+                    $file->file_type = FileTypeEnum::TEST_RELATED;
+                    $file->save();
+                    $testQuestion->file_id = $file->file_id;
+                }
+            }
+            if (isset($request->fileId)) {
+                $storedFile = File::query()->find($request->fileId);
+                if ($storedFile)
+                    $testQuestion->file_id = $storedFile->file_id;
+
+            }
+            $testQuestion->test_id = $test->test_id;
+            $testQuestion->save();
+
+            $subQuestions = json_decode($request->subQuestion);
+
+            $files = $request->allFiles();
+            $convertFiles = [];
+            foreach ($files as $indexFile => $f) {
+                if (strpos($indexFile,'pushedQuestionFile') !== false)
+                    $convertFiles[str_replace('pushedQuestionFile_', '', $indexFile)] = $f;
+            }
+
+            foreach ($subQuestions as $index => $subQuestion) {
+                if (!empty($subQuestion->testSubQuestionId))
+                {
+                    $testSubQuestion = TestSubQuestion::with('tags')->find($subQuestion->testSubQuestionId);
+
+                }
+                else {
+                    $testSubQuestion = new TestSubQuestion();
+
+                }
+                $testSubQuestion->test_question_id = $testQuestion->test_question_id;
+                $testSubQuestion->display_order = $index;
+                $testSubQuestion->sub_question_content = $subQuestion->question;
+                $testSubQuestion->answer1 = $subQuestion->answer1;
+                $testSubQuestion->answer2 = $subQuestion->answer2;
+                $testSubQuestion->answer3 = $subQuestion->answer3;
+                $testSubQuestion->answer4 = $subQuestion->answer4;
+                $testSubQuestion->explanation = $subQuestion->explanation;
+                if (!empty($subQuestion->fileId)) {
+                    $storedFile = File::query()->find($request->fileId);
+                    if ($storedFile)
+                        $testSubQuestion->explanation_file_id = $storedFile->file_id;
+                }
+                if (!empty($convertFiles[$index])) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST , $convertFiles[$index]);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $f->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::TEST . '/' . $name;
+                        $file->file_type = FileTypeEnum::TEST_RELATED;
+                        $file->save();
+                        $testSubQuestion->explanation_file_id = $file->file_id;
+                    }
+
+                }
+                $testSubQuestion->score = $subQuestion->score;
+                $totalScore += $subQuestion->score;
+
+                $testSubQuestion->save();
+                $savedTag = $testSubQuestion->tags->pluck('tag_id');
+
+
+                $pushedTagIds = collect(array_column($subQuestion->value, 'id'));
+
+                //get tag be removed in UI
+                $tagToRemove = $savedTag->diff($pushedTagIds);
+                TestSubQuestionTag::whereIn('tag_id', $tagToRemove)->delete();
+
+                //get tag be added in UI
+                $tagToAdd = $savedTag->diff($pushedTagIds);
+
+                foreach ($tagToAdd->all() as $tag) {
+                    $tsqsTag = new TestSubQuestionTag();
+                    $tsqsTag->test_sub_question_id = $testSubQuestion->test_sub_question_id;
+                    $tsqsTag->tag_id = $tag->id;
+                    $tsqsTag->save();
+                }
+
+            }
+
+            //get subquestion has been removed
+            $subQuestionToRemoveIds = collect(TestSubQuestion::where('test_question_id', $id)->get()->pluck('sub_question_id'))->diff(array_column($subQuestions, 'testSubQuestionId'));
+            TestSubQuestion::whereIn('test_sub_question_id', $subQuestionToRemoveIds)->delete();
+
+            $test->total_score = $totalScore;
+            $test->save();
+            DB::commit();
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'NG',
+                'exception' => $exception->getMessage(),
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+
+        return response()->json([
+            'status' => 'OK',
+            'id' => $test->test_id,
+        ], StatusCode::OK);
+
+    }
+
+
+    public function deleteQuestion($id, $testQuestionId)
+    {
+        try {
+            $testQuestion = TestQuestion::where('test_question_id', $testQuestionId)->delete();
+
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => '大問が削除されました',
+            'data' => [],
+        ], StatusCode::OK);
     }
 
 }

@@ -16,8 +16,12 @@ class Test extends Model
 
     protected $primaryKey = 'test_id';
 
+
+
+
     public function testQuestions()
     {
         return $this->hasMany('App\Models\TestQuestion', 'test_id', 'test_id');
     }
+
 }

@@ -6,7 +6,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            テスト問題追加
+                            テスト問題編集
 
 
                         </h5>
@@ -133,10 +133,7 @@
                                                 設問{{ getIndex(index)}}
                                                 <button v-if="index !== 0" type="button" v-on:click="deleteSubQuestion(index)" class="float-right btn">                                                <font-awesome-icon icon="minus-circle"></font-awesome-icon>
                                                 </button>
-
                                             </h5>
-
-
 
 
                                         </div>
@@ -390,8 +387,6 @@
             <add-tag-modal :createTagUrl="createTagUrl">
 
             </add-tag-modal>
-            <loader :flag-show="flagShowLoader"></loader>
-
         </main>
     </div>
 
@@ -416,6 +411,33 @@
             this.tags.forEach(function (e) {
                 that.optionsTag.push({id: e.tag_id, name: e.tag_name})
             });
+            this.testQuestion.test_sub_questions.forEach(function (e) {
+                var valueTags = [];
+                e.tags.forEach(function (tag) {
+                    valueTags.push({name : tag.tag_name, id: tag.tag_id});
+                });
+                that.subQuestion.push({
+                    testSubQuestionId: e.test_sub_question_id,
+                    question: e.sub_question_content,
+                    answer1: e.answer1,
+                    answer2: e.answer2,
+                    answer3: e.answer3,
+                    answer4: e.answer4,
+                    explanation: e.explanation,
+                    fileId: e.explanation_file_id,
+                    fileSelected: null,
+                    fileName: '',
+                    fileNameAttached: e.file == null ? '' : e.file.file_name_original,
+                    score: e.score,
+                    value: valueTags,
+
+
+                });
+
+            })
+
+
+
         },
         components: {
             Loader,
@@ -429,27 +451,12 @@
                 csrfToken: Laravel.csrfToken,
                 fileSelected: null,
                 fileName: '',
-                fileNameAttached: '',
-                navigation: '',
-                questionContent: '',
+                fileNameAttached: this.testQuestion.file === null ? '' : this.testQuestion.file.file_name_original,
+                navigation: this.testQuestion.navigation,
+                questionContent: this.testQuestion.question_content,
+                fileId :  this.testQuestion.file === null ? '' : this.testQuestion.file.file_id,
                 optionsTag : [],
-                subQuestion: [{
-                    question: '',
-                    answer1: '',
-                    answer2: '',
-                    answer3: '',
-                    answer4: '',
-                    explanation: '',
-                    fileId: null,
-                    fileSelected: null,
-                    fileName: '',
-                    fileNameAttached: '',
-                    score: 0,
-                    value: [
-                    ],
-
-
-                }],
+                subQuestion: [],
                 defaultCustomMessage : {
                     navigation: {
                         max: "復習名は255文字以内で入力してください。",
@@ -477,10 +484,36 @@
 
             };
         },
-        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail', 'createQuestionUrl', 'tags', 'createTagUrl'],
+        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail', 'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion'],
         mounted() {
         },
         methods: {
+            deleteSubQuestion (index) {
+                this.subQuestion = this.subQuestion.filter((_, indexArr) => indexArr !== index);
+                let messError = {
+                    custom: this.defaultCustomMessage,
+                };
+
+                messError.custom["subQuestion[" + index + "][question]"] = {
+                    required: "問題文を入力してください",
+                    max: "問題文は255文字以内で入力してください。",
+                };
+                messError.custom["subQuestion[" + index + "][answer1]"] = {
+                    required: "選択肢1(正解)を入力してください"
+                };
+                messError.custom["subQuestion[" + index + "][answer2]"] = {
+                    required: "選択肢2(正解)を入力してください"
+                };
+                messError.custom["subQuestion[" + index + "][score]"] = {
+                    required: "点数を入力してください",
+                    decimal: "点数は半角数字を入力してください",
+                    min_value: "点数は1～1000000000 を入力してください",
+                    max_value: "点数は1～1000000000 を入力してください",
+                };
+                this.$validator.localize("en", messError);
+
+            },
+
             getIndex(index){ return ++index; },
             addSubQuestion () {
                 var index = this.subQuestion.length;
@@ -521,32 +554,6 @@
                 this.$validator.localize("en", messError);
 
             },
-            deleteSubQuestion (index) {
-                alert('abc')
-                this.subQuestion = this.subQuestion.filter((_, indexArr) => indexArr !== index);
-                let messError = {
-                    custom: this.defaultCustomMessage,
-                };
-
-                messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
-                    max: "問題文は255文字以内で入力してください。",
-                };
-                messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください"
-                };
-                messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください"
-                };
-                messError.custom["subQuestion[" + index + "][score]"] = {
-                    required: "点数を入力してください",
-                    decimal: "点数は半角数字を入力してください",
-                    min_value: "点数は1～1000000000 を入力してください",
-                    max_value: "点数は1～1000000000 を入力してください",
-                };
-                this.$validator.localize("en", messError);
-
-            },
             showAddtag(index) {
                 this.$modal.show('add-tag-modal', {
                     handlers: {
@@ -561,6 +568,7 @@
                 this.$modal.show(modalName, {
                     fileType: this.fileType,
                     fileId: this.fileId,
+                    testQuestionId : this.testQuestion.test_question_id,
                     handlers: {
                         sendFileId: (...args) => {
                             this.fileId = args[0].fileId;
@@ -574,7 +582,8 @@
             showModalSubQuestion(modalName, index) {
                 this.$modal.show(modalName, {
                     fileType: this.fileType,
-                    fileId: null,
+                    fileId: this.subQuestion[index].fileId,
+                    testSubQuestionId : this.subQuestion[index].testSubQuestionId,
                     handlers: {
                         sendFileId: (...args) => {
                             this.subQuestion[index].fileId = args[0].fileId;
@@ -615,7 +624,7 @@
 
                 this.subQuestion.forEach(function (e, index) {
                     if (e.fileSelected !== null)
-                    formData.append('pushedQuestionFile_' + index, e.fileSelected);
+                        formData.append('pushedQuestionFile_' + index, e.fileSelected);
 
                 });
                 formData.append('subQuestion', JSON.stringify(this.subQuestion));
@@ -623,13 +632,12 @@
                     if (valid) {
                         that.flagShowLoader = true;
                         axios
-                            .post(that.createQuestionUrl, formData, {
+                            .post(that.updateQuestionUrl, formData, {
                                 header: {
                                     "Content-Type": "multipart/form-data",
                                 },
                             })
                             .then((res) => {
-                                that.flagShowLoader = false;
                                 this.$swal({
                                     title: "テスト問題新規作成が完了しました。",
                                     icon: "success",
@@ -637,9 +645,8 @@
                                 }).then(function (confirm) {
                                     if (confirm.isConfirmed)
                                         window.location.href = that.urlTestDetail;
-
-
                                 });
+
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

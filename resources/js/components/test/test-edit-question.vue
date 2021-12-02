@@ -387,6 +387,8 @@
             <add-tag-modal :createTagUrl="createTagUrl">
 
             </add-tag-modal>
+            <loader :flag-show="flagShowLoader"></loader>
+
         </main>
     </div>
 
@@ -638,6 +640,7 @@
                                 },
                             })
                             .then((res) => {
+                                that.flagShowLoader = false;
                                 this.$swal({
                                     title: "テスト問題新規作成が完了しました。",
                                     icon: "success",

@@ -34,7 +34,7 @@ class StoreUpdateCourseRequest extends FormRequest
             'isForLMS' => 'required',
             'courseType' => 'required',
             'fromDate' => 'required',
-            'toDate' => 'required|gte:fromDate'
+            'toDate' => 'required'
         ];
 
         if ($this->request->get('courseType') == CourseTypeEnum::GROUP_COURSE) {

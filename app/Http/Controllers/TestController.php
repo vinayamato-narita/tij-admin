@@ -183,7 +183,7 @@ class TestController extends BaseController
             ['name' => 'test_show', $id]
         ]);
 
-        $test = Test::with('testQuestions.testSubQuestions')->where('test_id', $id)->first();
+        $test = Test::with('testQuestions.testSubQuestions', 'courses')->where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
         return view('test.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -494,12 +494,12 @@ class TestController extends BaseController
                 TestSubQuestionTag::whereIn('tag_id', $tagToRemove)->delete();
 
                 //get tag be added in UI
-                $tagToAdd = $savedTag->diff($pushedTagIds);
+                $tagToAdd = $pushedTagIds->diff($savedTag);
 
                 foreach ($tagToAdd->all() as $tag) {
                     $tsqsTag = new TestSubQuestionTag();
                     $tsqsTag->test_sub_question_id = $testSubQuestion->test_sub_question_id;
-                    $tsqsTag->tag_id = $tag->id;
+                    $tsqsTag->tag_id = $tag;
                     $tsqsTag->save();
                 }
 
@@ -541,13 +541,82 @@ class TestController extends BaseController
             return response()->json([
                 'status' => 'NG',
                 'data' => [],
-            ], StatusCode::NOT_FOUND);
+            ], StatusCode::INTERNAL_ERR);
         }
         return response()->json([
             'status' => 'OK',
             'message' => '大問が削除されました',
             'data' => [],
         ], StatusCode::OK);
+    }
+
+    public function listQuestionAttach ($id)
+    {
+        $test = Test::with('testQuestions.testSubQuestions')->where('test_id', $id)->first();
+        if (!$test)
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $test->testQuestions->toArray(),
+        ], StatusCode::OK);
+
+
+    }
+
+    public function listQuestionAttachUpdate (Request $request, $id)
+    {
+        $test = Test::where('test_id', $id)->first();
+
+        if (empty($request->testQuestions) || !$test)
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+
+        DB::beginTransaction();
+        try {
+            $testQuestions = json_decode($request->testQuestions);
+            $totalScore =0 ;
+            foreach ($testQuestions as  $index => $testQuestion) {
+                $testQuestionDb = TestQuestion::find($testQuestion->test_question_id);
+                $orderValue = ++$index;
+                $testQuestionDb->display_order = $orderValue;
+                $testQuestionDb->save();
+                foreach ($testQuestion->test_sub_questions as $indexTSQuestion => $testSubQuestion) {
+                    $testSubQuestionDb = TestSubQuestion::find($testSubQuestion->test_sub_question_id);
+                    $orderValue = ++$indexTSQuestion;
+                    $testSubQuestionDb->display_order = $orderValue;
+                    $testSubQuestionDb->score = $testSubQuestion->score;
+                    $testSubQuestionDb->save();
+                    $totalScore += $testSubQuestion->score;
+
+                }
+
+            }
+
+            $test->total_score = $totalScore;
+            $test->save();
+
+            DB::commit();
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+
+        return response()->json([
+            'status' => 'OK',
+            'data' => [],
+        ], StatusCode::OK);
+
     }
 
 }

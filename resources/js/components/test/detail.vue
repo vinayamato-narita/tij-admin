@@ -107,8 +107,8 @@
 
                                     <div class="float-right">
                                         <a :href="this.addQuestionUrl" class="btn btn-primary ">問題追加</a>
-                                        <a :href="this.editTestUrl" class="btn btn-primary ">点数・表示順編集
-                                        </a>
+                                        <button  class="btn btn-primary " v-on:click="show('drag-question-modal')">点数・表示順編集
+                                        </button>
                                     </div>
 
 
@@ -171,10 +171,66 @@
 
                             </div>
 
+                            <div class="card" v-if="test.test_type === 1 || test.test_type === 2">
+                                <div class="card-header">コース名
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="course in this.test.courses">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/course/' + course.course_id" target="_blank" class="wrap-long-text" style="color: inherit">{{course.course_name}}}</a></div>
+
+                                                <div class="col-md-2">
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+<!--
+                            <div class="card" v-if="test.test_type === 0">
+                                <div class="card-header">レッスン一覧
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="lesson in this.test.courses">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/course/' + course.course_id" target="_blank" class="wrap-long-text" style="color: inherit">{{course.course_name}}}</a></div>
+
+                                                <div class="col-md-2">
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+-->
+
                         </div>
                     </div>
                 </div>
             </div>
+            <dragable-item :detailUrl="detailTestUrl" :listQuestionAttachUrl="listQuestionAttachUrl"   :id="test.testId"  :listQuestionAttachUpdateUrl="listQuestionAttachUpdateUrl">
+
+            </dragable-item>
         </main>
     </div>
 
@@ -184,6 +240,7 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
+    import DragableItem from "./dragable-item";
 
 
     export default {
@@ -191,13 +248,14 @@
         },
         components: {
             Loader,
+            DragableItem
         },
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['test', 'editTestUrl', 'addQuestionUrl'],
+        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl'],
         mounted() {
         },
         methods: {
@@ -243,6 +301,9 @@
                     }
                 });
             },
+            show(modalName){
+                this.$modal.show(modalName);
+            }
 
 
         },

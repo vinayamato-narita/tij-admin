@@ -863,3 +863,23 @@ td.ui-selectee.ui-selected, td.ui-selectee.ui-selecting {
 .answer-bg {
     background-color: #70B0E7!important;
 }
+
+.draggable-test-sub-question {
+    height: fit-content;
+    border-bottom: 1px solid;
+    border-bottom-color: #d8dbe0;
+}
+
+div > .draggable-test-sub-question:last-child {
+    border-bottom: none;
+
+}
+
+div > .draggable-test-sub-question:first-child {
+    border-top: 1px solid;
+    border-top-color: #d8dbe0;
+}
+
+.h-30px {
+    height: 30px;
+}

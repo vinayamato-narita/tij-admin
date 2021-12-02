@@ -522,7 +522,6 @@
 
             },
             deleteSubQuestion (index) {
-                alert('abc')
                 this.subQuestion = this.subQuestion.filter((_, indexArr) => indexArr !== index);
                 let messError = {
                     custom: this.defaultCustomMessage,

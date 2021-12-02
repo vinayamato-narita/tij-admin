@@ -21,7 +21,13 @@ class Test extends Model
 
     public function testQuestions()
     {
-        return $this->hasMany('App\Models\TestQuestion', 'test_id', 'test_id');
+        return $this->hasMany('App\Models\TestQuestion', 'test_id', 'test_id')->orderBy('display_order');
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany('App\Models\course', 'course_test' , 'test_id', 'course_id', 'test_id', 'course_id');
+    }
+
 
 }

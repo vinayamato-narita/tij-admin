@@ -98,7 +98,8 @@ Route::group([
     Route::get('test/{id}/edit_question/{testQuestionId}', 'TestController@editQuestion')->name('test.editQuestion');
     Route::post('test/{id}/edit_question/{testQuestionId}', 'TestController@QuestionUpdate')->name('test.editQuestionUpdate');
     Route::delete('test/{id}/delete_question/{testQuestionId}', 'TestController@deleteQuestion')->name('test.deleteQuestion');
-    Route::get('test/demo', 'TestController@demo')->name('test.demo');
+    Route::get('test/{id}/list_question_attach', 'TestController@listQuestionAttach')->name('test.listQuestionAttach');
+    Route::post('test/{id}/list_question_attach', 'TestController@listQuestionAttachUpdate')->name('test.listQuestionAttachUpdate');
     //tag
     Route::post('test/{id}/add_tag', 'TestController@addTag')->name('test.createTag');
 

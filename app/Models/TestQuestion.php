@@ -18,7 +18,7 @@ class TestQuestion extends Model
 
     public function testSubQuestions()
     {
-        return $this->hasMany('App\Models\TestSubQuestion', 'test_question_id', 'test_question_id');
+        return $this->hasMany('App\Models\TestSubQuestion', 'test_question_id', 'test_question_id')->orderBy('display_order');
     }
 
     public function file()

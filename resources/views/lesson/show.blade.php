@@ -18,6 +18,9 @@ use App\Enums\LangType;
             :register-review-url ="{{json_encode(route('lesson.registerReview'))}}"
             :edit-lang-en-url ="{{json_encode(route('lesson.editLang', [$lesson->lesson_id, LangType::EN]))}}"
             :edit-lang-zh-url ="{{json_encode(route('lesson.editLang', [$lesson->lesson_id, LangType::ZH]))}}"
+            :list-confirm-test-url ="{{json_encode(route('lesson.confirmTest', $lesson->lesson_id))}}"
+            :register-confirm-test-url="{{json_encode(route('lesson.registerConfirmTest', $lesson->lesson_id))}}"
+
 
     >
 

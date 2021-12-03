@@ -65,6 +65,9 @@ Route::group([
     Route::get('lesson/{id}/textLesson', 'LessonController@textLesson')->name('lesson.textLesson');
     Route::get('/lesson/{id}/edit-lang/{type}', 'LessonController@editLang')->name('lesson.editLang');
     Route::post('update_lang_lesson', 'LessonController@updateLang')->name('lesson.updateLang');
+    Route::get('lesson/{id}/confirmTest', 'LessonController@confirmTest')->name('lesson.confirmTest');
+    Route::post('lesson/{id}/confirmTest', 'LessonController@registerConfirmTest')->name('lesson.registerConfirmTest');
+    Route::delete('lesson/{id}/confirmTest/{testId}/delete', 'LessonController@confirmTestDelete')->name('lesson.confirmTestDelete');
 
     //course course set
     Route::resource('course', CourseController::class);

@@ -177,7 +177,7 @@
 
                                         <li v-for="preparation in this.lesson.preparations">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text">{{preparation.preparation_name}}</div>
+                                                <div class="col-md-10 wrap-long-text"><a :href="'/preparation/' + preparation.preparation_id" target="_blank" class="wrap-long-text" style="color: inherit">{{preparation.preparation_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriPreparationDelete(lesson.lesson_id , preparation.preparation_id)"
@@ -208,11 +208,42 @@
 
                                         <li v-for="review in this.lesson.reviews">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text">{{review.review_name}}</div>
+                                                <div class="col-md-10 wrap-long-text"><a :href="'/review/' + review.review_id" target="_blank" class="wrap-long-text" style="color: inherit">{{review.review_name}}</a></div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriReviewDelete(lesson.lesson_id , review.review_id)"
                                                             :message-confirm="messageConfirmReview"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+
+                                    </ol>
+                                </div>
+
+                            </div>
+                            <div class="card">
+                                <div class="card-header">確認テスト
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary']" v-on:click="show('add-confirm-test-modal')" >
+                                            追加
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+
+                                        <li v-for="confirmTest in this.lesson.confirm_test">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text"><a :href="'/test/' + confirmTest.test_id" target="_blank" class="wrap-long-text" style="color: inherit">{{confirmTest.test_name}}</a></div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriConfirmTestDelete(lesson.lesson_id , confirmTest.test_id)"
+                                                            :message-confirm="messageConfirmTest"
                                                     >
                                                     </DeleteItem>
                                                 </div>
@@ -268,6 +299,9 @@
                 <add-review :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listReviewUrl" :register-url="registerReviewUrl">
 
                 </add-review>
+                <add-confirm-test :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listConfirmTestUrl" :register-url="registerConfirmTestUrl">
+
+                </add-confirm-test>
             </div>
         </main>
     </div>
@@ -282,6 +316,7 @@
     import ModalTable from "../common/modal-table";
     import  AddPreparation from "../lesson/add-preparation.vue"
     import  AddReview from "../lesson/add-review.vue"
+    import  AddConfirmTest from "./add-confirm-test.vue"
 
 
     export default {
@@ -304,13 +339,15 @@
             DeleteItem,
             ModalTable,
             AddPreparation,
-            AddReview
+            AddReview,
+            AddConfirmTest
         },
         data() {
             return {
                 messageConfirm : 'このテキストをレッスンに解除しますか？',
                 messageConfirmPreparation : 'この予習をレッスンに解除しますか？',
                 messageConfirmReview : 'この復習をレッスンに解除しますか？',
+                messageConfirmTest : 'このテストをレッスンに解除しますか？',
                 type : 'lesson',
                 csrfToken: Laravel.csrfToken,
                 lessonENName : '',
@@ -320,7 +357,7 @@
             };
         },
         props: ["listTextLessonUrl", "createUrl", 'lesson', 'editLessonUrl', 'detailLessonUrl', 'pageSizeLimit', 'registerUrl', 'listPreparationUrl', 'registerPreparationUrl',
-            'listReviewUrl', 'registerReviewUrl', 'editLangEnUrl', 'editLangZhUrl'],
+            'listReviewUrl', 'registerReviewUrl', 'editLangEnUrl', 'editLangZhUrl', 'listConfirmTestUrl', 'registerConfirmTestUrl'],
         mounted() {},
         methods: {
             getUriDelete(id, textId) {
@@ -332,6 +369,9 @@
             },
             getUriReviewDelete(id, reviewId) {
                 return  id + '/review/' + reviewId + '/delete';
+            },
+            getUriConfirmTestDelete(id, testId) {
+                return  id + '/confirmTest/' + testId + '/delete';
             },
             show ($modalName) {
                 this.$modal.show($modalName);

@@ -196,7 +196,6 @@
                                 </div>
 
                             </div>
-<!--
                             <div class="card" v-if="test.test_type === 0">
                                 <div class="card-header">レッスン一覧
                                     <div class="float-right">
@@ -207,9 +206,9 @@
                                 </div>
                                 <div class="card-body">
                                     <ol style="margin-left: -30px;list-style-type: none;">
-                                        <li v-for="lesson in this.test.courses">
+                                        <li v-for="lesson in this.test.lessons">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text"> <a :href="'/course/' + course.course_id" target="_blank" class="wrap-long-text" style="color: inherit">{{course.course_name}}}</a></div>
+                                                <div class="col-md-10 wrap-long-text"> <a :href="'/lesson/' + lesson.lesson_id" target="_blank" class="wrap-long-text" style="color: inherit">{{lesson.lesson_name}}</a></div>
 
                                                 <div class="col-md-2">
                                                 </div>
@@ -222,7 +221,6 @@
                                 </div>
 
                             </div>
--->
 
                         </div>
                     </div>

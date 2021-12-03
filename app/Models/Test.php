@@ -26,7 +26,12 @@ class Test extends Model
 
     public function courses()
     {
-        return $this->belongsToMany('App\Models\course', 'course_test' , 'test_id', 'course_id', 'test_id', 'course_id');
+        return $this->belongsToMany('App\Models\Course', 'course_test' , 'test_id', 'course_id', 'test_id', 'course_id');
+    }
+
+    public function lessons()
+    {
+        return $this->belongsToMany('App\Models\Lesson', 'lesson_test' , 'test_id', 'lesson_id', 'test_id', 'lesson_id');
     }
 
 

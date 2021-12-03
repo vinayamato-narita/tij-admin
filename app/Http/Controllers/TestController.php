@@ -183,7 +183,7 @@ class TestController extends BaseController
             ['name' => 'test_show', $id]
         ]);
 
-        $test = Test::with('testQuestions.testSubQuestions', 'courses')->where('test_id', $id)->first();
+        $test = Test::with('testQuestions.testSubQuestions', 'courses', 'lessons')->where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
         return view('test.show', [
             'breadcrumbs' => $breadcrumbs,

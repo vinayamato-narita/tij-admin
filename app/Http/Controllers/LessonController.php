@@ -4,19 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Enums\TestType;
 use App\Http\Requests\LessonLangRequest;
 use App\Http\Requests\StoreUpdateLessonRequest;
 use App\Models\Lesson;
 use App\Models\LessonInfo;
+use App\Models\LessonTest;
 use App\Models\LessonText;
 use App\Models\LessonTextLesson;
 use App\Models\Preparation;
 use App\Models\PreparationLesson;
 use App\Models\Review;
 use App\Models\ReviewLesson;
+use App\Models\Test;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use mysql_xdevapi\Exception;
 
 class LessonController extends BaseController
 {
@@ -121,7 +125,7 @@ class LessonController extends BaseController
             ['name' => 'lesson_show', $id]
         ]);
 
-        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews', 'lesson_infos')->first();
+        $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews', 'lesson_infos', 'confirmTest')->first();
         if (!$lesson) return redirect()->route('lesson.index');
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -454,6 +458,70 @@ class LessonController extends BaseController
         );
         return response()->json([
             'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function confirmTest(Request $request, $id)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Test();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('test_name', $request['inputSearch']));
+            });
+        }
+        $testHasAdded = LessonTest::where('lesson_id', $id)->pluck('test_id');
+
+        $testList = $queryBuilder->whereNotIn('test_id', $testHasAdded)->where('test_type', TestType::CONFIRMED)->sortable(['test_name' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $testList
+        ], StatusCode::OK);
+    }
+
+    public function registerConfirmTest(Request $request, $id) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->all() as $rq) {
+                $tc = new LessonTest();
+                $tc->test_id = $rq;
+                $tc->lesson_id = $id;
+                $tc->save();
+            }
+        }
+        catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function confirmTestDelete($id, $testId)
+    {
+
+        try {
+            $textLesson = LessonTest::where([
+                'lesson_id' => $id,
+                'test_id' => $testId
+            ])->delete();
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'NOT_FOUND',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'テストの解除が完了しました。',
+            'data' => [],
         ], StatusCode::OK);
     }
 

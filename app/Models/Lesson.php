@@ -39,4 +39,9 @@ class Lesson extends Model
         return $this->hasMany('App\Models\LessonInfo', 'lesson_id', 'lesson_id');
     }
 
+    public function confirmTest()
+    {
+        return $this->belongsToMany('App\Models\Test', 'lesson_test' ,'lesson_id', 'test_id', 'lesson_id', 'test_id');
+    }
+
 }

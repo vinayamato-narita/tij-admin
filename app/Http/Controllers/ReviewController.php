@@ -104,6 +104,7 @@ class ReviewController extends BaseController
                 DB::commit();
                 return response()->json([
                     'status' => 'OK',
+                    'id' => $review->review_id
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
                 Log::error($exception);

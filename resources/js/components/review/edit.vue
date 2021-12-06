@@ -23,7 +23,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
@@ -73,7 +73,7 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="preparationName">復習名:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">

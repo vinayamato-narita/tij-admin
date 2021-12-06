@@ -105,6 +105,7 @@ class PreparationController extends BaseController
                 DB::commit();
                 return response()->json([
                     'status' => 'OK',
+                    'id' => $preparation->preparation_id
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
                 Log::error($exception);

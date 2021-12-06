@@ -39,7 +39,7 @@ class ForgotPasswordController extends BaseController
     public function storeForgotPassword(ForgotPasswordRequest $request)
     {
         if($request->isMethod('POST')) {
-            $account = AdminUser::where('admin_email', $request->admin_email)->first();
+            $account = AdminUser::where('admin_user_email', $request->admin_email)->first();
             if (!$account) {
                 return response()->json([
                     'status' => 'NG',
@@ -71,7 +71,7 @@ class ForgotPasswordController extends BaseController
             $mailBody = str_replace("#EntryURL#", $AccessURL, $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($account, $mailSubject) {
-                $message->to($account->admin_email)
+                $message->to($account->admin_user_email)
                     ->subject($mailSubject);
             });
 

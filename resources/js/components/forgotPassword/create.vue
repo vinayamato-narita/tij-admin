@@ -9,7 +9,7 @@
                         <div class="card-body card-login">
                             <div class="row justify-content-center">
                                 <div class="col-sm-8 text-center title-login">
-                                    <h3>パスワードの再設定sss</h3>
+                                    <h3>パスワードの再設定</h3>
                                 </div>
                             </div>
                             <div class="row justify-content-center">

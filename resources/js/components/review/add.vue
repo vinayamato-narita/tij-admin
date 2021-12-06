@@ -23,7 +23,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
@@ -68,7 +68,7 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="preparationName">復習名:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
@@ -224,12 +224,13 @@
                                 },
                             })
                             .then((res) => {
+                                var id = res.data.id;
                                 this.$swal({
                                     title: "復習新規作成が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
-                                    window.location.href = that.listReviewUrl;
+                                    window.location.href = '/review/' + id;
 
                                 });
                                 that.flagShowLoader = false;

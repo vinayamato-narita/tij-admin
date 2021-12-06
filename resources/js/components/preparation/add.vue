@@ -23,7 +23,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
@@ -68,7 +68,7 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="preparationName">予習名:
-                                                <span class="glyphicon glyphicon-star"
+                                                <span class="glyphicon glyphicon-star position-absolute"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
@@ -224,13 +224,14 @@
                                 },
                             })
                             .then((res) => {
+                                var id = res.data.id;
                                 this.$swal({
                                     title: "予習新規作成が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listPreparationUrl;
+                                    window.location.href = '/preparation/' + id;
 
                                 });
                                 that.flagShowLoader = false;

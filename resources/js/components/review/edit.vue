@@ -274,10 +274,9 @@
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
-                                    that.flagShowLoader = false;
+                                    window.location.href = that.listReviewUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listReviewUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

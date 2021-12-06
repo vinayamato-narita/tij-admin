@@ -230,9 +230,10 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listPreparationUrl;
+
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listPreparationUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

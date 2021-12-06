@@ -207,7 +207,7 @@
                 let formData = new FormData();
                 formData.append("displayOrder", this.displayOrder);
                 formData.append("reviewName", this.reviewName);
-                if (this.preparationDescription)
+                if (this.reviewDescription)
                     formData.append("reviewDescription", this.reviewDescription);
                 if (this.fileSelected)
                     formData.append('fileSelected', this.fileSelected);
@@ -229,10 +229,10 @@
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
-                                    that.flagShowLoader = false;
+                                    window.location.href = that.listReviewUrl;
+
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listReviewUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

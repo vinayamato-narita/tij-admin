@@ -80,7 +80,7 @@ class ReviewController extends BaseController
                 $review = new Review();
                 $review->display_order = $request->displayOrder;
                 $review->review_name = $request->reviewName;
-                $review->review_description = $request->reviewDescription;
+                $review->review_description = $request->reviewDescription ?? '';
 
                 if (isset($request->fileSelected)) {
                     $name = TIJAdminAzureComponent::upload(AzureFolderEnum::REVIEW, $request->fileSelected);

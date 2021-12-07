@@ -42,7 +42,8 @@ use App\Enums\LangType;
                                             >タイトル:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $newsInfo->news_body }}
+                                            {{ $newsInfo->news_title }}
+
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -52,7 +53,8 @@ use App\Enums\LangType;
                                             >内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $newsInfo->news_title }}
+                                            {{ $newsInfo->news_body }}
+
                                         </div>
                                     </div>
                                 </div>

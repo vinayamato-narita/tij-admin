@@ -45,10 +45,10 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
             DECLARE _default_corporation_code VARCHAR(255) DEFAULT NULL;
             DECLARE _corporation_flag TINYINT DEFAULT NULL;
 
-            SET @expired_date = IF(_expired_date = '',(SELECT DATE_ADD(IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d 23:59:59')), INTERVAL c.point_expire_day DAY) FROM course c WHERE c.course_id = _course_id), DATE_FORMAT(_expired_date,'%Y-%m-%d 23:59:59'));
+            SET @expired_date = IF(_expire_date = '',(SELECT DATE_ADD(IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d 23:59:59')), INTERVAL c.expire_day DAY) FROM course c WHERE c.course_id = _course_id), DATE_FORMAT(_expire_date,'%Y-%m-%d 23:59:59'));
 
             SELECT lc.favourite_code,lc.legal_code INTO _default_customer_code, _default_corporation_code FROM lms_company lc LEFT JOIN lms_project lp ON lc.company_id = lp.company_id WHERE lp.project_id = _project_id;
-            SELECT corporation_flag INTO _corporation_flag FROM lms_project lp WHERE lp.project_id = project_id;
+            SELECT corporation_flag INTO _corporation_flag FROM lms_project lp WHERE lp.project_id = _project_id;
             IF _corporation_flag = 0 THEN
                      SET _default_customer_code = NULL;
                 END IF;
@@ -119,7 +119,7 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
                         ,IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d %H:%i:%s'))
                         ,(SELECT MAX(point_subscription_history_id) FROM point_subscription_history WHERE student_id = _student_id)
                     );
-                CALL lms_insert_project_course_student(_project_course_id, project_id, course_id, student_id, start_date, expire_date, start_date_origin);
+                CALL lms_insert_project_course_student(_project_course_id, _project_id, _course_id, _student_id, _start_date, @expired_date, _start_date_origin);
             END CASE;
             UPDATE student
              SET

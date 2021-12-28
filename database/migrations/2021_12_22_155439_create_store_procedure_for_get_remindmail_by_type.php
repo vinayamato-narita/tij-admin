@@ -14,7 +14,6 @@ class CreateStoreProcedureForGetRemindmailByType extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_get_remindmail_by_type`;
         CREATE PROCEDURE `sp_get_remindmail_by_type`(IN _type INT,
             IN _lang_type VARCHAR(10))
@@ -30,8 +29,7 @@ class CreateStoreProcedureForGetRemindmailByType extends Migration
             WHERE
                 srmp.send_remind_mail_timing_type = _type
                 ;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

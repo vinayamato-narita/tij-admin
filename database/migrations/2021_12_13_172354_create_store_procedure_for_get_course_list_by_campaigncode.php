@@ -14,7 +14,6 @@ class CreateStoreProcedureForGetCourseListByCampaigncode extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_get_course_list_by_campaigncode`;
         CREATE PROCEDURE `sp_get_course_list_by_campaigncode`(IN _campaign_code VARCHAR(50),
         IN _category_id INT,
@@ -40,8 +39,7 @@ class CreateStoreProcedureForGetCourseListByCampaigncode extends Migration
             WHERE CASE WHEN _category_id <> 0 THEN ca.category_id = _category_id ELSE 1 = 1 END
                AND CASE WHEN _course_type <> 999 THEN course.course_type = _course_type ELSE 1 = 1 END
              ORDER BY course.course_type ASC, ca.order_num ASC, course.display_order ASC;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

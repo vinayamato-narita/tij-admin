@@ -14,7 +14,6 @@ class CreateStoreProcedureForGetCourseListByCampaigncodeLms extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_get_course_list_by_campaigncode_lms`;
         CREATE PROCEDURE `sp_get_course_list_by_campaigncode_lms`(IN _student_id INT,
         IN _campaign_code VARCHAR (50),
@@ -69,8 +68,7 @@ class CreateStoreProcedureForGetCourseListByCampaigncodeLms extends Migration
             AND CASE WHEN _course_type <> 999 THEN course.course_type = _course_type ELSE 1=1 END
             AND NOW() BETWEEN (CASE WHEN lms_project_course.start_date IS NULL THEN '1900-01-01 00:00:00' ELSE lms_project_course.start_date END) AND (CASE WHEN lms_project_course.expired_date IS NULL THEN '2900-12-12 23:59:59' ELSE lms_project_course.expired_date END)
           ORDER BY course.course_type asc, ca.order_num asc, course.display_order asc;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

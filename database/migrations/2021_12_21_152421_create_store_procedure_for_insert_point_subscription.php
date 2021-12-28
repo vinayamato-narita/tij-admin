@@ -14,7 +14,6 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_insert_point_subscription`;
         CREATE PROCEDURE `sp_insert_point_subscription`(IN _student_id INT,
         IN _course_id INT,
@@ -117,8 +116,7 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
           ELSE
             SET _rtn = 1;
         END CASE;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

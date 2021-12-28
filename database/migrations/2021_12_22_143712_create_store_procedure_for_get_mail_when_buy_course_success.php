@@ -14,7 +14,6 @@ class CreateStoreProcedureForGetMailWhenBuyCourseSuccess extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_get_mail_when_buy_course_success`;
         CREATE PROCEDURE `sp_get_mail_when_buy_course_success`(IN _order_id VARCHAR(27),
           IN _payment_date VARCHAR(255),
@@ -39,8 +38,7 @@ class CreateStoreProcedureForGetMailWhenBuyCourseSuccess extends Migration
                ON od.student_id = st.student_id
              WHERE od.order_id = _order_id
                  ;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

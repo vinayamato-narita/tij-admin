@@ -14,7 +14,6 @@ class CreateStoreProcedureForGetMailWhenBuyCourseSuccessLms extends Migration
     public function up()
     {
         $procedure = "
-        DELIMITER //
         DROP PROCEDURE IF EXISTS `sp_get_mail_when_buy_course_success_lms`;
         CREATE PROCEDURE `sp_get_mail_when_buy_course_success_lms`(IN _order_id VARCHAR(27),
                 IN _payment_date VARCHAR(255),
@@ -64,8 +63,7 @@ class CreateStoreProcedureForGetMailWhenBuyCourseSuccessLms extends Migration
                  WHERE od.order_id = _order_id
                 AND lmscs.project_id = _project_id AND lmscs.course_type = 0 -- normal course
                  LIMIT 1;
-        END //
-        DELIMITER ;
+        END 
         ";
 
         \DB::unprepared($procedure);

@@ -12,6 +12,10 @@
             :tags="{{json_encode($tags)}}"
             :create-tag-url="{{json_encode(route('test.createTag', $test->test_id))}}"
             :test-question="{{json_encode($testQuestion)}}"
+            :test-categories="{{json_encode($testCategories)}}"
+            :is-has-test-result="{{json_encode($isHasTestResult)}}"
+
+
 
     ></test-edit-question>
 @endsection

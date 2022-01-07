@@ -12,8 +12,11 @@ use App\Http\Requests\AddQuestionRequest;
 use App\Models\File;
 use App\Models\Tag;
 use App\Models\Test;
+use App\Models\TestCategory;
 use App\Models\TestQuestion;
+use App\Models\TestResult;
 use App\Models\TestSubQuestion;
+use App\Models\TestSubQuestionCategory;
 use App\Models\TestSubQuestionTag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -185,9 +188,11 @@ class TestController extends BaseController
 
         $test = Test::with('testQuestions.testSubQuestions', 'courses', 'lessons')->where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
+        $isHasTestResult = TestResult::where('test_id', $id)->exists();
         return view('test.show', [
             'breadcrumbs' => $breadcrumbs,
-            'test' => $test
+            'test' => $test,
+            'isHasTestResult' => $isHasTestResult
         ]);
     }
 
@@ -204,10 +209,12 @@ class TestController extends BaseController
         $test = Test::where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
         $tags = Tag::all();
+        $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
         return view('test.addQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
-            'tags' => $tags
+            'tags' => $tags,
+            'testCategories' => $testCategories
         ]);
 
     }
@@ -333,13 +340,20 @@ class TestController extends BaseController
 
                 $testSubQuestion->save();
 
+                if (isset($subQuestion->testCategory)) {
+                    $testSubQuestionCategory = new TestSubQuestionCategory();
+                    $testSubQuestionCategory->test_sub_question_id = $testSubQuestion->test_sub_question_id;
+                    $testSubQuestionCategory->test_category_id = $subQuestion->testCategory;
+                    $testSubQuestionCategory->save();
+                }
+
+
                 if (!empty($subQuestion->value)) {
                     foreach ($subQuestion->value as $tag) {
                         $tsqsTag = new TestSubQuestionTag();
                         $tsqsTag->test_sub_question_id = $testSubQuestion->test_sub_question_id;
                         $tsqsTag->tag_id = $tag->id;
                         $tsqsTag->save();
-
                     }
                 }
 
@@ -378,15 +392,20 @@ class TestController extends BaseController
         ]);
 
         $test = Test::where('test_id', $id)->first();
-        $testQuestion = TestQuestion::with(['testSubQuestions', 'file', 'testSubQuestions.file', 'testSubQuestions.tags'])->where('test_question_id', $testQuestionId)->first();
+        $testQuestion = TestQuestion::with(['testSubQuestions.testCategory', 'file', 'testSubQuestions.file', 'testSubQuestions.tags'])->where('test_question_id', $testQuestionId)->first();
         if (!$test || !$testQuestion) return redirect()->route('test.index');
 
         $tags = Tag::all();
+        $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
+        $isHasTestResult = TestResult::where('test_id', $id)->exists();
+
         return view('test.editQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
             'testQuestion' => $testQuestion,
-            'tags' => $tags
+            'tags' => $tags,
+            'testCategories' => $testCategories,
+            'isHasTestResult' => $isHasTestResult
         ]);
 
     }
@@ -444,6 +463,17 @@ class TestController extends BaseController
                     $convertFiles[str_replace('pushedQuestionFile_', '', $indexFile)] = $f;
             }
 
+            //get subquestion has been removed
+            $subQuestionToRemoveIds = collect(TestSubQuestion::where('test_question_id', $testQuestionId)->get()->pluck('test_sub_question_id'))->diff(array_column($subQuestions, 'testSubQuestionId'));
+            if (!empty($subQuestionToRemoveIds->toArray()) && TestResult::where('test_id', $id)->exists())
+                return response()->json([
+                    'status' => 'NG',
+                    'msg' => 'cannot remove subquestion has test result',
+                ], StatusCode::UNPROCESSABLE_ENTITY);
+            else {
+                TestSubQuestion::whereIn('test_sub_question_id', $subQuestionToRemoveIds)->delete();
+            }
+
             foreach ($subQuestions as $index => $subQuestion) {
                 if (!empty($subQuestion->testSubQuestionId))
                 {
@@ -484,6 +514,20 @@ class TestController extends BaseController
                 $totalScore += $subQuestion->score;
 
                 $testSubQuestion->save();
+                if (isset($subQuestion->testCategory)) {
+                    $oldSubQuestionCategory = TestSubQuestionCategory::where('test_sub_question_id', $testSubQuestion->test_sub_question_id)->first();
+                    if ($oldSubQuestionCategory) {
+                        $oldSubQuestionCategory->test_sub_question_id = $testSubQuestion->test_sub_question_id;
+                        $oldSubQuestionCategory->test_category_id = $subQuestion->testCategory;
+                        $oldSubQuestionCategory->save();
+                    } else {
+                        $testSubQuestionCategory = new TestSubQuestionCategory();
+                        $testSubQuestionCategory->test_sub_question_id = $testSubQuestion->test_sub_question_id;
+                        $testSubQuestionCategory->test_category_id = $subQuestion->testCategory;
+                        $testSubQuestionCategory->save();
+                    }
+
+                }
                 $savedTag = $testSubQuestion->tags->pluck('tag_id');
 
 
@@ -505,9 +549,6 @@ class TestController extends BaseController
 
             }
 
-            //get subquestion has been removed
-            $subQuestionToRemoveIds = collect(TestSubQuestion::where('test_question_id', $id)->get()->pluck('sub_question_id'))->diff(array_column($subQuestions, 'testSubQuestionId'));
-            TestSubQuestion::whereIn('test_sub_question_id', $subQuestionToRemoveIds)->delete();
 
             $test->total_score = $totalScore;
             $test->save();
@@ -533,6 +574,13 @@ class TestController extends BaseController
 
     public function deleteQuestion($id, $testQuestionId)
     {
+        if (TestResult::where('test_id', $id)->exists()) {
+            return response()->json([
+                'status' => 'NOT_FOUND',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+
         try {
             $testQuestion = TestQuestion::where('test_question_id', $testQuestionId)->delete();
 

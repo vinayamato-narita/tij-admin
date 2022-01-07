@@ -131,7 +131,7 @@
                                         <div class="div-deco answer-bg" >
                                             <h5>
                                                 設問{{ getIndex(index)}}
-                                                <button v-if="index !== 0" type="button" v-on:click="deleteSubQuestion(index)" class="float-right btn">                                                <font-awesome-icon icon="minus-circle"></font-awesome-icon>
+                                                <button v-if="index !== 0 && (!isHasTestResult || !item.isSavedDB)"  type="button" v-on:click="deleteSubQuestion(index)" class="float-right btn">                                                <font-awesome-icon icon="minus-circle"></font-awesome-icon>
                                                 </button>
                                             </h5>
 
@@ -353,6 +353,39 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group row">
+                                                <label
+                                                        class="col-md-2 col-form-label text-md-left"
+                                                ><b>カテゴリ</b><span v-if="test.test_type === 1" class="glyphicon glyphicon-star"
+                                                ></span
+                                                ></label>
+
+                                                <div class="col-md-10 text-md-left p-2">
+                                                    <select class="form-control"
+                                                            v-validate="{ required: test.test_type == 1}"
+                                                            :name="'subQuestion[' + index + '][testCategory]'"
+                                                            v-model="item.testCategory"
+
+                                                    >
+                                                        <option :value="value.test_category_id"
+                                                                v-for="(value, key) in testCategories">
+                                                            {{ value.parent_category_name }} : {{value.category_name}}
+                                                        </option
+                                                        >
+                                                    </select>
+                                                    <div
+                                                            class="input-group is-danger"
+                                                            role="alert"
+                                                            v-if="errors.has('subQuestion['+ index +'][testCategory]')"
+                                                    >
+                                                        {{ errors.first("subQuestion["+ index +"][testCategory]") }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
 
 
 
@@ -432,6 +465,8 @@
                     fileNameAttached: e.file == null ? '' : e.file.file_name_original,
                     score: e.score,
                     value: valueTags,
+                    testCategory :e.test_category === null ? null : e.test_category.test_category_id,
+                    isSavedDB: true
 
 
                 });
@@ -479,14 +514,18 @@
                         decimal: "点数は半角数字を入力してください",
                         min_value: "点数は1～1000000000 を入力してください",
                         max_value: "点数は1～1000000000 を入力してください",
-                    }
+                    },
+                    'subQuestion[0][testCategory]': {
+                        required: "カテゴリを選択してください",
+                    },
 
 
                 },
 
             };
         },
-        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail', 'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion'],
+        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail',
+            'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion', 'testCategories', 'isHasTestResult'],
         mounted() {
         },
         methods: {
@@ -512,6 +551,9 @@
                     min_value: "点数は1～1000000000 を入力してください",
                     max_value: "点数は1～1000000000 を入力してください",
                 };
+                messError.custom["subQuestion[" + index + "][testCategory]"] = {
+                    required: "カテゴリを選択してください",
+                };
                 this.$validator.localize("en", messError);
 
             },
@@ -532,6 +574,8 @@
                     fileNameAttached: '',
                     score: 0,
                     value: [],
+                    testCategory: null,
+                    isSavedDB: false
                 });
                 let messError = {
                     custom: this.defaultCustomMessage,
@@ -552,6 +596,9 @@
                     decimal: "点数は半角数字を入力してください",
                     min_value: "点数は1～1000000000 を入力してください",
                     max_value: "点数は1～1000000000 を入力してください",
+                };
+                messError.custom["subQuestion[" + index + "][testCategory]"] = {
+                    required: "カテゴリを選択してください",
                 };
                 this.$validator.localize("en", messError);
 
@@ -671,6 +718,22 @@
                                         break;
                                 }
                             });
+                    }
+                    else {
+                        this.$el
+                            .querySelector(
+                                "input[name=\"" + Object.keys(this.errors.collect())[0] + "\"]"
+                            )
+                            .focus();
+                        $("html, body").animate(
+                            {
+                                scrollTop:
+                                    $(
+                                        "input[name=\"" + Object.keys(this.errors.collect())[0] + "\"]"
+                                    ).offset().top - 104,
+                            },
+                            500
+                        );
                     }
                 });
 

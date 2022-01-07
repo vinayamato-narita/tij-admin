@@ -140,7 +140,7 @@
                                                 </div>
 
                                                 <div class="col-md-2 ">
-                                                    <button  v-on:click="showAlert(getDeleteQuestionUrl(test.test_id, test_question.test_question_id))" class="btn btn-danger text-nowrap">削除
+                                                    <button v-if="!isHasTestResult" v-on:click="showAlert(getDeleteQuestionUrl(test.test_id, test_question.test_question_id))" class="btn btn-danger text-nowrap">削除
                                                     </button>
 
                                                 </div>
@@ -253,7 +253,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl'],
+        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl', 'isHasTestResult'],
         mounted() {
         },
         methods: {

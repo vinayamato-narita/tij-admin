@@ -23,4 +23,9 @@ class TestSubQuestion extends Model
             'test_sub_question_id', 'tag_id', 'test_sub_question_id', 'tag_id');
     }
 
+    public function testCategory()
+    {
+        return $this->belongsTo('App\Models\TestSubQuestionCategory', 'test_sub_question_id' , 'test_sub_question_id');
+    }
+
 }

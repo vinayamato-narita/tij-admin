@@ -81,6 +81,12 @@ Route::group([
     Route::get('course/{id}/lesson_attach', 'CourseController@lessonAttach')->name('course.lessonAttach');
     Route::post('course/{id}/lesson_attach', 'CourseController@lessonAttachUpdate')->name('course.lessonAttachUpdate');
     Route::post('update_lang_course', 'CourseController@updateLang')->name('course.updateLang');
+        //campaign
+    Route::get('/course/{courseId}/add-campaign', 'CourseController@campaignCreate')->name('course.campaignCreate');
+    Route::post('/course/{courseId}/add-campaign-store', 'CourseController@addCampaignStore')->name('course.addCampaignStore');
+    Route::post('/course/{courseId}/exists_campaign_datetime', 'CourseController@existCampaignDatetime')->name('course.existCampaignDatetime');
+    Route::delete('/course/{courseId}/campaign/destroy/{campaignId}', 'CourseController@campaignDestroy')->name('course.campaign.destroy');
+
     Route::get('course/set/create', 'CourseController@courseSetCreate')->name('course.setCreate');
     Route::post('course/set/store', 'CourseController@courseSetStore')->name('course.setStore');
     Route::get('course/set/get-course/{id}', 'CourseController@getCourse')->name('course.getCourse');

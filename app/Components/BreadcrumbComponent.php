@@ -183,6 +183,10 @@ class BreadcrumbComponent
                 'text' => 'コース多言語編集',
                 'route_str' => "course.editLang",
             ],
+            'course_campaign_create' => [
+                'text' => 'キャンペーン追加',
+                'route_str' => "course.campaignCreate",
+            ],
             'course_set_edit' => [
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",

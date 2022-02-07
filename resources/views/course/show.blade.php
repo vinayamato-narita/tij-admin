@@ -22,6 +22,7 @@ use App\Enums\LangType;
             :course-video="{{json_encode($courseVideo)}}"
             :edit-lang-en-url ="{{json_encode(route('course.editLang', [$course->course_id, LangType::EN]))}}"
             :edit-lang-zh-url ="{{json_encode(route('course.editLang', [$course->course_id, LangType::ZH]))}}"
+            :add-campaign-url="{{json_encode(route('course.campaignCreate', $course->course_id))}}"
     >
 
     </course-show>

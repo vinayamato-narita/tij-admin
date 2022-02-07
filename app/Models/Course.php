@@ -39,6 +39,11 @@ class Course extends Model
             'course_id', 'tag_id', 'course_id', 'tag_id');
     }
 
+    public function campaigns()
+    {
+        return $this->hasMany('App\Models\CourseCampaign', 'course_id', 'course_id');
+    }
+
     public function lesson()
     {
         return $this->belongsToMany('App\Models\Lesson', 'course_lesson' ,

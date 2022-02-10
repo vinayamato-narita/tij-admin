@@ -347,6 +347,10 @@ class BreadcrumbComponent
                 'text' => '復習編集',
                 'route_str' => "review.edit",
             ],
+            'ability_test_result_list' => [
+                'text' => '受験済実力テスト一覧',
+                'route_str' => 'abilityTestResult.index'
+            ]
         ];
     }
 

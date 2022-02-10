@@ -211,4 +211,7 @@ Route::group([
     Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
     Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 
+
+    // ablity test result
+    Route::resource('/abilityTestResult', AbilityTestResultController::class);
 });

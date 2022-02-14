@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\TestType;
+use App\Models\TestCategory;
 use App\Models\TestResult;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -95,7 +96,7 @@ class AbilityTestResultController extends BaseController
             return $q->where('test_type', TestType::ABILITY);
         })->sortable(['last_update_date' => 'desc'])->paginate($pageLimit);
 
-        return view('abilityTestResult.index1', [
+        return view('abilityTestResult.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
@@ -132,7 +133,31 @@ class AbilityTestResultController extends BaseController
      */
     public function show($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'ability_test_result_list'],
+            ['name' => 'ability_test_result_show', $id]
+        ]);
+
+        $testResult = TestResult::with('student', 'test', 'test_comment')->find($id);
+        if (!$testResult)
+            return redirect()->route('abilityTestResult.index');
+        $parentCategoryNames = TestCategory::orderBy('display_order', 'asc')->groupBy('parent_category_name')->pluck('parent_category_name')->toArray();
+        $commentIndexs = ['comment1', 'comment2', 'comment3', 'comment4', 'comment5'];
+        $comments = [];
+        foreach ($parentCategoryNames as $index => $value) {
+            $propName = $commentIndexs[$index];
+            $comments[] = [
+                'title' => $value,
+                'comment_desc' => empty($testResult->test_comment) ? '' : $testResult->test_comment->$propName
+            ];
+        }
+        return view('abilityTestResult.show', [
+            'testResult' => $testResult,
+            'comments' => $comments,
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+
     }
 
     /**

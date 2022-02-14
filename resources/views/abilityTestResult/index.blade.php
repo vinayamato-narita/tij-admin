@@ -80,7 +80,7 @@
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
                                                                             <a class="dropdown-item"
-                                                                               href="#"><i
+                                                                               href="{{route('abilityTestResult.show', $testResult->test_result_id)}}"><i
                                                                                         class="fa fa-info mr-2"></i>情報</a>
                                                                     </li>
 

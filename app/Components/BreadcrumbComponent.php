@@ -350,6 +350,10 @@ class BreadcrumbComponent
             'ability_test_result_list' => [
                 'text' => '受験済実力テスト一覧',
                 'route_str' => 'abilityTestResult.index'
+            ],
+            'ability_test_result_show' => [
+                'text' => '受験済実力テスト情報表示',
+                'route_str' => 'abilityTestResult.show'
             ]
         ];
     }

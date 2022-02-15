@@ -275,6 +275,10 @@ class BreadcrumbComponent
                 'text' => 'スケジュール管理',
                 'route_str' => 'lessonSchedule.index'
             ],
+            'group_schedule_index' => [
+                'text' => 'グループレッスンスケジュール管理',
+                'route_str' => 'groupSchedule.index'
+            ],
             'student_point_history_list' => [
                 'text' => 'ポイント履歴一覧',
                 'route_str' => "student.pointHistoryList",

@@ -205,4 +205,8 @@ Route::group([
     Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
     Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 
+    Route::get('/groupSchedule', 'GroupScheduleController@index')->name('groupSchedule.index');
+    Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
+    Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
+    Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
 });

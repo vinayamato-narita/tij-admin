@@ -131,7 +131,7 @@ import ReviewAdd from "./components/review/add"
 import ReviewShow from "./components/review/detail.vue"
 import ReviewEdit from "./components/review/edit.vue"
 import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
-
+import GroupSchedule from "./components/groupSchedule/index.vue"
 
 new Vue({
     created() {
@@ -303,7 +303,7 @@ new Vue({
         TestShow,
         TestAddQuestion,
         TestEditQuestion,
-
+        GroupSchedule
     },
     methods: {},
     mounted() {}

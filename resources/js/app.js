@@ -13,7 +13,9 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ja';
 import Draggable from 'vuedraggable'
-
+Vue.use(VeeValidate, {
+    useConstraintAttrs: false
+});
 
 import Multiselect from 'vue-multiselect'
 
@@ -100,6 +102,7 @@ import CourseSetShow from "./components/course/set-detail.vue"
 import CourseEdit from "./components/course/edit.vue"
 import CourseSetEdit from "./components/course/set-edit.vue"
 import EditLangCourse from "./components/course/edit-lang-course.vue"
+import CourseAddCampaign from "./components/course/add-campaign.vue"
 import StudentCreateComment from "./components/student/student-create-comment.vue"
 import StudentEditComment from "./components/student/student-edit-comment.vue"
 import ShowLessonHistory from "./components/student/show-lesson-history.vue"
@@ -131,6 +134,8 @@ import ReviewAdd from "./components/review/add"
 import ReviewShow from "./components/review/detail.vue"
 import ReviewEdit from "./components/review/edit.vue"
 import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
+import AbilityTestResultInputSearchMulti from "./components/abilityTestResult/input-search-multi.vue"
+import AbilityTestResultShow from "./components/abilityTestResult/show.vue"
 import GroupSchedule from "./components/groupSchedule/index.vue"
 
 new Vue({
@@ -303,7 +308,11 @@ new Vue({
         TestShow,
         TestAddQuestion,
         TestEditQuestion,
+        CourseAddCampaign,
+        AbilityTestResultInputSearchMulti,
+        AbilityTestResultShow,
         GroupSchedule
+
     },
     methods: {},
     mounted() {}

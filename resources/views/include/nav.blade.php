@@ -235,6 +235,15 @@
                 CSV出力
             </a>
         </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ABILITY_TEST_RESULT], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ABILITY_TEST_RESULT) }}" href="{{route('abilityTestResult.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                受験済実力テスト一覧
+            </a>
+        </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

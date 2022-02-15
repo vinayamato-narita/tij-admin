@@ -11,6 +11,7 @@ use App\Http\Requests\CourseRegisterVideoRequest;
 use App\Http\Requests\StoreUpdateCourseRequest;
 use App\Http\Requests\StoreUpdateCourseSetRequest;
 use App\Models\Course;
+use App\Models\CourseCampaign;
 use App\Models\CourseInfo;
 use App\Models\CourseLesson;
 use App\Models\CourseSetCourse;
@@ -319,7 +320,7 @@ class CourseController extends BaseController
 
         $course = Course::where([
             'course_id' => $id,
-        ])->with(['lesson', 'course_infos', 'lesson.courseLesson', 'testAbilities', 'testCourseEnds'])->first();
+        ])->with(['lesson', 'course_infos', 'lesson.courseLesson', 'testAbilities', 'testCourseEnds', 'campaigns'])->first();
 
 
         $courseVideo = CourseVideo::where('course_id', $id)->get();
@@ -375,6 +376,84 @@ class CourseController extends BaseController
             'status' => 'OK',
         ], StatusCode::OK);
     }
+
+    public function campaignCreate($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'course_list'],
+            ['name' => 'course_show', $id],
+            ['name' => 'course_campaign_create', $id]
+        ]);
+        $course = Course::where([
+            'course_id' => $id,
+        ])->first();
+        if (!$course) return redirect()->route('course.index');
+        return view('course.add_campaign', [
+            'breadcrumbs' => $breadcrumbs,
+            'course' => $course,
+        ]);
+    }
+
+    public function existCampaignDatetime(Request $request, $courseId)
+    {
+        $startDate = Carbon::parse($request->startDate);
+        $endDate = Carbon::parse($request->endDate);
+        $valid = !CourseCampaign::where([
+            'course_id' => $courseId,
+        ])->where(function ($query) use ($startDate, $endDate) {
+            return $query->whereBetween('campaign_start_time', [$startDate, $endDate])
+                ->orWhereBetween('campaign_end_time', [$startDate, $endDate])
+                ->orWhere(function ($query) use ($startDate, $endDate) {
+                    return $query->whereDate('campaign_start_time', '<=', $startDate)->whereDate('campaign_end_time', '>=', $endDate);
+                });
+        })->exists();
+
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
+    }
+
+    public function campaignDestroy($courseId, $campaignId)
+    {
+        try {
+            $campaign = CourseCampaign::where([
+                'course_id' => $courseId,
+                'course_campaign_id' => $campaignId
+            ])->delete();
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' キャンペーンの解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
+    }
+
+    public function addCampaignStore(Request $request, $courseId)
+    {
+        $campaign = new CourseCampaign();
+        $campaign->course_id = $courseId;
+        $campaign->price = $request->price;
+        $campaign->campaign_start_time = Carbon::parse($request->startDate);
+        $campaign->campaign_end_time = Carbon::parse($request->endDate);
+        $ret = $campaign->save();
+        if ($ret) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+        }
+        return response()->json([
+            'status' => 'INTERNAL_ERR',
+        ], StatusCode::INTERNAL_ERR);
+
+    }
+
 
     public function registerVideo(CourseRegisterVideoRequest $request, $id)
     {

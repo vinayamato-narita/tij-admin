@@ -392,6 +392,40 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">キャンペーン
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+                                            <div class="float-right">
+                                                <a :href="addCampaignUrl" class="btn btn-primary ">
+                                                    追加
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="campaign in this.course.campaigns">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text"> {{ campaign.campaign_start_time | formatDateCourse}} - {{ campaign.campaign_end_time | formatDateCourse}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriCampaignDelete(course.course_id , campaign.course_campaign_id)"
+                                                            :message-confirm="messageConfirmCampaign"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -460,6 +494,7 @@
                 messageConfirm : 'このレッスンをコースに解除しますか？',
                 messageConfirmTest : 'このテストをコースに解除しますか？',
                 messageConfirmVideo: 'この動画を削除しますか？',
+                messageConfirmCampaign : 'このキャンペーンを削除しますか？',
                 courseENName : '',
                 courseENDes : '',
                 courseZHName : '',
@@ -469,7 +504,9 @@
             };
         },
         props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
-            'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl'],
+            'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl',
+            'addCampaignUrl'
+        ],
         mounted() {},
         methods: {
             getUriDelete(id, lessonId) {
@@ -478,6 +515,10 @@
             },
             getUriTestDelete(id, testId) {
                 return '/course/'+ id + '/test/' + testId + '/delete';
+
+            },
+            getUriCampaignDelete(courseId, campaignId) {
+                return '/course/' + courseId +'/campaign/destroy/'+ campaignId
 
             },
             getUriDeleteVideo(id, videoId) {

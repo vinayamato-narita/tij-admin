@@ -183,6 +183,10 @@ class BreadcrumbComponent
                 'text' => 'コース多言語編集',
                 'route_str' => "course.editLang",
             ],
+            'course_campaign_create' => [
+                'text' => 'キャンペーン追加',
+                'route_str' => "course.campaignCreate",
+            ],
             'course_set_edit' => [
                 'text' => 'セットコース編集',
                 'route_str' => "course.setEdit",
@@ -347,6 +351,14 @@ class BreadcrumbComponent
                 'text' => '復習編集',
                 'route_str' => "review.edit",
             ],
+            'ability_test_result_list' => [
+                'text' => '受験済実力テスト一覧',
+                'route_str' => 'abilityTestResult.index'
+            ],
+            'ability_test_result_show' => [
+                'text' => '受験済実力テスト情報表示',
+                'route_str' => 'abilityTestResult.show'
+            ]
         ];
     }
 

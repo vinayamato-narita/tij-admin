@@ -8,6 +8,7 @@ use App\Enums\StatusCode;
 use App\Models\Teacher;
 use App\Models\Lesson;
 use App\Models\LessonText;
+use App\Models\LessonSchedule;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Enums\LessonTiming;
@@ -110,8 +111,8 @@ class GroupScheduleController extends BaseController
             ));
             return;
         }
-        Log::info($request);
-        Log::info($time);
+        // Log::info($request);
+        // Log::info($time);
 
         // get course and lesson list of teacher
         $courseList = DB::table('course')
@@ -204,9 +205,9 @@ class GroupScheduleController extends BaseController
             ));
             return;
         }
-        Log::info($request);
-        Log::info($startDate);
-        Log::info($endDate);
+        // Log::info($request);
+        // Log::info($startDate);
+        // Log::info($endDate);
 
         $scheduleList = DB::table('lesson_schedule')
                         ->selectRaw('
@@ -244,7 +245,6 @@ class GroupScheduleController extends BaseController
 
     public function registerSchedule(Request $request)
     {
-        Log::info($request);
         try {
             $startDateTime = Carbon::parse($request['startDateTime']);
             $endDateTime = Carbon::parse($request['endDateTime']);
@@ -261,7 +261,7 @@ class GroupScheduleController extends BaseController
                         ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
                         ->where(function ($query) use ($startDateTime) {
                             $query->whereNull('course.course_start_date')
-                                 ->orWhere(function ($query) use ($startDateTime) {
+                                  ->orWhere(function ($query) use ($startDateTime) {
                                     $query->where('course.course_start_date', '<=', $startDateTime)
                                     ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$startDateTime]);
                                 });
@@ -295,7 +295,7 @@ class GroupScheduleController extends BaseController
                         ->where('teacher.teacher_id', '=', $request['selectedTeacher'])
                         ->where('lesson.lesson_id', '=', $request['selectedLesson'])
                         ->get()->toArray();
-        if (empty($lessonCheck)) {
+        if (empty($teacherCheck)) {
             echo json_encode(array(
                 'status' => 400,
                 'error_message' => __('有効な教師が存在しない為、登録できません。')
@@ -303,12 +303,20 @@ class GroupScheduleController extends BaseController
             return;
         }
 
+        $editFlag = false;
+        if (!empty($request['selectedEvent']) && !empty($request['selectedEvent']['lesson_schedule_id'])) {
+            $editFlag = true;
+        }
+
         $duplicateCheck = DB::table('lesson_schedule')
                         ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
                         ->where('lesson_schedule.lesson_starttime', '=', $startDateTime)
-                        ->where('lesson_schedule.lesson_endtime', '=', $endDateTime)
-                        ->get()->toArray();
-        if (empty($duplicateCheck)) {
+                        ->where('lesson_schedule.lesson_endtime', '=', $endDateTime);
+        if ($editFlag) {
+            $duplicateCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
+        }
+        $duplicateCheck = $duplicateCheck->get()->toArray();
+        if (!empty($duplicateCheck)) {
             echo json_encode(array(
                 'status' => 400,
                 'error_message' => __('既に他のスケジュールが登録されているため、登録できません。')
@@ -318,9 +326,12 @@ class GroupScheduleController extends BaseController
 
         $scheduleCheck = DB::table('lesson_schedule')
                         ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
-                        ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson'])
-                        ->get()->toArray();
-        if (empty($duplicateCheck)) {
+                        ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson']);
+        if ($editFlag) {
+            $scheduleCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
+        }
+        $scheduleCheck = $scheduleCheck->get()->toArray();
+        if (!empty($scheduleCheck)) {
             echo json_encode(array(
                 'status' => 400,
                 'error_message' => __('こちらレッスンのスケジュールが既に登録されているため、登録できません。')
@@ -329,11 +340,51 @@ class GroupScheduleController extends BaseController
         }
 
         // update schedule
-        if (!empty($request['selectedEvent']) && !empty($request['selectedEvent']['lesson_schedule_id'])) {
-            // code...
+        if ($editFlag) {
+            // check input
+            $schedule = DB::table('lesson_schedule')
+                        ->where('lesson_schedule.lesson_schedule_id', '=', $request['selectedEvent']['lesson_schedule_id'])
+                        ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
+                        ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson'])
+                        ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
+                        ->get()->toArray();
+            if (empty($schedule)) {
+                echo json_encode(array(
+                    'status' => 400,
+                    'error_message' => __('エラーが発生しました。再度お願いします。')
+                ));
+                return;
+            }
+
+        DB::table('lesson_schedule')
+            ->where('lesson_schedule_id', $request['selectedEvent']['lesson_schedule_id'])
+            ->update([
+                'course_id' => $request['selectedCourse'],
+                'lesson_id' => $request['selectedLesson'],
+                'teacher_id' => $request['selectedTeacher'],
+                'lesson_starttime' => $startDateTime,
+                'lesson_endtime' => $endDateTime,
+                'course_type' => CourseTypeEnum::GROUP_COURSE,
+                'last_update_date' => Carbon::now()
+            ]);
         } else {
         // create schedule
-
+            $result = DB::table('lesson_schedule')->insert([
+                'course_id' => $request['selectedCourse'],
+                'lesson_id' => $request['selectedLesson'],
+                'teacher_id' => $request['selectedTeacher'],
+                'lesson_date' => $startDateTime,
+                'lesson_starttime' => $startDateTime,
+                'lesson_endtime' => $endDateTime,
+                'course_type' => CourseTypeEnum::GROUP_COURSE,
+                'last_update_date' => Carbon::now()
+            ]);
         }
+
+        echo json_encode(array(
+            'status' => 200,
+            'error_message' => ''
+        ));
+        return;
     }
 }

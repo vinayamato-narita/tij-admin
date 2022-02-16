@@ -194,20 +194,43 @@ export default {
             let that = this;
             this.$validator.validateAll().then((valid) => {
                 if (valid) {
+                    that.flagShowLoader = true;
                     axios.post(that.baseUrl + '/groupSchedule/registerSchedule', {
-                        params: {
-                            startDateTime : that.startDateTime,
-                            endDateTime : that.endDateTime,
-                            selectedCourse : that.selectedCourse,
-                            selectedLesson : that.selectedLesson,
-                            selectedTeacher : that.selectedTeacher,
-                            selectedEvent : that.selectedEvent,
-                        }
+                        startDateTime : that.startDateTime,
+                        endDateTime : that.endDateTime,
+                        selectedCourse : that.selectedCourse,
+                        selectedLesson : that.selectedLesson,
+                        selectedTeacher : that.selectedTeacher,
+                        selectedEvent : that.selectedEvent,
                     })
                     .then(function (response) {
                         console.log(response)
+                        that.flagShowLoader = false;
+                        that.hide()
+                        if (response.data.status == 200) {
+                            that.$swal({
+                                text: "スケジュール登録が完了しました。",
+                                icon: "success",
+                                confirmButtonText: "OK"
+                            }).then(result => {
+                                window.location.reload()
+                            });
+                        } else {
+                            that.$swal({
+                                title: response.data.error_message,
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            }).then(function (confirm) {});
+                        }
                     })
                     .catch(function (error) {
+                        that.flagShowLoader = false;
+                        that.hide()
+                        that.$swal({
+                            title: "スケジュール登録が失敗しました。",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        }).then(function (confirm) {});
                     });
                 } else {
                     console.log(that.errors)

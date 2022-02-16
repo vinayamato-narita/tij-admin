@@ -78,25 +78,7 @@ export default {
             selectedTime : new Date(),
             courseData : null,
             events: [
-              {
-                start: '2022-02-07 14:00',
-                end: '2022-02-07 17:30',
-                title: 'Boring event',
-                class: 'blue-event',
-                deletable: false,
-                resizable: false,
-                draggable: false
-              },
-              {
-                start: '2022-02-10 04:00',
-                end: '2022-02-10 04:30',
-                title: '1',
-                class: 'blue-event',
-                deletable: false,
-                resizable: false,
-                draggable: false
-              },
-              // other events.
+              // events.
             ]
         }
     },

@@ -354,6 +354,10 @@ class BreadcrumbComponent
             'ability_test_result_show' => [
                 'text' => '受験済実力テスト情報表示',
                 'route_str' => 'abilityTestResult.show'
+            ],
+            'ability_test_result_edit' => [
+                'text' => '実力テスト評価',
+                'route_str' => 'abilityTestResult.edit'
             ]
         ];
     }

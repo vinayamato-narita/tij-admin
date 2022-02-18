@@ -1,0 +1,209 @@
+<template>
+
+    <div class="c-body">
+        <main class="c-main pt-0">
+            <div class="container-fluid">
+                <div class="page-heading">
+                    <div class="page-heading-left">
+                        <h5>
+                            実力テスト評価
+
+
+                        </h5>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">実力テスト情報
+                                    <div class="float-right">
+                                        <a href="#" class="btn btn-primary ">学習者の回答</a>
+                                        <a href="#" class="btn btn-primary ">マニュアル</a>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-secondary font-weight-bold text-center" v-if="disableComment">
+                                        他の方が評価実施中のため、評価入力できません
+                                    </div>
+                                    <div class="">
+                                        <table class="table table-responsive-sm table-striped border">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-left min-width-150">科目</th>
+                                                <th class="text-left min-width-150">分類</th>
+                                                <th   class="text-left min-width-150">問題数</th>
+                                                <th   class="text-left min-width-150">得点</th>
+                                                <th class="text-left min-width-150">　配点</th>
+                                                <th class="text-left min-width-150">合格者平均
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <template v-for="analyticItemArr in analyticList">
+                                                <tr v-for="(analyticItem, index) in analyticItemArr ">
+                                                    <td  :rowspan="analyticItemArr.length"  class="text-start tit" v-if="index === 0">{{ analyticItem.parent_category_name}}</td>
+                                                    <td  class="text-left" style="border-left: #d8dbe0 1px solid">{{ analyticItem.navigation}}</td>
+                                                    <td  class="text-left" > {{ analyticItem.num_sub_question }}</td>
+                                                    <td  class="text-left"> {{ analyticItem.exam_score }}</td>
+                                                    <td  class="text-left"> {{ analyticItem.score }}</td>
+                                                    <td  class="text-left"></td>
+                                                </tr>
+                                            </template>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
+                                        <div class="form-group row" v-for="(comment, index) in commentsModels">
+                                            <label class="col-md-3 col-form-label text-md-right" :for="index">{{comment.title}} :
+
+                                            </label>
+                                            <div class="col-md-6">
+                                                <textarea :disabled="disableComment" class="form-control"  rows="5" :id="index"  type="text" :name="comment.input_name"  v-model="comment.comment_desc"  >
+
+                                                </textarea>
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-actions text-center">
+                                            <div class="line"></div>
+                                            <div class="form-group">
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
+                                                    <a :href="detailUrl" class="btn btn-default w-100">閉じる</a>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </form>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <loader :flag-show="flagShowLoader"></loader>
+
+    </div>
+
+
+</template>
+
+<script>
+    import Loader from "./../../components/common/loader";
+
+    export default {
+        created: function () {
+        },
+        components: {
+            Loader,
+        },
+        data() {
+            return {
+                csrfToken: Laravel.csrfToken,
+                commentsModels: this.comments,
+                flagShowLoader: false,
+
+            };
+        },
+        created(){
+
+        },
+        props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl'],
+        mounted() {},
+        methods: {
+            register() {
+                let that = this;
+                let formData = new FormData();
+                this.commentsModels.forEach(function (comment) {
+                    formData.append(comment.input_name, comment.comment_desc);
+                });
+/*                formData.append("displayOrder", this.displayOrder);
+                formData.append("courseNameShort", this.courseNameShort);
+                formData.append("courseName", this.courseName);
+                formData.append("pointCount", this.pointCount);
+                formData.append("maxReserveCount", this.maxReserveCount);
+                formData.append("minReserveCount", this.minReserveCount);
+                formData.append("amount", this.amount);
+                formData.append("paypalItemNumber", this.paypalItemNumber);
+                formData.append("courseDescription", this.courseDescription);
+                formData.append("isForLMS", this.isForLMS);
+                formData.append("courseType", this.courseType);
+                formData.append("expireDay", this.expireDay);
+                formData.append('_method', 'PUT');
+                formData.append('id', this.course.course_id);*/
+
+                this.$validator.validateAll().then((valid) => {
+                    if (valid) {
+                        that.flagShowLoader = true;
+                        axios
+                            .post(that.updateUrl , formData, {
+                                header: {
+                                    "Content-Type": "multipart/form-data",
+                                },
+                            })
+                            .then((res) => {
+                                this.$swal({
+                                    title: "実力テスト評価が完了しました。",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then(function (confirm) {
+                                    that.flagShowLoader = false;
+                                });
+                                that.flagShowLoader = false;
+                                window.location.href = this.detailUrl;
+                            })
+                            .catch((err) => {
+                                switch (err.response.status) {
+                                    case 400:
+                                        var  message = err.response.data.message;
+                                        this.$swal({
+                                            title: message,
+                                            icon: "error",
+                                            customClass: 'text-nowrap',
+                                            confirmButtonText: "OK",
+                                        }).then(function (confirm) {});
+
+                                        that.flagShowLoader = false;
+                                        break;
+                                    case 500:
+                                        this.$swal({
+                                            title: "失敗したデータを評価しました",
+                                            icon: "error",
+                                            confirmButtonText: "OK",
+                                        }).then(function (confirm) {});
+
+                                        that.flagShowLoader = false;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                    }
+                });
+
+            },
+
+        },
+    }
+</script>

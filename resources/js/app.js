@@ -136,6 +136,7 @@ import ReviewEdit from "./components/review/edit.vue"
 import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
 import AbilityTestResultInputSearchMulti from "./components/abilityTestResult/input-search-multi.vue"
 import AbilityTestResultShow from "./components/abilityTestResult/show.vue"
+import AbilityTestResultEdit from "./components/abilityTestResult/edit.vue"
 
 
 new Vue({
@@ -310,7 +311,8 @@ new Vue({
         TestEditQuestion,
         CourseAddCampaign,
         AbilityTestResultInputSearchMulti,
-        AbilityTestResultShow
+        AbilityTestResultShow,
+        AbilityTestResultEdit
 
     },
     methods: {},

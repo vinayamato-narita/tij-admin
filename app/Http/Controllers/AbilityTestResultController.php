@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Enums\StatusCode;
 use App\Enums\TestType;
 use App\Models\TestCategory;
+use App\Models\TestComment;
 use App\Models\TestResult;
 use Carbon\Carbon;
+use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AbilityTestResultController extends BaseController
 {
@@ -160,6 +165,7 @@ class AbilityTestResultController extends BaseController
 
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -168,7 +174,92 @@ class AbilityTestResultController extends BaseController
      */
     public function edit($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'ability_test_result_list'],
+            ['name' => 'ability_test_result_show', $id],
+            ['name' => 'ability_test_result_edit', $id]
+        ]);
+        $testResult = TestResult::with('student', 'test', 'test_comment')->find($id);
+        if (!$testResult)
+            return redirect()->route('abilityTestResult.index');
+
+        $analyticRaw = DB::select("
+        		SELECT tc.parent_category_name,tq.navigation,tq.test_question_id, tsqs.test_sub_question_id, IF(trd.answer = trd.correct_answer, tsq.score, 0) as exam_score,
+				tsq.score as score
+				
+        FROM test_category as tc 
+				LEFT JOIN test_sub_question_category AS tsqs ON tc.test_category_id = tsqs.test_category_id 
+				LEFT JOIN test_sub_question AS tsq ON tsqs.test_sub_question_id = tsq.test_sub_question_id
+				LEFT JOIN test_question AS tq ON tq.test_question_id = tsq.test_question_id 
+				LEFT JOIN test_result_detail AS trd ON trd.test_sub_question_id = tsq.test_sub_question_id AND trd.test_result_id = :testResultId
+				WHERE tq.test_id = :testId
+        ORDER BY tc.display_order 
+        ",  [":testResultId" => $id, 'testId' => $testResult->test_id]);
+
+        $analyticList = [];
+        $collectionByParentCategoryName = collect($analyticRaw)->groupBy('parent_category_name')->all();
+        foreach ($collectionByParentCategoryName as  $byCatItem) {
+            $analyticItem = [];
+            foreach ($bySubCategoryId = $byCatItem->groupBy('test_question_id')->all() as $index => $item) {
+                $numSubQuestion = $item->count();
+                $examScore = $item->sum('exam_score');
+                $score = $item->sum('score');
+                $analyticItem[] = [
+                    'parent_category_name' => $item[0]->parent_category_name,
+                    'navigation' => $item[0]->navigation,
+                    'num_sub_question' => $numSubQuestion,
+                    'score' => $score,
+                    'exam_score' => $examScore
+                ];
+            }
+            $analyticList[] = $analyticItem;
+        }
+
+        $testComment = $testResult->test_comment;
+        $disableComment = false;
+        if (empty($testComment)) {
+            $testComment = new TestComment();
+            $testComment->test_result_id = $id;
+            $testComment->student_id = $testResult->student_id;
+            $testComment->teacher_admin_id = Auth::user()->admin_user_id;
+            $testComment->comment_start_time = Carbon::now();
+            if (!$testComment->save())
+                return redirect()->route('abilityTestResult.show', $id);
+        } else {
+            $now = Carbon::now();
+            if ($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) > env('MAX_HOURS_COMMENT')) {
+                $testComment->comment_start_time = Carbon::now();
+                $testComment->teacher_admin_id = Auth::user()->admin_user_id;
+                if (!$testComment->save())
+                    return redirect()->route('abilityTestResult.show', $id);
+            }
+
+            if ($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) <= env('MAX_HOURS_COMMENT') && $testComment->teacher_admin_id != Auth::user()->admin_user_id)
+                $disableComment = true;
+        }
+
+        $parentCategoryNames = TestCategory::orderBy('display_order', 'asc')->groupBy('parent_category_name')->pluck('parent_category_name')->toArray();
+        $commentIndexs = ['comment1', 'comment2', 'comment3', 'comment4', 'comment5'];
+        $comments = [];
+        foreach ($parentCategoryNames as $index => $value) {
+            $propName = $commentIndexs[$index];
+            $comments[] = [
+                'title' => $value,
+                'comment_desc' => empty($testResult->test_comment) ? '' : $testResult->test_comment->$propName,
+                'input_name' => $propName
+            ];
+        }
+
+        return view('abilityTestResult.edit', [
+            'testResult' => $testResult,
+            'testComment' => $testComment,
+            'disableComment' => $disableComment,
+            'breadcrumbs' => $breadcrumbs,
+            'analyticList' => $analyticList,
+            'comments' => $comments,
+
+        ]);
     }
 
     /**
@@ -178,9 +269,31 @@ class AbilityTestResultController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateTestComment(Request $request, $id)
     {
-        //
+        $testComment = TestComment::find($id);
+        if (!$testComment)
+            return redirect()->route('abilityTestResult.index');
+        if ($testComment->comment_end_time != null)
+            return response()->json([
+                'status' => 'BAD_REQUEST',
+                'message' => '他の方が評価を実施した為、保存できません。'
+            ], StatusCode::BAD_REQUEST);
+        $testComment->teacher_admin_id = Auth::user()->admin_user_id;
+        $testComment->comment_end_time = Carbon::now();
+        $testComment->comment1 = $request->comment1;
+        $testComment->comment2 = $request->comment2;
+        $testComment->comment3 = $request->comment3;
+        $testComment->comment4 = $request->comment4;
+        $testComment->comment5 = $request->comment5;
+        if ($testComment->save())
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+        return response()->json([
+            'status' => 'INTERNAL_ERR',
+        ], StatusCode::INTERNAL_ERR);
+
     }
 
     /**

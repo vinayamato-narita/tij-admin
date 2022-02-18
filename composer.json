@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.4.23",
+        "php": "^7.4.22",
         "bensampo/laravel-enum": "^3.4",
         "doctrine/dbal": "^2.12.1",
         "fideloper/proxy": "^4.2",

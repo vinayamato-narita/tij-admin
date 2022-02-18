@@ -1,5 +1,7 @@
 // Here you can add other styles
-
+.mx-datepicker-popup {
+    z-index: 10001 !important;
+}
 
 .c-header.c-header-fixed{
     top:0px;
@@ -882,4 +884,70 @@ div > .draggable-test-sub-question:first-child {
 
 .h-30px {
     height: 30px;
+}
+
+.vuecal__event.color-1 {
+    background-color: rgb(191, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-2 {
+    background-color: rgb(127, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-3 {
+    background-color: rgb(63, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-4 {
+    background-color: rgb(63, 191, 127);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-5 {
+    background-color: rgb(63, 191, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-6 {
+    background-color: rgb(63, 127, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-7 {
+    background-color: rgb(63, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-8 {
+    background-color: rgb(127, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-9 {
+    background-color: rgb(191, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-10 {
+    background-color: rgb(191, 63, 127);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-0 {
+    background-color: rgb(191, 63, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
 }

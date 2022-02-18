@@ -215,4 +215,12 @@ Route::group([
     // ablity test result
     Route::resource('/abilityTestResult', AbilityTestResultController::class);
     Route::post('/abilityTestResult/update-test-comment/{testCommentId}', 'AbilityTestResultController@updateTestComment')->name('abilityTestResult.updateTestComment');
+
+
+
+
+    Route::get('/groupSchedule', 'GroupScheduleController@index')->name('groupSchedule.index');
+    Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
+    Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
+    Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
 });

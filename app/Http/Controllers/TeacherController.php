@@ -14,6 +14,10 @@ use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Session;
+use App\Exports\TeacherExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Log;
 
 class TeacherController extends BaseController
 {
@@ -37,6 +41,7 @@ class TeacherController extends BaseController
                     ->orWhere($this->escapeLikeSentence('teacher_email', $request['search_input']));
             });
         }
+        Session::put('sessionTeacherList', collect($request));
 
         $teacherList = $queryBuilder->sortable(['display_order' => 'asc'])->paginate($pageLimit);
 
@@ -305,5 +310,13 @@ class TeacherController extends BaseController
             'message' => ' 講師が削除されました',
             'data' => [],
         ], StatusCode::OK);
+    }
+
+    public function exportTeacher()
+    {
+        $request = Session::get('sessionTeacherList');
+        $fileName = "teacherlist_".date("Y-m-d").".csv";
+
+        return Excel::download(new TeacherExport($request), $fileName);
     }
 }

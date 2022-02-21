@@ -35,6 +35,7 @@ Route::group([
     Route::delete('teacher/{id}/lesson/{lessonId}/delete', 'TeacherController@teacherLessonDelete')->name('teacher.teacherLessonDelete');
     Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
+    Route::get('export-teacher', 'TeacherController@exportTeacher')->name('exportTeacher');
 
 
     //-------------------------- 学習管理--------------------------------//

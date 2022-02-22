@@ -18,7 +18,7 @@
                             <div class="card">
                                 <div class="card-header">実力テスト情報
                                     <div class="float-right">
-                                        <a href="#" class="btn btn-primary ">学習者の回答</a>
+                                        <a :href="answerDetailUrl" class="btn btn-primary ">学習者の回答</a>
                                         <a href="#" class="btn btn-primary ">マニュアル</a>
 
                                     </div>
@@ -129,7 +129,7 @@
         created(){
 
         },
-        props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl'],
+        props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl', 'answerDetailUrl'],
         mounted() {},
         methods: {
             register() {
@@ -138,20 +138,6 @@
                 this.commentsModels.forEach(function (comment) {
                     formData.append(comment.input_name, comment.comment_desc);
                 });
-/*                formData.append("displayOrder", this.displayOrder);
-                formData.append("courseNameShort", this.courseNameShort);
-                formData.append("courseName", this.courseName);
-                formData.append("pointCount", this.pointCount);
-                formData.append("maxReserveCount", this.maxReserveCount);
-                formData.append("minReserveCount", this.minReserveCount);
-                formData.append("amount", this.amount);
-                formData.append("paypalItemNumber", this.paypalItemNumber);
-                formData.append("courseDescription", this.courseDescription);
-                formData.append("isForLMS", this.isForLMS);
-                formData.append("courseType", this.courseType);
-                formData.append("expireDay", this.expireDay);
-                formData.append('_method', 'PUT');
-                formData.append('id', this.course.course_id);*/
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {

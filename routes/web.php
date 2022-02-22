@@ -215,6 +215,7 @@ Route::group([
     // ablity test result
     Route::resource('/abilityTestResult', AbilityTestResultController::class);
     Route::post('/abilityTestResult/update-test-comment/{testCommentId}', 'AbilityTestResultController@updateTestComment')->name('abilityTestResult.updateTestComment');
+    Route::get('/abilityTestResult/{id}/edit/answerDetail', 'AbilityTestResultController@answerDetail')->name('abilityTestResult.answerDetail');
 
 
 

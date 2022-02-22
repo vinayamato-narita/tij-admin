@@ -7,7 +7,9 @@ use App\Enums\StatusCode;
 use App\Enums\TestType;
 use App\Models\TestCategory;
 use App\Models\TestComment;
+use App\Models\TestQuestion;
 use App\Models\TestResult;
+use App\Models\TestResultDetail;
 use Carbon\Carbon;
 use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
@@ -293,6 +295,56 @@ class AbilityTestResultController extends BaseController
         return response()->json([
             'status' => 'INTERNAL_ERR',
         ], StatusCode::INTERNAL_ERR);
+
+    }
+
+    public function answerDetail($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'ability_test_result_list'],
+            ['name' => 'ability_test_result_show', $id],
+            ['name' => 'ability_test_result_edit', $id],
+            ['name' => 'ability_test_result_answer_detail', $id]
+        ]);
+        $testResult = TestResult::with('test')->find($id);
+        if (!$testResult)
+            return redirect()->route('abilityTestResult.index');
+
+
+        $testQuestions = TestQuestion::with('testSubQuestions.file')->where('test_id', $testResult->test_id)->orderBy('display_order')->get()->toArray();
+        foreach ($testQuestions as &$testQuestion) {
+            $testQuestion['is_answered'] = TestResultDetail::where([
+                'test_result_id' => $id,
+                'test_question_id' => $testQuestion['test_question_id']
+            ])->whereNotNull('answer')->exists();
+            foreach ($testQuestion['test_sub_questions'] as &$tsqs) {
+                $tR = TestResultDetail::where([
+                    'test_result_id' => $id,
+                    'test_sub_question_id' => $tsqs['test_sub_question_id'],
+                ])->first();
+                if ($tR) {
+                    $tsqs['is_right'] =  $tR->answer == $tR->correct_answer;
+                    $tsqs['choiced_answer'] = $tR->answer;
+                }
+                else {
+                    $tsqs['is_right'] =  false;
+                    $tsqs['choiced_answer'] = null;
+                }
+                if (!empty($tsqs['answer1'])) $tsqs['answers'][] = $tsqs['answer1'];
+                if (!empty($tsqs['answer2'])) $tsqs['answers'][] = $tsqs['answer2'];
+                if (!empty($tsqs['answer3'])) $tsqs['answers'][] = $tsqs['answer3'];
+                if (!empty($tsqs['answer4'])) $tsqs['answers'][] = $tsqs['answer4'];
+            }
+
+        }
+
+        return view('abilityTestResult.answerDetail', [
+            'breadcrumbs' => $breadcrumbs,
+            'testResult' => $testResult,
+            'testQuestions' => $testQuestions,
+
+        ]);
 
     }
 

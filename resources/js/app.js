@@ -137,6 +137,7 @@ import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
 import AbilityTestResultInputSearchMulti from "./components/abilityTestResult/input-search-multi.vue"
 import AbilityTestResultShow from "./components/abilityTestResult/show.vue"
 import AbilityTestResultEdit from "./components/abilityTestResult/edit.vue"
+import AbilityTestResultAnswerDetail from "./components/abilityTestResult/answer-detail.vue"
 import GroupSchedule from "./components/groupSchedule/index.vue"
 
 new Vue({
@@ -313,8 +314,8 @@ new Vue({
         AbilityTestResultInputSearchMulti,
         AbilityTestResultShow,
         AbilityTestResultEdit,
-        GroupSchedule
-
+        GroupSchedule,
+        AbilityTestResultAnswerDetail
     },
     methods: {},
     mounted() {}

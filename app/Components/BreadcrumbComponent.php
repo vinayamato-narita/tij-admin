@@ -362,6 +362,10 @@ class BreadcrumbComponent
             'ability_test_result_edit' => [
                 'text' => '実力テスト評価',
                 'route_str' => 'abilityTestResult.edit'
+            ],
+            'ability_test_result_answer_detail' => [
+                'text' => '実力テスト回答詳細',
+                'route_str' => 'abilityTestResult.answerDetail'
             ]
         ];
     }

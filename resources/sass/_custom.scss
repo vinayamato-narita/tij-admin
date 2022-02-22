@@ -3,6 +3,80 @@
     z-index: 10001 !important;
 }
 
+.answer-detail {
+    .tit {
+        padding: 10px 0px 10px 0px;
+    }
+
+    .wrong {
+        color: #DA1E28;
+    }
+
+    .right {
+        color: #6CBB5A;
+    }
+
+    .tq-navi:hover {
+        background-color: rgba(0,0,0,0.08);
+    }
+
+    .wrong-card {
+        border: 1px solid #DA1E28;
+        background-color: #fdf4f4;
+    }
+
+    .right-card {
+        border: 1px solid #6CBB5A;;
+        background-color: #f8fcf7;
+    }
+
+    .comment {
+        margin-top: 24px;
+        padding: 30px;
+        border-radius: 2px;
+        background: #FFF;
+    }
+
+    .d_ra {
+        position: relative;
+        margin-bottom: 10px;
+        label {
+            input:checked+span {
+                border-color: #2D8CFF;
+                background: #eaf3ff;
+            }
+            i {
+                font-weight: normal;
+                font-style: normal;
+                line-height: 42px;
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
+                height: 42px;
+                padding-left: 60px;
+                cursor: pointer;
+            }
+
+            span {
+                line-height: 40px;
+                position: absolute;
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                text-align: center;
+                vertical-align: bottom;
+                border: 1px solid #E0E0E0;
+                border-radius: 50%;
+                background-color: #FFF;
+            }
+        }
+
+    }
+}
+
+
 .c-header.c-header-fixed{
     top:0px;
 }

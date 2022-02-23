@@ -56,6 +56,7 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
                     ,customer_code
                     ,corporation_code
                     ,begin_date
+                    ,paid_status
             )
             VALUES (
                  _student_id,
@@ -76,6 +77,7 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
                  _customer_code,
                  _corporation_code
                  ,IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d %H:%i:%s'))
+                 ,0
             );
         CASE
           WHEN _payment_way IN (0,1) THEN
@@ -86,24 +88,7 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
                 SET _rtn = 1;
               ELSE
                   -- Process with course free
-            call sp_disable_course_free(_student_id);
-
-                  INSERT INTO student_point_history
-                    (student_id,pay_date,pay_description,pay_type,point_count,expire_date,lesson_schedule_id,course_id,start_date,point_subscription_id)
-                      VALUES
-                       (
-                         _student_id
-                         ,NOW()
-
-                        ,CONCAT('レッスン付与 (',(SELECT course_name FROM course WHERE course_id = _course_id),')')
-                        ,_payment_way
-                        ,_add_point
-                        ,@expired_date
-                        ,0
-                        ,_course_id
-                        ,IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d %H:%i:%s'))
-                        ,(SELECT MAX(point_subscription_history_id) FROM point_subscription_history WHERE student_id = _student_id)
-                       );
+                  call sp_disable_course_free(_student_id);
 
             END CASE;
             UPDATE student

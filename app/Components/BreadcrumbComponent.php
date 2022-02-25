@@ -366,6 +366,10 @@ class BreadcrumbComponent
             'ability_test_result_answer_detail' => [
                 'text' => '実力テスト回答詳細',
                 'route_str' => 'abilityTestResult.answerDetail'
+            ],
+            'zoom_setting' => [
+                'text' => 'ZOOM連携設定',
+                'route_str' => 'zoomSetting.edit'
             ]
         ];
     }

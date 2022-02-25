@@ -224,4 +224,6 @@ Route::group([
     Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
     Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
     Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
+    Route::get('/zoomSetting/edit', 'ZoomSettingController@edit')->name('zoomSetting.edit');
+    Route::post('/zoomSetting/update', 'ZoomSettingController@update')->name('zoomSetting.update');
 });

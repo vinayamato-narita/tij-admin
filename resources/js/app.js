@@ -139,6 +139,7 @@ import AbilityTestResultShow from "./components/abilityTestResult/show.vue"
 import AbilityTestResultEdit from "./components/abilityTestResult/edit.vue"
 import AbilityTestResultAnswerDetail from "./components/abilityTestResult/answer-detail.vue"
 import GroupSchedule from "./components/groupSchedule/index.vue"
+import ZoomSettingEdit from "./components/zoomSetting/edit.vue"
 
 new Vue({
     created() {
@@ -315,7 +316,8 @@ new Vue({
         AbilityTestResultShow,
         AbilityTestResultEdit,
         GroupSchedule,
-        AbilityTestResultAnswerDetail
+        AbilityTestResultAnswerDetail,
+        ZoomSettingEdit
     },
     methods: {},
     mounted() {}

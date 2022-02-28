@@ -30,7 +30,7 @@ class InquiryExport implements FromCollection, WithHeadings
         if (isset($this->searchInput)) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($searchInput) {
                 $query->where($this->escapeLikeSentence('admin_inquiry.inquiry_subject', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('admin_inquiry.student_email', $searchInput))
+                    ->orWhere($this->escapeLikeSentence('admin_inquiry.user_mail', $searchInput))
                     ->orWhere($this->escapeLikeSentence('student.student_email', $searchInput))
                     ->orWhere($this->escapeLikeSentence('student.student_name', $searchInput));
             });
@@ -44,7 +44,7 @@ class InquiryExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return ["問合せ番号", "日時", "問い合わせ件名", "生徒番号", "名前", "メールアドレス", "対応状況", "問い合わせ内容"];
+        return ["問合せ番号", "日時", "問い合わせ件名", "学習者番号", "名前", "メールアドレス", "対応状況", "問い合わせ内容"];
     }
 
     public function escapeLikeSentence($column, $str, $before = true, $after = true)

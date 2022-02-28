@@ -378,6 +378,10 @@ class BreadcrumbComponent
             'zoom_account_edit' => [
                 'text' => 'Zoomアカウント編集',
                 'route_str' => 'zoomAccount.edit'
+            ],
+            'zoom_setting' => [
+                'text' => 'ZOOM連携設定',
+                'route_str' => 'zoomSetting.edit'
             ]
         ];
     }

@@ -141,6 +141,7 @@ import AbilityTestResultAnswerDetail from "./components/abilityTestResult/answer
 import GroupSchedule from "./components/groupSchedule/index.vue"
 import ZoomAccountAdd from "./components/zoomAccount/add.vue"
 import ZoomAccountEdit from "./components/zoomAccount/edit.vue"
+import ZoomSettingEdit from "./components/zoomSetting/edit.vue"
 
 new Vue({
     created() {
@@ -319,7 +320,8 @@ new Vue({
         GroupSchedule,
         AbilityTestResultAnswerDetail,
         ZoomAccountAdd,
-        ZoomAccountEdit
+        ZoomAccountEdit,
+        ZoomSettingEdit
     },
     methods: {},
     mounted() {}

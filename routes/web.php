@@ -228,4 +228,6 @@ Route::group([
 
     //zoom account
     Route::resource('zoomAccount', ZoomAccountController::class);
+    Route::get('/zoomSetting/edit', 'ZoomSettingController@edit')->name('zoomSetting.edit');
+    Route::post('/zoomSetting/update', 'ZoomSettingController@update')->name('zoomSetting.update');
 });

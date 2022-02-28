@@ -102,6 +102,8 @@ class TeacherController extends BaseController
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
+                $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
+                $teacher->zoom_password = $request->zoomPassword ?? "";
 
                 $teacher->save();
                 DB::commit();
@@ -268,6 +270,8 @@ class TeacherController extends BaseController
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
+                $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
+                $teacher->zoom_password = $request->zoomPassword ?? "";
 
 
                 $teacher->save();

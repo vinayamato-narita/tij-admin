@@ -135,7 +135,7 @@ Route::group([
 
     //preparation
     Route::resource('preparation', PreparationController::class);
-    
+
     //review
     Route::resource('review', ReviewController::class);
 
@@ -161,9 +161,9 @@ Route::group([
     Route::resource('lessonStatus', LessonStatusController::class);
     Route::post('getDataLessonStatus', 'LessonStatusController@getData')->name('getDataLessonStatus');
     Route::post('/lessonStatus/lessonInfomationDetailExportCsv', 'LessonStatusController@lessoninfomationdetailexportcsv')->name('lessonInfomationDetailExportCsv');
-    Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');   
-    Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');   
-    Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');   
+    Route::post('/lessonStatus/lessonInfomationStatusExportCsv', 'LessonStatusController@lessoninfomationstatusexportcsv')->name('lessonInfomationStatusExportCsv');
+    Route::post('/lessonStatus/updateLessonStatus', 'LessonStatusController@updateLessonStatus')->name('updateLessonStatus');
+    Route::post('/lessonStatus/copySettingLessonFree', 'LessonStatusController@copySettingLessonFree')->name('copySettingLessonFree');
     //comment list
     Route::get('/comment', 'CommentController@index')->name('comment.index');
 
@@ -225,4 +225,7 @@ Route::group([
     Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
     Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
     Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
+
+    //zoom account
+    Route::resource('zoomAccount', ZoomAccountController::class);
 });

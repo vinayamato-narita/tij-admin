@@ -366,6 +366,18 @@ class BreadcrumbComponent
             'ability_test_result_answer_detail' => [
                 'text' => '実力テスト回答詳細',
                 'route_str' => 'abilityTestResult.answerDetail'
+            ],
+            'zoom_account_list' => [
+                'text' => 'ZOOMアカウント一覧',
+                'route_str' => 'zoomAccount.index'
+            ],
+            'zoom_account_add' => [
+                'text' => 'Zoomアカウント新規作成',
+                'route_str' => 'zoomAccount.create'
+            ],
+            'zoom_account_edit' => [
+                'text' => 'Zoomアカウント編集',
+                'route_str' => 'zoomAccount.edit'
             ]
         ];
     }

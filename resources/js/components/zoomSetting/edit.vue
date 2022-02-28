@@ -160,10 +160,14 @@
         </div>
       </div>
     </main>
+    <loader :flag-show="flagShowLoader"></loader>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import Loader from "./../../components/common/loader";
+
 export default {
   created: function () {
     let messError = {
@@ -181,10 +185,13 @@ export default {
     };
     this.$validator.localize("en", messError);
   },
-  components: {},
+  components: {
+    Loader
+  },
   data() {
     return {
       csrfToken: Laravel.csrfToken,
+      flagShowLoader: false,
     };
   },
   props: ["zoomSetting", "updateUrl"],
@@ -195,7 +202,43 @@ export default {
       let that = this;
       this.$validator.validateAll().then((valid) => {
         if (valid) {
-          that.$refs.updateForm.submit();
+          // that.$refs.updateForm.submit();
+          that.flagShowLoader = true;
+          axios
+            .post(this.updateUrl, this.zoomSetting, {
+              header: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => {
+              this.$swal({
+                title: "ZOOM連携設定情報変更が完了しました。",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then(function (confirm) {
+                that.flagShowLoader = false;
+              });
+              that.flagShowLoader = false;
+            })
+            .catch((err) => {
+              switch (err.response.status) {
+                case 422:
+                case 400:
+                  this.errorsData = err.response.data;
+                  that.flagShowLoader = false;
+                  break;
+                case 500:
+                  this.$swal({
+                    title: "失敗したデータを編集しました",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                  }).then(function (confirm) {});
+                  that.flagShowLoader = false;
+                  break;
+                default:
+                  break;
+              }
+            });
         } else {
           this.$el
             .querySelector(

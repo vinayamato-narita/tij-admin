@@ -9,10 +9,9 @@ class ZoomSetting extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'zoom_setting_id',
-        'join_before_host',
-        'auto_recording',
-        'waiting_room'
-    ];
+    public $timestamps = false;
+    protected $primaryKey = 'zoom_setting_id';
+
+    protected $table = 'zoom_setting';
+
 }

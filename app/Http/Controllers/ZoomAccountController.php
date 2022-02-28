@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Models\ZoomAccount;
-use App\Services\ZoomService;
+use App\Services\ZoomClientService;
 use Illuminate\Http\Request;
 
 class ZoomAccountController extends BaseController
@@ -64,20 +64,18 @@ class ZoomAccountController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, ZoomService $zoomService)
+    public function store(Request $request, ZoomClientService $zoomClientService)
     {
         try {
-            $url = 'https://api.zoom.us/v2/users/me';
-            $method = 'GET';
-            $data = $zoomService->zoomClient($url, $method, $request->token);
-            if ($data['http_code'] != StatusCode::OK) {
+            $response = $zoomClientService->checkZoomAccountViaAccessKey($request->token);
+            if ($response->status() != StatusCode::OK) {
                 return response()->json([
                     'status' => 'UNPROCESSABLE_ENTITY',
                     'message' => 'APIキーとAPI SECRETが正しくありません',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoom_user_id = $data['data']->id;
-            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoom_user_id)->first();
+            $zoomUserId = $response->json('id');
+            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoomUserId)->first();
             if (!empty($zoomAccount)) {
                 return response()->json([
                     'status' => 'UNPROCESSABLE_ENTITY',
@@ -88,7 +86,7 @@ class ZoomAccountController extends BaseController
             $zoomAccount->zoom_account_name = $request->zoom_account_name;
             $zoomAccount->api_key = $request->api_key;
             $zoomAccount->api_secret = $request->api_secret;
-            $zoomAccount->zoom_user_id = $zoom_user_id;
+            $zoomAccount->zoom_user_id = $zoomUserId;
             $zoomAccount->save();
             return response()->json([
                 'status' => 'OK',
@@ -140,20 +138,18 @@ class ZoomAccountController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, ZoomService $zoomService)
+    public function update(Request $request, $id, ZoomClientService $zoomClientService)
     {
         try {
-            $url = 'https://api.zoom.us/v2/users/me';
-            $method = 'GET';
-            $data = $zoomService->zoomClient($url, $method, $request->token);
-            if ($data['http_code'] != StatusCode::OK) {
+            $response = $zoomClientService->checkZoomAccountViaAccessKey($request->token);
+            if ($response->status() != StatusCode::OK) {
                 return response()->json([
                     'status' => 'UNPROCESSABLE_ENTITY',
                     'message' => 'APIキーとAPI SECRETが正しくありません',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoom_user_id = $data['data']->id;
-            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoom_user_id)
+            $zoomUserId = $response->json('id');
+            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoomUserId)
                 ->whereNotIn('zoom_account_id', [$id])
                 ->first();
             if (!empty($zoomAccount)) {
@@ -166,7 +162,7 @@ class ZoomAccountController extends BaseController
             $zoomAccount->zoom_account_name = $request->zoom_account_name;
             $zoomAccount->api_key = $request->api_key;
             $zoomAccount->api_secret = $request->api_secret;
-            $zoomAccount->zoom_user_id = $zoom_user_id;
+            $zoomAccount->zoom_user_id = $zoomUserId;
             $zoomAccount->save();
             return response()->json([
                 'status' => 'OK',

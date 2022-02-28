@@ -6,6 +6,7 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
 use App\Models\ZoomAccount;
 use App\Services\ZoomClientService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ZoomAccountController extends BaseController
@@ -182,6 +183,19 @@ class ZoomAccountController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        try {
+            ZoomAccount::where('zoom_account_id', $id)->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Zoomアカウントの削除が完了しました',
+            'data' => [],
+        ], StatusCode::OK);
     }
 }

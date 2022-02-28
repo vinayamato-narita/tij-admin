@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Enums\StatusCode;
 use App\Models\ZoomAccount;
+use App\Services\ZoomService;
 use Illuminate\Http\Request;
 
 class ZoomAccountController extends BaseController
@@ -45,7 +47,15 @@ class ZoomAccountController extends BaseController
      */
     public function create()
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'zoom_account_list'],
+            ['name' => 'zoom_account_add']
+        ]);
+
+        return view('zoomAccount.add', [
+            'breadcrumbs' => $breadcrumbs
+        ]);
     }
 
     /**
@@ -54,9 +64,40 @@ class ZoomAccountController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, ZoomService $zoomService)
     {
-        //
+        try {
+            $url = 'https://api.zoom.us/v2/users/me';
+            $method = 'GET';
+            $data = $zoomService->zoomClient($url, $method, $request->token);
+            if ($data['http_code'] != StatusCode::OK) {
+                return response()->json([
+                    'status' => 'UNPROCESSABLE_ENTITY',
+                    'message' => 'APIキーとAPI SECRETが正しくありません',
+                ], StatusCode::UNPROCESSABLE_ENTITY);
+            }
+            $zoom_user_id = $data['data']->id;
+            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoom_user_id)->first();
+            if (!empty($zoomAccount)) {
+                return response()->json([
+                    'status' => 'UNPROCESSABLE_ENTITY',
+                    'message' => 'Zoomアカウントが重複しているため、登録できません。',
+                ], StatusCode::UNPROCESSABLE_ENTITY);
+            }
+            $zoomAccount = new ZoomAccount();
+            $zoomAccount->zoom_account_name = $request->zoom_account_name;
+            $zoomAccount->api_key = $request->api_key;
+            $zoomAccount->api_secret = $request->api_secret;
+            $zoomAccount->zoom_user_id = $zoom_user_id;
+            $zoomAccount->save();
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
     }
 
     /**
@@ -78,7 +119,18 @@ class ZoomAccountController extends BaseController
      */
     public function edit($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'zoom_account_list'],
+            ['name' => 'zoom_account_edit', $id]
+        ]);
+
+        $zoomAccount = ZoomAccount::where('zoom_account_id', $id)->first();
+        if (!$zoomAccount) return redirect()->route('zoomAccount.index');
+        return view('zoomAccount.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'zoomAccount' => $zoomAccount
+        ]);
     }
 
     /**
@@ -88,9 +140,42 @@ class ZoomAccountController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, ZoomService $zoomService)
     {
-        //
+        try {
+            $url = 'https://api.zoom.us/v2/users/me';
+            $method = 'GET';
+            $data = $zoomService->zoomClient($url, $method, $request->token);
+            if ($data['http_code'] != StatusCode::OK) {
+                return response()->json([
+                    'status' => 'UNPROCESSABLE_ENTITY',
+                    'message' => 'APIキーとAPI SECRETが正しくありません',
+                ], StatusCode::UNPROCESSABLE_ENTITY);
+            }
+            $zoom_user_id = $data['data']->id;
+            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoom_user_id)
+                ->whereNotIn('zoom_account_id', [$id])
+                ->first();
+            if (!empty($zoomAccount)) {
+                return response()->json([
+                    'status' => 'UNPROCESSABLE_ENTITY',
+                    'message' => 'Zoomアカウントが重複しているため、登録できません。',
+                ], StatusCode::UNPROCESSABLE_ENTITY);
+            }
+            $zoomAccount = ZoomAccount::find($id);
+            $zoomAccount->zoom_account_name = $request->zoom_account_name;
+            $zoomAccount->api_key = $request->api_key;
+            $zoomAccount->api_secret = $request->api_secret;
+            $zoomAccount->zoom_user_id = $zoom_user_id;
+            $zoomAccount->save();
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::OK);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
     }
 
     /**

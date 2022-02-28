@@ -370,6 +370,14 @@ class BreadcrumbComponent
             'zoom_account_list' => [
                 'text' => 'ZOOMアカウント一覧',
                 'route_str' => 'zoomAccount.index'
+            ],
+            'zoom_account_add' => [
+                'text' => 'Zoomアカウント新規作成',
+                'route_str' => 'zoomAccount.create'
+            ],
+            'zoom_account_edit' => [
+                'text' => 'Zoomアカウント編集',
+                'route_str' => 'zoomAccount.edit'
             ]
         ];
     }

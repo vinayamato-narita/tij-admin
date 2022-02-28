@@ -28,9 +28,6 @@ class StudentExport implements FromCollection, WithHeadings
             'student.student_name as student_name',
             'student.student_email as student_email',
             DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_project.project_code SEPARATOR '/'),'/') as all_project_code"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_company.company_name SEPARATOR '/'),'/') as all_project_company_name"),
-            DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_company.legal_code, point_subscription_history.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
             'student.create_date as create_date',
             DB::raw("COALESCE(MIN(IF(point_subscription_history.course_id = 1 AND student.is_lms_user = 0, NULL, point_subscription_history.payment_date)),'---') AS first_payment_date"), 
             'student.last_login_date as last_login_date',  
@@ -108,12 +105,8 @@ class StudentExport implements FromCollection, WithHeadings
         }
 
         $studentList = $queryBuilder->get()->map(function($item, $key) {
-            $item['all_project_code'] = trim($item['all_project_code'], '/');
-            $item['all_project_company_name'] = trim($item['all_project_company_name'], '/');
-            $item['company_code'] = trim($item['company_code'], '/');
             $item['create_date'] = isset($item['create_date']) ? date('Y-m-d', strtotime($item['create_date'])) : "";
             $item['first_payment_date'] = DateTime::createFromFormat('Y-m-d', $item['first_payment_date']) ? date('Y-m-d', strtotime($item['first_payment_date'])) : "";
-            $item['last_login_at'] = isset($item['last_login_at']) ? date('Y-m-d', strtotime($item['last_login_at'])) : "";
             $item['first_lesson_date'] = isset($item['first_lesson_date']) ? date('Y-m-d', strtotime($item['first_lesson_date'])) : "";
             $item['is_tmp_entry'] = StudentEntryType::getDescription($item['is_tmp_entry']);
 
@@ -131,7 +124,21 @@ class StudentExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return ["生徒番号", "生徒名", "生徒メール", "法人名", "企業ID", "企業名", "法人コード", "初回登録日", "初回支払日", "最終ログイン日", "初回受講日", "通算受講回数", "登録状態", "有料/無料", "DMステータス", "連絡事項"];
+        return [
+            "学習者番号", 
+            "学習者名", 
+            "学習者メール", 
+            "法人名", 
+            "初回登録日", 
+            "初回支払日", 
+            "最終ログイン日", 
+            "初回受講日", 
+            "通算受講回数", 
+            "登録状態", 
+            "有料/無料", 
+            "DMステータス", 
+            "連絡事項"
+        ];
     }
 
     public function escapeLikeSentence($column, $str, $before = true, $after = true)

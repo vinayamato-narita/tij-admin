@@ -953,7 +953,7 @@ class StudentController extends BaseController
             }
         }
 
-        Session::put('sessionStudent', json_encode($request));
+        Session::put('sessionStudent', collect($request));
 
         $studentList = $queryBuilder->paginate($pageLimit);
         $number_published = $queryBuilderCount->count();
@@ -971,7 +971,7 @@ class StudentController extends BaseController
     public function export()
     {
         $request = Session::get('sessionStudent');
-        $fileName = "student_list_".date("Y_m_d").".csv";
+        $fileName = "student_list_".date("Y-m-d").".csv";
         return Excel::download(new StudentExport($request), $fileName);
     }
 

@@ -29,6 +29,11 @@ class Teacher extends Model
             'teacher_id', 'lesson_id', 'teacher_id', 'lesson_id');
     }
 
+    public function teacherLesson()
+    {
+        return $this->hasMany(TeacherLesson::class, 'teacher_id');
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

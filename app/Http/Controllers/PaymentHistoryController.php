@@ -188,7 +188,7 @@ class PaymentHistoryController extends BaseController
             }
         }
 
-        Session::put('sessionPaymentHistory', json_encode($request));
+        Session::put('sessionPaymentHistory', collect($request));
 
         $total_tax = $queryBuilder->sum('point_subscription_history.tax');
         $total_amount = $queryBuilder->sum('point_subscription_history.amount');
@@ -208,7 +208,7 @@ class PaymentHistoryController extends BaseController
     public function export()
     {
         $request = Session::get('sessionStudent');
-        $fileName = "payment_".date("Y_m_d").".csv";
+        $fileName = "payment_".date("Y-m-d").".csv";
         return Excel::download(new PaymentHistoryExport($request), $fileName);
     }
    

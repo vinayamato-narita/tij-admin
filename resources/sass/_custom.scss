@@ -1,4 +1,80 @@
 // Here you can add other styles
+.mx-datepicker-popup {
+    z-index: 10001 !important;
+}
+
+.answer-detail {
+    .tit {
+        padding: 10px 0px 10px 0px;
+    }
+
+    .wrong {
+        color: #DA1E28;
+    }
+
+    .right {
+        color: #6CBB5A;
+    }
+
+    .tq-navi:hover {
+        background-color: rgba(0,0,0,0.08);
+    }
+
+    .wrong-card {
+        border: 1px solid #DA1E28;
+        background-color: #fdf4f4;
+    }
+
+    .right-card {
+        border: 1px solid #6CBB5A;;
+        background-color: #f8fcf7;
+    }
+
+    .comment {
+        margin-top: 24px;
+        padding: 30px;
+        border-radius: 2px;
+        background: #FFF;
+    }
+
+    .d_ra {
+        position: relative;
+        margin-bottom: 10px;
+        label {
+            input:checked+span {
+                border-color: #2D8CFF;
+                background: #eaf3ff;
+            }
+            i {
+                font-weight: normal;
+                font-style: normal;
+                line-height: 42px;
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
+                height: 42px;
+                padding-left: 60px;
+                cursor: pointer;
+            }
+
+            span {
+                line-height: 40px;
+                position: absolute;
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                text-align: center;
+                vertical-align: bottom;
+                border: 1px solid #E0E0E0;
+                border-radius: 50%;
+                background-color: #FFF;
+            }
+        }
+
+    }
+}
 
 
 .c-header.c-header-fixed{
@@ -882,4 +958,70 @@ div > .draggable-test-sub-question:first-child {
 
 .h-30px {
     height: 30px;
+}
+
+.vuecal__event.color-1 {
+    background-color: rgb(191, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-2 {
+    background-color: rgb(127, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-3 {
+    background-color: rgb(63, 191, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-4 {
+    background-color: rgb(63, 191, 127);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-5 {
+    background-color: rgb(63, 191, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-6 {
+    background-color: rgb(63, 127, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-7 {
+    background-color: rgb(63, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-8 {
+    background-color: rgb(127, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-9 {
+    background-color: rgb(191, 63, 191);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-10 {
+    background-color: rgb(191, 63, 127);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
+}
+
+.vuecal__event.color-0 {
+    background-color: rgb(191, 63, 63);
+    border: 1px solid rgb(235, 82, 82);
+    color: #fff;
 }

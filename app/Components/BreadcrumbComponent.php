@@ -279,6 +279,10 @@ class BreadcrumbComponent
                 'text' => 'スケジュール管理',
                 'route_str' => 'lessonSchedule.index'
             ],
+            'group_schedule_index' => [
+                'text' => 'グループレッスンスケジュール管理',
+                'route_str' => 'groupSchedule.index'
+            ],
             'student_point_history_list' => [
                 'text' => 'ポイント履歴一覧',
                 'route_str' => "student.pointHistoryList",
@@ -354,6 +358,14 @@ class BreadcrumbComponent
             'ability_test_result_show' => [
                 'text' => '受験済実力テスト情報表示',
                 'route_str' => 'abilityTestResult.show'
+            ],
+            'ability_test_result_edit' => [
+                'text' => '実力テスト評価',
+                'route_str' => 'abilityTestResult.edit'
+            ],
+            'ability_test_result_answer_detail' => [
+                'text' => '実力テスト回答詳細',
+                'route_str' => 'abilityTestResult.answerDetail'
             ]
         ];
     }

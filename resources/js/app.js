@@ -136,7 +136,9 @@ import ReviewEdit from "./components/review/edit.vue"
 import EditLangLesson from "./components/lesson/edit-lang-lesson.vue"
 import AbilityTestResultInputSearchMulti from "./components/abilityTestResult/input-search-multi.vue"
 import AbilityTestResultShow from "./components/abilityTestResult/show.vue"
-
+import AbilityTestResultEdit from "./components/abilityTestResult/edit.vue"
+import AbilityTestResultAnswerDetail from "./components/abilityTestResult/answer-detail.vue"
+import GroupSchedule from "./components/groupSchedule/index.vue"
 
 new Vue({
     created() {
@@ -310,8 +312,10 @@ new Vue({
         TestEditQuestion,
         CourseAddCampaign,
         AbilityTestResultInputSearchMulti,
-        AbilityTestResultShow
-
+        AbilityTestResultShow,
+        AbilityTestResultEdit,
+        GroupSchedule,
+        AbilityTestResultAnswerDetail
     },
     methods: {},
     mounted() {}

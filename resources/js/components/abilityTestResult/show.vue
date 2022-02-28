@@ -56,7 +56,7 @@
                             <div class="card">
                                 <div class="card-header">評価
                                     <div class="float-right">
-                                        <a href="#" class="btn btn-primary ">評価開始</a>
+                                        <a :href="abilityTestResultEditUrl" class="btn btn-primary ">評価開始</a>
                                     </div>
 
 
@@ -103,7 +103,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['testResult', 'comments'],
+        props: ['testResult', 'comments', 'abilityTestResultEditUrl'],
         mounted() {},
         methods: {
         },

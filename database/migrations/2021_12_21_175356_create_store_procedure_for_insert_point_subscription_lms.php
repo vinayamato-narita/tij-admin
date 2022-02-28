@@ -70,6 +70,7 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
                     ,customer_code
                     ,corporation_code
                     ,begin_date
+                    ,paid_status
             )
             VALUES (
                  _student_id,
@@ -89,7 +90,8 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
                  (SELECT paypal_item_number FROM course WHERE course_id = _course_id),
                  IF(_customer_code = '' OR customer_code IS NULL, _default_customer_code, _customer_code),
                  IF(_corporation_code = '' OR corporation_code IS NULL, _default_corporation_code, _corporation_code),
-                 IF(_begin_date = '',  NOW(), DATE_FORMAT(_begin_date,'%Y-%m-%d %H:%i:%s'))
+                 IF(_begin_date = '',  NOW(), DATE_FORMAT(_begin_date,'%Y-%m-%d %H:%i:%s')),
+                 0
             );
         CASE
           WHEN _payment_way IN (0,1) THEN
@@ -103,22 +105,7 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
                   -- Process with course free
                   CALL sp_disable_course_free(_student_id);
 
-                  INSERT INTO student_point_history
-                    (student_id,pay_date,pay_description,pay_type,point_count,expire_date,lesson_schedule_id,course_id,start_date,point_subscription_id)
-                    VALUES
-                     (
-                        _student_id
-                        ,NOW()
-                        ,CONCAT('レッスン付与 (',(SELECT course_name FROM course WHERE course_id = _course_id),')')
-                        ,_payment_way
-                        ,_add_point
-                        ,@expired_date
-                        ,0
-                        ,_course_id
-                        ,IF(_start_date = '',  NOW(), DATE_FORMAT(_start_date,'%Y-%m-%d %H:%i:%s'))
-                        ,(SELECT MAX(point_subscription_history_id) FROM point_subscription_history WHERE student_id = _student_id)
-                    );
-                CALL lms_insert_project_course_student(_project_course_id, _project_id, _course_id, _student_id, _start_date, @expired_date, _start_date_origin);
+                  CALL lms_insert_project_course_student(_project_course_id, _project_id, _course_id, _student_id, _start_date, @expired_date, _start_date_origin);
             END CASE;
             UPDATE student
              SET
@@ -131,7 +118,7 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
             SET _rtn = 1;
 
         END CASE;
-        END 
+        END
         ";
 
         \DB::unprepared($procedure);

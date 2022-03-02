@@ -382,7 +382,11 @@ class BreadcrumbComponent
             'zoom_setting' => [
                 'text' => 'ZOOM連携設定',
                 'route_str' => 'zoomSetting.edit'
-            ]
+            ],
+            'group_lesson_reserve' => [
+                'text' => 'グループレッスン申込一覧',
+                'route_str' => 'groupLessonReserves.index'
+            ],
         ];
     }
 

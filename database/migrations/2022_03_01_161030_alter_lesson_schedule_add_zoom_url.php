@@ -14,7 +14,7 @@ class AlterLessonScheduleAddZoomUrl extends Migration
     public function up()
     {
         Schema::table('lesson_schedule', function (Blueprint $table) {
-            $table->string('zoom_url')->after('lesson_text_name');
+            $table->string('zoom_url')->after('lesson_text_name')->nullable();
         });
     }
 

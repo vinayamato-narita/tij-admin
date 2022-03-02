@@ -67,7 +67,20 @@ class GroupLessonReserveController extends BaseController
      */
     public function show($id)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'group_lesson_reserve'],
+            ['name' => 'group_lesson_reserve_show', $id]
+        ]);
+        $course = Course::where('course_id', $id)
+            ->with(['childCourse', 'lessonSchedules'])
+            ->withCount(['studentPointHistories'])
+            ->first();
+
+        return view('groupLessonReserve.show', [
+            'breadcrumbs' => $breadcrumbs,
+            'course' => $course,
+        ]);
     }
 
     /**

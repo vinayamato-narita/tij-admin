@@ -19,9 +19,9 @@ class CreateStoreProcedureForCheckLessonReserve extends Migration
         IN _lesson_schedule_id INT ,
         IN _course_id   INT)
         BEGIN
-           SET @skypeName = (SELECT coalesce(student_skypename, "") from student where student_id = _student_id limit 1);
+           SET @skypeName = (SELECT coalesce(student_skypename, '') from student where student_id = _student_id limit 1);
            CASE @skypeName
-               WHEN "" THEN SELECT 10; -- check skype empty
+               WHEN '' THEN SELECT 10; -- check skype empty
                ELSE
                  CALL sp_check_lesson_reserve_time(_student_id,_lesson_schedule_id,@rtn);
            END CASE;

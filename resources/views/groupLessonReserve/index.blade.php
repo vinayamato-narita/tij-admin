@@ -38,21 +38,21 @@ use App\Components\SearchQueryComponent;
                                                 <thead>
                                                     <tr>
                                                         <th class="text-left min-width-150">@sortablelink('course_name',
-                                                            'コース名')</th>
+                                                            ' コース名')</th>
                                                         <th class="text-left min-width-150">@sortablelink('is_for_lms',
-                                                            '法人/個人')</th>
+                                                            ' 法人/個人')</th>
                                                         <th class="text-left min-width-120">
-                                                            @sortablelink('min_reserve_count', '最小開催人数')</th>
+                                                            @sortablelink('min_reserve_count', ' 最小開催人数')</th>
                                                         <th class="text-left min-width-120">
-                                                            @sortablelink('max_reserve_count', '最大申込人数')</th>
+                                                            @sortablelink('max_reserve_count', ' 最大申込人数')</th>
                                                         <th class="text-left min-width-120">
                                                             @sortablelink('student_point_histories_count', ' 申込人数')</th>
                                                         <th class="text-left min-width-120">@sortablelink('decide_date',
-                                                            '開催決定日時')</th>
+                                                            ' 開催決定日時')</th>
                                                         <th class="text-left min-width-120">
-                                                            @sortablelink('reserve_end_date', '申込期限')</th>
+                                                            @sortablelink('reserve_end_date', ' 申込期限')</th>
                                                         <th class="text-left min-width-120">
-                                                            @sortablelink('group_lesson_status', 'ステータス')</th>
+                                                            @sortablelink('group_lesson_status', ' ステータス')</th>
                                                         <th class="text-left min-width-120"></th>
                                                     </tr>
                                                 </thead>

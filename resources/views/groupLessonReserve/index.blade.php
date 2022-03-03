@@ -26,10 +26,10 @@ use App\Components\SearchQueryComponent;
                                             <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}"
                                                 :page-limit="{{ $pageLimit }}"></page-size>
                                         </div>
-                                        <input-search-multi :page-limit="{{ $pageLimit }}"
+                                        <input-search-group-lesson :page-limit="{{ $pageLimit }}"
                                             :url="{{ json_encode(route('groupLessonReserves.index')) }}"
                                             :data-query="{{ json_encode(!empty($request) ? $request->all() : new stdClass()) }}">
-                                        </input-search-multi>
+                                        </input-search-group-lesson>
 
                                     </div>
                                     @if (!$courseList->isEmpty())
@@ -79,7 +79,7 @@ use App\Components\SearchQueryComponent;
                                                             <td class="text-left">
                                                                 <div class="btn-group" style="float:right;">
                                                                     <button class="btn btn-primary" type="button"><i
-                                                                            class="bi bi-pencil-square mr-1"></i>詳細</button>
+                                                                        class="fa fa-info mr-1"></i>詳細</button>
                                                                 </div>
                                                             </td>
                                                         </tr>

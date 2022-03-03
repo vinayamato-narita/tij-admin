@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Enums\CourseTypeEnum;
 use App\Models\Course;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class GroupLessonReserveController extends BaseController
@@ -20,12 +22,29 @@ class GroupLessonReserveController extends BaseController
             ['name' => 'group_lesson_reserve']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = Course::where('course_type', 2);
+        $queryBuilder = Course::where('course_type', CourseTypeEnum::GROUP_COURSE);
+
 
         if (!empty($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
             });
+        }
+
+        if (!empty($request['decide_date_start'])) {
+            $queryBuilder = $queryBuilder->whereDate('decide_date', '>=', Carbon::createFromTimestamp($request['decide_date_start']));
+        }
+
+        if (!empty($request['decide_date_end'])) {
+            $queryBuilder = $queryBuilder->whereDate('decide_date', '<', Carbon::createFromTimestamp($request['decide_date_end']));
+        }
+
+        if (!empty($request['reserve_end_date_start'])) {
+            $queryBuilder = $queryBuilder->whereDate('reserve_end_date', '>=', Carbon::createFromTimestamp($request['reserve_end_date_start']));
+        }
+
+        if (!empty($request['reserve_end_date_end'])) {
+            $queryBuilder = $queryBuilder->whereDate('reserve_end_date', '<', Carbon::createFromTimestamp($request['reserve_end_date_end']));
         }
 
         $courseList = $queryBuilder->with(['childCourse', 'lessonSchedules'])->withCount(['studentPointHistories'])->sortable(['course_name' => 'desc'])->paginate($pageLimit);

@@ -78,8 +78,8 @@ use App\Components\SearchQueryComponent;
 
                                                             <td class="text-left">
                                                                 <div class="btn-group" style="float:right;">
-                                                                    <button class="btn btn-primary" type="button"><i
-                                                                        class="fa fa-info mr-1"></i>詳細</button>
+                                                                    <a href="{{ route('groupLessonReserves.show', $course->course_id) }}" class="btn btn-primary text-white" type="button"><i
+                                                                        class="fa fa-info mr-1"></i>詳細</a>
                                                                 </div>
                                                             </td>
                                                         </tr>

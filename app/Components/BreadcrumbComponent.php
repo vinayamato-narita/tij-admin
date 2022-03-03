@@ -387,6 +387,10 @@ class BreadcrumbComponent
                 'text' => 'グループレッスン申込一覧',
                 'route_str' => 'groupLessonReserves.index'
             ],
+            'group_lesson_reserve_show' => [
+                'text' => 'グループコース申込情報表示',
+                'route_str' => 'groupLessonReserves.show'
+            ],
         ];
     }
 

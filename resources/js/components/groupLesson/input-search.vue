@@ -31,7 +31,7 @@
           <div class="form-group">
             <label for="course_name">開催決定日From</label>
             <div class="input text">
-              <div style="width: 150px" class="d-inline-block">
+              <div class="d-inline-block width-100">
                 <date-picker
                   v-model="decide_date_start"
                   :format="'YYYY/MM/DD HH:mm'"
@@ -53,7 +53,7 @@
           <div class="form-group">
             <label for="course_name">開催決定日To</label>
             <div class="input text">
-              <div style="width: 150px" class="d-inline-block">
+              <div class="d-inline-block width-100">
                 <date-picker
                   v-model="decide_date_end"
                   :format="'YYYY/MM/DD HH:mm'"
@@ -75,7 +75,7 @@
           <div class="form-group">
             <label for="course_name">申込期限From</label>
             <div class="input text">
-              <div style="width: 150px" class="d-inline-block">
+              <div class="d-inline-block width-100">
                 <date-picker
                   v-model="reserve_end_date_start"
                   :format="'YYYY/MM/DD HH:mm'"
@@ -97,7 +97,7 @@
           <div class="form-group">
             <label for="course_name">申込期限To</label>
             <div class="input text">
-              <div style="width: 150px" class="d-inline-block">
+              <div class="d-inline-block width-100">
                 <date-picker
                   v-model="reserve_end_date_end"
                   :format="'YYYY/MM/DD HH:mm'"
@@ -136,7 +136,13 @@
     </form>
   </div>
 </template>
-
+<style lang="css" scoped>
+.mx-datepicker {
+  width: 100% !important;
+}
+</style>>
+  
+</style>
 <script>
 export default {
   data() {
@@ -164,9 +170,7 @@ export default {
     };
   },
   props: ["url", "pageLimit", "dataQuery"],
-  mounted() {
-    console.log(this.dataQuery);
-  },
+  mounted() {},
   methods: {
     onchangeDP() {
       this.$refs["input-group"].classList.value =

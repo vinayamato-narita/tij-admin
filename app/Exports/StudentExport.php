@@ -71,16 +71,20 @@ class StudentExport implements FromCollection, WithHeadings
                     ->orWhere($this->escapeLikeSentence('student.student_email', $request['search_input']));
             });
         }
-        if (isset($request['student_id'])) {
+        if (isset($request['search_detail'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
                     ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
                     ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
                     ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']))
-                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']))
-                    ->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
+                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
 
+                    if ($request['all_project_code'] != "") {
+                        $query->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
+                    }
+                    if ($request['all_project_company_name'] != "") {
+                        $query->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
+                    }
                     if(!isset($request['check_company_code'])) {
                         $query->where(function($query) use ($request) {
                             $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
@@ -89,17 +93,19 @@ class StudentExport implements FromCollection, WithHeadings
                     }
                     if(isset($request['check_company_code'])) {
                         $query->where(function($query) {
-                            $query->orWhere('lms_company.legal_code', '=', '')
-                                ->orWhereNull('lms_company.legal_code')
-                                ->orWhere('point_subscription_history.corporation_code', '=', '')
+                            $query->orWhere('point_subscription_history.corporation_code', '=', '')
                                 ->orWhereNull('point_subscription_history.corporation_code');
+                        });
+                        $query->where(function($query) {
+                            $query->orWhere('lms_company.legal_code', '=', '')
+                                ->orWhereNull('lms_company.legal_code');
                         });
                     }
                     if ($request['student_id'] != "") {
                         $query->where('student.student_id', '=', $request['student_id']);
                     }
-                    if ($request['first_lesson_date'] != "") {
-                        $query->where('student.create_date', '>=', $request['first_lesson_date']);
+                    if ($request['create_date'] != "") {
+                        $query->where('student.create_date', '>=', $request['create_date']);
                     }
             });
         }

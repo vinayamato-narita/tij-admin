@@ -386,7 +386,15 @@ class BreadcrumbComponent
             'group_lesson_history' => [
                 'text' => 'グループレッスン履歴一覧',
                 'route_str' => 'group_lesson_history.index'
-            ]
+            ],
+            'group_lesson_reserve' => [
+                'text' => 'グループレッスン申込一覧',
+                'route_str' => 'groupLessonReserves.index'
+            ],
+            'group_lesson_reserve_show' => [
+                'text' => 'グループコース申込情報表示',
+                'route_str' => 'groupLessonReserves.show'
+            ],
         ];
     }
 

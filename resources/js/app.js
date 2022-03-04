@@ -144,6 +144,8 @@ import ZoomAccountEdit from "./components/zoomAccount/edit.vue"
 import ZoomSettingEdit from "./components/zoomSetting/edit.vue"
 import GroupLessonHistoryInputSearchMulti from "./components/groupLessonHistory/input-search-multi.vue"
 
+import InputSearchGroupLesson from "./components/groupLesson/input-search.vue"
+import GroupLessonReserveShow from "./components/groupLessonReserve/detail.vue"
 
 new Vue({
     created() {
@@ -324,7 +326,9 @@ new Vue({
         ZoomAccountAdd,
         ZoomAccountEdit,
         ZoomSettingEdit,
-        GroupLessonHistoryInputSearchMulti
+        GroupLessonHistoryInputSearchMulti,
+        InputSearchGroupLesson,
+        GroupLessonReserveShow,
     },
     methods: {},
     mounted() {}

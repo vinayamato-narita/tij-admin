@@ -67,7 +67,7 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
         ->orderByDesc('point_subscription_history.update_date');
         	
         $request = $this->request;
-       
+
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
@@ -81,8 +81,8 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
                     ->orWhere($this->escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
-   
-        if(isset($request['payment_date_start'])) {
+
+        if(isset($request['search_detail'])) {
             if ($request['payment_date_start'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.payment_date', '>=', $request['payment_date_start']);
             }
@@ -125,10 +125,10 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
             if ($request['company_name'] != "") {
                 $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('lms_company.company_name', $request['company_name']));
             }
-            if ($request['corporation_code'] != "" && !isset($request['check_corporation_code'])) {
+            if (isset($request['corporation_code']) && $request['corporation_code'] != "" && !isset($request['check_corporation_code'])) {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.corporation_code', $request['corporation_code']);
             }
-            if (isset($request['check_corporation_code'])) {
+            if (isset($request['check_corporation_code']) && $request['check_corporation_code'] == 1) {
                 $queryBuilder = $queryBuilder->where(function ($query) {
                     $query->where('point_subscription_history.corporation_code', "")
                         ->orWhereNull('point_subscription_history.corporation_code');
@@ -137,7 +137,7 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
             if ($request['campaign_code'] != "") {
                 $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
             }
-            if ($request['j_paid_status'] != "") {
+            if (isset($request['j_paid_status']) && $request['j_paid_status'] != "") {
                 $queryBuilder = $queryBuilder->whereRaw('IF(point_subscription_history.payment_way = 2, point_subscription_history.payment_way + point_subscription_history.paid_status, point_subscription_history.payment_way) = '. $request['j_paid_status']);
             }
         }

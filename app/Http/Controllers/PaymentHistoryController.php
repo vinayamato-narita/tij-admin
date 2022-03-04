@@ -46,7 +46,7 @@ class PaymentHistoryController extends BaseController
         	'student.student_name as j_student_name',
         	'student.is_lms_user as j_is_lms_user',
         	'point_subscription_history.course_code as course_code',
-        	DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS j_company_name"),
+        	DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
         	'lms_company.company_name as company_name',
         	'lms_project.project_code as j_project_code',
         	'point_subscription_history.corporation_code as corporation_code',
@@ -94,7 +94,6 @@ class PaymentHistoryController extends BaseController
                     ->orWhere($this->escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
-   
         if(isset($request['payment_date_start'])) {
             if ($request['payment_date_start'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.payment_date', '>=', $request['payment_date_start']);
@@ -103,7 +102,7 @@ class PaymentHistoryController extends BaseController
                 $queryBuilder = $queryBuilder->where('point_subscription_history.payment_date', '<=', date('Y/m/d 23:59:59', strtotime($request['payment_date_end'])));
             }
             if ($request['start_date_start'] != "") {
-                $queryBuilder = $queryBuilder->where('student_point_history.point_subscription_id.start_date', '>=', $request['start_date_start']);
+                $queryBuilder = $queryBuilder->where('student_point_history.start_date', '>=', $request['start_date_start']);
             }
             if ($request['start_date_end'] != "") {
                 $queryBuilder = $queryBuilder->where('student_point_history.start_date', '<=', date('Y/m/d 23:59:59', strtotime($request['start_date_end'])));
@@ -150,7 +149,7 @@ class PaymentHistoryController extends BaseController
             if ($request['campaign_code'] != "") {
                 $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
             }
-            if ($request['j_paid_status'] != "") {
+            if (isset($request['j_paid_status']) && $request['j_paid_status'] != "") {
                 $queryBuilder = $queryBuilder->whereRaw('IF(point_subscription_history.payment_way = 2, point_subscription_history.payment_way + point_subscription_history.paid_status, point_subscription_history.payment_way) = '. $request['j_paid_status']);
             }
         }
@@ -207,7 +206,7 @@ class PaymentHistoryController extends BaseController
 
     public function export()
     {
-        $request = Session::get('sessionStudent');
+        $request = Session::get('sessionPaymentHistory');
         $fileName = "payment_".date("Y-m-d").".csv";
         return Excel::download(new PaymentHistoryExport($request), $fileName);
     }

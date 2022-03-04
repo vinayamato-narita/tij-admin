@@ -21,6 +21,7 @@
                     <div class="dropdown-menu dropdown-menu-right search-popup"  style="width: 400px;padding: 10px 10px" role="menu">
                         <form method="GET" :action="url">
                             <input type="hidden" name="limit" :value="pageLimit" />
+                            <input type="hidden" name="search_detail" value="1" />
                             <div class="form-group">
                                 <label>生徒番号</label>
                                 <div class="input text">
@@ -54,7 +55,7 @@
                             <div class="form-group">
                                 <label>法人名</label>
                                 <div class="input text">
-                                    <input type="text" name="company_name" class="form-control input-sm" placeholder="法人名を入力してください" :value="dataQuery.company_name">
+                                    <input type="text" name="custom_company_name" class="form-control input-sm" placeholder="法人名を入力してください" :value="dataQuery.custom_company_name">
                                 </div>
                             </div> 
                             <div class="form-group">
@@ -66,22 +67,22 @@
                             <div class="form-group">
                                 <label>企業ID</label>
                                 <div class="input text">
-                                    <input type="text" name="project_code" class="form-control input-sm" placeholder="企業IDを入力してください" :value="dataQuery.project_code">
+                                    <input type="text" name="all_project_code" class="form-control input-sm" placeholder="企業IDを入力してください" :value="dataQuery.all_project_code">
                                 </div>
                             </div> 
                             <div class="form-group">
                                 <label style="margin-right: 20px">法人コード</label> <input type="checkbox" name="check_company_code" v-model="dataQuery.check_company_code" @change="dataQueryEx.check_company_code = !dataQueryEx.check_company_code" value=1> 法人コード空白のみ
                                 <div class="input text" v-if="!dataQueryEx.check_company_code">
-                                    <input type="text" name="company_code" class="form-control input-sm" placeholder="企業IDを入力してください" :value="dataQuery.company_code">
+                                    <input type="text" name="company_code" class="form-control input-sm" placeholder="法人コードを入力してください" :value="dataQuery.company_code">
                                 </div>
                             </div> 
                             <div class="form-group">
                                 <label>初回登録日</label>
                                 <div class="input text">
                                     <date-picker
-                                        :input-attr="{ name: 'first_lesson_date'}"
+                                        :input-attr="{ name: 'create_date'}"
                                         :format="'YYYY/MM/DD'"
-                                        v-model="dataQueryEx.first_lesson_date"
+                                        v-model="dataQueryEx.create_date"
                                         type="date"
                                     ></date-picker>
                                 </div>

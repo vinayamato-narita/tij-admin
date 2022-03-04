@@ -235,4 +235,5 @@ Route::group([
 
     //group lesson
     Route::resource('groupLessonReserves', GroupLessonReserveController::class);
+    Route::get('groupLessonStudentList/{id}', 'GroupLessonReserveController@getStudent')->name('groupLesson.getStudent');
 });

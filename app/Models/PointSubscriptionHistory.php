@@ -11,14 +11,14 @@ use Log;
 class PointSubscriptionHistory extends Authenticatable
 {
     use HasFactory, Sortable;
-    
+
     protected $table = 'point_subscription_history';
 
     public $timestamps = false;
 
     protected $primaryKey = 'point_subscription_history_id';
-    
-    public function studentPointHistory() 
+
+    public function studentPointHistory()
     {
         return $this->hasMany(StudentPointHistory::class);
     }
@@ -66,5 +66,10 @@ class PointSubscriptionHistory extends Authenticatable
             ->where('point_subscription_history.del_flag', 0)
             ->groupBy('point_subscription_history.point_subscription_history_id')
             ->first();
+    }
+
+    public function course()
+    {
+        return $this->belongsTo('App\Models\Course', 'course_id', 'course_id');
     }
 }

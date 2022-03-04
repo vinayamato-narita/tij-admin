@@ -382,6 +382,10 @@ class BreadcrumbComponent
             'zoom_setting' => [
                 'text' => 'ZOOM連携設定',
                 'route_str' => 'zoomSetting.edit'
+            ],
+            'group_lesson_history' => [
+                'text' => 'グループレッスン履歴一覧',
+                'route_str' => 'group_lesson_history.index'
             ]
         ];
     }

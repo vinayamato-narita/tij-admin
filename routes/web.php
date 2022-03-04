@@ -218,6 +218,8 @@ Route::group([
     Route::post('/abilityTestResult/update-test-comment/{testCommentId}', 'AbilityTestResultController@updateTestComment')->name('abilityTestResult.updateTestComment');
     Route::get('/abilityTestResult/{id}/edit/answerDetail', 'AbilityTestResultController@answerDetail')->name('abilityTestResult.answerDetail');
 
+    // group lesson history
+    Route::resource('/group_lesson_history', GroupLessonHistoryController::class);
 
 
 

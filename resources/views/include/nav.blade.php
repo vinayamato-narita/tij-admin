@@ -244,6 +244,14 @@
                 受験済実力テスト一覧
             </a>
         </li>
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GROUP_LESSON_HISTORY], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GROUP_LESSON_HISTORY) }}" href="{{route('group_lesson_history.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                グループレッスン履歴一覧
+            </a>
+        </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

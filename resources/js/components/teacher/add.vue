@@ -258,6 +258,39 @@
 
                                             </div>
                                         </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> 個人ミーティングID:
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                                </label>
+
+                                            <div class="col-md-6">
+
+                                                <input class="form-control" id="zoomPersonalMeetingId" type="text" name="zoomPersonalMeetingId" @input="changeInput()"  v-model="zoomPersonalMeetingId"  v-validate="'required|max:15'"  />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("zoomPersonalMeetingId") }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> パスワード: </label>
+
+                                            <div class="col-md-6">
+
+                                                <input class="form-control" id="zoomPassword" type="text" name="zoomPassword" @input="changeInput()"  v-model="zoomPassword"  v-validate="'max:50'"  />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("zoomPassword") }}
+                                                </div>
+
+
+                                            </div>
+                                        </div>
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -321,7 +354,14 @@
                     },
                     photoSavepath : {
                         url: "イメージ画像をURL形で入力してください。"
-                    }
+                    },
+                    zoomPersonalMeetingId: {
+                        required: "個人ミーティングIDを入力してください",
+                        max: "個人ミーティングIDは15文字以内で入力してください。",
+                    },
+                    zoomPassword: {
+                        max: "パスワードは50文字以内で入力してください。",
+                    },
                 },
             };
             this.$validator.localize("en", messError);
@@ -349,7 +389,9 @@
                 teacherIntroduction : '',
                 introduceFromAdmin : '',
                 teacherNote : '',
-                photoSavepath : ''
+                photoSavepath : '',
+                zoomPersonalMeetingId: '',
+                zoomPassword: ''
 
             };
         },
@@ -374,6 +416,8 @@
                 formData.append("introduceFromAdmin", this.introduceFromAdmin);
                 formData.append("teacherNote", this.teacherNote);
                 formData.append("photoSavepath", this.photoSavepath);
+                formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
+                formData.append("zoomPassword", this.zoomPassword);
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Session;
 use App\Exports\TeacherExport;
 use App\Services\CommonService;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Log;
 
@@ -81,7 +83,7 @@ class TeacherController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateTeacherRequest $request, CommonService $commonService)
+    public function store(CreateTeacherRequest $request)
     {
         if($request->isMethod('POST')){
             DB::beginTransaction();
@@ -101,7 +103,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->password = $commonService->rand_string(8);
+                $teacher->password = Hash::make(Str::random(8));
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";

@@ -62,7 +62,7 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="#"><i class="fa fa-info mr-2"></i>出欠管理</a>
+                                                                        <a class="dropdown-item" href="{{ route('groupLessonHistory.studentAttendance', $history->lesson_schedule_id) }}"><i class="fa fa-info mr-2"></i>出欠管理</a>
                                                                     </li>
 
                                                                 </ul>

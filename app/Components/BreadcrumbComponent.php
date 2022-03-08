@@ -395,6 +395,10 @@ class BreadcrumbComponent
                 'text' => 'グループコース申込情報表示',
                 'route_str' => 'groupLessonReserves.show'
             ],
+            'student_attendance' => [
+                'text' => '欠席一覧',
+                'route_str' => 'groupLessonHistory.studentAttendance'
+            ],
         ];
     }
 

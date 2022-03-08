@@ -1029,3 +1029,26 @@ div > .draggable-test-sub-question:first-child {
 .width-100 {
     width: 100% !important;
 }
+.div-primary {
+    width: 55px; 
+    border: 1px solid #321fdb; 
+    border-radius: 5px;
+    height: 30px;
+}
+.btn-primary-attendance {
+    border-radius: 4px 0 0 4px;
+    border:none;
+    width: 45px;
+}
+.div-danger {
+    width: 55px; 
+    border: 1px solid #e55353; 
+    border-radius: 5px;
+    height: 30px;
+}
+.btn-danger-attendance {
+    border-radius: 0 4px 4px 0;
+    border:none;
+    float: right;
+    width: 45px;
+}

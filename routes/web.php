@@ -235,4 +235,6 @@ Route::group([
 
     //group lesson
     Route::resource('groupLessonReserves', GroupLessonReserveController::class);
+    Route::get('/group_lesson_history/student_attendance/{id}', 'GroupLessonHistoryController@studentAttendance')->name('groupLessonHistory.studentAttendance');
+    Route::post('/group_lesson_history/update-student-attendace/{id}', 'GroupLessonHistoryController@updateStudentAttendance')->name('groupLessonHistory.updateStudentAttendance');
 });

@@ -18,7 +18,7 @@ class CreateSpLessonReview extends Migration
         CREATE PROCEDURE `sp_get_student_lesson_history_by_schedule_id`(IN _student_id INT,
         IN _lesson_schedule_id BIGINT,
         IN _lang_type varchar(10))
-BEGIN
+            BEGIN
 
             SET @time_diff_from = COALESCE((SELECT diff_time * 60 FROM  timezone tz WHERE tz.timezone_id = 1 LIMIT 1),9 * 60);
             SELECT
@@ -91,7 +91,7 @@ BEGIN
 
         $procedure = "
         DROP PROCEDURE IF EXISTS `sp_update_lesson_teacher_rating`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_lesson_teacher_rating`(
+        CREATE PROCEDURE `sp_update_lesson_teacher_rating`(
             IN _lesson_history_id INT(10),
             IN _teacher_rating INT(11),
             IN _teacher_attitude INT(11),

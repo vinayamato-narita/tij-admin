@@ -12,10 +12,12 @@
                     <div class="pull-left">
                         <h5>
                             グループレッスン履歴一覧
-
                         </h5>
                     </div>
                     <div class="pull-right mrb-5">
+                        <a href="{{ route('exportGroupLesson') }}" class="btn btn-primary pull-right"
+                        ><i class="las la-plus"></i> CSV出力
+                        </a>
                     </div>
                 </div>
                 <div class="clear"></div>

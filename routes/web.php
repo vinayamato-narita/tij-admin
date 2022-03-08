@@ -235,4 +235,6 @@ Route::group([
 
     //group lesson
     Route::resource('groupLessonReserves', GroupLessonReserveController::class);
+
+    Route::get('export-group-lesson', 'GroupLessonHistoryController@exportGroupLesson')->name('exportGroupLesson');
 });

@@ -9,6 +9,9 @@ use App\Enums\CourseTypeEnum;
 use App\Models\LessonSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GroupLessonExport;
+use Session;
 
 class GroupLessonHistoryController extends BaseController
 {
@@ -22,13 +25,13 @@ class GroupLessonHistoryController extends BaseController
         $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->withCount('studentPointHistory', 'lessonHistories');
 
         if (!empty($request['search_input'])) {
-            $queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
+            /*$queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
             })->orWhereHas('teacher', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('teacher_name', $request['search_input']));
             })->orWhereHas('lesson', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('lesson_name', $request['search_input']));
-            });
+            });*/
         }
 
         if (!empty($request['time_from']) || !empty($request['time_to'])) {
@@ -45,7 +48,7 @@ class GroupLessonHistoryController extends BaseController
             }
         }
 
-
+        Session::put('exportGroupLesson', collect($request));
 
         $groupLessonHistoryList = $queryBuilder->whereHas('course', function ($q) {
             return $q->where('course_type', CourseTypeEnum::GROUP_COURSE);
@@ -60,4 +63,11 @@ class GroupLessonHistoryController extends BaseController
 
     }
 
+    public function exportGroupLesson()
+    {
+        $request = Session::get('exportGroupLesson');
+        $fileName = "groupLesson".date("Y-m-d").".csv";
+
+        return Excel::download(new GroupLessonExport($request), $fileName);
+    }
 }

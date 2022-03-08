@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
 use App\Exports\TeacherExport;
+use App\Services\CommonService;
 use Maatwebsite\Excel\Facades\Excel;
 use Log;
 
@@ -80,7 +81,7 @@ class TeacherController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateTeacherRequest $request)
+    public function store(CreateTeacherRequest $request, CommonService $commonService)
     {
         if($request->isMethod('POST')){
             DB::beginTransaction();
@@ -100,7 +101,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->password = '';
+                $teacher->password = $commonService->rand_string(8);
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
@@ -268,7 +269,6 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";

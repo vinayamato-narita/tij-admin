@@ -93,7 +93,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder"  onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -138,7 +138,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("pointCount") }}
@@ -155,7 +155,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" onKeyDown="return false" v-validate="'decimal|min_value:0|max_value:1000000000'" />
+                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" v-validate="'decimal|min_value:0|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("amount") }}
@@ -564,7 +564,7 @@
                 courseStartDateDate : null,
                 maxReserveCount : 1,
                 minReserveCount : 1,
-                expireDay : 1,
+                expireDay : 90,
                 displayOrder: 1,
                 courseDescription : '',
                 courseName : '',

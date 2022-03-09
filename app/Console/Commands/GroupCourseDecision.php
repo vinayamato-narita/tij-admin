@@ -4,14 +4,11 @@ namespace App\Console\Commands;
 
 use App\Enums\CourseTypeEnum;
 use App\Enums\MailType;
-use App\Enums\StatusCode;
-use App\Mail\CancelCourse;
 use App\Models\Course;
 use App\Models\LessonHistory;
 use App\Models\LessonSchedule;
 use App\Models\PointSubscriptionHistory;
 use App\Models\SendRemindMailPattern;
-use App\Models\Student;
 use App\Models\StudentPointHistory;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

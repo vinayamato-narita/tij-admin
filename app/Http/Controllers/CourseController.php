@@ -119,8 +119,8 @@ class CourseController extends BaseController
             DB::beginTransaction();
             try {
                 $course = new Course();
-                $course->publish_date_from = Carbon::createFromFormat('H:i:s, d/m/Y', $request->fromDate);
-                $course->publish_date_to = Carbon::createFromFormat('H:i:s, d/m/Y', $request->toDate);
+                $course->publish_date_from = Carbon::parse($request->fromDate);
+                $course->publish_date_to = Carbon::parse($request->toDate);
                 $course->display_order = $request->displayOrder;
                 $course->course_name_short = $request->courseNameShort ?? ' ';
                 $course->course_name = $request->courseName;

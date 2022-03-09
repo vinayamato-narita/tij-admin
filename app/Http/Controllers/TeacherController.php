@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
 use App\Exports\TeacherExport;
+use App\Services\CommonService;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Log;
 
@@ -100,7 +103,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin;
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->password = '';
+                $teacher->password = Hash::make(Str::random(8));
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
@@ -268,7 +271,6 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->password = '';
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";

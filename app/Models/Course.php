@@ -116,4 +116,9 @@ class Course extends Model
 
     protected $sortableAs = ['student_point_histories_count'];
 
+    public function pointSubscriptionHistories()
+    {
+        return $this->hasMany('App\Models\PointSubscriptionHistory', 'course_id', 'course_id')->where('del_flag', NULL)->orWhere('del_flag', 0);
+    }
+
 }

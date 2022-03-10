@@ -20,4 +20,9 @@ class Student extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function pointSubscriptionHistories()
+    {
+        return $this->hasMany('App\Models\PointSubscriptionHistory', 'student_id', 'student_id');
+    }
 }

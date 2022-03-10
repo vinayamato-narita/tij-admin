@@ -13,4 +13,6 @@ final class MailType extends Enum
 {
     const FORGOTPASSWORD = 9;
     const CHANGEPASSSTUDENT = 6;
+    const STUDENT_CANCEL_LESSON = 100;
+    const TEACHER_CANCEL_LESSON = 101;
 }

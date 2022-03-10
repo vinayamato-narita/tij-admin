@@ -67,4 +67,14 @@ class PointSubscriptionHistory extends Authenticatable
             ->groupBy('point_subscription_history.point_subscription_history_id')
             ->first();
     }
+
+    public function course()
+    {
+        return $this->belongsTo('App\Models\Course', 'course_id', 'course_id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
+    }
 }

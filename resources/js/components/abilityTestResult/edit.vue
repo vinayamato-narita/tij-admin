@@ -50,7 +50,7 @@
                                                     <td  class="text-left" > {{ analyticItem.num_sub_question }}</td>
                                                     <td  class="text-left"> {{ analyticItem.exam_score }}</td>
                                                     <td  class="text-left"> {{ analyticItem.score }}</td>
-                                                    <td  class="text-left"></td>
+                                                    <td  class="text-left">{{ analyticItem.top_score_avg }}</td>
                                                 </tr>
                                             </template>
 

@@ -418,6 +418,7 @@ export default {
             this.linkZoomScheduleFlag = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : true
             this.zoomAccountId = this.selectedEvent != null ? this.selectedEvent.zoom_account_id : ''
             this.zoomUrl = this.selectedEvent != null ? this.selectedEvent.zoom_url : ''
+            this.showZoomSetting = false
 
             var dateTime = new Date(new Date().setHours(new Date().getHours() + 1))
 

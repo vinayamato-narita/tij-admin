@@ -32,7 +32,7 @@ class ZoomClientService
     public function createZoomMeeting($token, $zoom_user_id, $object)
     {
         $response = Http::withToken($token)
-        ->post('https://api.zoom.us/v2/users/me/meetings', $object);
+        ->post('https://api.zoom.us/v2/users/' . $zoom_user_id . '/meetings', $object);
         return $response;
     }
 }

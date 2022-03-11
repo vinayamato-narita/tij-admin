@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Enums\LessonTiming;
 use App\Enums\CourseTypeEnum;
+use App\Models\Course;
 use App\Models\ZoomAccount;
 use App\Models\ZoomSchedule;
 use App\Models\ZoomSetting;
@@ -308,9 +309,11 @@ class GroupScheduleController extends BaseController
             }
 
             $diff = abs(strtotime($endDateTime) - strtotime($startDateTime));
+            $course = Course::find($request['selectedCourse']);
+            $lesson = Lesson::find($request['selectedLesson']);
 
             $object = [
-                'topic' => $request['selectedEvent']['title'] . $request['selectedEvent']['lesson_name'],
+                'topic' => $course->course_name . $lesson->lesson_name,
                 'type => 2',
                 'start_time' => $startDateTime,
                 'duration' => $diff / 60,

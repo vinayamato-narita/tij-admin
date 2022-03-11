@@ -118,6 +118,156 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="text-input"
+                                >Zoom連携：
+                            </label>
+                            <div class="col-md-6 d-flex justify-content-between align-items-center flex-wrap">
+                                <label class="switch mb-0">
+                                    <input type="checkbox" v-model="linkZoomScheduleFlag">
+                                    <span class="slider round"></span>
+                                </label>
+                                <a v-if="linkZoomScheduleFlag" @click="showZoomSetting = !showZoomSetting" href="javascript:;" class="btn-link-zoom">Zoom設定詳細表示</a>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="!linkZoomScheduleFlag">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="text-input"
+                                >スケジューラリンク：
+                            </label>
+                            <div class="col-md-6">
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    name="zoomUrl"
+                                    v-model="zoomUrl"
+                                    v-validate="{ required: !linkZoomScheduleFlag }"
+                                >
+                                <div v-if="initFlag" class="input-group is-danger error" role="alert">
+                                    {{ errors.first("zoomUrl") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="text-input"
+                                >Zoomアカウント：
+                            </label>
+                            <div class="col-md-6">
+                                <select
+                                    class="form-control"
+                                    name="selectedZoomAccount"
+                                    v-model="zoomAccountId"
+                                >
+                                    <option value=""></option>
+                                    <option v-for="item in zoomAccounts" :key="item.zoom_account_id" :value="item.zoom_account_id">{{item.zoom_account_name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="text-input"
+                                >会議開始前参加：
+                            </label>
+                            <div class="col-md-6 col-form-label">
+                                <div class="form-check form-check-inline mr-1">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="0"
+                                    name="join_before_host"
+                                    id="inline-radio1"
+                                    v-validate="'required'"
+                                    v-model="join_before_host"
+                                />
+                                <label class="form-check-label" for="inline-radio1"
+                                    >無効</label
+                                >
+                                </div>
+                                <div class="form-check form-check-inline mr-1">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="1"
+                                    name="join_before_host"
+                                    id="inline-radio2"
+                                    v-validate="'required'"
+                                    v-model="join_before_host"
+                                />
+                                <label class="form-check-label" for="inline-radio2"
+                                    >有効</label
+                                >
+                                </div>
+                                <div class="input-group is-danger" role="alert">
+                                {{ errors.first("join_before_host") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="text-input"
+                                >待機室：
+                            </label>
+                            <div class="col-md-6 col-form-label">
+                                <div class="form-check form-check-inline mr-1">
+                                <input
+                                    class="form-check-input"
+                                    id="inline-radio3"
+                                    type="radio"
+                                    value="0"
+                                    name="waiting_room"
+                                    v-validate="'required'"
+                                    v-model="waiting_room"
+                                />
+                                <label class="form-check-label" for="inline-radio3"
+                                    >無効</label
+                                >
+                                </div>
+                                <div class="form-check form-check-inline mr-1">
+                                <input
+                                    class="form-check-input"
+                                    id="inline-radio4"
+                                    type="radio"
+                                    value="1"
+                                    name="waiting_room"
+                                    v-validate="'required'"
+                                    v-model="waiting_room"
+                                />
+                                <label class="form-check-label" for="inline-radio4"
+                                    >有効</label
+                                >
+                                </div>
+                                <div class="input-group is-danger" role="alert">
+                                {{ errors.first("waiting_room") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                            <label
+                                class="col-md-3 col-form-label text-md-right"
+                                for="auto_recording"
+                                >録画方法: <span class="glyphicon glyphicon-star"></span
+                            ></label>
+                            <div class="col-md-6 col-form-label">
+                                <select
+                                class="form-control"
+                                id="auto_recording"
+                                name="auto_recording"
+                                v-validate="'required'"
+                                v-model="auto_recording"
+                                >
+                                <option value="0">ローカル</option>
+                                <option value="1">ウラウド</option>
+                                <option value="2">無効</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions text-center">
@@ -161,6 +311,15 @@ export default {
             courseData: [],
             lessonData: [],
             teacherData: [],
+            linkZoomScheduleFlag: true,
+            zoomUrl: "",
+            join_before_host: 1,
+            waiting_room: 0,
+            auto_recording: 1,
+            showZoomSetting: false,
+            zoomAccounts: [],
+            zoomAccountId: '',
+            zoomSetting: {}
         };
     },
     props: [ 'event', 'selectedTime', 'selectedEvent' ],
@@ -179,9 +338,13 @@ export default {
                 selectedTeacher: {
                     is_not : "講師名を選択してください。"
                 },
+                zoomUrl: {
+                    required : "スケジューラリンクを入力してください"
+                },
             }
         };
         this.$validator.localize('ja', messError);
+        this.getDataZoom();
     },
     methods: {
         hide () {
@@ -202,6 +365,12 @@ export default {
                         selectedLesson : that.selectedLesson,
                         selectedTeacher : that.selectedTeacher,
                         selectedEvent : that.selectedEvent,
+                        zoomAccountId: that.zoomAccountId,
+                        linkZoomScheduleFlag: that.linkZoomScheduleFlag,
+                        join_before_host: that.join_before_host,
+                        waiting_room: that.waiting_room,
+                        auto_recording: that.auto_recording,
+                        zoomUrl: that.zoomUrl
                     })
                     .then(function (response) {
                         console.log(response)
@@ -243,6 +412,12 @@ export default {
             this.selectedCourse = this.selectedEvent != null ? this.selectedEvent.course_id : 0
             this.selectedLesson = this.selectedEvent != null ? this.selectedEvent.lesson_id : 0
             this.selectedTeacher = this.selectedEvent != null ? this.selectedEvent.teacher_id : 0
+            this.join_before_host = this.selectedEvent != null ? this.selectedEvent.join_before_host : (this.zoomSetting != null ? this.zoomSetting.join_before_host : 1)
+            this.waiting_room = this.selectedEvent != null ? this.selectedEvent.waiting_room : (this.zoomSetting != null ? this.zoomSetting.waiting_room : 0)
+            this.auto_recording = this.selectedEvent != null ? this.selectedEvent.auto_recording : (this.zoomSetting != null ? this.zoomSetting.auto_recording : 1)
+            this.linkZoomScheduleFlag = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : true
+            this.zoomAccountId = this.selectedEvent != null ? this.selectedEvent.zoom_account_id : ''
+            this.zoomUrl = this.selectedEvent != null ? this.selectedEvent.zoom_url : ''
 
             var dateTime = new Date(new Date().setHours(new Date().getHours() + 1))
 
@@ -303,12 +478,22 @@ export default {
                 if (that.lessonData.length != 0 && that.lessonData[that.selectedLesson] != undefined) {
                     that.teacherData = that.lessonData[that.selectedLesson]['teacher']
                 }
+
                 that.errors.clear()
                 that.initFlag = true
             })
             .catch(function (error) {
             });
-        }
+        },
+        getDataZoom () {
+             let that = this;
+            axios.get(that.baseUrl + '/groupSchedule/getZoom')
+            .then(function (response) {
+                console.log(response.data);
+                that.zoomAccounts = response.data.zoomAccountList;
+                that.zoomSetting = response.data.zoomSetting;
+            })
+        },
     },
     watch: {
         startDate (value) {

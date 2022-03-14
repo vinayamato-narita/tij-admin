@@ -126,7 +126,7 @@
                                         >レッスン概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            <nl2br tag="p" :text="lessonENDes"></nl2br>
+                                            {{ lessonENDes }}
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                                         >レッスン概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            <nl2br tag="p" :text="lessonZHDes"></nl2br>
+                                            {{ lessonZHDes }}
                                         </div>
                                     </div>
                                 </div>

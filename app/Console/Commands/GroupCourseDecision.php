@@ -61,19 +61,13 @@ class GroupCourseDecision extends Command
                 //send mail student
                 foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
 
-                    $langType = 'jp';
-
-                    if ($pointSubscriptionHistory->student->lang_type == 2) {
-                        $langType = 'en';
-                    } else if ($pointSubscriptionHistory->student->lang_type == 3) {
-                        $langType = 'vn';
-                    }
+                    $langType = $pointSubscriptionHistory->student->lang_type;
 
                     $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::STUDENT_CANCEL_LESSON, $langType);
 
                     if ($mailPattern) {
-                        $mailSubject = $mailPattern->mail_subject;
-                        $mailBody = $mailPattern->mail_body;
+                        $mailSubject = $mailPattern[0]->mail_subject;
+                        $mailBody = $mailPattern[0]->mail_body;
                         $mailBody = str_replace("#STUDENT_NAME#", $pointSubscriptionHistory->student->student_name, $mailBody);
 
                         Mail::raw($mailBody, function ($message) use ($pointSubscriptionHistory, $mailSubject) {
@@ -87,8 +81,8 @@ class GroupCourseDecision extends Command
                     $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langType);
 
                     if ($mailPattern) {
-                        $mailSubject = $mailPattern->mail_subject;
-                        $mailBody = $mailPattern->mail_body;
+                        $mailSubject = $mailPattern[0]->mail_subject;
+                        $mailBody = $mailPattern[0]->mail_body;
                         $mailBody = str_replace("#TEACHER_NAME#", $lessonSchedule->teacher->teacher_name, $mailBody);
 
                         Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {

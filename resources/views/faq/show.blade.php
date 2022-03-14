@@ -108,7 +108,7 @@ use App\Enums\LangType;
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="title-page">ベトナム語版</h5>
-                                    <a href="{{ route('editLangFaq', [$faqInfo->faq_id, LangType::VN]) }}" class="btn btn-primary">編集</a>     
+                                    <a href="{{ route('editLangFaq', [$faqInfo->faq_id, LangType::ZH]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 
                                 <div class="card-body">
@@ -119,7 +119,7 @@ use App\Enums\LangType;
                                             >質問・Q:</label
                                         >
                                         <div class="col-md-3 pd-7">
-                                            {{ $faqVnInfo->question ?? "" }}
+                                            {{ $faqZhInfo->question ?? "" }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -129,7 +129,7 @@ use App\Enums\LangType;
                                             >答え・A:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $faqVnInfo->answer ?? "" }}
+                                            {{ $faqZhInfo->answer ?? "" }}
                                         </div>
                                     </div>
                                 </div>

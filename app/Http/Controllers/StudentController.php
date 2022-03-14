@@ -36,6 +36,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail; 
 use App\Models\SendRemindMailPattern;
 use App\Models\StudentEntryType;
+use App\Enums\LangType;
 use Hash;
 use Log; 
 
@@ -1127,8 +1128,8 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);          
         }
         
-        $studentInfo = Student::where('id', $request->id)->first();
-        
+        $studentInfo = Student::where('student_id', $request->id)->first();
+       
         if ($studentInfo == null) {
             return response()->json([
                 'status' => 'NG',
@@ -1136,16 +1137,12 @@ class StudentController extends BaseController
         }
         $studentInfo->password = Hash::make($request->password);
         $studentInfo->save();  
-        $langType = 'jp';
-        if ($studentInfo->lang_type == 2) {
-            $langType = 'en';
-        } else if ($studentInfo->lang_type == 3) {
-            $langType = 'vn';
-        }
-        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::CHANGEPASSSTUDENT, $langType);
+        
+        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::CHANGEPASSSTUDENT, $studentInfo->lang_type);
+
         if ($mailPattern) {
-            $mailSubject = $mailPattern->mail_subject;
-            $mailBody = $mailPattern->mail_body;
+            $mailSubject = $mailPattern[0]->mail_subject;
+            $mailBody = $mailPattern[0]->mail_body;
             $mailBody = str_replace("#STUDENT_NAME#", $studentInfo->student_name, $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($studentInfo, $mailSubject) {

@@ -124,14 +124,14 @@ class NewsController extends BaseController
         ]);
         $newsInfo = AdminNews::where('news_id', $id)->with('newsSubject')->firstOrFail();
         
-        $newsVnInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::VN])->first();
         $newsEnInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::EN])->first();
+        $newsZhInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::ZH])->first();
 
         return view('news.show', [
             'breadcrumbs' => $breadcrumbs,
             'newsInfo' => $newsInfo,
-            'newsVnInfo' => $newsVnInfo,
             'newsEnInfo' => $newsEnInfo,
+            'newsZhInfo' => $newsZhInfo,
         ]);
     }
 

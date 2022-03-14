@@ -13,4 +13,9 @@ class ZoomAccount extends Model
     protected $primaryKey = 'zoom_account_id';
 
     protected $table = 'zoom_account';
+
+    public function zoomSchedules()
+    {
+        return $this->hasMany('App\Models\ZoomSchedule', 'zoom_account_id', 'zoom_account_id');
+    }
 }

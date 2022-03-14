@@ -465,7 +465,7 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: bold;
 }
 input:disabled {
-   background-color: #eee !important; 
+   background-color: #eee !important;
 }
 .changePassStudentModal {
     max-width: 600px;
@@ -526,7 +526,7 @@ input:disabled {
 .teacher-menu-r {
     padding-right: 0px;
     padding-left: 0px;
-    border-top: 4px solid #eaeaea; 
+    border-top: 4px solid #eaeaea;
     cursor: pointer;
 }
 
@@ -1030,8 +1030,8 @@ div > .draggable-test-sub-question:first-child {
     width: 100% !important;
 }
 .div-primary {
-    width: 55px; 
-    border: 1px solid #321fdb; 
+    width: 55px;
+    border: 1px solid #321fdb;
     border-radius: 5px;
     height: 30px;
 }
@@ -1041,8 +1041,8 @@ div > .draggable-test-sub-question:first-child {
     width: 45px;
 }
 .div-danger {
-    width: 55px; 
-    border: 1px solid #e55353; 
+    width: 55px;
+    border: 1px solid #e55353;
     border-radius: 5px;
     height: 30px;
 }
@@ -1051,4 +1051,67 @@ div > .draggable-test-sub-question:first-child {
     border:none;
     float: right;
     width: 45px;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 22px;
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transform: translateX(18px);
+        -ms-transform: translateX(18px);
+        transform: translateX(18px);
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    input:checked + .slider {
+        background-color: #06af60;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #06af60;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(2px);
+      -ms-transform: translateX(2px);
+      transform: translateX(2px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+}
+
+.btn-link-zoom {
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 18px;
 }

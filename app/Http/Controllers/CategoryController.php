@@ -274,9 +274,7 @@ class CategoryController extends BaseController
             DB::beginTransaction();
             try {
                 $category->order_num = $request->orderNum;
-                $category->category_icon = $request->categoryIcon;
                 $category->category_name = $request->categoryName;
-
 
                 $category->save();
                 DB::commit();

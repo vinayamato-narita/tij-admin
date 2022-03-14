@@ -275,83 +275,6 @@ class GroupScheduleController extends BaseController
             ZoomSchedule::where('zoom_schedule_id', $request['selectedEvent']['zoom_schedule_id'])->delete();
         }
 
-        if ($request->linkZoomScheduleFlag) {
-            $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTime, $endDateTime) {
-                $query->where(function ($query) use ($startDateTime) {
-                    $query->where('start_time', '<=', $startDateTime)
-                        ->whereRaw('start_time + interval duration minute >= ?', [$startDateTime]);
-                })->orWhere(function ($query) use ($endDateTime) {
-                    $query->where('start_time', '<=', $endDateTime)
-                        ->whereRaw('start_time + interval duration minute >= ?', [$endDateTime]);
-                })->orWhere(function ($query) use ($startDateTime, $endDateTime) {
-                    $query->where('start_time', '<', $startDateTime)
-                        ->whereRaw('start_time + interval duration minute > ?', [$endDateTime]);
-                });
-            })->get();
-            if (!empty($request->zoomAccountId)) {
-                if (!in_array($request->zoomAccountId, $zoomAccounts->pluck('zoom_account_id')->toArray())) {
-                    echo json_encode(array(
-                        'status' => 400,
-                        'error_message' => __('選択されたZoomアカウントにすでにスケジュールが登録されている。')
-                    ));
-                    return;
-                }
-                $zoomAccountId = $request->zoomAccountId;
-            } else {
-                if (empty($zoomAccounts)) {
-                    echo json_encode(array(
-                        'status' => 400,
-                        'error_message' => __('全てZoomアカウントが利用される為、スケジュール登録できません。')
-                    ));
-                    return;
-                }
-                $zoomAccountId = $zoomAccounts[0]['zoom_account_id'];
-            }
-
-            $diff = abs(strtotime($endDateTime) - strtotime($startDateTime));
-            $course = Course::find($request['selectedCourse']);
-            $lesson = Lesson::find($request['selectedLesson']);
-
-            $object = [
-                'topic' => $course->course_name . $lesson->lesson_name,
-                'type => 2',
-                'start_time' => $startDateTime,
-                'duration' => $diff / 60,
-                'timezone' => 'Asia/Tokyo',
-                'password' => Str::random(8),
-                'settings' => [
-                    'host_video' => true,
-                    'participant_video' => true,
-                    'join_before_host' => $request->join_before_host == Boolean::TRUE ? true : false,
-                    'jbh_time' => 5,
-                    'use_pmi' => false,
-                    'auto_recording' => AutoRecording::getDescription($request->auto_recording),
-                    'waiting_room' => $request->waiting_room == Boolean::TRUE ? true : false
-                ]
-            ];
-
-            $zoomAccount = ZoomAccount::where('zoom_account_id', $zoomAccountId)->first();
-            $token = $zoomClientService->getZoomAccessToken($zoomAccount->api_key, $zoomAccount->api_secret);
-            $dataZoomMeeting = $zoomClientService->createZoomMeeting($token, $zoomAccount->zoom_user_id, $object)->json();
-
-            $zoomSchedule = new ZoomSchedule();
-            $zoomSchedule->zoom_account_id = $zoomAccountId;
-            $zoomSchedule->zoom_meeting_id = $dataZoomMeeting['id'];
-            $zoomSchedule->meeting_type = $dataZoomMeeting['type'];
-            $zoomSchedule->start_time = $dataZoomMeeting['start_time'];
-            $zoomSchedule->duration = $dataZoomMeeting['duration'];
-            $zoomSchedule->time_zone = $dataZoomMeeting['timezone'];
-            $zoomSchedule->join_before_host = $request->join_before_host;
-            $zoomSchedule->auto_recording = $request->auto_recording;
-            $zoomSchedule->waiting_room = $request->waiting_room;
-            $zoomSchedule->zoom_url = $dataZoomMeeting['start_url'];
-            $zoomSchedule->password = $dataZoomMeeting['password'];
-            $zoomSchedule->save();
-            $zoomUrl = $dataZoomMeeting['start_url'];
-        } else {
-            $zoomUrl = $request->zoomUrl;
-        }
-
         $courseCheck = DB::table('course')
             ->where('course.course_id', '=', $request['selectedCourse'])
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
@@ -433,6 +356,83 @@ class GroupScheduleController extends BaseController
                 'error_message' => __('こちらレッスンのスケジュールが既に登録されているため、登録できません。')
             ));
             return;
+        }
+
+        if ($request->linkZoomScheduleFlag) {
+            $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTime, $endDateTime) {
+                $query->where(function ($query) use ($startDateTime) {
+                    $query->where('start_time', '<=', $startDateTime)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$startDateTime]);
+                })->orWhere(function ($query) use ($endDateTime) {
+                    $query->where('start_time', '<=', $endDateTime)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$endDateTime]);
+                })->orWhere(function ($query) use ($startDateTime, $endDateTime) {
+                    $query->where('start_time', '<', $startDateTime)
+                        ->whereRaw('start_time + interval duration minute > ?', [$endDateTime]);
+                });
+            })->get();
+            if (!empty($request->zoomAccountId)) {
+                if (!in_array($request->zoomAccountId, $zoomAccounts->pluck('zoom_account_id')->toArray())) {
+                    echo json_encode(array(
+                        'status' => 400,
+                        'error_message' => __('選択されたZoomアカウントにすでにスケジュールが登録されている。')
+                    ));
+                    return;
+                }
+                $zoomAccountId = $request->zoomAccountId;
+            } else {
+                if (empty($zoomAccounts)) {
+                    echo json_encode(array(
+                        'status' => 400,
+                        'error_message' => __('全てZoomアカウントが利用される為、スケジュール登録できません。')
+                    ));
+                    return;
+                }
+                $zoomAccountId = $zoomAccounts[0]['zoom_account_id'];
+            }
+
+            $diff = abs(strtotime($endDateTime) - strtotime($startDateTime));
+            $course = Course::find($request['selectedCourse']);
+            $lesson = Lesson::find($request['selectedLesson']);
+
+            $object = [
+                'topic' => $course->course_name . $lesson->lesson_name,
+                'type => 2',
+                'start_time' => $startDateTime,
+                'duration' => $diff / 60,
+                'timezone' => 'Asia/Tokyo',
+                'password' => Str::random(8),
+                'settings' => [
+                    'host_video' => true,
+                    'participant_video' => true,
+                    'join_before_host' => $request->joinBeforeHost == Boolean::TRUE ? true : false,
+                    'jbh_time' => 5,
+                    'use_pmi' => false,
+                    'auto_recording' => AutoRecording::getDescription($request->autoRecording),
+                    'waiting_room' => $request->waitingRoom == Boolean::TRUE ? true : false
+                ]
+            ];
+
+            $zoomAccount = ZoomAccount::where('zoom_account_id', $zoomAccountId)->first();
+            $token = $zoomClientService->getZoomAccessToken($zoomAccount->api_key, $zoomAccount->api_secret);
+            $dataZoomMeeting = $zoomClientService->createZoomMeeting($token, $zoomAccount->zoom_user_id, $object)->json();
+
+            $zoomSchedule = new ZoomSchedule();
+            $zoomSchedule->zoom_account_id = $zoomAccountId;
+            $zoomSchedule->zoom_meeting_id = $dataZoomMeeting['id'];
+            $zoomSchedule->meeting_type = $dataZoomMeeting['type'];
+            $zoomSchedule->start_time = $dataZoomMeeting['start_time'];
+            $zoomSchedule->duration = $dataZoomMeeting['duration'];
+            $zoomSchedule->time_zone = $dataZoomMeeting['timezone'];
+            $zoomSchedule->join_before_host = $request->joinBeforeHost;
+            $zoomSchedule->auto_recording = $request->autoRecording;
+            $zoomSchedule->waiting_room = $request->waitingRoom;
+            $zoomSchedule->zoom_url = $dataZoomMeeting['start_url'];
+            $zoomSchedule->password = $dataZoomMeeting['password'];
+            $zoomSchedule->save();
+            $zoomUrl = $dataZoomMeeting['start_url'];
+        } else {
+            $zoomUrl = $request->zoomUrl;
         }
 
         // update schedule

@@ -180,10 +180,10 @@
                                     class="form-check-input"
                                     type="radio"
                                     value="0"
-                                    name="join_before_host"
+                                    name="joinBeforeHost"
                                     id="inline-radio1"
                                     v-validate="'required'"
-                                    v-model="join_before_host"
+                                    v-model="joinBeforeHost"
                                 />
                                 <label class="form-check-label" for="inline-radio1"
                                     >無効</label
@@ -194,17 +194,17 @@
                                     class="form-check-input"
                                     type="radio"
                                     value="1"
-                                    name="join_before_host"
+                                    name="joinBeforeHost"
                                     id="inline-radio2"
                                     v-validate="'required'"
-                                    v-model="join_before_host"
+                                    v-model="joinBeforeHost"
                                 />
                                 <label class="form-check-label" for="inline-radio2"
                                     >有効</label
                                 >
                                 </div>
                                 <div class="input-group is-danger" role="alert">
-                                {{ errors.first("join_before_host") }}
+                                {{ errors.first("joinBeforeHost") }}
                                 </div>
                             </div>
                         </div>
@@ -221,9 +221,9 @@
                                     id="inline-radio3"
                                     type="radio"
                                     value="0"
-                                    name="waiting_room"
+                                    name="waitingRoom"
                                     v-validate="'required'"
-                                    v-model="waiting_room"
+                                    v-model="waitingRoom"
                                 />
                                 <label class="form-check-label" for="inline-radio3"
                                     >無効</label
@@ -235,32 +235,32 @@
                                     id="inline-radio4"
                                     type="radio"
                                     value="1"
-                                    name="waiting_room"
+                                    name="waitingRoom"
                                     v-validate="'required'"
-                                    v-model="waiting_room"
+                                    v-model="waitingRoom"
                                 />
                                 <label class="form-check-label" for="inline-radio4"
                                     >有効</label
                                 >
                                 </div>
                                 <div class="input-group is-danger" role="alert">
-                                {{ errors.first("waiting_room") }}
+                                {{ errors.first("waitingRoom") }}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
                             <label
                                 class="col-md-3 col-form-label text-md-right"
-                                for="auto_recording"
+                                for="autoRecording"
                                 >録画方法: <span class="glyphicon glyphicon-star"></span
                             ></label>
                             <div class="col-md-6 col-form-label">
                                 <select
                                 class="form-control"
-                                id="auto_recording"
-                                name="auto_recording"
+                                id="autoRecording"
+                                name="autoRecording"
                                 v-validate="'required'"
-                                v-model="auto_recording"
+                                v-model="autoRecording"
                                 >
                                 <option value="0">ローカル</option>
                                 <option value="1">ウラウド</option>
@@ -313,9 +313,9 @@ export default {
             teacherData: [],
             linkZoomScheduleFlag: true,
             zoomUrl: "",
-            join_before_host: 1,
-            waiting_room: 0,
-            auto_recording: 1,
+            joinBeforeHost: 1,
+            waitingRoom: 0,
+            autoRecording: 1,
             showZoomSetting: false,
             zoomAccounts: [],
             zoomAccountId: '',
@@ -367,9 +367,9 @@ export default {
                         selectedEvent : that.selectedEvent,
                         zoomAccountId: that.zoomAccountId,
                         linkZoomScheduleFlag: that.linkZoomScheduleFlag,
-                        join_before_host: that.join_before_host,
-                        waiting_room: that.waiting_room,
-                        auto_recording: that.auto_recording,
+                        joinBeforeHost: that.joinBeforeHost,
+                        waitingRoom: that.waitingRoom,
+                        autoRecording: that.autoRecording,
                         zoomUrl: that.zoomUrl
                     })
                     .then(function (response) {
@@ -412,13 +412,25 @@ export default {
             this.selectedCourse = this.selectedEvent != null ? this.selectedEvent.course_id : 0
             this.selectedLesson = this.selectedEvent != null ? this.selectedEvent.lesson_id : 0
             this.selectedTeacher = this.selectedEvent != null ? this.selectedEvent.teacher_id : 0
-            this.join_before_host = this.selectedEvent != null ? this.selectedEvent.join_before_host : (this.zoomSetting != null ? this.zoomSetting.join_before_host : 1)
-            this.waiting_room = this.selectedEvent != null ? this.selectedEvent.waiting_room : (this.zoomSetting != null ? this.zoomSetting.waiting_room : 0)
-            this.auto_recording = this.selectedEvent != null ? this.selectedEvent.auto_recording : (this.zoomSetting != null ? this.zoomSetting.auto_recording : 1)
+            if (this.selectedEvent != null && this.selectedEvent.join_before_host != undefined) {
+                this.joinBeforeHost = this.selectedEvent.join_before_host
+            } else {
+                this.joinBeforeHost = this.zoomSetting != null ? this.zoomSetting.join_before_host : 1
+            }
+            if (this.selectedEvent != null && this.selectedEvent.waiting_room != undefined) {
+                this.waitingRoom = this.selectedEvent.waiting_room
+            } else {
+                this.waitingRoom = this.zoomSetting != null ? this.zoomSetting.waiting_room : 0
+            }
+            if (this.selectedEvent != null && this.selectedEvent.auto_recording != undefined) {
+                this.autoRecording = this.selectedEvent.auto_recording
+            } else {
+                this.autoRecording = this.zoomSetting != null ? this.zoomSetting.auto_recording : 1
+            }
             this.linkZoomScheduleFlag = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : true
             this.zoomAccountId = this.selectedEvent != null ? this.selectedEvent.zoom_account_id : ''
             this.zoomUrl = this.selectedEvent != null ? this.selectedEvent.zoom_url : ''
-            this.showZoomSetting = false
+            this.showZoomSetting = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : false
 
             var dateTime = new Date(new Date().setHours(new Date().getHours() + 1))
 

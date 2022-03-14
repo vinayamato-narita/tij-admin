@@ -1037,7 +1037,7 @@ export default {
                     _token: Laravel.csrfToken,
                     password: that.password,
                     password_confirm: that.password_confirm,
-                    id: that.studentInfoEx.id,
+                    id: that.studentInfoEx.student_id,
                 })
                 .then(response => {
                     that.flagShowLoader = false;
@@ -1048,7 +1048,7 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            
+                            location.reload();
                         });
                     }
                 })

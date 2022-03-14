@@ -117,11 +117,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">コース概要:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <nl2br tag="p" :text="this.course.course_description">
-
-                                            </nl2br>
-
-
+                                            {{ this.course.course_description }}
                                         </div>
                                     </div>
 
@@ -248,7 +244,7 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            <nl2br tag="p" :text="courseENDes"></nl2br>
+                                            {{ courseENDes }}
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +274,7 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            <nl2br tag="p" :text="courseZHDes"></nl2br>
+                                            {{ courseZHDes }}
                                         </div>
                                     </div>
                                 </div>

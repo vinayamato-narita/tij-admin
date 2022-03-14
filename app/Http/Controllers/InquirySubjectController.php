@@ -106,14 +106,14 @@ class InquirySubjectController extends BaseController
             ['name' => 'show_inquiry_subject', $id],
         ]);
         $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
-        $inquirySubjectVnInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => LangType::VN])->first();
         $inquirySubjectEnInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => LangType::EN])->first();
+        $inquirySubjectZhInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => LangType::ZH])->first();
 
         return view('inquirySubject.show', [
             'breadcrumbs' => $breadcrumbs,
             'inquirySubjectInfo' => $inquirySubjectInfo,
-            'inquirySubjectVnInfo' => $inquirySubjectVnInfo,
             'inquirySubjectEnInfo' => $inquirySubjectEnInfo,
+            'inquirySubjectZhInfo' => $inquirySubjectZhInfo,
         ]);
     }
 

@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class LangType extends Enum
 {
+    const JP = 'jp';
     const EN = 'en';
-    const VN = 'vn';
     const ZH = 'zh';
 }

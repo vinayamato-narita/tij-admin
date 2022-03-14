@@ -271,10 +271,6 @@ class GroupScheduleController extends BaseController
             return;
         }
 
-        if (!empty($request['selectedEvent']) && !empty($request['selectedEvent']['zoom_schedule_id'])) {
-            ZoomSchedule::where('zoom_schedule_id', $request['selectedEvent']['zoom_schedule_id'])->delete();
-        }
-
         $courseCheck = DB::table('course')
             ->where('course.course_id', '=', $request['selectedCourse'])
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
@@ -356,6 +352,10 @@ class GroupScheduleController extends BaseController
                 'error_message' => __('こちらレッスンのスケジュールが既に登録されているため、登録できません。')
             ));
             return;
+        }
+
+        if (!empty($request['selectedEvent']) && !empty($request['selectedEvent']['zoom_schedule_id'])) {
+            ZoomSchedule::where('zoom_schedule_id', $request['selectedEvent']['zoom_schedule_id'])->delete();
         }
 
         if ($request->linkZoomScheduleFlag) {

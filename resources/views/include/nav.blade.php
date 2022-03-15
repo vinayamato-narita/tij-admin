@@ -24,7 +24,7 @@
                 支払い履歴管理
             </a>
         </li>
-        
+
         <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([STUDENT], $adminUserRights) }}">
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(STUDENT) }}" href="{{route('student.index')}}">
                 <svg class="c-sidebar-nav-icon">
@@ -93,7 +93,7 @@
             </ul>
         </li>
 
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([LESSONCOURSE, TEXT, LESSON], $adminUserRights) }}">
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([LESSONCOURSE, TEXT, LESSON, PREPARATION, REVIEW, TEST], $adminUserRights) }}">
             <a class="c-sidebar-nav-link" onclick="$('#learning-sub').hasClass('hidden') ?
             $('#learning-sub').removeClass('hidden') : $('#learning-sub').addClass('hidden')">
                 <svg class="c-sidebar-nav-icon">
@@ -102,7 +102,10 @@
                 学習管理
                 <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
             </a>
-            <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(CATEGORY) == 'c-active' || AdminUserRightComponent::getActiveMenu(COURSE) == 'c-active' || AdminUserRightComponent::getActiveMenu(LESSON) == 'c-active' || AdminUserRightComponent::getActiveMenu(TEXT) == 'c-active') ? '' : 'hidden' }}" id="learning-sub">
+            <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(CATEGORY) == 'c-active' || AdminUserRightComponent::getActiveMenu(COURSE) == 'c-active' || AdminUserRightComponent::getActiveMenu(LESSON) == 'c-active' || AdminUserRightComponent::getActiveMenu(TEXT) == 'c-active' ||
+            AdminUserRightComponent::getActiveMenu(PREPARATION) == 'c-active' ||
+            AdminUserRightComponent::getActiveMenu(REVIEW) == 'c-active' ||
+            AdminUserRightComponent::getActiveMenu(TEST) == 'c-active') ? '' : 'hidden' }}" id="learning-sub">
 
                 <li class=" c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([LESSONCOURSE], $adminUserRights) }}">
                     <a class=" c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(CATEGORY) }}" href="{{route('category.index')}}">

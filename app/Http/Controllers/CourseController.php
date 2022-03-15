@@ -26,6 +26,7 @@ use function Doctrine\Common\Cache\Psr6\get;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 
 class CourseController extends BaseController
@@ -779,8 +780,8 @@ class CourseController extends BaseController
         if ($request->isMethod('PUT')) {
             DB::beginTransaction();
             try {
-                $course->publish_date_from = Carbon::createFromFormat('H:i:s, d/m/Y', $request->fromDate);
-                $course->publish_date_to = Carbon::createFromFormat('H:i:s, d/m/Y', $request->toDate);
+                $course->publish_date_from = $request->fromDate;
+                $course->publish_date_to = $request->toDate;
                 $course->display_order = $request->displayOrder;
                 $course->course_name_short = $request->courseNameShort ?? ' ';
                 $course->course_name = $request->courseName;
@@ -796,9 +797,9 @@ class CourseController extends BaseController
                 if ($request->courseType == CourseTypeEnum::GROUP_COURSE) {
                     $course->min_reserve_count = $request->minReserveCount;
                     $course->max_reserve_count = $request->maxReserveCount;
-                    $course->decide_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->decideDate);
-                    $course->reserve_end_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->reverseEndDate);
-                    $course->course_start_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->courseStartDate);
+                    $course->decide_date = $request->decideDate;
+                    $course->reserve_end_date = $request->reverseEndDate;
+                    $course->course_start_date = $request->courseStartDate;
                 }
 
                 $course->save();
@@ -808,6 +809,7 @@ class CourseController extends BaseController
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
+                Log::info($exception->getMessage());
                 DB::rollBack();
                 return response()->json([
                     'status' => 'INTERNAL_ERR',

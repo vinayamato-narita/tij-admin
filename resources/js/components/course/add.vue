@@ -291,7 +291,7 @@
                                             </label>
                                             <div class="col-md-6">
 
-                                                <input class="form-control" id="minReserveCount" type="number" name="minReserveCount" style="max-width: 100px"  onKeyDown="return false" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" @input="changeInput()" @change="validateDepend('maxReserveCount')"  v-model="minReserveCount"  />
+                                                <input class="form-control" id="minReserveCount" type="number" name="minReserveCount" style="max-width: 100px"  v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" @input="changeInput()" @change="validateDepend('maxReserveCount')"  v-model="minReserveCount"  />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("minReserveCount") }}

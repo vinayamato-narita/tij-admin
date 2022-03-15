@@ -30,7 +30,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="orderNum" type="number" name="orderNum" @input="changeInput()" style="max-width: 100px" v-model="orderNum" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="orderNum" type="number" name="orderNum" @input="changeInput()" style="max-width: 100px" v-model="orderNum" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("orderNum") }}

@@ -399,6 +399,10 @@ class BreadcrumbComponent
                 'text' => '欠席一覧',
                 'route_str' => 'groupLessonHistory.studentAttendance'
             ],
+            'edit_lang_remind_mail' => [
+                'text' => 'リマインドメール情報',
+                'route_str' => "editLangRemindMail",
+            ],
         ];
     }
 

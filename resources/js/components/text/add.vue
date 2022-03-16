@@ -25,7 +25,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextNo" type="number" name="lessonTextNo" @input="changeInput()" style="max-width: 100px" v-model="lessonTextNo" value="1" onKeyDown="return false" v-validate="'min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="lessonTextNo" type="number" name="lessonTextNo" @input="changeInput()" style="max-width: 100px" v-model="lessonTextNo" value="1" v-validate="'min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonTextNo") }}

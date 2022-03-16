@@ -120,8 +120,8 @@ class CourseController extends BaseController
             DB::beginTransaction();
             try {
                 $course = new Course();
-                $course->publish_date_from = Carbon::parse($request->fromDate);
-                $course->publish_date_to = Carbon::parse($request->toDate);
+                $course->publish_date_from = $request->fromDate;
+                $course->publish_date_to = $request->toDate;
                 $course->display_order = $request->displayOrder;
                 $course->course_name_short = $request->courseNameShort ?? ' ';
                 $course->course_name = $request->courseName;
@@ -137,9 +137,9 @@ class CourseController extends BaseController
                 if ($request->courseType == CourseTypeEnum::GROUP_COURSE) {
                     $course->min_reserve_count = $request->minReserveCount;
                     $course->max_reserve_count = $request->maxReserveCount;
-                    $course->decide_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->decideDate);
-                    $course->reserve_end_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->reverseEndDate);
-                    $course->course_start_date = Carbon::createFromFormat('H:i:s, d/m/Y', $request->courseStartDate);
+                    $course->decide_date = $request->decideDate;
+                    $course->reserve_end_date = $request->reverseEndDate;
+                    $course->course_start_date = $request->courseStartDate;
                 }
 
                 $course->save();

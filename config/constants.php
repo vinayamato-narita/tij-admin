@@ -170,6 +170,24 @@ const MENU = [
 		'text.show',
 		'text.edit',
 	],
+	PREPARATION => [
+		'preparation.index',
+		'preparation.create',
+		'preparation.show',
+		'preparation.edit',
+	],
+	REVIEW => [
+		'review.index',
+		'review.create',
+		'review.show',
+		'review.edit',
+	],
+	TEST => [
+		'test.index',
+		'test.create',
+		'test.show',
+		'test.edit',
+	],
 	REMINDMAIL => [
 		'remindmail.index',
 		'remindmail.create',

@@ -82,7 +82,7 @@
                             <thead >
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input   v-on:click="checkAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input v-on:click="checkAll" type="checkbox" class="checkAll" style="width: auto; height: auto; display: inline-block;">
                                 </th>
                                 <th class="text-center text-md-left bg-gray-100">公開状況</th>
                                 <th class="text-center text-md-left bg-gray-100">コースID</th>
@@ -93,7 +93,15 @@
                             <tbody>
                             <tr v-for="course in dataList">
                                 <td class="text-center">
-                                    <input id="isTestLesson" v-on:click="checkedId(course.course_id)" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input 
+                                        id="isTestLesson" 
+                                        v-on:click="checkedId(course.course_id)" 
+                                        type="checkbox" 
+                                        class=" checkbox" 
+                                        style="width: auto; height: auto; display: inline-block;"
+                                        v-model="courses.ids"
+                                        :value="course.course_id"
+                                    >
                                 </td>
                                 <td class="text-md-left" >{{  course.is_show ? '公開中' : '公開中' }}</td>
                                 <td class="text-md-left" >{{  course.is_set_course ?  '' : course.course_id }}</td>
@@ -176,8 +184,9 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                checkedIds : [],
-
+                courses: {
+                    ids: []
+                }
             };
         },
         props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl', 'type'],
@@ -227,26 +236,33 @@
 
             },
             checkAll(event) {
+                let that = this;
                 if (event.target.checked) {
-                    $(':checkbox').prop('checked', true);
+                    $('.checkbox').prop('checked', true);
+                    that.dataList.forEach(function (course) {
+                        that.courses.ids.push(course.course_id);
+                    });
                 }
                 else {
-                    $(':checkbox').prop('checked', false);
+                    $('.checkbox').prop('checked', false);
+                    that.dataList.forEach(function (course) {
+                        that.courses.ids.remove(course.course_id);
+                    });
                 }
             },
             checkedId(id) {
-                if(this.checkedIds.includes(id)) {
-                    this.checkedIds.remove(id);
+                let lengAll = $('.checkbox').length;
+                let lengChecked = $('.checkbox:checked').length;
+                if (lengAll == lengChecked) {
+                    $('.checkAll').prop('checked', true);
+                }else {
+                    $('.checkAll').prop('checked', false);
                 }
-                else {
-                    this.checkedIds.push(id);
-                }
-
             },
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, that.checkedIds)
+                    .post(that.registerUrl, that.courses.ids)
                     .then(response => {
                         window.location = this.detailUrl;
                     })

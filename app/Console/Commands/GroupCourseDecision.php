@@ -51,7 +51,7 @@ class GroupCourseDecision extends Command
         Log::info('group course decision batch start');
 
         $yesterday = Carbon::yesterday()->format('Y-m-d');
-        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher'])->get();
+        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
        
         foreach ($courses as $course) {
             $reserveNum = $course->pointSubscriptionHistories->count();
@@ -78,7 +78,10 @@ class GroupCourseDecision extends Command
                 }
                 //send mail teacher
                 foreach ($course->lessonSchedules as $lessonSchedule) {
-                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langType);
+
+                    $langTypeTeacher  = $lessonSchedule->teacher->teacherInfo->lang_type;
+                    
+                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langTypeTeacher);
 
                     if ($mailPattern) {
                         $mailSubject = $mailPattern[0]->mail_subject;

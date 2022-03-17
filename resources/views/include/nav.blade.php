@@ -43,14 +43,33 @@
             </a>
         </li>
 
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([SCHEDULE], $adminUserRights) }}">
-            <a class="c-sidebar-nav-link" href="{{route('lessonSchedule.index')}}">
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([SCHEDULE, GROUP_LESSON_SCHEDULE], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link " onclick="$('#schedule-sub').hasClass('hidden') ?
+            $('#schedule-sub').removeClass('hidden') : $('#schedule-sub').addClass('hidden')">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 スケジュール管理
-
+                <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
             </a>
+            <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(SCHEDULE) == 'c-active' || AdminUserRightComponent::getActiveMenu(GROUP_LESSON_SCHEDULE) == 'c-active') ? '' : 'hidden' }}" id="schedule-sub">
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([SCHEDULE], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(SCHEDULE) }}" href="{{route('lessonSchedule.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        プライベートレッスンスケジュール
+                    </a>
+                </li>
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GROUP_LESSON_SCHEDULE], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GROUP_LESSON_SCHEDULE) }}" href="{{route('groupSchedule.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        グループレッスンスケジュール
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([LESSONSTATUS], $adminUserRights) }}">
@@ -59,6 +78,24 @@
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 レッスン状況管理
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GROUP_LESSON_HISTORY], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GROUP_LESSON_HISTORY) }}" href="{{route('group_lesson_history.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                グループレッスン履歴一覧
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GROUP_LESSON_RESERVE], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GROUP_LESSON_RESERVE) }}" href="{{route('groupLessonReserves.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                グループコース申込一覧
             </a>
         </li>
 
@@ -72,7 +109,16 @@
             </a>
         </li>
 
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([COMMENT], $adminUserRights) }}">
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ABILITY_TEST_RESULT], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ABILITY_TEST_RESULT) }}" href="{{route('abilityTestResult.index')}}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                受験済実力テスト一覧
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([COMMENT, STUDENT_COMMENT], $adminUserRights) }}">
             <a class="c-sidebar-nav-link " onclick="$('#comment-sub').hasClass('hidden') ?
             $('#comment-sub').removeClass('hidden') : $('#comment-sub').addClass('hidden')">
                 <svg class="c-sidebar-nav-icon">
@@ -81,13 +127,21 @@
                 コメント管理
                 <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
             </a>
-            <ul class="nav-dropdown-items {{ AdminUserRightComponent::getActiveMenu(COMMENT) == 'c-active' ? '' : 'hidden' }}" id="comment-sub">
-                <li class="c-sidebar-nav-item">
-                    <a class="c-sidebar-nav-link" href="{{route('comment.index')}}">
+            <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(COMMENT) == 'c-active' || AdminUserRightComponent::getActiveMenu(STUDENT_COMMENT) == 'c-active') ? '' : 'hidden' }}" id="comment-sub">
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([COMMENT], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(COMMENT) }}" href="{{route('comment.index')}}">
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
                         レッスン単位
+                    </a>
+                </li>
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([STUDENT_COMMENT], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(STUDENT_COMMENT) }}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        生徒単位
                     </a>
                 </li>
             </ul>
@@ -175,6 +229,16 @@
             </ul>
         </li>
 
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GUIDE], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GUIDE) }}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                ガイド管理
+
+            </a>
+        </li>
+
         <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([REMINDMAIL], $adminUserRights) }}">
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(REMINDMAIL) }}" href="{{route('remindmail.index')}}">
                 <svg class="c-sidebar-nav-icon">
@@ -185,12 +249,52 @@
             </a>
         </li>
 
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([NOTIFICATION], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(NOTIFICATION) }}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                お知らせメール（送付先）
+
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([COURSE_REGISTRATION], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link " onclick="$('#bulk-registration-sub').hasClass('hidden') ?
+            $('#bulk-registration-sub').removeClass('hidden') : $('#bulk-registration-sub').addClass('hidden')">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                一括登録
+                <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
+            </a>
+            <ul class="nav-dropdown-items {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) == 'c-active' ? '' : 'hidden' }}" id="bulk-registration-sub">
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([COURSE_REGISTRATION], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) }}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        法人・グループコース登録
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([INQUIRY], $adminUserRights) }}">
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(INQUIRY) }}" href="{{route('inquiry.index')}}">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 問い合わせ履歴
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ACCESSLOG], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ACCESSLOG) }}">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                アクセスログ管理
             </a>
         </li>
 
@@ -226,8 +330,37 @@
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
-                管理ユーザー管理
+                管理ユーザ管理
             </a>
+        </li>
+
+        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ZOOM_ACCOUNT, ZOOM_SETTING], $adminUserRights) }}">
+            <a class="c-sidebar-nav-link " onclick="$('#zoom-sub').hasClass('hidden') ?
+            $('#zoom-sub').removeClass('hidden') : $('#zoom-sub').addClass('hidden')">
+                <svg class="c-sidebar-nav-icon">
+                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                </svg>
+                Zoom管理
+                <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
+            </a>
+            <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(ZOOM_ACCOUNT) == 'c-active' || AdminUserRightComponent::getActiveMenu(ZOOM_SETTING) == 'c-active') ? '' : 'hidden' }}" id="zoom-sub">
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ZOOM_ACCOUNT], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ZOOM_ACCOUNT) }}" href="{{route('zoomAccount.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        Zoomアカウント管理
+                    </a>
+                </li>
+                <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ZOOM_SETTING], $adminUserRights) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ZOOM_SETTING) }}" href="{{route('zoomSetting.edit')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        Zoom設定
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([CSVEXPORT], $adminUserRights) }}">
@@ -236,23 +369,6 @@
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 CSV出力
-            </a>
-        </li>
-
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ABILITY_TEST_RESULT], $adminUserRights) }}">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ABILITY_TEST_RESULT) }}" href="{{route('abilityTestResult.index')}}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                受験済実力テスト一覧
-            </a>
-        </li>
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([GROUP_LESSON_HISTORY], $adminUserRights) }}">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GROUP_LESSON_HISTORY) }}" href="{{route('group_lesson_history.index')}}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                グループレッスン履歴一覧
             </a>
         </li>
     </ul>

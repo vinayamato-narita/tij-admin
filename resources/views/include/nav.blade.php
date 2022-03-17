@@ -340,7 +340,7 @@
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
-                コメント管理
+                Zoom管理
                 <span class="fa fa-chevron-down" style="position: absolute; right: 15px"></span>
             </a>
             <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(ZOOM_ACCOUNT) == 'c-active' || AdminUserRightComponent::getActiveMenu(ZOOM_SETTING) == 'c-active') ? '' : 'hidden' }}" id="zoom-sub">
@@ -349,7 +349,7 @@
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
-                        レッスン単位
+                        Zoomアカウント管理
                     </a>
                 </li>
                 <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([ZOOM_SETTING], $adminUserRights) }}">
@@ -357,7 +357,7 @@
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
-                        生徒単位
+                        Zoom設定
                     </a>
                 </li>
             </ul>

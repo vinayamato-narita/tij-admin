@@ -328,7 +328,7 @@ class TestController extends BaseController
             foreach ($subQuestions as $index => $subQuestion) {
                 $testSubQuestion = new TestSubQuestion();
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = $index;
+                $testSubQuestion->display_order = ++$index;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;
@@ -503,7 +503,7 @@ class TestController extends BaseController
 
                 }
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = $index;
+                $testSubQuestion->display_order = ++$index;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;

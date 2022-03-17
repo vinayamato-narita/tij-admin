@@ -169,7 +169,7 @@
 
             },
             getindexSee($index){
-                return ++$index;
+                return $index++;
             },
             toPage(page) {
                 this.currentPage = page;

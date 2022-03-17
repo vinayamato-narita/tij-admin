@@ -151,7 +151,7 @@
                                                 <div class="col-md-2">
                                                 </div>
                                                 <div class="col-md-5 wrap-long-text"><span class="wrap-long-text"
-                                                                                            style="color: inherit">設問{{ ++test_sub_question.display_order }}　{{test_sub_question.sub_question_content | truncate(30, '...')}}</span>
+                                                                                            style="color: inherit">設問{{ test_sub_question.display_order++ }}　{{test_sub_question.sub_question_content | truncate(30, '...')}}</span>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <span class="wrap-long-text"

@@ -403,6 +403,10 @@ class BreadcrumbComponent
                 'text' => 'リマインドメール情報',
                 'route_str' => "editLangRemindMail",
             ],
+            'teacher_lesson_history' => [
+                'text' => 'レッスン履歴一覧',
+                'route_str' => "teacher.lessonHistory",
+            ],
         ];
     }
 

@@ -242,4 +242,7 @@ Route::group([
 
     Route::get('/remindMail/{id}/edit-lang/{type}', 'RemindMailController@editLang')->name('editLangRemindMail');
     Route::post('updateLangRemindMail', 'RemindMailController@updateLang')->name('updateLangRemindMail');
+
+    Route::get('/teacher/lesson-history/{id}', 'TeacherController@lessonHistory')->name('teacher.lessonHistory');
+    Route::get('/teacher/lesson-history-export/{id}', 'TeacherController@lessonHistoryExport')->name('teacher.lessonHistoryExport');
 });

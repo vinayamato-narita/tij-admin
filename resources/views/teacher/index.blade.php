@@ -75,7 +75,7 @@
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-envelope mr-2"></i>メール送信</a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" href="#"><i class="fa fa-book mr-2"></i> レッスン履歴</a>
+                                                                        <a class="dropdown-item" href="{{ route('teacher.lessonHistory', $teacher->teacher_id) }}"><i class="fa fa-book mr-2"></i> レッスン履歴</a>
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item" href="{{ route('teacher.show', $teacher->teacher_id) }}"><i class="fa fa-info mr-2"></i>情報</a>

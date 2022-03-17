@@ -43,7 +43,9 @@ insert  into `send_remind_mail_pattern`(`send_remind_mail_pattern_id`,`send_remi
 (631,18,0,'レッスンキャンセル通知','#TEACHER_NAME# 先生\r\r以下のレッスンがキャンセルされました。\r\r----------------------------------------------------------------------\r\rLesson Date：#LESSON_DATE#\r\rLesson Time：#LESSON_TIME#\r\r----------------------------------------------------------------------\r\rこのメールは自動送信メールです。\r（このメールに返信しないでください）\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************\r'),
 (641,17,30,'レッスン30分前通知',' #TEACHER_NAME#　先生\r\r下記レッスンまで30分になりました。\r生徒名:　#STUDENT_NICKNAME#\rレッスン日:　#LESSON_DATE#\rレッスン時間:　#LESSON_TIME#\rレッスン名:　#LESSON_NAME#\rテキスト名:　#LESSON_TEXT_NAME#\r\rレッスンを準備をしてお待ちください。\r\rこのメールは自動送信メールです。\r（このメールに返信しないでください）\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************'),
 (651,15,0,'レッスン予約通知','#TEACHER_NAME#先生、こんにちは！\rあなたのレッスンが予約されました。\r\r------------------------------------------\r\r生徒名:　#STUDENT_NICKNAME#\r\rレッスン日:　#LESSON_DATE#\rレッスン時間:　#LESSON_TIME#\rレッスン名:　#LESSON_NAME#\rテキスト名:　#LESSON_TEXT_NAME#\r\r------------------------------------------\r\rこのメールは自動送信メールです。\r（このメールに返信しないでください）\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************\r\r'),
-(661,13,0,'【アルクオンライン日本語スクール】　新しいお問い合わせが来ました','#ADMIN_NAME#様\r\r\r\r新しいお問い合わせがありました。\r\rお問い合わせの内容は、以下となります。\r\r\r\r------------------------------------------------------------------------\r\rお問い合わせID：#INQUIRY_ID#\r\r日時：#INQUIRY_DATE#\r\rお問い合わせ件名：#INQUIRY_TITLE#\r\rお名前：#USER_TITLE#\r\rメールアドレス：#USER_EMAIL#\r\r問い合わせ内容：#INQUIRY_BODY#\r\r-------------------------------------------------------------------------\r\r\r\r……………………………………………………………………\r\r株式会社アルク　\rアルクオンライン日本語スクール事務局\rjpn_info@alc.co.jp\r\r……………………………………………………………………');
+(661,13,0,'【アルクオンライン日本語スクール】　新しいお問い合わせが来ました','#ADMIN_NAME#様\r\r\r\r新しいお問い合わせがありました。\r\rお問い合わせの内容は、以下となります。\r\r\r\r------------------------------------------------------------------------\r\rお問い合わせID：#INQUIRY_ID#\r\r日時：#INQUIRY_DATE#\r\rお問い合わせ件名：#INQUIRY_TITLE#\r\rお名前：#USER_TITLE#\r\rメールアドレス：#USER_EMAIL#\r\r問い合わせ内容：#INQUIRY_BODY#\r\r-------------------------------------------------------------------------\r\r\r\r……………………………………………………………………\r\r株式会社アルク　\rアルクオンライン日本語スクール事務局\rjpn_info@alc.co.jp\r\r……………………………………………………………………'),
+(662,100,0,'Student Cancel lesson','#STUDENT_NAME# student lesson has been cancelled.'),
+(663,101,0,'Teacher Cancel lesson','#TEACHER_NAME# teacher lesson has been cancelled.');
 
 /*Data for the table `send_remind_mail_pattern_info` */
 
@@ -81,7 +83,9 @@ insert  into `send_remind_mail_pattern_info`(`send_remind_mail_pattern_info_id`,
 (343,631,'レッスンキャンセル通知','#TEACHER_NAME# 先生\r\r下記のレッスンがキャンセルされました。\r\r----------------------------------------------------------------------\r\rレッスン日：#LESSON_DATE#\r\rレッスン時間：#LESSON_TIME#\r\r----------------------------------------------------------------------\r\rこのメールは自動送信メールです。\r（このメールに返信しないでください）\r\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************\r','vn'),
 (345,641,'レッスン30分前通知',' #TEACHER_NAME# 先生\r\r下記レッスンまで30分となりました。\r生徒名:　#STUDENT_NICKNAME#\rレッスン日:　#LESSON_DATE#\rレッスン時間:　#LESSON_TIME#\rレッスン名:　#LESSON_NAME#\rテキスト名:　#LESSON_TEXT_NAME#\r\rこのメールは自動送信メールです。\r（このメールに返信しないでください）\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************','vn'),
 (347,651,'レッスン予約通知',' #TEACHER_NAME# 先生\r\rあなたのレッスンが予約されました。\r\r生徒名:　#STUDENT_NICKNAME#\r\rレッスン日:　#LESSON_DATE#\rレッスン時間:　#LESSON_TIME#\rレッスン名:　#LESSON_NAME#\rテキスト名:　#LESSON_TEXT_NAME#\r\rこのメールは自動送信メール。\r（このメールに返信しないでください）\r\r**************************************\rTeacher\'s Page URL\rhttps://nihongo-system.alc.co.jp/tutor.swf\r**************************************\r\r','vn'),
-(349,661,'【アルクオンライン日本語スクール】　新しいお問い合わせが来ました','#ADMIN_NAME#様\r\r\r\r新しいお問い合わせがありました。\r\rお問い合わせの内容は、以下となります。\r\r\r\r------------------------------------------------------------------------\r\rお問い合わせID：#INQUIRY_ID#\r\r日時：#INQUIRY_DATE#\r\rお問い合わせ件名：#INQUIRY_TITLE#\r\rお名前：#USER_TITLE#\r\rメールアドレス：#USER_EMAIL#\r\r問い合わせ内容：#INQUIRY_BODY#\r\r-------------------------------------------------------------------------\r\r\r\rアルクオンライン日本語スクール事務局\r\r……………………………………………………………………\r\r株式会社アルク　\r\rアルクオンライン日本語スクール事務局\r\rjpn_info@alc.co.jp\r\r……………………………………………………………………','vn');
+(349,661,'【アルクオンライン日本語スクール】　新しいお問い合わせが来ました','#ADMIN_NAME#様\r\r\r\r新しいお問い合わせがありました。\r\rお問い合わせの内容は、以下となります。\r\r\r\r------------------------------------------------------------------------\r\rお問い合わせID：#INQUIRY_ID#\r\r日時：#INQUIRY_DATE#\r\rお問い合わせ件名：#INQUIRY_TITLE#\r\rお名前：#USER_TITLE#\r\rメールアドレス：#USER_EMAIL#\r\r問い合わせ内容：#INQUIRY_BODY#\r\r-------------------------------------------------------------------------\r\r\r\rアルクオンライン日本語スクール事務局\r\r……………………………………………………………………\r\r株式会社アルク　\r\rアルクオンライン日本語スクール事務局\r\rjpn_info@alc.co.jp\r\r……………………………………………………………………','vn'),
+(350,662,'Student Cancel Lesson','#STUDENT_NAME# student lesson has been cancelled.','en'),
+(351,663,'Teacher Cancel Lesson','#TEACHER_NAME# teacher lesson has been cancelled.','en');
 
 /*Data for the table `send_remind_mail_timing` */
 
@@ -128,4 +132,6 @@ insert  into `send_remind_mail_timing`(`send_remind_mail_timing_type`,`send_remi
 (42,'【固定】一括登録　法人会員　新規登録　ユーザー登録＋コース購入　（セットコース）'),
 (43,'【固定】一括登録　法人会員　更新登録 （セットコース）'),
 (44,'【固定】一括登録　法人会員　継続メール（個人決済）'),
-(45,'【固定】講師コメント登録時メール（テスト有）');
+(45,'【固定】講師コメント登録時メール（テスト有）'),
+(100,'Student Cancel Lesson'),
+(101,'Teacher Cancel Lesson');

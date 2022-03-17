@@ -148,6 +148,7 @@ import InputSearchGroupLesson from "./components/groupLesson/input-search.vue"
 import GroupLessonReserveShow from "./components/groupLessonReserve/detail.vue"
 import UpdateStudentAttendance from "./components/groupLessonHistory/update-student-attendance.vue"
 import EditLangRemindMail from "./components/remindMailPatern/edit-lang-remind-mail.vue"
+import LessonHistorySearch from "./components/teacher/lesson-history-search.vue"
 
 new Vue({
     created() {
@@ -332,7 +333,8 @@ new Vue({
         InputSearchGroupLesson,
         GroupLessonReserveShow,
         UpdateStudentAttendance,
-        EditLangRemindMail
+        EditLangRemindMail,
+        LessonHistorySearch
     },
     methods: {},
     mounted() {}

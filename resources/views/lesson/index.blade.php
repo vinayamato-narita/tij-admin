@@ -36,6 +36,7 @@
                                         </div>
                                     </div>
                                     @if(!$lessonList->isEmpty())
+                                        {{ $lessonList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>

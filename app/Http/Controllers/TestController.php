@@ -219,6 +219,24 @@ class TestController extends BaseController
 
     }
 
+    public function checkNavigation($id, Request $request)
+    {
+        if (empty($request->navigation))
+            return response()->json([
+                'valid' => false,
+            ], StatusCode::OK);
+        $valid = !TestQuestion::where(function ($query) use ($request, $id) {
+            if (isset($request['test_question_id'])) {
+                $query->where('test_question_id', '!=', $request["test_question_id"]);
+            }
+            $query->where(['navigation' => $request["navigation"], 'test_id' => $id]);
+        })->exists();
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
+    }
+
+
     public function addTag(Request $request, $id)
     {
         if (!$request->isMethod('POST')) {

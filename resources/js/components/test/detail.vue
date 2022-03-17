@@ -80,7 +80,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.test.passing_point}}
+                                            {{this.test.passing_score}}
 
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.test.total_point}}
+                                            {{this.test.total_score}}
 
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@
                                             <div class="row"
                                                  style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
                                                 <div class="col-md-4 wrap-long-text"><span class="wrap-long-text"
-                                                                                            style="color: inherit">大問{{test_question.display_order}} {{test_question.question_content| truncate(30, '...')}}</span>
+                                                                                            style="color: inherit"> {{test_question.navigation}}</span>
                                                 </div>
                                                 <div class="col-md-3">
 

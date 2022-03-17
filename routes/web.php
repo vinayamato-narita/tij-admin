@@ -110,6 +110,7 @@ Route::group([
     Route::delete('test/{id}/delete_question/{testQuestionId}', 'TestController@deleteQuestion')->name('test.deleteQuestion');
     Route::get('test/{id}/list_question_attach', 'TestController@listQuestionAttach')->name('test.listQuestionAttach');
     Route::post('test/{id}/list_question_attach', 'TestController@listQuestionAttachUpdate')->name('test.listQuestionAttachUpdate');
+    Route::post('test/{id}/check_navigation', 'TestController@checkNavigation')->name('test.checkNavigation');
     //tag
     Route::post('test/{id}/add_tag', 'TestController@addTag')->name('test.createTag');
 

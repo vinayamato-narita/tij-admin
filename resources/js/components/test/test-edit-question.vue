@@ -66,6 +66,7 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-2 col-form-label text-md-left"><b>ナビゲーション :</b>
+                                                <span class="glyphicon glyphicon-star"></span>
                                             </label>
                                             <div class="col-md-10 text-md-left p-2">
                                                 <input
@@ -73,7 +74,7 @@
                                                         name="navigation"
                                                         v-model="navigation"
                                                         v-validate="
-                                                        'max:255'
+                                                        'required|max:255|unique_custom'
                                                     "
                                                 />
                                                 <div
@@ -472,6 +473,24 @@
                 });
 
             })
+            this.$validator.extend("unique_custom", {
+                validate(value, args) {
+                    return axios
+                        .post(that.checkNavigationUrl, {
+                            _token: Laravel.csrfToken,
+                            navigation: value,
+                            test_question_id : that.testQuestion.test_question_id,
+                            type: args[0],
+                        })
+                        .then(function (response) {
+                            return {
+                                valid: response.data.valid,
+                            };
+                        })
+                        .catch((error) => {});
+                },
+            });
+
 
 
 
@@ -496,27 +515,29 @@
                 subQuestion: [],
                 defaultCustomMessage : {
                     navigation: {
-                        max: "復習名は255文字以内で入力してください。",
+                        max: "ナビゲーションは255文字以内で入力してください。",
+                        required : "ナビゲーションを入力してください。",
+                        unique_custom: "このナビゲーションは既に登録されています。"
                     },
                     'subQuestion[0][question]': {
-                        required: "問題文を入力してください",
+                        required: "問題文を入力してください。",
                         max: "問題文は255文字以内で入力してください。",
 
                     },
                     'subQuestion[0][answer1]': {
-                        required: "選択肢1(正解)を入力してください"
+                        required: "選択肢1(正解)を入力してください。"
                     },
                     'subQuestion[0][answer2]': {
-                        required: "選択肢2(正解)を入力してください"
+                        required: "選択肢2(正解)を入力してください。"
                     },
                     'subQuestion[0][score]': {
-                        required: "点数を入力してください",
-                        decimal: "点数は半角数字を入力してください",
-                        min_value: "点数は1～1000000000 を入力してください",
-                        max_value: "点数は1～1000000000 を入力してください",
+                        required: "点数を入力してください。",
+                        decimal: "点数は半角数字を入力してください。",
+                        min_value: "点数は1～1000000000 を入力してください。",
+                        max_value: "点数は1～1000000000 を入力してください。",
                     },
                     'subQuestion[0][testCategory]': {
-                        required: "カテゴリを選択してください",
+                        required: "カテゴリを選択してください。",
                     },
 
 
@@ -525,8 +546,18 @@
             };
         },
         props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail',
-            'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion', 'testCategories', 'isHasTestResult'],
+            'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion', 'testCategories', 'isHasTestResult', "checkNavigationUrl"],
         mounted() {
+        },
+        watch : {
+            navigation() {
+                this.defaultCustomMessage.navigation.unique_custom ="ナビゲーション「" + this.navigation + "」が既に存在する為、登録できません";
+                let messError = {
+                    custom: this.defaultCustomMessage
+                };
+                this.$validator.localize("en", messError);
+
+            }
         },
         methods: {
             deleteSubQuestion (index) {
@@ -536,23 +567,23 @@
                 };
 
                 messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
+                    required: "問題文を入力してください。",
                     max: "問題文は255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください"
+                    required: "選択肢1(正解)を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください"
+                    required: "選択肢2(正解)を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
                     required: "点数を入力してください",
                     decimal: "点数は半角数字を入力してください",
-                    min_value: "点数は1～1000000000 を入力してください",
-                    max_value: "点数は1～1000000000 を入力してください",
+                    min_value: "点数は1～1000000000 を入力してください。",
+                    max_value: "点数は1～1000000000 を入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][testCategory]"] = {
-                    required: "カテゴリを選択してください",
+                    required: "カテゴリを選択してください。",
                 };
                 this.$validator.localize("en", messError);
 

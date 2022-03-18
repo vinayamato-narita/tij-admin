@@ -154,6 +154,7 @@ class InquirySubjectController extends BaseController
         $inquirySubjectInfo->_token = csrf_token();
         $inquirySubjectInfo->lang_inquiry_subject = $inquirySubjectLangInfo->inquiry_subject ?? "";
         $inquirySubjectInfo->lang = $langType;
+        $inquirySubjectInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
 
         return view('inquirySubject.edit_lang', [
             'breadcrumbs' => $breadcrumbs,

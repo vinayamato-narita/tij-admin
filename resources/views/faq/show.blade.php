@@ -107,7 +107,7 @@ use App\Enums\LangType;
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="title-page">ベトナム語版</h5>
+                                    <h5 class="title-page">中国語版</h5>
                                     <a href="{{ route('editLangFaq', [$faqInfo->faq_id, LangType::ZH]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 

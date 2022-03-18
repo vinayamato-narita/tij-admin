@@ -31,4 +31,19 @@ class CommonComponent
         }
         return true;
     }
+
+    public static function escapeLikeSentence($column, $str, $before = true, $after = true)
+    {
+        $result = str_replace('\\', '[\]', CommonComponent::mb_trim($str)); // \ -> \\
+        $result = str_replace('%', '\%', $result); // % -> \%
+        $result = str_replace('_', '\_', $result); // _ -> \_
+        return [[$column, 'LIKE', (($before) ? '%' : '') . $result . (($after) ? '%' : '')]];
+    }
+
+    public static function mb_trim($string)
+    {
+        $whitespace = '[\s\0\x0b\p{Zs}\p{Zl}\p{Zp}]';
+        $ret = preg_replace(sprintf('/(^%s+|%s+$)/u', $whitespace, $whitespace), '', $string);
+        return $ret;
+    }
 }

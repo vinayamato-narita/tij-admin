@@ -8,6 +8,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Enums\StudentEntryType;
 use DB;
 use DateTime;
+use App\Components\CommonComponent;
+use App\Components\DateTimeComponent;
 use Log;
 
 class StudentExport implements FromCollection, WithHeadings
@@ -66,29 +68,29 @@ class StudentExport implements FromCollection, WithHeadings
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where('student.student_id', '=',$request['search_input'])
-                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student.student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student.student_email', $request['search_input']));
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_nickname', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_email', $request['search_input']));
             });
         }
         if (isset($request['search_detail'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
-                    ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
-                    ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
+                $query->where(CommonComponent::escapeLikeSentence('student.student_name', $request['student_name']))
+                    ->where(CommonComponent::escapeLikeSentence('student.student_nickname', $request['student_nickname']))
+                    ->where(CommonComponent::escapeLikeSentence('student.student_skypename', $request['student_skypename']))
+                    ->where(CommonComponent::escapeLikeSentence('student.student_email', $request['student_email']))
+                    ->where(CommonComponent::escapeLikeSentence('student.company_name', $request['custom_company_name']));
 
                     if ($request['all_project_code'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
+                        $query->where(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
                     }
                     if ($request['all_project_company_name'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
+                        $query->where(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
                     }
                     if(!isset($request['check_company_code'])) {
                         $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
+                            $query->orWhere(CommonComponent::escapeLikeSentence('lms_company.legal_code', $request['company_code']))
+                                ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
                         });
                     }
                     if(isset($request['check_company_code'])) {
@@ -111,9 +113,9 @@ class StudentExport implements FromCollection, WithHeadings
         }
 
         $studentList = $queryBuilder->get()->map(function($item, $key) {
-            $item['create_date'] = isset($item['create_date']) ? date('Y-m-d', strtotime($item['create_date'])) : "";
-            $item['first_payment_date'] = DateTime::createFromFormat('Y-m-d', $item['first_payment_date']) ? date('Y-m-d', strtotime($item['first_payment_date'])) : "";
-            $item['first_lesson_date'] = isset($item['first_lesson_date']) ? date('Y-m-d', strtotime($item['first_lesson_date'])) : "";
+            $item['create_date'] = DateTimeComponent::getDate($item['create_date']);
+            $item['first_payment_date'] = DateTimeComponent::getDate($item['first_payment_date']);
+            $item['first_lesson_date'] = DateTimeComponent::getDate($item['first_lesson_date']);
             $item['is_tmp_entry'] = StudentEntryType::getDescription($item['is_tmp_entry']);
 
             if (is_null($item['direct_mail_flag']) === true) {
@@ -145,20 +147,5 @@ class StudentExport implements FromCollection, WithHeadings
             "DMステータス", 
             "連絡事項"
         ];
-    }
-
-    public function escapeLikeSentence($column, $str, $before = true, $after = true)
-    {
-        $result = str_replace('\\', '[\]', $this->mb_trim($str)); // \ -> \\
-        $result = str_replace('%', '\%', $result); // % -> \%
-        $result = str_replace('_', '\_', $result); // _ -> \_
-        return [[$column, 'LIKE', (($before) ? '%' : '') . $result . (($after) ? '%' : '')]];
-    }
-
-    public function mb_trim($string)
-    {
-        $whitespace = '[\s\0\x0b\p{Zs}\p{Zl}\p{Zp}]';
-        $ret = preg_replace(sprintf('/(^%s+|%s+$)/u', $whitespace, $whitespace), '', $string);
-        return $ret;
     }
 }

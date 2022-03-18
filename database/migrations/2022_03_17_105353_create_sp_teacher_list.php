@@ -15,7 +15,7 @@ class CreateSpTeacherList extends Migration
     {
         $procedure = "
         DROP PROCEDURE IF EXISTS `sp_get_teacher_list_teacher_search`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_teacher_list_teacher_search`(
+        CREATE PROCEDURE `sp_get_teacher_list_teacher_search`(
             IN _course_id VARCHAR(255),
             IN _lesson_id VARCHAR(255),
             IN _gender VARCHAR(255),

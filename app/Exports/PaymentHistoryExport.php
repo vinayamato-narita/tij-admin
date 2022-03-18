@@ -8,6 +8,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Enums\PaidStatus;
 use DB;
 use DateTime;
+use App\Components\CommonComponent;
+use App\Components\DateTimeComponent;
 use Log;
 
 class PaymentHistoryExport implements FromCollection, WithHeadings
@@ -70,15 +72,15 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lms_company.company_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('student.company_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lms_project.project_code', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('order.campaign_code', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('point_subscription_history.item_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('course.course_name', $request['search_input']));
+                $query->where(CommonComponent::escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.company_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.corporation_code', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('order.campaign_code', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
 
@@ -111,19 +113,19 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
                 $queryBuilder = $queryBuilder->where('point_subscription_history.student_id', '=', $request['student_id']);
             }
             if ($request['student_name'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('student.student_name', $request['student_name']));
+                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('student.student_name', $request['student_name']));
             }
             if ($request['student_email'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('student.student_email', $request['student_email']));
+                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('student.student_email', $request['student_email']));
             }
             if ($request['item_name'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
+                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
             }
             if ($request['project_code'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('lms_project.project_code', $request['project_code']));
+                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['project_code']));
             }
             if ($request['company_name'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('lms_company.company_name', $request['company_name']));
+                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['company_name']));
             }
             if (isset($request['corporation_code']) && $request['corporation_code'] != "" && !isset($request['check_corporation_code'])) {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.corporation_code', $request['corporation_code']);
@@ -143,10 +145,10 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
         }
 
         $paymentList = $queryBuilder->get()->map(function($item, $key) {
-            $item['payment_date'] = isset($item['payment_date']) ? date('Y-m-d', strtotime($item['payment_date'])) : "";
-            $item['j_start_date'] = isset($item['j_start_date']) ? date('Y-m-d', strtotime($item['j_start_date'])) : "";
-            $item['begin_date'] = isset($item['begin_date']) ? date('Y-m-d', strtotime($item['begin_date'])) : "";
-            $item['point_expire_date'] = isset($item['point_expire_date']) ? date('Y-m-d', strtotime($item['point_expire_date'])) : "";
+            $item['payment_date'] = DateTimeComponent::getDate($item['payment_date']);
+            $item['j_start_date'] = DateTimeComponent::getDate($item['j_start_date']);
+            $item['begin_date'] = DateTimeComponent::getDate($item['begin_date']);
+            $item['point_expire_date'] = DateTimeComponent::getDate($item['point_expire_date']);
             $item['amount'] = number_format($item['amount']);
             $item['tax'] = number_format($item['tax']);
             $item['j_paid_status'] = PaidStatus::getDescription($item['j_paid_status']);
@@ -176,20 +178,5 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
             "入金日",
             "支払期限"
         ];
-    }
-
-    public function escapeLikeSentence($column, $str, $before = true, $after = true)
-    {
-        $result = str_replace('\\', '[\]', $this->mb_trim($str)); // \ -> \\
-        $result = str_replace('%', '\%', $result); // % -> \%
-        $result = str_replace('_', '\_', $result); // _ -> \_
-        return [[$column, 'LIKE', (($before) ? '%' : '') . $result . (($after) ? '%' : '')]];
-    }
-
-    public function mb_trim($string)
-    {
-        $whitespace = '[\s\0\x0b\p{Zs}\p{Zl}\p{Zp}]';
-        $ret = preg_replace(sprintf('/(^%s+|%s+$)/u', $whitespace, $whitespace), '', $string);
-        return $ret;
     }
 }

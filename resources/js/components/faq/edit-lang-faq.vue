@@ -48,8 +48,7 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
-                                        <h5 v-if="faqInfo.lang ===  'en'" class="title-page">英語版</h5>
-                                        <h5 v-if="faqInfo.lang ===  'zh'"  class="title-page">中国語版</h5>
+                                        <h5 class="title-page">{{ faqInfoEx.title }}</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">

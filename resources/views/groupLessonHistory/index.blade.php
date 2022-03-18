@@ -35,6 +35,7 @@
                                         </group-lesson-history-input-search-multi>
                                     </div>
                                     @if(!$groupLessonHistoryList->isEmpty())
+                                        {{ $groupLessonHistoryList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>

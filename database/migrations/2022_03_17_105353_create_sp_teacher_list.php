@@ -48,7 +48,7 @@ class CreateSpTeacherList extends Migration
                         WHEN _gender = '' THEN
                             1 = 1
                         ELSE
-                            te.teacher_sex IN (_gender)
+                            FIND_IN_SET(te.teacher_sex,_gender)
                         END
                          AND EXISTS (
                        SELECT * FROM teacher_lesson tl JOIN lesson l ON tl.lesson_id = l.lesson_id  WHERE tl.teacher_id = te.teacher_id
@@ -58,8 +58,22 @@ class CreateSpTeacherList extends Migration
                                      ELSE 
                                             tl.lesson_id IN (SELECT lesson_id
                                         FROM lesson
-                                        WHERE _lesson_id LIKE CONCAT('%,', lesson_id, ',%' ))
+                                        WHERE lesson_id LIKE CONCAT('%', _lesson_id, '%' ))
                                      END
+                            AND EXISTS (
+                       SELECT * 
+                                 FROM teacher_lesson tl 
+                                 JOIN lesson l ON tl.lesson_id = l.lesson_id
+                                 JOIN course_lesson cl ON cl.lesson_id = l.lesson_id
+                                 WHERE tl.teacher_id = te.teacher_id
+                       AND CASE 
+                                     WHEN _course_id = -1 THEN
+                                            1 = 1
+                                     ELSE 
+                                            cl.course_id IN (SELECT course_id
+                                        FROM course
+                                        WHERE course_id LIKE CONCAT('%', _course_id, '%' ))
+                                    END)
                             AND
                                  CASE
                                         WHEN _search_input = '' THEN
@@ -78,6 +92,13 @@ class CreateSpTeacherList extends Migration
                                         WHEN _teacher_age = 2 THEN
                                                 DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(te.teacher_birthday, '%Y') < 30
                                         END
+                            AND
+                                 CASE
+                                    WHEN _teacher_feature = '' THEN
+                            1 = 1
+                        ELSE
+                                            FIND_IN_SET(te.teacher_feature,_teacher_feature)
+                        END
                      )
                 ORDER BY te.display_order ASC ,COALESCE(ti.teacher_nickname, te.teacher_nickname) ASC
                 ;

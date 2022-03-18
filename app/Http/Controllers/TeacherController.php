@@ -20,6 +20,8 @@ use App\Services\CommonService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\LessonHistory;
+use App\Exports\TeacherLessonHistoryExport;
 use Log;
 
 class TeacherController extends BaseController
@@ -324,5 +326,168 @@ class TeacherController extends BaseController
         $fileName = "teacherlist_".date("Y-m-d").".csv";
 
         return Excel::download(new TeacherExport($request), $fileName);
+    }
+
+    public function lessonHistory(Request $request, $id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_lesson_history', $id]
+        ]);
+        $pageLimit = $this->newListLimit($request);
+
+        $teacher = Teacher::where('teacher_id', $id)->firstOrFail();
+
+        Session::put('teacherLessonHistory', collect($request));
+
+        $queryBuilder = LessonHistory::select('lesson_schedule.lesson_date', 
+            'lesson_schedule.lesson_starttime',
+            'lesson_schedule.lesson_endtime',
+            'course.course_name',
+            'lesson.lesson_name',
+            'lesson_text.lesson_text_name',
+            'lesson_history.student_id',
+            'student.student_name',
+            'lesson_history.lesson_history_id'
+        )
+        ->join('lesson_schedule', function($join) use ($id) {
+            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+            ->where('lesson_schedule.teacher_id', $id);
+        })
+        ->leftJoin('lesson', function($join) {
+            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+        })
+        ->leftJoin('lesson_text', function($join) {
+            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+        })
+        ->leftJoin('student', function($join) {
+            $join->on('lesson_history.student_id', '=', 'student.student_id');
+        })
+        ->leftJoin('course', function($join) {
+            $join->on('lesson_history.course_id', '=', 'course.course_id');
+        })
+        ->where('lesson_history.student_lesson_reserve_type', '!=', 2);
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('course.course_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('lesson.lesson_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('lesson_text.lesson_text_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']));
+            });
+        }
+       
+        if (isset($request['lesson_date_start']) && $request['lesson_date_start'] != null) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where('lesson_schedule.lesson_date', '>=', $request['lesson_date_start']);
+            });
+        }
+        if (isset($request['lesson_date_end']) && $request['lesson_date_end'] != null) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where('lesson_schedule.lesson_date', '<=', $request['lesson_date_end']);
+            });
+        }
+
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "lesson_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_date','ASC') : $queryBuilder->orderBy('lesson_date','DESC');
+            }
+            if ($request['sort'] == "lesson_starttime") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_starttime','ASC') : $queryBuilder->orderBy('lesson_starttime','DESC');
+            }
+            if ($request['sort'] == "course_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name','ASC') : $queryBuilder->orderBy('course_name','DESC');
+            }
+            if ($request['sort'] == "lesson_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_name','ASC') : $queryBuilder->orderBy('lesson_name','DESC');
+            }
+            if ($request['sort'] == "lesson_text_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_text_name','ASC') : $queryBuilder->orderBy('lesson_text_name','DESC');
+            }
+            if ($request['sort'] == "student_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id','ASC') : $queryBuilder->orderBy('student_id','DESC');
+            }
+            if ($request['sort'] == "student_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_name','ASC') : $queryBuilder->orderBy('student_name','DESC');
+            }
+        }else {
+            $queryBuilder = $queryBuilder->orderBy('lesson_date','DESC');
+        }
+
+        $lessonHistories = $queryBuilder->paginate($pageLimit);
+
+        return view('teacher.lesson-history', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'teacher' => $teacher,
+            'lessonHistories' => $lessonHistories,
+        ]);
+    }
+
+    public function lessonHistoryExport($id)
+    {
+        $request = Session::get('teacherLessonHistory');
+        $fileName = "teacher_lesson_history_".date("Y-m-d").".csv";
+
+        return Excel::download(new TeacherLessonHistoryExport($id, $request), $fileName);
+    }
+
+    public function lessonHistoryDetail($id)
+    {
+        $lesson = LessonHistory::select('lesson_schedule.lesson_date', 
+            'lesson_schedule.lesson_starttime',
+            'lesson_schedule.lesson_endtime',
+            'course.course_name',
+            'lesson.lesson_name',
+            'lesson_text.lesson_text_name',
+            'lesson_history.student_id',
+            'student.student_name',
+            'lesson_history.lesson_history_id',
+            'teacher.teacher_id',
+            'teacher.teacher_name',
+            'lesson_history.teacher_rating',
+            'lesson_history.teacher_attitude',
+            'lesson_history.teacher_punctual',
+            'lesson_history.skype_voice_rating_from_student',
+            'lesson_history.comment_from_student_to_office',
+            'lesson_history.comment_from_teacher_to_student',
+            'lesson_history.comment_from_admin_to_student'
+        )
+        ->join('lesson_schedule', function($join) {
+            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+        })
+        ->leftJoin('lesson', function($join) {
+            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+        })
+        ->leftJoin('lesson_text', function($join) {
+            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+        })
+        ->leftJoin('teacher', function($join) {
+            $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
+        })
+        ->leftJoin('student', function($join) {
+            $join->on('lesson_history.student_id', '=', 'student.student_id');
+        })
+        ->leftJoin('course', function($join) {
+            $join->on('lesson_history.course_id', '=', 'course.course_id');
+        })
+        ->where('lesson_history.lesson_history_id', $id)->firstOrFail();
+
+        $teacherId = $lesson->teacher_id;
+
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_lesson_history', $teacherId],
+            ['name' => 'teacher_lesson_history_detail', $id],
+        ]);
+
+        return view('teacher.lesson-history-detail', [
+            'breadcrumbs' => $breadcrumbs,
+            'lesson' => $lesson,
+            'teacherId' => $teacherId
+        ]);
     }
 }

@@ -48,7 +48,7 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save" autocomplete="off">
                                     <div class="card-header">
-                                        <h5 class="title-page">英語版</h5>
+                                        <h5 class="title-page">{{ newsInfoEx.title }}</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">

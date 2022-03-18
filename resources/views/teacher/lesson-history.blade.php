@@ -1,5 +1,6 @@
 @php
     use App\Components\SearchQueryComponent;
+    use App\Components\DateTimeComponent;
 @endphp
 
 @extends('layouts.default')
@@ -58,25 +59,16 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($lessonHistories as $index => $lesson)
-                                                @php
-                                                    $lessonTime = "";
-                                                    if (!empty($lesson['lesson_starttime']) && !empty($lesson['lesson_endtime'])) {
-                                                        $start = strtotime($lesson['lesson_starttime']);
-                                                        $end = strtotime($lesson['lesson_endtime']);
-                                                        $lessonTime = date('H:i', $start).'~'.date('H:i', $end);   
-                                                    }
-                                                    $lessonDate = $lesson->lesson_date != null ? date('Y-m-d', strtotime($lesson->lesson_date)) : "";
-                                                @endphp
                                                     <tr>
-                                                        <td class="text-center">{{ $lessonDate }}</td>
-                                                        <td class="text-center">{{ $lessonTime }}</td>
+                                                        <td class="text-center">{{ DateTimeComponent::getDate($lesson->lesson_date) }}</td>
+                                                        <td class="text-center">{{ DateTimeComponent::getStartEndTime($lesson->lesson_starttime, $lesson->lesson_endtime) }}</td>
                                                         <td class="text-center">{{ $lesson->course_name }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_name }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_text_name }}</td>
                                                         <td class="text-center">{{ $lesson->student_id }}</td>
                                                         <td class="text-center">{{ $lesson->student_name }}</td>
                                                         <td>
-                                                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-info-circle"></i>詳細</a>
+                                                            <a href="{{ route('teacher.lessonHistoryDetail', $lesson->lesson_history_id) }}" class="btn btn-primary btn-sm"><i class="fa fa-info-circle"></i>詳細</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

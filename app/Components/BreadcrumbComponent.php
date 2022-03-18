@@ -407,6 +407,10 @@ class BreadcrumbComponent
                 'text' => 'レッスン履歴一覧',
                 'route_str' => "teacher.lessonHistory",
             ],
+            'teacher_lesson_history_detail' => [
+                'text' => 'レッスン履歴詳細',
+                'route_str' => "teacher.lessonHistoryDetail",
+            ],
         ];
     }
 

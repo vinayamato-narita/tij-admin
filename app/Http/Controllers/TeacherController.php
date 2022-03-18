@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LessonHistory;
+use App\Exports\TeacherLessonHistoryExport;
 use Log;
 
 class TeacherController extends BaseController
@@ -427,6 +428,66 @@ class TeacherController extends BaseController
 
     public function lessonHistoryExport($id)
     {
-        
+        $request = Session::get('teacherLessonHistory');
+        $fileName = "teacher_lesson_history_".date("Y-m-d").".csv";
+
+        return Excel::download(new TeacherLessonHistoryExport($id, $request), $fileName);
+    }
+
+    public function lessonHistoryDetail($id)
+    {
+        $lesson = LessonHistory::select('lesson_schedule.lesson_date', 
+            'lesson_schedule.lesson_starttime',
+            'lesson_schedule.lesson_endtime',
+            'course.course_name',
+            'lesson.lesson_name',
+            'lesson_text.lesson_text_name',
+            'lesson_history.student_id',
+            'student.student_name',
+            'lesson_history.lesson_history_id',
+            'teacher.teacher_id',
+            'teacher.teacher_name',
+            'lesson_history.teacher_rating',
+            'lesson_history.teacher_attitude',
+            'lesson_history.teacher_punctual',
+            'lesson_history.skype_voice_rating_from_student',
+            'lesson_history.comment_from_student_to_office',
+            'lesson_history.comment_from_teacher_to_student',
+            'lesson_history.comment_from_admin_to_student'
+        )
+        ->join('lesson_schedule', function($join) {
+            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+        })
+        ->leftJoin('lesson', function($join) {
+            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+        })
+        ->leftJoin('lesson_text', function($join) {
+            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+        })
+        ->leftJoin('teacher', function($join) {
+            $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
+        })
+        ->leftJoin('student', function($join) {
+            $join->on('lesson_history.student_id', '=', 'student.student_id');
+        })
+        ->leftJoin('course', function($join) {
+            $join->on('lesson_history.course_id', '=', 'course.course_id');
+        })
+        ->where('lesson_history.lesson_history_id', $id)->firstOrFail();
+
+        $teacherId = $lesson->teacher_id;
+
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_lesson_history', $teacherId],
+            ['name' => 'teacher_lesson_history_detail', $id],
+        ]);
+
+        return view('teacher.lesson-history-detail', [
+            'breadcrumbs' => $breadcrumbs,
+            'lesson' => $lesson,
+            'teacherId' => $teacherId
+        ]);
     }
 }

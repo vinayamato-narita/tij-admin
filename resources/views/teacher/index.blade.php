@@ -13,7 +13,6 @@
                     <div class="pull-left">
                         <h5>
                             講師情報一覧
-
                         </h5>
                     </div>
                     <div class="pull-right mrb-5">
@@ -69,10 +68,10 @@
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                     <li>
-                                                                        <a class="dropdown-item" href="#"><i class="fa fa-skype mr-2"></i>スカイプ接続</a>
+                                                                        <a class="dropdown-item" href="skype:{{ $teacher->teacher_skypename }}?chat"><i class="fa fa-skype mr-2"></i>スカイプ接続</a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" href="#"><i class="fa fa-envelope mr-2"></i>メール送信</a>
+                                                                        <a class="dropdown-item" href="mailto:{{ $teacher->teacher_email }}"><i class="fa fa-envelope mr-2"></i>メール送信</a>
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item" href="{{ route('teacher.lessonHistory', $teacher->teacher_id) }}"><i class="fa fa-book mr-2"></i> レッスン履歴</a>

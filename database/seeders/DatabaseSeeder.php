@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(TestCategorySeeder::class);
         $this->call(ZoomSettingSeeder::class);
+        $this->call(FAQCategoryseeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

@@ -96,8 +96,12 @@ class Course extends Model
         $today = Carbon::now();
         $lessonDateArr = $this->lessonSchedules->pluck('lesson_date')->toArray();
 
-        $lessonMaxDate = max($lessonDateArr);
-        $lessonMinDate = min($lessonDateArr);
+        $lessonMaxDate = '';
+        $lessonMinDate = '';
+        if (!empty($lessonDateArr)) {
+            $lessonMaxDate = max($lessonDateArr);
+            $lessonMinDate = min($lessonDateArr);
+        }
         
         if ($this->group_lesson_status == 0 && Carbon::parse($this->pushlish_date_from) > $today) {
             return '公開前';

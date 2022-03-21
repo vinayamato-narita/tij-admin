@@ -260,6 +260,10 @@ const MENU = [
     ZOOM_SETTING => [
 		'zoomSetting.edit',
     ],
+    GROUP_LESSON_HISTORY => [
+    	'groupLessonHistory.index',
+    	'groupLessonHistory.studentAttendance'
+    ]
 ];
 
 

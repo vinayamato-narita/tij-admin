@@ -15,7 +15,8 @@
                     <div class="row">
                         <div class="col-md-7">
                             <div class="card">
-                                <div class="card-header">講師情報
+                                <div class="card-header">
+                                    <h5 class="title-page">講師情報</h5>
                                     <div class="float-right">
                                         <a href="#" class="btn btn-primary ">
                                             パスワード設定・変更
@@ -186,10 +187,115 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">英語版</h5>
+                                    <div class="float-right">
+                                        <a :href="urlTeacherEn" class="btn btn-primary ">編集</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">講師名:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "teacher_name") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">ニックネーム:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "teacher_nickname") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">出身国:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "teacher_university") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">居住地:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "teacher_department") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">自己紹介:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "teacher_introduction") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">管理者からの紹介:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherEnInfo, "introduce_from_admin") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">中国語版</h5>
+                                    <div class="float-right">
+                                        <a :href="urlTeacherZh" class="btn btn-primary ">編集</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">講師名:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "teacher_name") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">ニックネーム:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "teacher_nickname") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">出身国:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "teacher_university") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">居住地:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "teacher_department") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">自己紹介:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "teacher_introduction") }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">管理者からの紹介:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{ getTeacherContent(teacherZhInfo, "introduce_from_admin") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="card">
-                                <div class="card-header">レッスン一覧
+                                <div class="card-header">
+                                    <h5 class="title-page">レッスン一覧</h5>
                                     <div class="float-right">
                                         <a href="javascript:void(0);" v-on:click="show" class="btn btn-primary ">
                                             追加
@@ -255,7 +361,7 @@
                 messageConfirm : 'このレッスンを解除しますか？',
             };
         },
-        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl'],
+        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh'],
         mounted() {
 
         },
@@ -270,6 +376,12 @@
             getUriDelete(id, lessonId) {
                  return  id + '/lesson/' + lessonId + '/delete';
 
+            },
+            getTeacherContent(teacher, field) {
+                if (teacher == null) {
+                    return "";
+                }
+                return teacher[field];
             }
         },
     }

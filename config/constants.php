@@ -141,6 +141,9 @@ const MENU = [
 		'teacher.create',
 		'teacher.show',
 		'teacher.edit',
+		'teacher.lessonHistory',
+		'teacher.lessonHistoryDetail',
+		'teacher.editLang',
 	],
 	COMMENT => [
 		'comment.index'

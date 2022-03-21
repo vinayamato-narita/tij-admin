@@ -14,6 +14,8 @@ class TeacherInfo extends Model
 
     protected $table = 'teacher_info';
 
+    protected $fillable = ['teacher_info_id', 'teacher_id', 'teacher_name', 'teacher_nickname', 'teacher_introduction', 'introduce_from_admin', 'teacher_university', 'teacher_department', 'lang_type'];
+
     public function teacher()
     {
         return $this->belongsTo('App\Models\Teacher', 'teacher_id', 'teacher_id');

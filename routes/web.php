@@ -246,4 +246,6 @@ Route::group([
     Route::get('/teacher/lesson-history/{id}', 'TeacherController@lessonHistory')->name('teacher.lessonHistory');
     Route::get('/teacher/lesson-history-export/{id}', 'TeacherController@lessonHistoryExport')->name('teacher.lessonHistoryExport');
     Route::get('/teacher/lesson-history-detail/{id}', 'TeacherController@lessonHistoryDetail')->name('teacher.lessonHistoryDetail');
+    Route::get('/teacher/{id}/edit-lang/{type}', 'TeacherController@editLang')->name('teacher.editLang');
+    Route::post('updateTeacherLang', 'TeacherController@updateLang')->name('teacher.updateLang');
 });

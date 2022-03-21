@@ -411,6 +411,10 @@ class BreadcrumbComponent
                 'text' => 'レッスン履歴詳細',
                 'route_str' => "teacher.lessonHistoryDetail",
             ],
+            'edit_lang_teacher' => [
+                'text' => '講師情報多言語編集',
+                'route_str' => "teacher.editLang",
+            ],
         ];
     }
 

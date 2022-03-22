@@ -82,7 +82,7 @@
                             <thead >
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input v-on:click="checkAll" type="checkbox" class="checkAll" style="width: auto; height: auto; display: inline-block;">
+                                    <input v-model="selectAll" type="checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </th>
                                 <th class="text-center text-md-left bg-gray-100">公開状況</th>
                                 <th class="text-center text-md-left bg-gray-100">コースID</th>
@@ -95,11 +95,10 @@
                                 <td class="text-center">
                                     <input 
                                         id="isTestLesson" 
-                                        v-on:click="checkedId(course.course_id)" 
                                         type="checkbox" 
                                         class=" checkbox" 
                                         style="width: auto; height: auto; display: inline-block;"
-                                        v-model="courses.ids"
+                                        v-model="checkedIds" 
                                         :value="course.course_id"
                                     >
                                 </td>
@@ -184,9 +183,7 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                courses: {
-                    ids: []
-                }
+                checkedIds: []
             };
         },
         props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl', 'type'],
@@ -235,34 +232,10 @@
                 this.getData();
 
             },
-            checkAll(event) {
-                let that = this;
-                if (event.target.checked) {
-                    $('.checkbox').prop('checked', true);
-                    that.dataList.forEach(function (course) {
-                        that.courses.ids.push(course.course_id);
-                    });
-                }
-                else {
-                    $('.checkbox').prop('checked', false);
-                    that.dataList.forEach(function (course) {
-                        that.courses.ids.remove(course.course_id);
-                    });
-                }
-            },
-            checkedId(id) {
-                let lengAll = $('.checkbox').length;
-                let lengChecked = $('.checkbox:checked').length;
-                if (lengAll == lengChecked) {
-                    $('.checkAll').prop('checked', true);
-                }else {
-                    $('.checkAll').prop('checked', false);
-                }
-            },
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, that.courses.ids)
+                    .post(that.registerUrl, that.checkedIds)
                     .then(response => {
                         window.location = this.detailUrl;
                     })
@@ -270,7 +243,19 @@
                     });
             }
         },
-
+        computed: {
+            selectAll: {
+                get: function () {
+                   
+                },
+                set: function (value) {
+                    this.checkedIds = [];
+                    if (value) {
+                        this.checkedIds = this.dataList.map((course) => course.course_id); 
+                    }
+                }
+            }
+        }
     }
 </script>
 

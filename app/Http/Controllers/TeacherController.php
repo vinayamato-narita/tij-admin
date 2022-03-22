@@ -558,4 +558,27 @@ class TeacherController extends BaseController
             'status' => 'OK',
         ], StatusCode::OK);
     }
+
+    public function updatePassword(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+        
+        $teacherInfo = Teacher::where('teacher_id', $request->id)->first();
+       
+        if ($teacherInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $teacherInfo->password = Hash::make($request->password);
+        $teacherInfo->save();  
+        
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
 }

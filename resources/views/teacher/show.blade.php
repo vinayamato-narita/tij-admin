@@ -16,6 +16,7 @@ use App\Enums\LangType;
             :teacher-zh-info ="{{json_encode($teacherZhInfo)}}"
             :url-teacher-en ="{{json_encode(route('teacher.editLang', [$teacher->teacher_id, LangType::EN]))}}"
             :url-teacher-zh ="{{json_encode(route('teacher.editLang', [$teacher->teacher_id, LangType::ZH]))}}"
+            :url-update-password="{{json_encode(route('teacher.updatePassword'))}}" 
     >
 
     </teacher-show>

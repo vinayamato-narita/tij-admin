@@ -22,6 +22,9 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LessonHistory;
 use App\Exports\TeacherLessonHistoryExport;
+use App\Models\TeacherInfo;
+use App\Enums\LangType;
+use App\Http\Requests\TeacherLangRequest;
 use Log;
 
 class TeacherController extends BaseController
@@ -144,9 +147,15 @@ class TeacherController extends BaseController
 
         $teacher = Teacher::where('teacher_id', $id)->with(['timeZone', 'lesson'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
+
+        $teacherEnInfo = TeacherInfo::where(['teacher_id' => $id, 'lang_type' => LangType::EN])->first();
+        $teacherZhInfo = TeacherInfo::where(['teacher_id' => $id, 'lang_type' => LangType::ZH])->first();
+
         return view('teacher.show', [
             'breadcrumbs' => $breadcrumbs,
-            'teacher' => $teacher
+            'teacher' => $teacher,
+            'teacherEnInfo' => $teacherEnInfo,
+            'teacherZhInfo' => $teacherZhInfo,
         ]);
     }
 
@@ -489,5 +498,87 @@ class TeacherController extends BaseController
             'lesson' => $lesson,
             'teacherId' => $teacherId
         ]);
+    }
+
+    public function editLang($id, $langType)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'teacher_list'],
+            ['name' => 'teacher_show', $id],
+            ['name' => 'edit_lang_teacher', $id, $langType],
+        ]);
+
+        $teacherInfo = Teacher::where('teacher_id', $id)->firstOrFail();
+        
+        $teacherLangInfo = TeacherInfo::where(['teacher_id' => $id, 'lang_type' => $langType])->first();
+        $teacherInfo->_token = csrf_token();
+        $teacherInfo->teacher_name_lang = $teacherLangInfo->teacher_name ?? "";
+        $teacherInfo->teacher_nickname_lang = $teacherLangInfo->teacher_nickname ?? "";
+        $teacherInfo->teacher_university_lang = $teacherLangInfo->teacher_university ?? "";
+        $teacherInfo->teacher_department_lang = $teacherLangInfo->teacher_department ?? "";
+        $teacherInfo->teacher_introduction_lang = $teacherLangInfo->teacher_introduction ?? "";
+        $teacherInfo->introduce_from_admin_lang = $teacherLangInfo->introduce_from_admin ?? "";
+
+        $teacherInfo->lang_type = $langType;
+        $teacherInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
+
+        return view('teacher.edit-lang', [
+            'breadcrumbs' => $breadcrumbs,
+            'teacherInfo' => $teacherInfo,
+        ]);
+    }
+
+    public function updateLang(TeacherLangRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);  
+        }
+        $teacherInfo = Teacher::where('teacher_id', $request->teacher_id)->first();
+        if ($teacherInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $teacherLangInfo = TeacherInfo::updateOrCreate(
+            ['teacher_id' => $request->teacher_id, 'lang_type' => $request->lang_type],
+            [
+                'teacher_name' => $request->teacher_name_lang, 
+                'teacher_nickname' => $request->teacher_nickname_lang,
+                'teacher_university' => $request->teacher_university_lang,
+                'teacher_department' => $request->teacher_department_lang,
+                'teacher_introduction' => $request->teacher_introduction_lang,
+                'introduce_from_admin' => $request->introduce_from_admin_lang
+            ]
+        );
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        if(!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);          
+        }
+        
+        $teacherInfo = Teacher::where('teacher_id', $request->id)->first();
+       
+        if ($teacherInfo == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $teacherInfo->password = Hash::make($request->password);
+        $teacherInfo->save();  
+        
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 }

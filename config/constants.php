@@ -141,6 +141,9 @@ const MENU = [
 		'teacher.create',
 		'teacher.show',
 		'teacher.edit',
+		'teacher.lessonHistory',
+		'teacher.lessonHistoryDetail',
+		'teacher.editLang',
 	],
 	COMMENT => [
 		'comment.index'
@@ -257,6 +260,10 @@ const MENU = [
     ZOOM_SETTING => [
 		'zoomSetting.edit',
     ],
+    GROUP_LESSON_HISTORY => [
+    	'groupLessonHistory.index',
+    	'groupLessonHistory.studentAttendance'
+    ]
 ];
 
 

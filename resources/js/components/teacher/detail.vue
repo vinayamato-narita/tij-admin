@@ -325,9 +325,14 @@
                         </div>
                     </div>
                 </div>
-                <modal-table :type="type" :detailUrl="detailTeacherUrl" :url="lessonListUrl"  :pageSizeLimit="pageSizeLimit" :id="teacher.id" :register-url="registerUrl">
-
-                </modal-table>
+                <teacher-lesson 
+                    :detailUrl="detailTeacherUrl" 
+                    :url="lessonListUrl"  
+                    :pageSizeLimit="pageSizeLimit" 
+                    :id="teacher.id" 
+                    :register-url="registerUrl">
+                    
+                </teacher-lesson>
             </div>
         </main>
     </div>
@@ -340,14 +345,14 @@
     import PageSize from "./../../components/common/page-size";
     import InputSearch from "./../../components/common/input-search";
     import Loader from "./../../components/common/loader";
-    import ModalTable from "../common/modal-table";
+    import TeacherLesson from "../teacher/teacher-lesson";
     import DeleteItem from "./../../components/common/delete-item";
 
     export default {
         created: function () {
         },
         components: {
-            ModalTable,
+            TeacherLesson,
             Loader,
             PageSize,
             InputSearch,

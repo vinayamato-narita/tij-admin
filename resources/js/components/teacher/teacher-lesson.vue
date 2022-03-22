@@ -1,8 +1,8 @@
 <template>
     <modal name="select-teacher-lesson-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header">
-                <h5 class="title-page">コース一覧</h5>
+            <div class="card-header"> 
+                <h5 class="title-page">レッスン一覧</h5>
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
@@ -76,47 +76,28 @@
                     <div class="tanemaki-table pd-t-7" style="width: 100%;">
                         <div v-if="dataList.length ==  0" class="data-empty-message text-center alert alert-danger">
                             該当データがありません
-
                         </div>
                         <table v-if="dataList.length !=  0" class="table table-responsive-sm table-striped border">
                             <thead >
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input v-model="selectAll" type="checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input v-model="selectAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </th>
-                                <th class="text-center text-md-left bg-gray-100">公開状況</th>
-                                <th class="text-center text-md-left bg-gray-100">コースID</th>
-                                <th class="text-center text-md-left bg-gray-100">セットコード</th>
-                                <th class="text-center text-md-left bg-gray-100">コース名</th>
+                                <th class="text-center text-md-left bg-gray-100">レッスン名</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="course in dataList">
-                                <td class="text-center">
-                                    <input 
-                                        id="isTestLesson" 
-                                        type="checkbox" 
-                                        class=" checkbox" 
-                                        style="width: auto; height: auto; display: inline-block;"
-                                        v-model="checkedIds" 
-                                        :value="course.course_id"
-                                    >
-                                </td>
-                                <td class="text-md-left" >{{  course.is_show ? '公開中' : '公開中' }}</td>
-                                <td class="text-md-left" >{{  course.is_set_course ?  '' : course.course_id }}</td>
-                                <td class="text-md-left" >{{  course.is_set_course ? course.course_id : '' }}</td>
-                                <td class="text-md-left" >{{  course.course_name }}</td>
-
-
-                            </tr>
-
-
+                                <tr v-for="lesson in dataList">
+                                    <td class="text-center">
+                                        <input  type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;"
+                                            v-model="checkedIds" 
+                                            :value="lesson.lesson_id">
+                                    </td>
+                                    <td class="text-md-left">{{ lesson.lesson_name  }}</td>
+                                </tr>
                             </tbody>
-
                         </table>
                     </div>
-
-
                 </div>
                 <div class="row mb-2">
                     <div class="col-md-2">
@@ -183,10 +164,11 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                checkedIds: []
+                checkedIds : [],
+
             };
         },
-        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl', 'type'],
+        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl'],
         mounted() {
         },
         created: function () {
@@ -251,7 +233,7 @@
                 set: function (value) {
                     this.checkedIds = [];
                     if (value) {
-                        this.checkedIds = this.dataList.map((course) => course.course_id); 
+                        this.checkedIds = this.dataList.map((lesson) => lesson.lesson_id); 
                     }
                 }
             }

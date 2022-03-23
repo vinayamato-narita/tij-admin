@@ -77,7 +77,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">固定/自由:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.is_free_teacher === '0' ? '固定' : '自由'}}
+                                            {{this.teacher.is_free_teacher == '0' ? '固定' : '自由'}}
 
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">性別:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.teacher_sex === '0' ? '女性' : '男性'}}
+                                            {{this.teacher.teacher_sex == '0' ? '女性' : '男性'}}
 
                                         </div>
                                     </div>

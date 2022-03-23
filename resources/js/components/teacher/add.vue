@@ -278,7 +278,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> パスワード: </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> Zoomパスワード: </label>
 
                                             <div class="col-md-6">
 
@@ -434,9 +434,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listTeacherUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

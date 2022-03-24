@@ -202,9 +202,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listTextUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTextUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

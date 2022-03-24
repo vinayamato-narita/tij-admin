@@ -643,9 +643,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.detailCourseUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.detailCourseUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

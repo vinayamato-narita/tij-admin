@@ -287,21 +287,22 @@
 
                                                 </div>
                                             </div>
-                                            <div class="form-group row " v-if="test.test_type === 2">
+                                            <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
                                                 <label class="col-md-2 col-form-label text-md-left"><b>参考URL :</b>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
                                                     <input
                                                             class="form-control"
-                                                            :name="'subQuestion[' + index + '][answer4]'"
-                                                            v-model="item.answer4"
+                                                            :name="'subQuestion[' + index + '][reference_url]'"
+                                                            v-model="item.referenceUrl"
+                                                            v-validate="'max:30'"
                                                     />
                                                     <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('subQuestion['+ index +'][answer4]')"
+                                                            v-if="errors.has('subQuestion['+ index +'][reference_url]')"
                                                     >
-                                                        {{ errors.first("subQuestion["+ index +"][answer4]") }}
+                                                        {{ errors.first("subQuestion["+ index +"][reference_url]") }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -465,6 +466,7 @@
                     fileName: '',
                     fileNameAttached: e.file == null ? '' : e.file.file_name_original,
                     score: e.score,
+                    referenceUrl: e.reference_url,
                     value: valueTags,
                     testCategory :e.test_category === null ? null : e.test_category.test_category_id,
                     isSavedDB: true
@@ -539,6 +541,9 @@
                     'subQuestion[0][testCategory]': {
                         required: "カテゴリを選択してください。",
                     },
+                    'subQuestion[0][reference_url]': {
+                        max: "参考URLは255文字以内で入力してください。",
+                    },
 
 
                 },
@@ -584,6 +589,9 @@
                 };
                 messError.custom["subQuestion[" + index + "][testCategory]"] = {
                     required: "カテゴリを選択してください。",
+                };
+                messError.custom["subQuestion[" + index + "][reference_url]"] = {
+                    max: "参考URLは255文字以内で入力してください。",
                 };
                 this.$validator.localize("en", messError);
 

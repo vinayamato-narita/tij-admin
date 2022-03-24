@@ -1,5 +1,4 @@
 <template>
-
     <div class="c-body">
         <main class="c-main pt-0">
             <div class="container-fluid">
@@ -7,7 +6,6 @@
                     <div class="page-heading-left">
                         <h5>
                             テキスト編集
-
                         </h5>
                     </div>
                 </div>
@@ -16,26 +14,10 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">テキスト情報
+                                    <div class="card-header">
+                                        <h5 class="title-page">テキスト情報</h5>
                                     </div>
                                     <div class="card-body">
-
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextNo">表示順:
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextNo" type="number" name="lessonTextNo" @input="changeInput()" style="max-width: 100px" v-model="lessonTextNo" value="1" v-validate="'min_value:1|max_value:1000000000'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextNo") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrl">テキストURL（生徒用） :
 
@@ -44,10 +26,7 @@
                                                 <input style="" class="form-control col-md-8 col-md-" id="lessonTextUrl" type="text" name="lessonTextUrl" @input="changeInput()"  v-model="lessonTextUrl"  v-validate="'max:255|url'" />
                                                 <div class="col-md-1"></div>
                                                 <button type="button" class="btn btn-outline-secondary col-md-2" v-on:click="checkLink(lessonTextUrl)">チェック</button>
-
-
                                             </div>
-
                                         </div>
                                         <div class="form-group row " style="margin-top: -15px">
                                             <div class="col-md-3">
@@ -57,7 +36,6 @@
                                                 {{ errors.first("lessonTextUrl") }}
                                             </div>
                                         </div>
-
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrlForTeacher">テキストURL（先生用） :
@@ -70,18 +48,15 @@
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonTextUrlForTeacher") }}
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="form-group row " style="margin-top: -15px">
                                             <div class="col-md-3">
-
                                             </div>
                                             <div class="col-md-6 input-group is-danger" role="alert">
                                                 {{ errors.first("lessonTextUrlForTeacher") }}
                                             </div>
                                         </div>
-
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextName">テキスト名 :
@@ -94,13 +69,8 @@
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonTextName") }}
                                                 </div>
-
-
                                             </div>
                                         </div>
-
-
-
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextDescription"> 説明 : </label>
@@ -113,10 +83,8 @@
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonTextDescription") }}
                                                 </div>
-
                                             </div>
                                         </div>
-
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextSoundUrl"> MP3 URL : </label>
@@ -129,8 +97,6 @@
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonTextSoundUrl") }}
                                                 </div>
-
-
                                             </div>
                                         </div>
                                         <div class="form-group row " style="margin-top: -15px">
@@ -142,7 +108,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -153,8 +118,6 @@
                                                     <a :href="detailTextUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </form>
@@ -167,8 +130,6 @@
         </main>
         <loader :flag-show="flagShowLoader"></loader>
     </div>
-
-
 </template>
 
 <script>

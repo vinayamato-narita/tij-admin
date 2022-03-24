@@ -41,7 +41,6 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('display_order', ' 表示順')</th>
                                                     <th class="text-left min-width-150">@sortablelink('review_id', '復習ID')</th>
                                                     <th class="text-left min-width-120">@sortablelink('review_name', ' 復習名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('review_description', ' 説明')</th>
@@ -52,7 +51,6 @@
                                                 <tbody>
                                                 @foreach ($reviewList as $index => $review)
                                                     <tr>
-                                                        <td class="text-left">{{ $review->display_order }}</td>
                                                         <td class="text-left">{{ $review->review_id }}</td>
                                                         <td class="text-left">{{ $review->review_name }}</td>
                                                         <td class="text-left">{{ $review->review_description }}</td>

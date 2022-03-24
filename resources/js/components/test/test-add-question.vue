@@ -358,7 +358,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="form-group row" v-if="test.show_category">
                                                 <label
                                                         class="col-md-2 col-form-label text-md-left"
                                                 ><b>カテゴリ</b><span v-if="test.test_type === 1" class="glyphicon glyphicon-star"
@@ -541,6 +541,7 @@
         props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail',
             'createQuestionUrl', 'tags', 'createTagUrl', 'testCategories', 'checkNavigationUrl'],
         mounted() {
+            
         },
         watch : {
             navigation() {

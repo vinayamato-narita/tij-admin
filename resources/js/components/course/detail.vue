@@ -355,7 +355,7 @@
 
                             </div>
                             <div class="card" v-if="this.course.course_type === 1">
-                                <div class="card-header">コース終了テスト
+                                <div class="card-header">コース修了テスト
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">

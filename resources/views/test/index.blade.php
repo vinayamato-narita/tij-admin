@@ -1,5 +1,6 @@
 @php
     use App\Components\SearchQueryComponent;
+    use App\Enums\TestType;
 @endphp
 
 @extends('layouts.default')
@@ -72,15 +73,8 @@
                                                             />
                                                             @endif
                                                         </td>
-                                                        @if($test->test_type === \App\Enums\TestType::CONFIRMED)
-                                                            <td class="text-left">確認テスト</td>
-                                                        @endif
-                                                        @if($test->test_type === \App\Enums\TestType::ABILITY)
-                                                            <td class="text-left">実力テスト</td>
-                                                        @endif
-                                                        @if($test->test_type === \App\Enums\TestType::ENDCOURSE)
-                                                            <td class="text-left">コース終了テスト</td>
-                                                        @endif
+
+                                                        <td class="text-left">{{ TestType::getDescription($test->test_type) }}</td>
 
                                                         <td class="text-left "></td>
                                                         <td>

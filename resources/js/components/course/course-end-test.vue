@@ -1,7 +1,7 @@
 <template>
     <modal name="course-end-test-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header"> コース終了テスト
+            <div class="card-header"> コース修了テスト
 
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>

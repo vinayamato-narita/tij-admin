@@ -167,21 +167,20 @@
                             })
                             .then((res) => {
                                 this.$swal({
-                                    title: "テキスト新規作成が完了しました。",
+                                    title: "レッスン新規作成が完了しました",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listLessonUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listLessonUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {
                                     case 422:
                                     case 400:
                                         this.errorsData = err.response.data;
-                                        console.log(this.errorsData)
                                         that.flagShowLoader = false;
                                         break;
                                     case 500:

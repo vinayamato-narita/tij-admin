@@ -89,9 +89,10 @@ class LessonController extends BaseController
                 $lesson->display_order = 1;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
-                $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
-                $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
-                $lesson->is_show_to_teacher_detail = $request->isShoToTeacherDetail == 'true' ? true: false;
+                $lesson->lesson_code = $request->lessonCode ?? '';
+                // $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
+                // $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
+                // $lesson->is_show_to_teacher_detail = $request->isShoToTeacherDetail == 'true' ? true: false;
 
                 $lesson->save();
                 DB::commit();
@@ -371,9 +372,10 @@ class LessonController extends BaseController
             try {
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
-                $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
-                $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
-                $lesson->is_show_to_teacher_detail = $request->isShowToSearchDetail == 'true' ? true: false;
+                $lesson->lesson_code = $request->lessonCode;
+                // $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
+                // $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
+                // $lesson->is_show_to_teacher_detail = $request->isShowToSearchDetail == 'true' ? true: false;
 
                 $lesson->save();
                 DB::commit();

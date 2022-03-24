@@ -25,6 +25,7 @@ class StoreUpdateLessonRequest extends FormRequest
     {
         return [
             'lessonName' => 'required|max:255',
+            'lessonCode' => 'required|max:6',
         ];
     }
 }

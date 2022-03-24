@@ -28,7 +28,7 @@ class TextController extends BaseController
             });
         }
 
-        $lessonTextList = $queryBuilder->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        $lessonTextList = $queryBuilder->sortable(['lesson_text_name' => 'asc'])->paginate($pageLimit);
 
         return view('text.index', [
             'breadcrumbs' => $breadcrumbs,

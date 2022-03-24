@@ -46,7 +46,7 @@ class LessonController extends BaseController
             });
         }
 
-        $lessonList = $queryBuilder->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        $lessonList = $queryBuilder->sortable(['lesson_name' => 'asc'])->paginate($pageLimit);
 
         return view('lesson.index', [
             'breadcrumbs' => $breadcrumbs,

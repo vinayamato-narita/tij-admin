@@ -39,7 +39,7 @@ class PreparationController extends BaseController
             });
         }
 
-        $preparationList = $queryBuilder->sortable(['display_order' => 'asc', 'preparation_name' => 'asc'])->paginate($pageLimit);
+        $preparationList = $queryBuilder->sortable(['preparation_name' => 'asc'])->paginate($pageLimit);
 
         return view('preparation.index', [
             'breadcrumbs' => $breadcrumbs,

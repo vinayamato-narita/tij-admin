@@ -38,7 +38,7 @@ class ReviewController extends BaseController
             });
         }
 
-        $reviewList = $queryBuilder->sortable(['display_order' => 'asc', 'review_name' => 'asc'])->paginate($pageLimit);
+        $reviewList = $queryBuilder->sortable(['review_name' => 'asc'])->paginate($pageLimit);
 
         return view('review.index', [
             'breadcrumbs' => $breadcrumbs,

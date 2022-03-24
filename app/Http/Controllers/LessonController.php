@@ -86,7 +86,7 @@ class LessonController extends BaseController
             DB::beginTransaction();
             try {
                 $lesson = new Lesson();
-                $lesson->display_order = $request->displayOrder;
+                $lesson->display_order = 1;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
                 $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
@@ -369,7 +369,6 @@ class LessonController extends BaseController
 
             DB::beginTransaction();
             try {
-                $lesson->display_order = $request->displayOrder;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
                 $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;

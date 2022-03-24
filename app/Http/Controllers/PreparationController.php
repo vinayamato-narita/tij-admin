@@ -79,7 +79,7 @@ class PreparationController extends BaseController
             DB::beginTransaction();
             try {
                 $preparation = new Preparation();
-                $preparation->display_order = $request->displayOrder;
+                $preparation->display_order = 1;
                 $preparation->preparation_name = $request->preparationName;
                 $preparation->preparation_description = $request->preparationDescription;
 
@@ -185,7 +185,6 @@ class PreparationController extends BaseController
 
             DB::beginTransaction();
             try {
-                $preparation->display_order = $request->displayOrder;
                 $preparation->preparation_name = $request->preparationName;
                 $preparation->preparation_description = $request->preparationDescription;
                 if (isset($request->fileSelected)) {

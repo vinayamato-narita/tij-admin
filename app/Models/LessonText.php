@@ -19,4 +19,14 @@ class LessonText extends Model
     {
         return $this->belongsToMany('App\Models\Lesson', 'lesson_text_lesson' , 'lesson_text_id', 'lesson_id', 'lesson_text_id', 'lesson_id');
     }
+
+    public function studentFile()
+    {
+        return $this->hasOne('App\Models\File','file_id', 'lesson_text_student_file_id');
+    }
+
+    public function teacherFile()
+    {
+        return $this->hasOne('App\Models\File','file_id',  'lesson_text_teacher_file_id');
+    }
 }

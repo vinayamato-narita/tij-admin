@@ -39,11 +39,22 @@
 
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextUrl" type="text" name="lessonTextUrl" @input="changeInput()"  v-model="lessonTextUrl"  v-validate="'max:255|url'" />
+                                                <button type="button" class="btn btn-primary w-100 mr-2"
+                                                        v-on:click="show('add-files-modal')">ファイル選択
+                                                </button>
+                                                <span class="text-nowrap">
+                                                    {{studentFileNameAttached}}
+                                                </span>
+                                                <button type="button" v-on:click="newFile"
+                                                        class="btn btn-primary  mr-2">新規ファイル追加
+                                                </button>
+                                                <input type="file" name="studentNewFile" id="studentNewFile" ref="studentNewFile"
+                                                       v-on:change="changeFile" class="hidden">
+                                                <span class="text-nowrap">
+                                                    {{studentFileName}}
 
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextUrl") }}
-                                                </div>
+                                                </span>
+
 
                                             </div>
                                         </div>
@@ -53,11 +64,22 @@
 
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextUrlForTeacher" type="text" name="lessonTextUrlForTeacher" @input="changeInput()"  v-model="lessonTextUrlForTeacher"  v-validate="'url|max:255'" />
+                                                <button type="button" class="btn btn-primary w-100 mr-2"
+                                                        v-on:click="showTeacher('add-files-modal')">ファイル選択
+                                                </button>
+                                                <span class="text-nowrap">
+                                                    {{teacherFileNameAttached}}
+                                                </span>
+                                                <button type="button" v-on:click="newFileTeacher"
+                                                        class="btn btn-primary  mr-2">新規ファイル追加
+                                                </button>
+                                                <input type="file" name="teacherNewFile" id="teacherNewFile" ref="teacherNewFile"
+                                                       v-on:change="changeFileTeacher" class="hidden">
+                                                <span class="text-nowrap">
+                                                    {{teacherFileName}}
 
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextUrlForTeacher") }}
-                                                </div>
+                                                </span>
+
 
                                             </div>
                                         </div>
@@ -98,20 +120,6 @@
 
 
 
-                                        <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextSoundUrl"> MP3 URL : </label>
-
-                                            <div class="col-md-6">
-
-                                                <input class="form-control" id="lessonTextSoundUrl" type="text" name="lessonTextSoundUrl" @input="changeInput()"  v-model="lessonTextSoundUrl"  v-validate="'url|max:255'"  />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextSoundUrl") }}
-                                                </div>
-
-
-                                            </div>
-                                        </div>
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -132,6 +140,9 @@
                 </div>
             </div>
         </main>
+        <add-files :pageSizeLimit="pageSizeLimit" :url="getFilesUrl">
+
+        </add-files>
         <loader :flag-show="flagShowLoader"></loader>
     </div>
 
@@ -141,6 +152,8 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
+    import AddFiles from "./add-files.vue"
+
 
     export default {
         created: function () {
@@ -174,6 +187,7 @@
         },
         components: {
             Loader,
+            AddFiles
         },
         data() {
             return {
@@ -187,9 +201,18 @@
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
+                studentFileSelected: null,
+                studentFileName: '',
+                studentFileNameAttached: '',
+                teacherFileSelected: null,
+                teacherFileName: '',
+                teacherFileNameAttached: '',
+                studentFileId: null,
+                teacherFileId: null
+
             };
         },
-        props: ["listTextUrl", "createUrl"],
+        props: ["listTextUrl", "createUrl", "getFilesUrl", "pageSizeLimit", "fileType"],
         mounted() {},
         methods: {
             register() {
@@ -201,6 +224,15 @@
                 formData.append("lessonTextName", this.lessonTextName);
                 formData.append("lessonTextDescription", this.lessonTextDescription);
                 formData.append("lessonTextSoundUrl", this.lessonTextSoundUrl);
+                if (this.studentFileSelected)
+                    formData.append('studentFileSelected', this.studentFileSelected);
+                if (this.studentFileId)
+                    formData.append('studentFileId', this.studentFileId);
+
+                if (this.teacherFileSelected)
+                    formData.append('teacherFileSelected', this.teacherFileSelected);
+                if (this.teacherFileId)
+                    formData.append('teacherFileId', this.teacherFileId);
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;
@@ -247,6 +279,52 @@
             changeInput() {
                 this.errorsData = [];
                 this.messageText = "";
+            },
+            show(modalName) {
+                this.$modal.show(modalName, {
+                    fileType: this.fileType,
+                    fileId: this.studentFileId,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.studentFileId = args[0].fileId;
+                            this.studentFileNameAttached = args[0].selectedFileName;
+                            this.studentFileSelected = null;
+                            this.studentFileName = null;
+                        }
+                    }
+                });
+            },
+            newFile() {
+                this.$refs.studentNewFile.click();
+            },
+            changeFile(e) {
+                this.studentFileId = null;
+                this.studentFileNameAttached = '';
+                this.studentFileSelected = e.target.files[0];
+                this.studentFileName = e.target.files[0].name;
+            },
+            showTeacher(modalName) {
+                this.$modal.show(modalName, {
+                    fileType: this.fileType,
+                    fileId: this.teacherFileId,
+                    handlers: {
+                        sendFileId: (...args) => {
+                            this.teacherFileId = args[0].fileId;
+                            this.teacherFileNameAttached = args[0].selectedFileName;
+                            this.teacherFileSelected = null;
+                            this.teacherFileName = null;
+                        }
+                    }
+                });
+            },
+            newFileTeacher() {
+                this.$refs.teacherNewFile.click();
+            },
+            changeFileTeacher(e) {
+                this.teacherFileId = null;
+                this.teacherFileNameAttached = '';
+                this.teacherFileSelected = e.target.files[0];
+                this.teacherFileName = e.target.files[0].name;
             },
         },
     }

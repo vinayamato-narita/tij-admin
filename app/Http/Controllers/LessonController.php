@@ -20,6 +20,7 @@ use App\Models\Test;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use mysql_xdevapi\Exception;
 
 class LessonController extends BaseController
@@ -492,9 +493,9 @@ class LessonController extends BaseController
         }
         catch (\Exception $exception) {
             DB::rollBack();
+            Log::error('error:' . $exception->getMessage());
             return response()->json([
                 'status' => 'INTERNAL_ERR',
-                'err' => $exception->getMessage(),
             ], StatusCode::INTERNAL_ERR);
         }
 

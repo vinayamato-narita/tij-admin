@@ -191,7 +191,7 @@
                                 <div class="card-header">
                                     <h5 class="title-page">確認テスト</h5>
                                     <div class="float-right">
-                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary']" v-on:click="show('add-confirm-test-modal')" >
+                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary', this.lesson.confirm_test.length === 0 ? '' : 'disabled']" v-on:click="show('add-confirm-test-modal')" >
                                             追加
                                         </a>
                                     </div>
@@ -218,7 +218,7 @@
                                 <div class="card-header">
                                     <h5 class="title-page">テキスト一覧</h5>
                                     <div class="float-right">
-                                        <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('select-teacher-lesson-modal')">
+                                        <a href="javascript:void(0);" :class="['btn', 'btn-primary', this.lesson.lesson_text.length === 0 ? '' : 'disabled'] " v-on:click="show('add-text-modal')">
                                             追加
                                         </a>
                                     </div>
@@ -244,9 +244,9 @@
                         </div>
                     </div>
                 </div>
-                <modal-table :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl" :type="type">
+                <add-text :detailUrl="detailLessonUrl" :url="listTextLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="lesson.id" :register-url="registerUrl" :type="type">
 
-                </modal-table>
+                </add-text>
                 <add-preparation :detailUrl="detailLessonUrl" :pageSizeLimit="pageSizeLimit" :id="lesson.lesson_id" :url="listPreparationUrl" :register-url="registerPreparationUrl">
 
                 </add-preparation>
@@ -270,6 +270,7 @@
     import  AddPreparation from "../lesson/add-preparation.vue"
     import  AddReview from "../lesson/add-review.vue"
     import  AddConfirmTest from "./add-confirm-test.vue"
+    import  AddText from "./add-text"
 
     export default {
         created: function () {
@@ -292,7 +293,8 @@
             ModalTable,
             AddPreparation,
             AddReview,
-            AddConfirmTest
+            AddConfirmTest,
+            AddText
         },
         data() {
             return {

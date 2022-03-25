@@ -1,7 +1,7 @@
 <template>
-    <modal name="add-confirm-test-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
+    <modal name="add-text-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header"> 確認テスト
+            <div class="card-header"> テキスト一覧
 
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -84,16 +84,15 @@
                                 <th class="text-center bg-gray-100 " style="width: 50px">
                                     <input   type="radio" class=" checkbox" style="width: auto; height: auto; display: none;">
                                 </th>
-                                <th class="text-center text-md-left bg-gray-100">テスト名</th>
+                                <th class="text-center text-md-left bg-gray-100">	テキスト名</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="test in dataList">
+                            <tr v-for="text in dataList">
                                 <td class="text-center">
-                                    <input :value="test.test_id"  type="radio" class=" checkbox" style="width: auto; height: auto; display: inline-block;" v-model="testId" >
-
+                                    <input :value="text.lesson_text_id"  type="radio" class=" checkbox" style="width: auto; height: auto; display: inline-block;" v-model="textId" >
                                 </td>
-                                <td class="text-md-left">{{  test.test_name }}</td>
+                                <td class="text-md-left">{{  text.lesson_text_name }}</td>
 
                             </tr>
 
@@ -155,7 +154,7 @@
     import Loader from "./../../components/common/loader";
 
     export default {
-        name: "add-confirm-test",
+        name: "add-text-modal",
         components: {
             Loader
         },
@@ -170,15 +169,14 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                testId : null,
+                textId : null,
 
             };
         },
-        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl'],
+        props: [ 'url', 'pageSizeLimit', 'id', 'registerUrl', 'detailUrl', 'type'],
         mounted() {
         },
         created: function () {
-            this.getData();
 
         },
         methods: {
@@ -188,7 +186,7 @@
 
             },
             hide () {
-                this.$modal.hide('add-confirm-test-modal');
+                this.$modal.hide('add-text-modal');
             },
             getData(){
                 let that = this;
@@ -220,27 +218,10 @@
                 this.getData();
 
             },
-            checkAll(event) {
-                if (event.target.checked) {
-                    $(':checkbox').prop('checked', true);
-                }
-                else {
-                    $(':checkbox').prop('checked', false);
-                }
-            },
-            checkedId(id) {
-                if(this.checkedIds.includes(id)) {
-                    this.checkedIds = this.checkedIds.filter(item => item !== id);
-                }
-                else {
-                    this.checkedIds.push(id);
-                }
-
-            },
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, {testId:  this.preparationId, lessonId : this.id})
+                    .post(that.registerUrl, {textId:  this.textId, lessonId : this.id})
                     .then(response => {
                         window.location = this.detailUrl;
                     })

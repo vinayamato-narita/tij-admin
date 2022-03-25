@@ -41,9 +41,8 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-150">@sortablelink('lesson_id', ' レッスンID')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('is_test_lesson', ' テストあり/なし')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_name', ' レッスン名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('lesson_code', ' レッスンコード')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_description', ' 説明')</th>
                                                     <th class="text-left min-width-120"></th>
                                                     <th class="text-left min-width-120"></th>
@@ -52,9 +51,8 @@
                                                 <tbody>
                                                 @foreach ($lessonList as $index => $lesson)
                                                     <tr>
-                                                        <td class="text-left">{{ $lesson->lesson_id }}</td>
-                                                        <td class="text-left">{{ $lesson->is_test_lesson ? "あり" : "なし" }}</td>
                                                         <td class="text-left">{{ $lesson->lesson_name }}</td>
+                                                        <td class="text-left">{{ $lesson->lesson_code }}</td>
                                                         <td class="text-left">{{ $lesson->lesson_description }}</td>
                                                         <td class="text-left "></td>
                                                         <td>

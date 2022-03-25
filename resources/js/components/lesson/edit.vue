@@ -34,6 +34,20 @@
                                         </div>
 
                                         <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonName">レッスンコード:
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="lessonCode" type="number" name="lessonCode" @input="changeInput()" style="max-width: 100px" v-model="lessonCode"  v-validate="'required|max:6'" />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("lessonCode") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="isTestLesson"> テストあり/なし: </label>
 
                                             <div class="col-md-6 col-form-label">
@@ -89,7 +103,7 @@
                                                 </div>
 
                                             </div>
-                                        </div>
+                                        </div> -->
 
 
                                         <div class="form-group row ">
@@ -153,6 +167,10 @@
                         required: "レッスン名を入力してください",
                         max: "レッスン名は255文字以内で入力してください。",
                     },
+                    lessonCode : {
+                        required: "レッスンコードはを入力してください",
+                        max: "レッスンコードは6文字以内で入力してください。",
+                    },
 
                 },
             };
@@ -167,9 +185,10 @@
                 csrfToken: Laravel.csrfToken,
                 displayOrder: this.lesson.display_order,
                 lessonName: this.lesson.lesson_name,
-                isTestLesson: this.lesson.is_test_lesson ? true : false,
-                isShowToSearch : this.lesson.is_show_to_search ? true : false,
-                isShowToSearchDetail : this.lesson.is_show_to_teacher_detail ? true : false,
+                lessonCode: this.lesson.lesson_code,
+                // isTestLesson: this.lesson.is_test_lesson ? true : false,
+                // isShowToSearch : this.lesson.is_show_to_search ? true : false,
+                // isShowToSearchDetail : this.lesson.is_show_to_teacher_detail ? true : false,
                 flagShowLoader: false,
                 messageText: this.message,
                 errorsData: {},
@@ -219,9 +238,10 @@
                 let formData = new FormData();
                 formData.append("displayOrder", this.displayOrder);
                 formData.append("lessonName", this.lessonName);
-                formData.append("isTestLesson", this.isTestLesson);
-                formData.append("isShowToSearch", this.isShowToSearch);
-                formData.append("isShowToSearchDetail", this.isShowToSearchDetail);
+                formData.append("lessonCode", this.lessonCode);
+                // formData.append("isTestLesson", this.isTestLesson);
+                // formData.append("isShowToSearch", this.isShowToSearch);
+                // formData.append("isShowToSearchDetail", this.isShowToSearchDetail);
                 formData.append("lessonDescription", this.lessonDescription);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.id);

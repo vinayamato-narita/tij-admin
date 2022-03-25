@@ -33,6 +33,20 @@
                                         </div>
 
                                         <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonName">レッスンコード:
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="lessonCode" type="number" name="lessonCode" @input="changeInput()" style="max-width: 100px" v-model="lessonCode"  v-validate="'required|max:6'" />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("lessonCode") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="isTestLesson"> テストあり/なし: </label>
                                             <div class="col-md-6 col-form-label">
                                                 <input class=" checkbox" id="isTestLesson" name="isTestLesson"
@@ -75,7 +89,7 @@
                                                     {{ errors.first("isShowToSearchDetail") }}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonDescription"> 説明: </label>
@@ -123,6 +137,10 @@
                         required: "レッスン名を入力してください",
                         max: "レッスン名は255文字以内で入力してください。",
                     },
+                    lessonCode : {
+                        required: "レッスンコードはを入力してください",
+                        max: "レッスンコードは6文字以内で入力してください。",
+                    },
 
                 },
             };
@@ -135,9 +153,10 @@
             return {
                 csrfToken: Laravel.csrfToken,
                 lessonName: '',
-                isTestLesson: false,
-                isShowToSearch : true,
-                isShowToSearchDetail : true,
+                lessonCode: '',
+                // isTestLesson: false,
+                // isShowToSearch : true,
+                // isShowToSearchDetail : true,
                 flagShowLoader: false,
                 messageText: this.message,
                 lessonDescription : '',
@@ -151,9 +170,10 @@
                 let that = this;
                 let formData = new FormData();
                 formData.append("lessonName", this.lessonName);
-                formData.append("isTestLesson", this.isTestLesson);
-                formData.append("isShowToSearch", this.isShowToSearch);
-                formData.append("isShowToSearchDetail", this.isShowToSearchDetail);
+                formData.append("lessonCode", this.lessonCode);
+                // formData.append("isTestLesson", this.isTestLesson);
+                // formData.append("isShowToSearch", this.isShowToSearch);
+                // formData.append("isShowToSearchDetail", this.isShowToSearchDetail);
                 formData.append("lessonDescription", this.lessonDescription);
 
                 this.$validator.validateAll().then((valid) => {

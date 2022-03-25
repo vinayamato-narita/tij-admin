@@ -7,8 +7,6 @@
                     <div class="page-heading-left">
                         <h5>
                             テキスト情報表示
-
-
                         </h5>
                     </div>
                 </div>
@@ -16,25 +14,14 @@
                     <div class="row">
                         <div class="col-md-7">
                             <div class="card">
-                                <div class="card-header">テキスト情報
-
+                                <div class="card-header">
+                                    <h5 class="title-page">テキスト情報</h5>
                                     <div class="float-right">
                                         <a :href="this.editTextUrl" class="btn btn-primary ">編集</a>
                                     </div>
 
                                 </div>
                                 <div class="card-body">
-
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">表示順:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            {{this.lessonText.lesson_text_no}}
-
-                                        </div>
-                                    </div>
-
                                     <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">テキストファイル（学習者用）:
                                         </label>
@@ -99,7 +86,8 @@
                         </div>
                         <div class="col-md-5">
                             <div class="card">
-                                <div class="card-header">レッスン一覧
+                                <div class="card-header">
+                                    <h5 class="title-page">レッスン一覧</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
 

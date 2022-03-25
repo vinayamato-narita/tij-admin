@@ -38,7 +38,7 @@ class ReviewController extends BaseController
             });
         }
 
-        $reviewList = $queryBuilder->sortable(['display_order' => 'asc', 'review_name' => 'asc'])->paginate($pageLimit);
+        $reviewList = $queryBuilder->sortable(['review_name' => 'asc'])->paginate($pageLimit);
 
         return view('review.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -78,7 +78,7 @@ class ReviewController extends BaseController
             DB::beginTransaction();
             try {
                 $review = new Review();
-                $review->display_order = $request->displayOrder;
+                $review->display_order = 1;
                 $review->review_name = $request->reviewName;
                 $review->review_description = $request->reviewDescription ?? '';
 
@@ -184,7 +184,6 @@ class ReviewController extends BaseController
 
             DB::beginTransaction();
             try {
-                $review->display_order = $request->displayOrder;
                 $review->review_name = $request->reviewName;
                 $review->review_description = $request->reviewDescription;
                 if (isset($request->fileSelected)) {

@@ -210,6 +210,9 @@ class TestController extends BaseController
         if (!$test) return redirect()->route('test.index');
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
+
+        $test->show_category = $test->test_type == TestType::ABILITY;
+
         return view('test.addQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
@@ -401,7 +404,6 @@ class TestController extends BaseController
 
     public function editQuestion($id, $testQuestionId)
     {
-
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'test_list'],
@@ -417,7 +419,8 @@ class TestController extends BaseController
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
         $isHasTestResult = TestResult::where('test_id', $id)->exists();
-
+        $test->show_category = $test->test_type == TestType::ABILITY;
+        
         return view('test.editQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,

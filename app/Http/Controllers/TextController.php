@@ -32,7 +32,7 @@ class TextController extends BaseController
             });
         }
 
-        $lessonTextList = $queryBuilder->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        $lessonTextList = $queryBuilder->sortable(['lesson_text_name' => 'asc'])->paginate($pageLimit);
 
         return view('text.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -80,7 +80,6 @@ class TextController extends BaseController
             DB::beginTransaction();
             try {
                 $lessonText = new LessonText();
-                $lessonText->lesson_text_no = $request->lessonTextNo;
                 $lessonText->lesson_text_url = $request->lessonTextUrl;
                 $lessonText->lesson_text_url_for_teacher = $request->lessonTextUrlForTeacher;
                 $lessonText->lesson_text_sound_url = $request->lessonTextSoundUrl;
@@ -189,7 +188,6 @@ class TextController extends BaseController
 
             DB::beginTransaction();
             try {
-                $lessonText->lesson_text_no = $request->lessonTextNo;
                 $lessonText->lesson_text_url = $request->lessonTextUrl;
                 $lessonText->lesson_text_url_for_teacher = $request->lessonTextUrlForTeacher;
                 $lessonText->lesson_text_sound_url = $request->lessonTextSoundUrl;

@@ -41,7 +41,6 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('lesson_text_no', ' 表示順')</th>
                                                     <th class="text-left min-width-150">@sortablelink('lesson_text_name', ' テキスト名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_text_description', ' 説明')</th>
                                                 </tr>
@@ -49,7 +48,6 @@
                                                 <tbody>
                                                 @foreach ($lessonTextList as $index => $text)
                                                     <tr>
-                                                        <td class="text-left">{{ $text->lesson_text_no }}</td>
                                                         <td class="text-left">{{ $text->lesson_text_name }}</td>
                                                         <td class="text-left">{{ $text->lesson_text_description }}</td>
                                                         <td class="text-left "></td>

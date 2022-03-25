@@ -46,7 +46,7 @@ class LessonController extends BaseController
             });
         }
 
-        $lessonList = $queryBuilder->sortable(['display_order' => 'asc', 'lesson_name' => 'asc'])->paginate($pageLimit);
+        $lessonList = $queryBuilder->sortable(['lesson_name' => 'asc'])->paginate($pageLimit);
 
         return view('lesson.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -86,12 +86,13 @@ class LessonController extends BaseController
             DB::beginTransaction();
             try {
                 $lesson = new Lesson();
-                $lesson->display_order = $request->displayOrder;
+                $lesson->display_order = 1;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
-                $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
-                $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
-                $lesson->is_show_to_teacher_detail = $request->isShoToTeacherDetail == 'true' ? true: false;
+                $lesson->lesson_code = $request->lessonCode ?? '';
+                // $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
+                // $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
+                // $lesson->is_show_to_teacher_detail = $request->isShoToTeacherDetail == 'true' ? true: false;
 
                 $lesson->save();
                 DB::commit();
@@ -369,12 +370,12 @@ class LessonController extends BaseController
 
             DB::beginTransaction();
             try {
-                $lesson->display_order = $request->displayOrder;
                 $lesson->lesson_name = $request->lessonName;
                 $lesson->lesson_description = $request->lessonDescription ?? '';
-                $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
-                $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
-                $lesson->is_show_to_teacher_detail = $request->isShowToSearchDetail == 'true' ? true: false;
+                $lesson->lesson_code = $request->lessonCode;
+                // $lesson->is_test_lesson = $request->isTestLesson ==  'true' ? true : false;
+                // $lesson->is_show_to_search = $request->isShowToSearch ==  'true' ? true : false;;
+                // $lesson->is_show_to_teacher_detail = $request->isShowToSearchDetail == 'true' ? true: false;
 
                 $lesson->save();
                 DB::commit();

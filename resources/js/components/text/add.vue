@@ -15,25 +15,10 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">テキスト情報
+                                    <div class="card-header">
+                                        <h5 class="title-page">テキスト情報</h5>
                                     </div>
                                     <div class="card-body">
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextNo">表示順:
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="lessonTextNo" type="number" name="lessonTextNo" @input="changeInput()" style="max-width: 100px" v-model="lessonTextNo" value="1" v-validate="'min_value:1|max_value:1000000000'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("lessonTextNo") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrl">テキストファイル（学習者用） :
 
@@ -250,9 +235,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listTextUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTextUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

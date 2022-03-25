@@ -258,8 +258,6 @@ class TeacherController extends BaseController
      */
     public function update(UpdateTeacherRequest $request, $id)
     {
-        dump($request->all());
-        die('yyy');
         if($request->isMethod('PUT')){
             $teacher = Teacher::where('teacher_id', $id)->first();
             if (!$teacher) {

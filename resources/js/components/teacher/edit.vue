@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
+                                <form  class="form-horizontal " style="width: 100%" method="POST" @submit.prevent="register" autocomplete="off">
                                     <div class="card-header">講師情報</div>
                                     <div class="card-body">
 
@@ -391,12 +391,11 @@
                 teacherDepartment : this.teacher.teacher_department,
                 teacherHobby : this.teacher.teacher_hobby,
                 teacherIntroduction : this.teacher.teacher_introduction,
-                introduceFromAdmin : this.teacher.introduce_from_admin,
+                introduceFromAdmin : this.teacher.introduce_from_admin ?? '',
                 teacherNote : this.teacher.teacher_note,
                 photoSavepath : this.teacher.photo_savepath,
                 zoomPersonalMeetingId: this.teacher.zoom_personal_meeting_id,
-                zoomPassword: this.teacher.zoom_password
-
+                zoomPassword: this.teacher.zoom_password ?? '' 
             };
         },
         props: ["listTeacherUrl", "timeZones", "updateUrl", 'teacher', 'deleteAction', 'detailTeacherUrl'],
@@ -458,7 +457,7 @@
                 formData.append('photoSavepath', this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
-
+                
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;

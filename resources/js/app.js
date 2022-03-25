@@ -46,6 +46,11 @@ Vue.filter("formatDateTime", function(value) {
       return moment(String(value)).tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm");
     }
   });
+  Vue.filter("formatDateTime", function(value) {
+    if (value) {
+      return moment(String(value)).format("YYYY/MM/DD HH:mm");
+    }
+  });
 
 var filter = function(text, length, clamp){
     clamp = clamp || '...';

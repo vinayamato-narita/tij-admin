@@ -362,15 +362,6 @@
                 </li>
             </ul>
         </li>
-
-        <li class="c-sidebar-nav-item {{ AdminUserRightComponent::checkAdminUserRight([CSVEXPORT], $adminUserRights) }}">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(CSVEXPORT) }}" href="{{route('csv.index')}}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                CSV出力
-            </a>
-        </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div>

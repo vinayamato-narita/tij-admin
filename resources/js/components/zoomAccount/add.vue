@@ -159,9 +159,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.listZoomAccountUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listZoomAccountUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

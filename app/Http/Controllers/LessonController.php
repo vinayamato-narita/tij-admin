@@ -494,6 +494,7 @@ class LessonController extends BaseController
             DB::rollBack();
             return response()->json([
                 'status' => 'INTERNAL_ERR',
+                'err' => $exception->getMessage(),
             ], StatusCode::INTERNAL_ERR);
         }
 

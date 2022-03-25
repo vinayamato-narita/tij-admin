@@ -106,7 +106,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
-                $teacher->introduce_from_admin = $request->introduceFromAdmin;
+                $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->password = Hash::make(Str::random(8));
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
@@ -258,6 +258,8 @@ class TeacherController extends BaseController
      */
     public function update(UpdateTeacherRequest $request, $id)
     {
+        dump($request->all());
+        die('yyy');
         if($request->isMethod('PUT')){
             $teacher = Teacher::where('teacher_id', $id)->first();
             if (!$teacher) {

@@ -172,7 +172,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listLessonUrl;
+                                    window.location.href = baseUrl + '/lesson/' + res.data.lesson_id;
                                 });
                                 that.flagShowLoader = false;
                             })

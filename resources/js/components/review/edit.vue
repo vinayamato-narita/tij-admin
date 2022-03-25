@@ -255,7 +255,7 @@
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
-                                    window.location.href = that.listReviewUrl;
+                                    window.location.href = that.detailReviewUrl;
                                 });
                                 that.flagShowLoader = false;
                             })

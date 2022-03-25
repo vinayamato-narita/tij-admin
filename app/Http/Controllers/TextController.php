@@ -85,6 +85,7 @@ class TextController extends BaseController
                 $lessonText->save();
                 DB::commit();
                 return response()->json([
+                    'lesson_text_id' => $lessonText->lesson_text_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {

@@ -96,6 +96,7 @@ class LessonController extends BaseController
                 $lesson->save();
                 DB::commit();
                 return response()->json([
+                    'lesson_id' => $lesson->lesson_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {

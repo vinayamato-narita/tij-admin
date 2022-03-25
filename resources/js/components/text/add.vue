@@ -202,7 +202,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listTextUrl;
+                                    window.location.href = baseUrl + '/text/' + res.data.lesson_text_id;
                                 });
                                 that.flagShowLoader = false;
                             })

@@ -39,7 +39,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonCode" type="number" name="lessonCode" @input="changeInput()" style="max-width: 100px" v-model="lessonCode"  v-validate="'required|max:6'" />
+                                                <input class="form-control" id="lessonCode" type="text" name="lessonCode" @input="changeInput()" @keydown="keyInput" v-model="lessonCode"  v-validate="'required|max:6|min:6'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonCode") }}
@@ -169,7 +169,8 @@
                     },
                     lessonCode : {
                         required: "レッスンコードはを入力してください",
-                        max: "レッスンコードは6文字以内で入力してください。",
+                        max: "レッスンコードは6桁の英数字で入力してください",
+                        min: "レッスンコードは6桁の英数字で入力してください",
                     },
 
                 },
@@ -199,6 +200,26 @@
         props: ["listLessonUrl", "updateUrl", 'lesson', 'deleteAction', 'detailLessonUrl'],
         mounted() {},
         methods: {
+            keyInput(event) {
+                switch (event.keyCode) {
+                    case 8:  // Backspace
+                    case 9:  // Tab
+                    case 13: // Enter
+                    case 37: // Left
+                    case 38: // Up
+                    case 39: // Right
+                    case 40: // Down
+                    break;
+                    default:
+                    var regex = new RegExp("^[a-zA-Z0-9]+$");
+                    var key = event.key;
+                    if (!regex.test(key)) {
+                        event.preventDefault();
+                        return false;
+                    }
+                    break;
+                }
+            },
             showAlert() {
                 let that = this;
                 this.$swal({

@@ -111,7 +111,6 @@ import RemindMailEdit from "./components/remindMailPatern/edit.vue"
 import CategoryAdd from "./components/category/add.vue"
 import CategoryShow from "./components/category/detail.vue"
 import CategoryEdit from "./components/category/edit.vue"
-import CsvExport from "./components/csv/csv-export.vue"
 import CreatePaymentHistory from "./components/student/create-payment-history.vue"
 import EditPaymentHistory from "./components/student/edit-payment-history.vue"
 import StudentSearch from "./components/student/student-search.vue"
@@ -278,7 +277,6 @@ new Vue({
         EditLangFaq,
         EditInquiry,
         ModalTable,
-        CsvExport,
         EditLangInquirySubject,
         EditInquirySubject,
         CreateInquirySubject,

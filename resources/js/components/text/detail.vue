@@ -36,25 +36,25 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">テキストURL（生徒用):
+                                        <label class="col-md-3 col-form-label text-md-right">テキストファイル（学習者用）:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <a :href="this.lessonText.lesson_text_url" class="text-dark">
-                                                {{this.lessonText.lesson_text_url}}
+                                            <span v-if="this.lessonText.student_file">
+                                                {{this.lessonText.student_file.file_name_original}}
 
-                                            </a>
+                                            </span>
 
                                         </div>
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">テキストURL（先生用):
+                                        <label class="col-md-3 col-form-label text-md-right">テキストファイル（講師用）:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <a :href="this.lessonText.lesson_text_url_for_teacher" class="text-dark">
-                                                {{this.lessonText.lesson_text_url_for_teacher}}
+                                            <span v-if="this.lessonText.teacher_file">
+                                                {{this.lessonText.teacher_file.file_name_original}}
 
-                                            </a>
+                                            </span>
 
                                         </div>
                                     </div>

@@ -37,7 +37,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrl">テキストURL（生徒用） :
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrl">テキストファイル（学習者用） :
 
                                             </label>
                                             <div class="col-md-6">
@@ -72,7 +72,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrlForTeacher">テキストURL（先生用） :
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextUrlForTeacher">テキストファイル（講師用）:
 
                                             </label>
                                             <div class="col-md-6">

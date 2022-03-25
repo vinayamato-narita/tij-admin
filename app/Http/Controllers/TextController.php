@@ -151,9 +151,8 @@ class TextController extends BaseController
             ['name' => 'text_show', $id]
         ]);
 
-        $lessonText = LessonText::where('lesson_text_id', $id)->with(['lesson'])->first();
+        $lessonText = LessonText::where('lesson_text_id', $id)->with(['lesson', 'studentFile', 'teacherFile'])->first();
 
-        $a = $lessonText->getQuery();
         if (!$lessonText) return redirect()->route('text.index');
         return view('text.show', [
             'breadcrumbs' => $breadcrumbs,

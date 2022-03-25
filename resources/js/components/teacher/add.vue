@@ -434,7 +434,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listTeacherUrl;
+                                    window.location.href = baseUrl + '/teacher/' + res.data.teacher_id;
                                 });
                                 that.flagShowLoader = false;
                             })

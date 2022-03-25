@@ -116,6 +116,7 @@ class TeacherController extends BaseController
                 $teacher->save();
                 DB::commit();
                 return response()->json([
+                    'teacher_id' => $teacher->teacher_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
@@ -352,7 +353,7 @@ class TeacherController extends BaseController
 
         Session::put('teacherLessonHistory', collect($request));
 
-        $queryBuilder = LessonHistory::select('lesson_schedule.lesson_date', 
+        $queryBuilder = LessonHistory::select('lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
@@ -388,7 +389,7 @@ class TeacherController extends BaseController
                     ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']));
             });
         }
-       
+
         if (isset($request['lesson_date_start']) && $request['lesson_date_start'] != null) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where('lesson_schedule.lesson_date', '>=', $request['lesson_date_start']);
@@ -447,7 +448,7 @@ class TeacherController extends BaseController
 
     public function lessonHistoryDetail($id)
     {
-        $lesson = LessonHistory::select('lesson_schedule.lesson_date', 
+        $lesson = LessonHistory::select('lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
@@ -512,7 +513,7 @@ class TeacherController extends BaseController
         ]);
 
         $teacherInfo = Teacher::where('teacher_id', $id)->firstOrFail();
-        
+
         $teacherLangInfo = TeacherInfo::where(['teacher_id' => $id, 'lang_type' => $langType])->first();
         $teacherInfo->_token = csrf_token();
         $teacherInfo->teacher_name_lang = $teacherLangInfo->teacher_name ?? "";
@@ -536,7 +537,7 @@ class TeacherController extends BaseController
         if(!$request->isMethod('POST')){
             return response()->json([
                 'status' => 'NG',
-            ], StatusCode::BAD_REQUEST);  
+            ], StatusCode::BAD_REQUEST);
         }
         $teacherInfo = Teacher::where('teacher_id', $request->teacher_id)->first();
         if ($teacherInfo == null) {
@@ -547,7 +548,7 @@ class TeacherController extends BaseController
         $teacherLangInfo = TeacherInfo::updateOrCreate(
             ['teacher_id' => $request->teacher_id, 'lang_type' => $request->lang_type],
             [
-                'teacher_name' => $request->teacher_name_lang, 
+                'teacher_name' => $request->teacher_name_lang,
                 'teacher_nickname' => $request->teacher_nickname_lang,
                 'teacher_university' => $request->teacher_university_lang,
                 'teacher_department' => $request->teacher_department_lang,
@@ -566,19 +567,19 @@ class TeacherController extends BaseController
         if(!$request->isMethod('POST')) {
             return response()->json([
                 'status' => 'NG',
-            ], StatusCode::BAD_REQUEST);          
+            ], StatusCode::BAD_REQUEST);
         }
-        
+
         $teacherInfo = Teacher::where('teacher_id', $request->id)->first();
-       
+
         if ($teacherInfo == null) {
             return response()->json([
                 'status' => 'NG',
             ], StatusCode::NOT_FOUND);
         }
         $teacherInfo->password = Hash::make($request->password);
-        $teacherInfo->save();  
-        
+        $teacherInfo->save();
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

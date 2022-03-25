@@ -84,6 +84,7 @@ class CategoryController extends BaseController
                 $category->save();
                 DB::commit();
                 return response()->json([
+                    'category_id' => $category->category_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {

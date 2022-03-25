@@ -631,7 +631,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listCourseUrl;
+                                    window.location.href = baseUrl + '/course/' + res.data.course_id;
                                 });
                                 that.flagShowLoader = false;
                             })

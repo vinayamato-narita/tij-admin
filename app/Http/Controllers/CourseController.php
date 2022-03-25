@@ -146,6 +146,7 @@ class CourseController extends BaseController
 
                 DB::commit();
                 return response()->json([
+                    'course_id' => $course->course_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
@@ -243,6 +244,7 @@ class CourseController extends BaseController
 
                 DB::commit();
                 return response()->json([
+                    'course_id' => $course->course_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {

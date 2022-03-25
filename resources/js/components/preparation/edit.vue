@@ -256,7 +256,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listPreparationUrl;
+                                    window.location.href = that.detailPreparationUrl;
 
                                 });
                                 that.flagShowLoader = false;

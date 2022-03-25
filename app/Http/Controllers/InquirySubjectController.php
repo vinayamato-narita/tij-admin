@@ -80,6 +80,7 @@ class InquirySubjectController extends BaseController
                 $inquirySubject->save();
 
                 return response()->json([
+                    'inquiry_subject_id' => $inquirySubject->inquiry_subject_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $e) {
@@ -89,7 +90,7 @@ class InquirySubjectController extends BaseController
                 ], StatusCode::BAD_REQUEST);
             }
         }
-        
+
     }
 
     /**
@@ -133,7 +134,7 @@ class InquirySubjectController extends BaseController
         ]);
         $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
         $inquirySubjectInfo->_token = csrf_token();
-        
+
         return view('inquirySubject.edit', [
             'breadcrumbs' => $breadcrumbs,
             'inquirySubjectInfo' => $inquirySubjectInfo
@@ -149,7 +150,7 @@ class InquirySubjectController extends BaseController
             ['name' => 'edit_lang_inquiry_subject', $id, $langType],
         ]);
         $inquirySubjectInfo = InquirySubject::where('inquiry_subject_id', $id)->firstOrFail();
-        
+
         $inquirySubjectLangInfo = InquirySubjectInfo::where(['inquiry_subject_id' => $id, 'lang_type' => $langType])->first();
         $inquirySubjectInfo->_token = csrf_token();
         $inquirySubjectInfo->lang_inquiry_subject = $inquirySubjectLangInfo->inquiry_subject ?? "";
@@ -208,9 +209,9 @@ class InquirySubjectController extends BaseController
                     'message' => '問い合わせ件名の編集に失敗しました。再度お願いいたします。'
                 ], StatusCode::BAD_REQUEST);
             }
-                        
+
         }
-        
+
     }
 
     /**

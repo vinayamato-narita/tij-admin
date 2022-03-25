@@ -118,7 +118,7 @@ export default {
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {
-                            window.location = this.urlInquirySubjectList;
+                            window.location = baseUrl + '/inquirySubject/' + response.data.inquiry_subject_id;
                         });
                     } else {
                         this.$swal({

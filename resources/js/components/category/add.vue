@@ -133,7 +133,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listCategoryUrl ;
+                                    window.location.href = baseUrl + '/category/' + res.data.category_id;
                                 });
                                 that.flagShowLoader = false;
                             })

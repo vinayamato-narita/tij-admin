@@ -67,17 +67,6 @@
                                     </div>
 
 
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right text-dark" >MP3 URL:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            <a :href="this.lessonText.lesson_text_sound_url" class="text-dark">
-                                                {{this.lessonText.lesson_text_sound_url}}
-
-                                            </a>
-
-                                        </div>
-                                    </div>
 
 
                                 </div>

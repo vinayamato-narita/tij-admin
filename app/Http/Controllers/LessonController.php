@@ -97,6 +97,7 @@ class LessonController extends BaseController
                 $lesson->save();
                 DB::commit();
                 return response()->json([
+                    'lesson_id' => $lesson->lesson_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
@@ -166,9 +167,8 @@ class LessonController extends BaseController
                 $query->where($this->escapeLikeSentence('lesson_text_name', $request['inputSearch']));
             });
         }
-        $lessonTextHasAdded = LessonTextLesson::where('lesson_id', $id)->pluck('lesson_text_id');
 
-        $lessonTextList = $queryBuilder->whereNotIn('lesson_text_id', $lessonTextHasAdded)->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        $lessonTextList = $queryBuilder->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $lessonTextList
@@ -472,9 +472,8 @@ class LessonController extends BaseController
                 $query->where($this->escapeLikeSentence('test_name', $request['inputSearch']));
             });
         }
-        $testHasAdded = LessonTest::where('lesson_id', $id)->pluck('test_id');
 
-        $testList = $queryBuilder->whereNotIn('test_id', $testHasAdded)->where('test_type', TestType::CONFIRMED)->sortable(['test_name' => 'asc'])->paginate($pageLimit);
+        $testList = $queryBuilder->where('test_type', TestType::CONFIRMED)->sortable(['test_name' => 'asc'])->paginate($pageLimit);
         return response()->json([
             'status' => 'OK',
             'dataList' => $testList
@@ -525,6 +524,8 @@ class LessonController extends BaseController
             'data' => [],
         ], StatusCode::OK);
     }
+
+
 
 
 }

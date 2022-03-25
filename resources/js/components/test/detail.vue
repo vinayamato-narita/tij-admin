@@ -37,6 +37,14 @@
                                     </div>
 
                                     <div class="form-group row ">
+                                        <label class="col-md-4 col-form-label text-md-right">テスト種別:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.test.type_name}}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
                                         <label class="col-md-4 col-form-label text-md-right">説明:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">

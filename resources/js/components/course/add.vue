@@ -93,7 +93,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" v-validate="'required|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -138,7 +138,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" v-validate="'required|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("pointCount") }}
@@ -155,7 +155,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" v-validate="'decimal|min_value:0|max_value:1000000000'" />
+                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" v-validate="'required|min_value:0|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("amount") }}
@@ -201,21 +201,24 @@
                                                 法人・個人 :
                                             </label>
                                             <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="isForlms_0" name="isForLMS"
-                                                       type="radio"
-                                                       value="0"
-                                                       @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isForlms_0">
-                                                    個人
-                                                </label>
-                                                &nbsp;
-                                                <input class=" checkbox" id="isForlms_1" name="isForLMS"
-                                                       type="radio"
-                                                       value="1"
-                                                       @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="isForlms_1">
-                                                    法人
-                                                </label>
+                                                <div>
+                                                    <input class=" checkbox" id="isForlms_0" name="isForLMS"
+                                                        type="radio"
+                                                        value="0"
+                                                        @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="isForlms_0">
+                                                        個人
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input class=" checkbox" id="isForlms_1" name="isForLMS"
+                                                        type="radio"
+                                                        value="1"
+                                                        @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="isForlms_1">
+                                                        法人
+                                                    </label>
+                                                </div>
 
 
                                                 <div class="input-group is-danger" role="alert">
@@ -230,34 +233,35 @@
                                                 コースタイプ :
                                             </label>
                                             <div class="col-md-6 col-form-label">
-                                                <input class=" checkbox" id="courseType_0" name="courseType"
-                                                       type="radio"
-                                                       value="0"
-                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="courseType_0">
-                                                    通常コース
-                                                </label>
-                                                &nbsp;
-                                                &nbsp;
+                                                <div>
+                                                    <input class=" checkbox" id="courseType_0" name="courseType"
+                                                        type="radio"
+                                                        value="0"
+                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="courseType_0">
+                                                        通常コース
+                                                    </label>
+                                                </div>
 
-                                                <input class=" checkbox" id="courseType_2" name="courseType"
-                                                       type="radio"
-                                                       value="1"
-                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="courseType_2">
-                                                    グループコース
-                                                </label>
-                                                &nbsp;
-                                                &nbsp;
-                                                <input class=" checkbox" id="courseType_1" name="courseType"
-                                                       type="radio"
-                                                       value="2"
-                                                       @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
-                                                <label class="" for="courseType_1">
-                                                    実力テスト用コース
-                                                </label>
-                                                &nbsp;
-                                                &nbsp;
+                                                <div>
+                                                    <input class=" checkbox" id="courseType_1" name="courseType"
+                                                        type="radio"
+                                                        value="2"
+                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="courseType_1">
+                                                        実力テスト用コース
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <input class=" checkbox" id="courseType_2" name="courseType"
+                                                        type="radio"
+                                                        value="1"
+                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="courseType_2">
+                                                        グループコース
+                                                    </label>
+                                                </div>
 
 
 
@@ -307,7 +311,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="maxReserveCount" style="max-width: 100px" onKeyDown="return false" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" type="number" name="maxReserveCount" @input="changeInput()" @change="validateDepend('minReserveCount')"  v-model="maxReserveCount"  />
+                                                <input class="form-control" id="maxReserveCount" style="max-width: 100px" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" type="number" name="maxReserveCount" @input="changeInput()" @change="validateDepend('minReserveCount')"  v-model="maxReserveCount"  />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("maxReserveCount") }}
@@ -480,7 +484,7 @@
                         required :  "公開終了日時を選択してください"
                     },
                     displayOrder : {
-                        require: "表示順を入力してください",
+                        required: "表示順を入力してください",
                         min_value: "表示順は1～1000000000 を入力してください",
                         max_value: "表示順は1～1000000000 を入力してください"
                     },
@@ -492,12 +496,12 @@
                         max: "短縮名は255文字以内で入力してください。",
                     },
                     pointCount : {
-                        require: "受講回数はを入力してください",
+                        required: "受講回数はを入力してください",
                         min_value: "受講回数は1～1000000000 を入力してください",
                         max_value: "受講回数は1～1000000000 を入力してください"
                     },
                     amount : {
-                        require: "価格（税抜）はを入力してください",
+                        required: "価格（税抜）を入力してください",
                         min_value: "価格（税抜）は0～1000000000 を入力してください",
                         max_value: "価格（税抜）は0～1000000000 を入力してください"
                     },
@@ -505,13 +509,13 @@
                         max: "商品コードは45文字以内で入力してください。"
                     },
                     minReserveCount : {
-                        require: "最小開催人数はを入力してください",
+                        required: "最小開催人数を入力してください",
                         min_value: "最小開催人数は1～1000000000 を入力してください",
                         max_value: "最小開催人数は1～1000000000 を入力してください",
                         custom_compare: "最小開催人数は最大申込人数より小さくなければなりません"
                     },
                     maxReserveCount : {
-                        require: "最大申込人数を入力してください",
+                        required: "最大申込人数を入力してください",
                         min_value: "最大申込人数は1～1000000000 を入力してください",
                         max_value: "最大申込人数は1～1000000000 を入力してください",
                         custom_compare: "最小開催人数は最大申込人数より小さくなければなりません"

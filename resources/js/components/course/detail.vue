@@ -40,7 +40,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">公開日時:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.course.publish_date_from | formatDateCourse}} ～ {{this.course.publish_date_to | formatDateCourse}}
+                                            {{this.course.publish_date_from | formatDateTime}} ～ {{this.course.publish_date_to | formatDateTime}}
 
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
                                     </div>
 
                                     <div class="form-group row " v-if="this.course.course_type === 1">
-                                        <label class="col-md-3 col-form-label text-md-right">開講日時  :
+                                        <label class="col-md-3 col-form-label text-md-right">最大申込人数  :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
@@ -191,7 +191,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.decide_date | formatDateCourse}}
+                                            {{this.course.decide_date | formatDateTime}}
 
                                         </div>
                                     </div>
@@ -201,7 +201,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.reserve_end_date | formatDateCourse}}
+                                            {{this.course.reserve_end_date | formatDateTime}}
 
                                         </div>
                                     </div>
@@ -211,7 +211,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.course_start_date | formatDateCourse}}
+                                            {{this.course.course_start_date | formatDateTime}}
 
                                         </div>
                                     </div>
@@ -405,7 +405,7 @@
                                     <ol style="margin-left: -30px;list-style-type: none;">
                                         <li v-for="campaign in this.course.campaigns">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text"> {{ campaign.campaign_start_time | formatDateCourse}} - {{ campaign.campaign_end_time | formatDateCourse}}</div>
+                                                <div class="col-md-10 wrap-long-text"> {{ campaign.campaign_start_time | formatDateTime}} - {{ campaign.campaign_end_time | formatDateTime}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriCampaignDelete(course.course_id , campaign.course_campaign_id)"

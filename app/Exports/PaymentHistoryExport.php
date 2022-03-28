@@ -155,12 +155,17 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
 
         	return $item;
         });
+
+        foreach ($paymentList as &$item) {
+            $item = $this->convertShijis($item);
+        }
+
         return $paymentList;
     }
 
     public function headings(): array
     {
-        return [
+        $header = [
             "オーダーID",
             "学習者番号",
             "受注日",
@@ -178,5 +183,15 @@ class PaymentHistoryExport implements FromCollection, WithHeadings
             "入金日",
             "支払期限"
         ];
+        
+        foreach ($header as $item) {
+            $item = $this->convertShijis($item);
+        }
+
+        return $header;
+    }
+
+    private function convertShijis($text) {
+        return mb_convert_encoding($text, "SJIS", "UTF-8");
     }
 }

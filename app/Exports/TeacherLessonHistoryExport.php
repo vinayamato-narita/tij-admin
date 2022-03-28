@@ -86,6 +86,10 @@ class TeacherLessonHistoryExport implements FromCollection, WithHeadings
             return $item;
         });
 
+        foreach ($dataExport as &$item) {
+            $item = $this->convertShijis($item);
+        }
+
         return collect($dataExport);
     }
 
@@ -101,6 +105,14 @@ class TeacherLessonHistoryExport implements FromCollection, WithHeadings
             "生徒名"
         ];
 
+        foreach ($header as $item) {
+            $item = $this->convertShijis($item);
+        }
+
         return $header;
+    }
+
+    private function convertShijis($text) {
+        return mb_convert_encoding($text, "SJIS", "UTF-8");
     }
 }

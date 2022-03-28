@@ -64,7 +64,7 @@ class StudentExport implements FromCollection, WithHeadings
         ->groupBy('student.student_id');
         	
         $request = $this->request;
-       
+        
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where('student.student_id', '=',$request['search_input'])
@@ -127,12 +127,16 @@ class StudentExport implements FromCollection, WithHeadings
             }
         	return $item;
         });
+
+        foreach ($studentList as &$item) {
+            $item = $this->convertShijis($item);
+        }
         return $studentList;
     }
 
     public function headings(): array
     {
-        return [
+        $header = [
             "学習者番号", 
             "学習者名", 
             "学習者メール", 
@@ -146,6 +150,16 @@ class StudentExport implements FromCollection, WithHeadings
             "有料/無料", 
             "DMステータス", 
             "連絡事項"
-        ];
+        ]; 
+
+        foreach ($header as $item) {
+            $item = $this->convertShijis($item);
+        }
+
+        return $header;
+    }
+
+    private function convertShijis($text) {
+        return mb_convert_encoding($text, "SJIS", "UTF-8");
     }
 }

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ZoomSettingSeeder::class);
         $this->call(AdminUserRightSeeder::class);
         $this->call(FAQCategoryseeder::class);
+        $this->call(NewsSubjectSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

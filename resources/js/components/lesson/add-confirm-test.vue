@@ -242,7 +242,10 @@
                 axios
                     .post(that.registerUrl, {testId:  this.preparationId, lessonId : this.id})
                     .then(response => {
+                        console.log(response);
+/*
                         window.location = this.detailUrl;
+*/
                     })
                     .catch(e => {
                     });

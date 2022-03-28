@@ -240,12 +240,9 @@
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, {testId:  this.preparationId, lessonId : this.id})
+                    .post(that.registerUrl, {testId:  this.testId, lessonId : this.id})
                     .then(response => {
-                        console.log(response);
-/*
                         window.location = this.detailUrl;
-*/
                     })
                     .catch(e => {
                     });

@@ -130,6 +130,9 @@ class LessonController extends BaseController
 
         $lesson = Lesson::where('lesson_id', $id)->with('lessonText', 'preparations', 'reviews', 'lesson_infos', 'confirmTest')->first();
         if (!$lesson) return redirect()->route('lesson.index');
+        dump(LessonTest::all()->toArray());
+        die();
+
         return view('lesson.show', [
             'breadcrumbs' => $breadcrumbs,
             'lesson' => $lesson

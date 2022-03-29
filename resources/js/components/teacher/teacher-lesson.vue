@@ -228,7 +228,7 @@
         computed: {
             selectAll: {
                 get: function () {
-                   
+                   return this.dataList ? this.checkedIds.length == this.dataList.length : false;
                 },
                 set: function (value) {
                     this.checkedIds = [];

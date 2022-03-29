@@ -26,6 +26,9 @@ use App\Models\TeacherInfo;
 use App\Enums\LangType;
 use App\Http\Requests\TeacherLangRequest;
 use Log;
+use Response;
+use App\Components\CommonComponent;
+use App\Components\DateTimeComponent;
 
 class TeacherController extends BaseController
 {
@@ -335,7 +338,92 @@ class TeacherController extends BaseController
         $request = Session::get('sessionTeacherList');
         $fileName = "teacherlist_".date("Y-m-d").".csv";
 
-        return Excel::download(new TeacherExport($request), $fileName);
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        
+        $header = [
+            $this->convertShijis("講師名"),
+            $this->convertShijis("ニックネーム"),
+            $this->convertShijis("生年月日"),
+            $this->convertShijis("メアド"),
+            $this->convertShijis("固定／自由"),
+            $this->convertShijis("最終ログイン日時"),
+            $this->convertShijis("出身"),
+            $this->convertShijis("居住"),
+            $this->convertShijis("日本語対応"),
+            $this->convertShijis("一覧への表示"),
+            $this->convertShijis("自己紹介"),
+            $this->convertShijis("イメージURL"),
+            $this->convertShijis("動画URL")
+        ];
+        
+        $lessonList = Lesson::select("lesson_id", "lesson_name")->get()->toArray();
+
+        foreach ($lessonList as $lesson) {
+            $header[] = $this->convertShijis($this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name']));
+        }
+
+    	$queryBuilder = new Teacher();
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where(CommonComponent::escapeLikeSentence('teacher_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('teacher_email', $request['search_input']));
+            });
+        }
+
+        $teacherList = $queryBuilder->get()->toArray();
+
+        $teacherIds = $queryBuilder->pluck("teacher_id");
+        $teacherLessons = TeacherLesson::select("teacher_id", "lesson_id")->whereIn('teacher_id', $teacherIds)->get()->toArray();
+        $teacherLessonList = [];
+        foreach($teacherLessons as $item) {
+            $teacherLessonList[$item['teacher_id']][$item['lesson_id']] = $item['lesson_id'];
+        }
+
+        $lessionIds = Lesson::pluck('lesson_id');
+        $dataExport = [];
+
+        if (!file_exists(public_path().'/csv_file/users')) {
+            mkdir(public_path().'/csv_file/users', 0777, true);
+        }
+        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $header);
+
+        foreach ($teacherList as $teacher) {
+            $input = array();
+            $input["講師名"] = $this->convertShijis($teacher['teacher_name']);
+            $input["ニックネーム"] = $this->convertShijis($teacher['teacher_nickname']);
+            $input["生年月日"] = isset($item['teacher_birthday']) ? $this->convertShijis(date('Y-m-d', strtotime($item['teacher_birthday']))) : "";
+            $input["メアド"] = $this->convertShijis($teacher['teacher_email']);
+            $input["固定／自由"] = $teacher['is_free_teacher'] == 1 ? $this->convertShijis("自由") : $this->convertShijis("固定");
+            $input["最終ログイン日時"] = isset($item['last_login_date']) ? $this->convertShijis(date('Y-m-d', strtotime($item['last_login_date']))) : "";
+            $input["出身"] = $this->convertShijis($teacher['teacher_department']);
+            $input["居住"] = $this->convertShijis($teacher['teacher_university']);
+            $input["日本語対応"] = $this->convertShijis($teacher['teacher_hobby']);
+            $input["一覧への表示"] = $teacher['show_flag'] == 1 ? $this->convertShijis("する") : $this->convertShijis("しない");
+            $input["自己紹介"] = $this->convertShijis($teacher['teacher_introduction']);
+            $input["イメージURL"] = $this->convertShijis($teacher['photo_savepath']);    
+            $input["動画URL"] = $this->convertShijis($teacher['movie_savepath']);
+            foreach($lessionIds as $lessionId) {
+                if (array_key_exists($teacher['teacher_id'], $teacherLessonList) && array_key_exists($lessionId, $teacherLessonList[$teacher['teacher_id']])) {
+                    $input[$this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name'])] = "1";
+                }else {
+                    $input[$this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name'])] = "0";
+                }
+            }
+            $dataExport[] = $input;
+            fputcsv($file, $input);
+        }
+
+        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
     }
 
     public function lessonHistory(Request $request, $id)
@@ -441,7 +529,101 @@ class TeacherController extends BaseController
         $request = Session::get('teacherLessonHistory');
         $fileName = "teacher_lesson_history_".date("Y-m-d").".csv";
 
-        return Excel::download(new TeacherLessonHistoryExport($id, $request), $fileName);
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $header = [
+            $this->convertShijis("レッスン日"),
+            $this->convertShijis("レッスン時間"),
+            $this->convertShijis("コース名"),
+            $this->convertShijis("レッスン名"),
+            $this->convertShijis("テキスト名"),
+            $this->convertShijis("生徒番号"),
+            $this->convertShijis("生徒名")
+        ];
+
+
+        if (!file_exists(public_path().'/csv_file/users')) {
+            mkdir(public_path().'/csv_file/users', 0777, true);
+        }
+        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $header);
+        
+    	$queryBuilder = LessonHistory::select('lesson_schedule.lesson_date', 
+            'lesson_schedule.lesson_starttime',
+            'lesson_schedule.lesson_endtime',
+            'course.course_name',
+            'lesson.lesson_name',
+            'lesson_text.lesson_text_name',
+            'lesson_history.student_id',
+            'student.student_name',
+            'lesson_history.lesson_history_id'
+        )
+        ->join('lesson_schedule', function($join) use ($id) {
+            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+            ->where('lesson_schedule.teacher_id', $id);
+        })
+        ->leftJoin('lesson', function($join) {
+            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+        })
+        ->leftJoin('lesson_text', function($join) {
+            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+        })
+        ->leftJoin('student', function($join) {
+            $join->on('lesson_history.student_id', '=', 'student.student_id');
+        })
+        ->leftJoin('course', function($join) {
+            $join->on('lesson_history.course_id', '=', 'course.course_id');
+        })
+        ->where('lesson_history.student_lesson_reserve_type', '!=', 2)
+        ->orderByDesc('lesson_schedule.lesson_starttime');
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where(CommonComponent::escapeLikeSentence('course.course_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('lesson.lesson_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('lesson_text.lesson_text_name', $request['search_input']))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $request['search_input']));
+            });
+        }
+
+        if (isset($request['lesson_date_start']) && $request['lesson_date_start'] != null) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where('lesson_schedule.lesson_date', '>=', $request['lesson_date_start']);
+            });
+        }
+
+        if (isset($request['lesson_date_end']) && $request['lesson_date_end'] != null) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where('lesson_schedule.lesson_date', '<=', $request['lesson_date_end']);
+            });
+        }
+
+        $dataExport = $queryBuilder->get()->map(function($item, $key) {
+            $item['lesson_date'] = DateTimeComponent::getDate($item['lesson_date']);
+            $item['lesson_starttime'] = DateTimeComponent::getStartEndTime($item['lesson_starttime'], $item['lesson_endtime']);
+            return $item;
+        });
+
+        foreach ($dataExport as &$item) {
+            $input = [];
+            $input["レッスン日"] = $this->convertShijis($item['lesson_date']).
+            $input["レッスン時間"] = $this->convertShijis($item['lesson_starttime']).
+            $input["コース名"] = $this->convertShijis($item['course_name']).
+            $input["レッスン名"] = $this->convertShijis($item['lesson_name']).
+            $input["テキスト名"] = $this->convertShijis($item['lesson_text_name']).
+            $input["生徒番号"] = $this->convertShijis($item['student_id']).
+            $input["生徒名"] = $this->convertShijis($item['student_name']).
+            fputcsv($file, $item);
+        }
+
+        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
     }
 
     public function lessonHistoryDetail($id)

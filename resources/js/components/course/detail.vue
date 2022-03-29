@@ -17,8 +17,8 @@
                     <div class="row">
                         <div class="col-md-7">
                             <div class="card">
-                                <div class="card-header">コース情報
-
+                                <div class="card-header">
+                                    <h5 class="title-page">コース情報</h5>
                                     <div class="float-right">
                                         <a :href="this.editCourseUrl" class="btn btn-primary ">編集</a>
                                     </div>
@@ -282,7 +282,8 @@
                         </div>
                         <div class="col-md-5">
                             <div class="card" v-if="this.course.course_type === 0 || this.course.course_type === 1">
-                                <div class="card-header">レッスン一覧
+                                <div class="card-header">
+                                    <h5 class="title-page">レッスン一覧</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px;">
                                             <div class="float-right" >
@@ -321,7 +322,8 @@
 
                             </div>
                             <div class="card" v-if="this.course.course_type === 2">
-                                <div class="card-header">実力テスト
+                                <div class="card-header">
+                                    <h5 class="title-page">実力テスト</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
@@ -355,7 +357,8 @@
 
                             </div>
                             <div class="card" v-if="this.course.course_type === 1">
-                                <div class="card-header">コース修了テスト
+                                <div class="card-header">
+                                    <h5 class="title-page">コース修了テスト</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
@@ -389,7 +392,8 @@
 
                             </div>
                             <div class="card">
-                                <div class="card-header">キャンペーン
+                                <div class="card-header">
+                                    <h5 class="title-page">キャンペーン</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
@@ -425,9 +429,9 @@
                         </div>
                     </div>
                 </div>
-                <modal-table  :detailUrl="detailCourseUrl" :url="listLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="course.course_id" :register-url="registerUrl" :type="type">
+                <course-add-lesson  :detailUrl="detailCourseUrl" :url="listLessonUrl"  :pageSizeLimit="pageSizeLimit" :id="course.course_id" :register-url="registerUrl">
 
-                </modal-table>
+                </course-add-lesson>
                 <dragable-item :detailUrl="detailCourseUrl" :listLessonAttachUrl="listLessonAttachUrl"   :id="course.course_id" :register-url="registerUrl" :listLessonAttachUpdateUrl="listLessonAttachUpdateUrl">
 
                 </dragable-item>
@@ -450,7 +454,7 @@
 <script>
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
-    import ModalTable from "../common/modal-table";
+    import CourseAddLesson from "../course/course-add-lesson";
     import InsertVideo from "../course/insert-video";
     import DragableItem from "../course/dragable-item";
     import DeleteItem from "./../../components/common/delete-item";
@@ -476,7 +480,7 @@
         },
         components: {
             Loader,
-            ModalTable,
+            CourseAddLesson,
             DeleteItem,
             InsertVideo,
             DragableItem,
@@ -486,7 +490,6 @@
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
-                type : 'course',
                 messageConfirm : 'このレッスンをコースに解除しますか？',
                 messageConfirmTest : 'このテストをコースに解除しますか？',
                 messageConfirmVideo: 'この動画を削除しますか？',

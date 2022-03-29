@@ -111,8 +111,4 @@ class TeacherLessonHistoryExport implements FromCollection, WithHeadings
 
         return $header;
     }
-
-    private function convertShijis($text) {
-        return mb_convert_encoding($text, "SJIS", "UTF-8");
-    }
 }

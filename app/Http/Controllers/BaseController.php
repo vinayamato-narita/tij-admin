@@ -121,4 +121,23 @@ class BaseController extends Controller
 
         return $adminCanEdit;
     }
+
+    public function convertShijis($text) {
+        return mb_convert_encoding($text, "SJIS", "UTF-8");
+    }
+
+    public  function convert_text($comment)
+    {
+        if (!isset($comment)) {
+            return $comment;
+        }
+        $comment = str_replace('"', '""', $comment);
+        if (isset($comment)) {
+            $comment = '"'.$comment.'"';
+        }
+        $comment = str_replace("\r", ' ', $comment);
+        $comment = str_replace("\n", ' ', $comment);
+        
+        return $comment;
+    }
 }

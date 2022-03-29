@@ -22,28 +22,20 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >テスト種別<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
+                                                >テストID</label
                                             >
-                                            <div class="col-md-3">
-                                                <select
-                                                    class="form-control"
-                                                    name="test_type"
-                                                    v-model="testInfoEx.test_type"
-                                                    v-validate="'required'"
-                                                >
-                                                    <option :value="key" v-for="(value, key) in testTypes">
-                                                        {{ value }}</option
-                                                    >
-                                                </select>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('test_type')"
-                                                >
-                                                    {{ errors.first("test_type") }}
-                                                </div>
+                                            <div class="col-md-3 pt-7">
+                                                {{ testInfoEx.test_id }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >テスト種別</label
+                                            >
+                                            <div class="col-md-3 pt-7">
+                                                {{ testInfoEx.type_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -99,7 +91,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row" v-if="testInfoEx.test_type === 2">
+                                        <div class="form-group row" v-if="testInfoEx.test_type === 1 || testInfoEx.test_type === 2">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"

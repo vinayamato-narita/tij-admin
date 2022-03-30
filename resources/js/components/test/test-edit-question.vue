@@ -612,6 +612,7 @@
                     fileName: '',
                     fileNameAttached: '',
                     score: 0,
+                    referenceUrl: this.test.test_type != 0 ? '' : null ,
                     value: [],
                     testCategory: null,
                     isSavedDB: false

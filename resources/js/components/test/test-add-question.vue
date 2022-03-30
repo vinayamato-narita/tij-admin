@@ -495,7 +495,7 @@
                     fileName: '',
                     fileNameAttached: '',
                     score: 0,
-                    referenceUrl: '',
+                    referenceUrl: this.test.test_type != 0 ? '' : null ,
                     value: [
                     ],
                     testCategory : null
@@ -570,6 +570,7 @@
                     fileNameAttached: '',
                     score: 0,
                     value: [],
+                    referenceUrl: this.test.test_type != 0 ? '' : null ,
                     testCategory : null
                 });
                 let messError = {

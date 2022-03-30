@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminUserRightSeeder::class);
         $this->call(FAQCategoryseeder::class);
         $this->call(NewsSubjectSeeder::class);
+        $this->call(TimeZoneSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

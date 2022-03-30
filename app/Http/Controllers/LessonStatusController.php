@@ -247,19 +247,19 @@ class LessonStatusController extends BaseController
         fputcsv($file, $columns);
 
         foreach ($string as $item) {
-            $row['レッスン日'] = $item->lesson_date;
-            $row['レッスン時間'] = $item->lesson_time;
-            $row['レッスン予約時間'] = $item->student_book_time;
-            $row['レッスン名'] = $this->convert_text($item->lesson_name);
-            $row['テキスト名'] = $this->convert_text($item->lesson_text_name);
-            $row['講師名'] = $this->convert_text($item->teacher_name);
-            $row['生徒番号'] = $item->student_id;
-            $row['生徒ニックネーム'] = $this->convert_text($item->student_nickname);
-            $row['生徒スカイプ名'] = $this->convert_text($item->student_skype_name);
-            $row['評価（生徒→先生）'] = $item->teacher_rating;
-            $row['評価（先生→生徒）'] = $item->student_rating;
-            $row['コメント（生徒→先生）'] = $this->convert_text($item->comment_from_student_to_teacher);
-            $row['コメント（先生→生徒）'] = $this->convert_text($item->comment_from_teacher_to_student);
+            $row['レッスン日'] = $this->convertShijis($item->lesson_date);
+            $row['レッスン時間'] = $this->convertShijis($item->lesson_time);
+            $row['レッスン予約時間'] = $this->convertShijis($item->student_book_time);
+            $row['レッスン名'] = $this->convertShijis($this->convert_text($item->lesson_name));
+            $row['テキスト名'] = $this->convertShijis($this->convert_text($item->lesson_text_name));
+            $row['講師名'] = $this->convertShijis($this->convert_text($item->teacher_name));
+            $row['生徒番号'] = $this->convertShijis($item->student_id);
+            $row['生徒ニックネーム'] = $this->convertShijis($this->convert_text($item->student_nickname));
+            $row['生徒スカイプ名'] = $this->convertShijis($this->convert_text($item->student_skype_name));
+            $row['評価（生徒→先生）'] = $this->convertShijis($item->teacher_rating);
+            $row['評価（先生→生徒）'] = $this->convertShijis($item->student_rating);
+            $row['コメント（生徒→先生）'] = $this->convertShijis($this->convert_text($item->comment_from_student_to_teacher));
+            $row['コメント（先生→生徒）'] = $this->convertShijis($this->convert_text($item->comment_from_teacher_to_student));
 
             fputcsv($file, array($row['レッスン日'],$row['レッスン時間'],$row['レッスン予約時間'],$row['レッスン名'],$row['テキスト名'],$row['講師名'],$row['生徒番号'],$row['生徒ニックネーム'],$row['生徒スカイプ名'],$row['評価（生徒→先生）'],$row['評価（先生→生徒）'],$row['コメント（生徒→先生）'],$row['コメント（先生→生徒）']));
         }
@@ -340,24 +340,24 @@ class LessonStatusController extends BaseController
         $curColDate = $startDate;
         
         while($curColDate <= $endDate) {
-            $header1[] = date("Y/m/d", strtotime($curColDate)) . "(" . $dateDefine[date("w", strtotime($curColDate))] .")";
+            $header1[] = $this->convertShijis(date("Y/m/d", strtotime($curColDate)) . "(" . $dateDefine[date("w", strtotime($curColDate))] .")");
             $header1[] = "";
             $header1[] = "";
             $header1[] = "";
             $header1[] = "";
             $header1[] = "";
-            $header2[] = "固定枠";
+            $header2[] = $this->convertShijis("固定枠");
             $header2[] = "";
-            $header2[] = "自由枠";
+            $header2[] = $this->convertShijis("自由枠");
             $header2[] = "";
             $header2[] = "";
             $header2[] = "";
-            $header3[] = "予約数";
-            $header3[] = "登録数";
-            $header3[] = "予約数";
-            $header3[] = "登録数";
-            $header3[] = "残枠";
-            $header3[] = "枠数";
+            $header3[] = $this->convertShijis("予約数");
+            $header3[] = $this->convertShijis("登録数");
+            $header3[] = $this->convertShijis("予約数");
+            $header3[] = $this->convertShijis("登録数");
+            $header3[] = $this->convertShijis("残枠");
+            $header3[] = $this->convertShijis("枠数");
             $curColDate = date("Y-m-d", strtotime($curColDate. " +1 days"));
         }
         $input_array[] = $header1;
@@ -376,18 +376,18 @@ class LessonStatusController extends BaseController
         for ($i= 0; $i < $numRow; $i ++) {
             $row = array();
             $curRowTime = date("Y-m-d H:i:s", strtotime($startDate. " +" .$i * $nexLessonTine . " minutes"));
-            $row[] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
+            $row[] = $this->convertShijis(date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes")));
 
             $curCellTime = $curRowTime;
             $endTime = date ("Y-m-d 23:30:00", strtotime($endDate));
             while($curCellTime <= $endTime) {
-                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->reverse_count_normal;
-                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->lesson_count_normal;
-                $row[] = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->reverse_count_free;
-                $row[] = $freeSchedule = !isset($lessonStatus[$curCellTime]) ? 0:  $lessonStatus[$curCellTime]->lesson_count_free;
-                $maxFreeSchedule = !isset($freeTeacherLessonSetting[$curCellTime]) ? 0:  $freeTeacherLessonSetting[$curCellTime]->max_free_lesson;
-                $row[] = $maxFreeSchedule - $freeSchedule;
-                $row[] = $maxFreeSchedule;
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0: $this->convertShijis($lessonStatus[$curCellTime]->reverse_count_normal);
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0: $this->convertShijis($lessonStatus[$curCellTime]->lesson_count_normal);
+                $row[] = !isset($lessonStatus[$curCellTime]) ? 0: $this->convertShijis($lessonStatus[$curCellTime]->reverse_count_free);
+                $row[] = $freeSchedule = !isset($lessonStatus[$curCellTime]) ? 0: $this->convertShijis($lessonStatus[$curCellTime]->lesson_count_free);
+                $maxFreeSchedule = !isset($freeTeacherLessonSetting[$curCellTime]) ? 0: $this->convertShijis($freeTeacherLessonSetting[$curCellTime]->max_free_lesson);
+                $row[] = $this->convertShijis($maxFreeSchedule - $freeSchedule);
+                $row[] = $this->convertShijis($maxFreeSchedule);
                 
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curCellTime. " +1 days"));
             }
@@ -399,10 +399,10 @@ class LessonStatusController extends BaseController
         $row = array("合計");
         $curColDate = $startDate;
         while($curColDate <= $endDate) {
-            $row[] = $this->sum_of_lesson_by_date($curColDate, 1, $lessonStatus);
-            $row[] = $this->sum_of_lesson_by_date($curColDate, 2, $lessonStatus);
-            $row[] = $this->sum_of_lesson_by_date($curColDate, 3, $lessonStatus);
-            $row[] = $this->sum_of_lesson_by_date($curColDate, 4, $lessonStatus);
+            $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 1, $lessonStatus));
+            $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 2, $lessonStatus));
+            $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 3, $lessonStatus));
+            $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 4, $lessonStatus));
             $row[] = "-";
             $row[] = "-";
             $curColDate = date("Y-m-d", strtotime($curColDate. " +1 days"));
@@ -585,24 +585,5 @@ class LessonStatusController extends BaseController
             }
         }
         return $return;
-    }
-
-    private function convertShijis($text) {
-        return mb_convert_encoding($text, "SJIS", "UTF-8");
-    }
-
-    public  function convert_text($comment)
-    {
-        if (!isset($comment)) {
-            return $comment;
-        }
-        $comment = str_replace('"', '""', $comment);
-        if (isset($comment)) {
-            $comment = '"'.$comment.'"';
-        }
-        $comment = str_replace("\r", ' ', $comment);
-        $comment = str_replace("\n", ' ', $comment);
-        
-        return $comment;
     }
 }

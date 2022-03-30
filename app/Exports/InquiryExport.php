@@ -41,10 +41,6 @@ class InquiryExport implements FromCollection, WithHeadings
         	return $item;
         });
 
-        foreach ($inquiryList as &$item) {
-            $item = $this->convertShijis($item);
-        }
-
         return $inquiryList;
     }
 
@@ -52,14 +48,6 @@ class InquiryExport implements FromCollection, WithHeadings
     {
         $header = ["問合せ番号", "日時", "問い合わせ件名", "学習者番号", "名前", "メールアドレス", "対応状況", "問い合わせ内容"];
         
-        foreach ($header as $item) {
-            $item = $this->convertShijis($item);
-        }
-
         return $header;
-    }
-
-    private function convertShijis($text) {
-        return mb_convert_encoding($text, "SJIS", "UTF-8");
     }
 }

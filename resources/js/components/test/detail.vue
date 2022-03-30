@@ -142,7 +142,7 @@
 
                             <div class="card" v-if="test.test_type === 1 || test.test_type === 2">
                                 <div class="card-header">
-                                    <h5 class="title-page">コース名</h5>
+                                    <h5 class="title-page">コース一覧</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                         </div>

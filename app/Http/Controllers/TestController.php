@@ -116,11 +116,12 @@ class TestController extends BaseController
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'test_list'],
-            ['name' => 'show_test', $id],
+            ['name' => 'test_show', $id],
             ['name' => 'edit_test', $id],
         ]);
         $testInfo = Test::where('test_id', $id)->firstOrFail();
         $testInfo->_token = csrf_token();
+        $testInfo->type_name = TestType::getDescription($testInfo->test_type);
         $testTypes = TestType::asSelectArray();
 
         return view('test.edit', [

@@ -16,7 +16,8 @@ use App\Exports\InquiryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use Log;
-
+use App\Components\CommonComponent;
+use Response;
 class InquiryController extends BaseController
 {
     /**
@@ -184,7 +185,64 @@ class InquiryController extends BaseController
     public function exportInquiry($searchInput = null)
     {
         $fileName = "contact_".date("Y_m_d").".csv";
-        return Excel::download(new InquiryExport($searchInput), $fileName);
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $header = [
+            $this->convertShijis("問合せ番号"), 
+            $this->convertShijis("日時"), 
+            $this->convertShijis("問い合わせ件名"), 
+            $this->convertShijis("学習者番号"), 
+            $this->convertShijis("名前"), 
+            $this->convertShijis("メールアドレス"), 
+            $this->convertShijis("対応状況"), 
+            $this->convertShijis("問い合わせ内容")
+        ];
+
+        if (!file_exists(public_path().'/csv_file/users')) {
+            mkdir(public_path().'/csv_file/users', 0777, true);
+        }
+        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $header);
+
+        $queryBuilder = AdminInquiry::leftJoin('student', 'student.student_id', '=', 'admin_inquiry.user_id')
+        	->select('admin_inquiry.inquiry_id as inquiry_id', 'inquiry_date', 'inquiry_subject', 'admin_inquiry.user_id as student_id', 'student.student_name as student_name', DB::raw('ifnull(admin_inquiry.user_mail,student.student_email) as j_student_email'), 'inquiry_flag', 'inquiry_body');
+        
+        if (isset($this->searchInput)) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($searchInput) {
+                $query->where(CommonComponent::escapeLikeSentence('admin_inquiry.inquiry_subject', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('admin_inquiry.user_mail', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_email', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $searchInput));
+            });
+        }
+        $inquiryList = $queryBuilder->get()->map(function($item, $key) {
+        	$item['inquiry_flag'] = InquiryFlag::getDescription($item['inquiry_flag']);
+        	return $item;
+        });
+
+        foreach ($inquiryList as $inquiry) {
+            $input = [];
+            $input["問合せ番号"] = $inquiry['inquiry_id'];
+            $input["日時"] = $inquiry['inquiry_date'];
+            $input["問い合わせ件名"] = $inquiry['inquiry_subject'];
+            $input["学習者番号"] = $inquiry['student_id'];
+            $input["名前"] = $inquiry['student_name'];
+            $input["メールアドレス"] = $inquiry['j_student_email'];
+            $input["対応状況"] = $inquiry['inquiry_flag'];
+            $input["問い合わせ内容"] = $inquiry['inquiry_body'];
+
+            fputcsv($file, $input);
+        }
+
+        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
     }
 
 }

@@ -86,7 +86,6 @@ class GroupCourseDecision extends Command
                     if ($mailPattern) {
                         $mailSubject = $mailPattern[0]->mail_subject;
                         $mailBody = $mailPattern[0]->mail_body;
-                        $mailBody = str_replace("#TEACHER_NAME#", $lessonSchedule->teacher->teacher_name, $mailBody);
 
                         Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                             $message->to($lessonSchedule->teacher->teacher_email)

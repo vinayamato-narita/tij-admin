@@ -263,7 +263,7 @@
                                 v-model="autoRecording"
                                 >
                                 <option value="0">ローカル</option>
-                                <option value="1">ウラウド</option>
+                                <option value="1">クラウド</option>
                                 <option value="2">無効</option>
                                 </select>
                             </div>

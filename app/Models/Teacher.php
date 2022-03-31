@@ -33,6 +33,11 @@ class Teacher extends Model
     {
         return $this->hasMany(TeacherLesson::class, 'teacher_id');
     }
+    
+    public function teacherInfo()
+    {
+        return $this->hasOne('App\Models\TeacherInfo', 'teacher_id', 'teacher_id');
+    }
 
     protected $hidden = [
         'password',

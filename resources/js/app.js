@@ -46,6 +46,11 @@ Vue.filter("formatDateTime", function(value) {
       return moment(String(value)).tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm");
     }
   });
+  Vue.filter("formatDateTime", function(value) {
+    if (value) {
+      return moment(String(value)).format("YYYY/MM/DD HH:mm");
+    }
+  });
 
 var filter = function(text, length, clamp){
     clamp = clamp || '...';
@@ -111,7 +116,6 @@ import RemindMailEdit from "./components/remindMailPatern/edit.vue"
 import CategoryAdd from "./components/category/add.vue"
 import CategoryShow from "./components/category/detail.vue"
 import CategoryEdit from "./components/category/edit.vue"
-import CsvExport from "./components/csv/csv-export.vue"
 import CreatePaymentHistory from "./components/student/create-payment-history.vue"
 import EditPaymentHistory from "./components/student/edit-payment-history.vue"
 import StudentSearch from "./components/student/student-search.vue"
@@ -146,6 +150,11 @@ import GroupLessonHistoryInputSearchMulti from "./components/groupLessonHistory/
 
 import InputSearchGroupLesson from "./components/groupLesson/input-search.vue"
 import GroupLessonReserveShow from "./components/groupLessonReserve/detail.vue"
+import UpdateStudentAttendance from "./components/groupLessonHistory/update-student-attendance.vue"
+import EditLangRemindMail from "./components/remindMailPatern/edit-lang-remind-mail.vue"
+import LessonHistorySearch from "./components/teacher/lesson-history-search.vue"
+import EditTeacherLang from "./components/teacher/edit-teacher-lang.vue"
+import TeacherLesson from "./components/teacher/teacher-lesson.vue"
 
 new Vue({
     created() {
@@ -273,7 +282,6 @@ new Vue({
         EditLangFaq,
         EditInquiry,
         ModalTable,
-        CsvExport,
         EditLangInquirySubject,
         EditInquirySubject,
         CreateInquirySubject,
@@ -329,6 +337,11 @@ new Vue({
         GroupLessonHistoryInputSearchMulti,
         InputSearchGroupLesson,
         GroupLessonReserveShow,
+        UpdateStudentAttendance,
+        EditLangRemindMail,
+        LessonHistorySearch,
+        EditTeacherLang,
+        TeacherLesson
     },
     methods: {},
     mounted() {}

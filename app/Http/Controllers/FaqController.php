@@ -116,14 +116,14 @@ class FaqController extends BaseController
             ['name' => 'show_faq', $id],
         ]);
         $faqInfo = Faq::where('faq_id', $id)->with('faqCategory')->firstOrFail();
-        $faqVnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::VN])->first();
         $faqEnInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::EN])->first();
+        $faqZhInfo = FaqInfo::where(['faq_id' => $id, 'lang_type' => LangType::ZH])->first();
 
         return view('faq.show', [
             'breadcrumbs' => $breadcrumbs,
             'faqInfo' => $faqInfo,
-            'faqVnInfo' => $faqVnInfo,
             'faqEnInfo' => $faqEnInfo,
+            'faqZhInfo' => $faqZhInfo,
         ]);
     }
 
@@ -142,6 +142,7 @@ class FaqController extends BaseController
         $faqInfo->lang_question = $faqLangInfo->question ?? "";
         $faqInfo->lang_answer = $faqLangInfo->answer ?? "";
         $faqInfo->lang = $langType;
+        $faqInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
 
         return view('faq.edit_lang', [
             'breadcrumbs' => $breadcrumbs,

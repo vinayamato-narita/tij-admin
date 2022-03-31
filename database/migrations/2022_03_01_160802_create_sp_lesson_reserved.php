@@ -15,7 +15,7 @@ class CreateSpLessonReserved extends Migration
     {
         $procedure = "
         DROP PROCEDURE IF EXISTS `sp_student_top_lesson_history_list`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_student_top_lesson_history_list`(IN _student_id int,
+        CREATE PROCEDURE `sp_student_top_lesson_history_list`(IN _student_id int,
             IN _limit INT,
             IN _lang_type varchar(10))
         BEGIN

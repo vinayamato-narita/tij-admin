@@ -67,8 +67,8 @@ use App\Enums\LangType;
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="title-page">ベトナム語版</h5>
-                                    <a href="{{ route('editLangInquirySubject', [$inquirySubjectInfo->inquiry_subject_id, LangType::VN]) }}" class="btn btn-primary">編集</a>     
+                                    <h5 class="title-page">中国語版</h5>
+                                    <a href="{{ route('editLangInquirySubject', [$inquirySubjectInfo->inquiry_subject_id, LangType::ZH]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 
                                 <div class="card-body">
@@ -79,7 +79,7 @@ use App\Enums\LangType;
                                             >問い合わせ件名:</label
                                         >
                                         <div class="col-md-3 pd-7">
-                                            {{ $inquirySubjectVnInfo->inquiry_subject ?? "" }}
+                                            {{ $inquirySubjectZhInfo->inquiry_subject ?? "" }}
                                         </div>
                                     </div>
                                 </div>

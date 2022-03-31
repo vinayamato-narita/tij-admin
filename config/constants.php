@@ -75,35 +75,42 @@ const PAGE_SIZE_DEFAULT = 20;
 
 const COURSE_FREE_ID = 1;
 
-const STUDENT = 1;
-const TEACHER = 2;
-const LESSON = 3;
-const INQUIRY = 5;
-const PAYMENTHISTORY = 6;
-const NEWS = 7;
-const LESSONCOURSE = 8;
-const SCHEDULE = 10;
-const TEXT = 12;
-const REMINDMAIL = 14;
-const ACCESSLOG = 17;
-const ADMINUSER = 18;
-const INQUIRYSUBJECT = 19;
-const FAQ = 24;
-const LESSONSTATUS = 26;
-const COMMENT = 27;
-const GUIDE = 29;
-const CSV = 30;
-const CSVEXPORT = 31;
+const PAYMENTHISTORY = 1;
+const STUDENT = 2;
+const TEACHER = 3;
+const SCHEDULE = 4;
+const GROUP_LESSON_SCHEDULE = 5;
+const LESSONSTATUS = 6;
+const GROUP_LESSON_HISTORY = 7;
+const GROUP_LESSON_RESERVE = 8;
+const LESSONCANCEL = 9;
+const ABILITY_TEST_RESULT = 10;
+const COMMENT = 11;
+const STUDENT_COMMENT = 12;
+const LESSONCOURSE = 13;
+const LESSON = 14;
+const TEXT = 15;
+const PREPARATION = 16;
+const REVIEW = 17;
+const TEST = 18;
+const GUIDE = 19;
+const REMINDMAIL = 20;
+const NOTIFICATION = 21;
+const COURSE_REGISTRATION = 22;
+const INQUIRY = 23;
+const ACCESSLOG = 24;
+const INQUIRYSUBJECT = 25;
+const FAQ = 26;
+const NEWS = 27;
+const ADMINUSER = 28;
+const ZOOM_ACCOUNT = 29;
+const ZOOM_SETTING = 30;
+const CSV = 31;
+const CSVEXPORT = 32;
 const LMSCSV = 33;
-const GMO = 37;
-const DEMANDMAIL = 38;
-const ADMINDEMAND = 41;
-const LESSONCANCEL = 43;
-const PREPARATION = 44;
-const REVIEW = 45;
-const TEST = 46;
-const ABILITY_TEST_RESULT = 47;
-const GROUP_LESSON_HISTORY = 48;
+const GMO = 34;
+const DEMANDMAIL = 35;
+const ADMINDEMAND = 36;
 
 const CANEDIT = 'can_edit';
 const ISPERMITTED = 'is_permitted';
@@ -134,6 +141,9 @@ const MENU = [
 		'teacher.create',
 		'teacher.show',
 		'teacher.edit',
+		'teacher.lessonHistory',
+		'teacher.lessonHistoryDetail',
+		'teacher.editLang',
 	],
 	COMMENT => [
 		'comment.index'
@@ -169,6 +179,24 @@ const MENU = [
 		'text.create',
 		'text.show',
 		'text.edit',
+	],
+	PREPARATION => [
+		'preparation.index',
+		'preparation.create',
+		'preparation.show',
+		'preparation.edit',
+	],
+	REVIEW => [
+		'review.index',
+		'review.create',
+		'review.show',
+		'review.edit',
+	],
+	TEST => [
+		'test.index',
+		'test.create',
+		'test.show',
+		'test.edit',
 	],
 	REMINDMAIL => [
 		'remindmail.index',
@@ -209,7 +237,33 @@ const MENU = [
 		'admin.show',
 		'admin.edit',
 		'admin.editRole',
-	]
+    ],
+    SCHEDULE => [
+        'lessonSchedule.index',
+		'lessonSchedule.create',
+		'lessonSchedule.show',
+		'lessonSchedule.edit',
+    ],
+    GROUP_LESSON_RESERVE => [
+        'groupLessonReserves.index',
+		'groupLessonReserves.show',
+    ],
+    GROUP_LESSON_SCHEDULE => [
+        'groupSchedule.index'
+    ],
+    ZOOM_ACCOUNT => [
+        'zoomAccount.index',
+		'zoomAccount.create',
+		'zoomAccount.show',
+		'zoomAccount.edit',
+    ],
+    ZOOM_SETTING => [
+		'zoomSetting.edit',
+    ],
+    GROUP_LESSON_HISTORY => [
+    	'groupLessonHistory.index',
+    	'groupLessonHistory.studentAttendance'
+    ]
 ];
 
 

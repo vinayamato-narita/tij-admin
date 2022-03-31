@@ -124,14 +124,14 @@ class NewsController extends BaseController
         ]);
         $newsInfo = AdminNews::where('news_id', $id)->with('newsSubject')->firstOrFail();
         
-        $newsVnInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::VN])->first();
         $newsEnInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::EN])->first();
+        $newsZhInfo = AdminNewsInfo::where(['news_id' => $id, 'lang_type' => LangType::ZH])->first();
 
         return view('news.show', [
             'breadcrumbs' => $breadcrumbs,
             'newsInfo' => $newsInfo,
-            'newsVnInfo' => $newsVnInfo,
             'newsEnInfo' => $newsEnInfo,
+            'newsZhInfo' => $newsZhInfo,
         ]);
     }
 
@@ -150,6 +150,7 @@ class NewsController extends BaseController
         $newsInfo->news_lang_title = $newsLangInfo->news_title ?? "";
         $newsInfo->news_lang_body = $newsLangInfo->news_body ?? "";
         $newsInfo->lang = $langType;
+        $newsInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
 
         return view('news.edit_lang', [
             'breadcrumbs' => $breadcrumbs,

@@ -7,5 +7,5 @@ use BenSampo\Enum\Contracts\LocalizedEnum;
 
 final class LangTypeOption extends Enum implements LocalizedEnum
 {
-    const JAPANESE = 1;
+    const JAPANESE = 'jp';
 }

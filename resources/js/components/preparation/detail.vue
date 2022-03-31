@@ -16,7 +16,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">予習情報
+                                <div class="card-header">
+                                    <h5 class="title-page">予習情報</h5>
 
                                     <div class="float-right">
                                         <a :href="this.editPreparationUrl" class="btn btn-primary ">編集</a>
@@ -24,17 +25,6 @@
 
                                 </div>
                                 <div class="card-body">
-
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-4 col-form-label text-md-right">表示順:
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            {{this.preparation.display_order}}
-
-                                        </div>
-                                    </div>
-
                                     <div class="form-group row ">
                                         <label class="col-md-4 col-form-label text-md-right">予習動画:
                                         </label>

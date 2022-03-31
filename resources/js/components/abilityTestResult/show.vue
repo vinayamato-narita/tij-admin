@@ -68,7 +68,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">{{comment.title}}:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <nl2br :text="comment.comment_desc" tag="p">
+                                            <nl2br :text="comment.comment_desc" tag="p" v-if="comment.comment_desc">
 
                                             </nl2br>
 

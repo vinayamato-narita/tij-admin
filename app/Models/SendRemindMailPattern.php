@@ -23,14 +23,14 @@ class SendRemindMailPattern extends Model
     }
 
     public static function getRemindmailPatternInfo($type, $langType) {
-    	return DB::table('send_remind_mail_patterns')->select(DB::raw("COALESCE(send_remind_mail_pattern_infos.mail_subject, send_remind_mail_patterns.mail_subject) AS mail_subject"),
-            DB::raw("COALESCE(send_remind_mail_pattern_infos.mail_body, send_remind_mail_patterns.mail_body) AS mail_body")
+    	return DB::table('send_remind_mail_pattern')->select(DB::raw("COALESCE(send_remind_mail_pattern_info.mail_subject, send_remind_mail_pattern.mail_subject) AS mail_subject"),
+            DB::raw("COALESCE(send_remind_mail_pattern_info.mail_body, send_remind_mail_pattern.mail_body) AS mail_body")
         )
-            ->leftJoin('send_remind_mail_pattern_infos', function($join) use($langType) {
-                $join->on('send_remind_mail_patterns.id', '=', 'send_remind_mail_pattern_infos.send_remind_mail_pattern_id')
-                	->where('send_remind_mail_pattern_infos.lang_type', $langType);
+            ->leftJoin('send_remind_mail_pattern_info', function($join) use($langType) {
+                $join->on('send_remind_mail_pattern.send_remind_mail_pattern_id', '=', 'send_remind_mail_pattern_info.send_remind_mail_pattern_id')
+                	->where('send_remind_mail_pattern_info.lang_type', $langType);
             })
             ->where('send_remind_mail_timing_type', $type)
-            ->first();
+            ->get();
     }
 }

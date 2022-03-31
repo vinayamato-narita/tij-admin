@@ -66,7 +66,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -369,9 +369,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.detailUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.detailUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

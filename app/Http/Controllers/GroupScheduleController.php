@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Components\BreadcrumbComponent;
+use App\Enums\AutoRecording;
+use App\Enums\Boolean;
 use App\Enums\StatusCode;
 use App\Models\Teacher;
 use App\Models\Lesson;
@@ -13,6 +15,12 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Enums\LessonTiming;
 use App\Enums\CourseTypeEnum;
+use App\Models\Course;
+use App\Models\ZoomAccount;
+use App\Models\ZoomSchedule;
+use App\Models\ZoomSetting;
+use App\Services\ZoomClientService;
+use Illuminate\Support\Str;
 use Log;
 
 class GroupScheduleController extends BaseController
@@ -116,33 +124,33 @@ class GroupScheduleController extends BaseController
 
         // get course and lesson list of teacher
         $courseList = DB::table('course')
-                        ->selectRaw('course.course_id,
+            ->selectRaw('course.course_id,
                             coalesce(course_info.course_name, course.course_name) as course_name,
                             lesson.lesson_id,
                             coalesce(lesson_info.lesson_name, lesson.lesson_name) as lesson_name,
                             teacher.teacher_id,
                             teacher.teacher_name')
-                        ->leftJoin('course_info', function ($join) {
-                            $join->on('course_info.course_id', '=', 'course.course_id');
-                        })
-                        ->leftJoin('course_lesson', 'course_lesson.course_id', '=', 'course.course_id')
-                        ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
-                        ->leftJoin('lesson_info', function ($join) {
-                            $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id');
-                        })
-                        ->leftJoin('teacher_lesson', 'teacher_lesson.lesson_id', '=', 'lesson.lesson_id')
-                        ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
-                        ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
-                        ->where(function ($query) use ($time) {
-                            $query->whereNull('course.course_start_date')
-                                 ->orWhere(function ($query) use ($time) {
-                                    $query->where('course.course_start_date', '<=', $time)
-                                    ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$time]);
-                                });
-                        })
-                        ->orderBy('course.display_order', 'ASC')
-                        ->orderBy('course_name', 'ASC')
-                        ->get()->toArray();
+            ->leftJoin('course_info', function ($join) {
+                $join->on('course_info.course_id', '=', 'course.course_id');
+            })
+            ->leftJoin('course_lesson', 'course_lesson.course_id', '=', 'course.course_id')
+            ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
+            ->leftJoin('lesson_info', function ($join) {
+                $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id');
+            })
+            ->leftJoin('teacher_lesson', 'teacher_lesson.lesson_id', '=', 'lesson.lesson_id')
+            ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
+            ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
+            ->where(function ($query) use ($time) {
+                $query->whereNull('course.course_start_date')
+                    ->orWhere(function ($query) use ($time) {
+                        $query->where('course.course_start_date', '<=', $time)
+                            ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$time]);
+                    });
+            })
+            ->orderBy('course.display_order', 'ASC')
+            ->orderBy('course_name', 'ASC')
+            ->get()->toArray();
 
         $beautyList = [];
         foreach ($courseList as $course) {
@@ -181,7 +189,6 @@ class GroupScheduleController extends BaseController
                         'teacher_name' => $course->teacher_name,
                     ];
                 }
-
             }
         }
 
@@ -210,11 +217,14 @@ class GroupScheduleController extends BaseController
         // Log::info($endDate);
 
         $scheduleList = DB::table('lesson_schedule')
-                        ->selectRaw('
+            ->selectRaw('
                             lesson_schedule.lesson_schedule_id,
                             lesson_schedule.lesson_starttime as start,
                             lesson_schedule.lesson_endtime as end,
                             lesson_schedule.teacher_id,
+                            lesson_schedule.zoom_url,
+                            lesson_schedule.link_zoom_schedule_flag,
+                            lesson_schedule.zoom_schedule_id,
                             course.course_id,
                             coalesce(course_info.course_name, course.course_name) as title,
                             lesson.lesson_id,
@@ -222,28 +232,33 @@ class GroupScheduleController extends BaseController
                             CONCAT("color-", MOD(course.course_id, 11)) as class,
                             false as deletable,
                             false as resizable,
-                            false as draggable
+                            false as draggable,
+                            zoom_schedule.zoom_account_id as zoom_account_id,
+                            zoom_schedule.join_before_host as join_before_host,
+                            zoom_schedule.waiting_room as waiting_room,
+                            zoom_schedule.auto_recording as auto_recording
                             ')
-                        ->leftJoin('lesson', 'lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-                        ->leftJoin('lesson_info', 'lesson_info.lesson_id', '=', 'lesson.lesson_id')
-                        ->leftJoin('course_lesson', 'course_lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-                        ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
-                        ->leftJoin('course_info', 'course_info.course_id', '=', 'course.course_id')
-                        ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
-                        ->where('lesson_schedule.lesson_starttime', '>=', $startDate)
-                        ->where('lesson_schedule.lesson_starttime', '<=', $endDate)
-                        ->get()->toArray();
+            ->leftJoin('lesson', 'lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
+            ->leftJoin('lesson_info', 'lesson_info.lesson_id', '=', 'lesson.lesson_id')
+            ->leftJoin('course_lesson', 'course_lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
+            ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
+            ->leftJoin('course_info', 'course_info.course_id', '=', 'course.course_id')
+            ->leftJoin('zoom_schedule', 'zoom_schedule.zoom_schedule_id', '=', 'lesson_schedule.zoom_schedule_id')
+            ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
+            ->where('lesson_schedule.lesson_starttime', '>=', $startDate)
+            ->where('lesson_schedule.lesson_starttime', '<=', $endDate)
+            ->get()->toArray();
 
         // Log::info($scheduleList);
         echo json_encode(array(
             'status' => 200,
             'error_message' => '',
-            'data' => $scheduleList
+            'data' => $scheduleList,
         ));
         return;
     }
 
-    public function registerSchedule(Request $request)
+    public function registerSchedule(Request $request, ZoomClientService $zoomClientService)
     {
         try {
             $startDateTime = Carbon::parse($request['startDateTime']);
@@ -257,16 +272,16 @@ class GroupScheduleController extends BaseController
         }
 
         $courseCheck = DB::table('course')
-                        ->where('course.course_id', '=', $request['selectedCourse'])
-                        ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
-                        ->where(function ($query) use ($startDateTime) {
-                            $query->whereNull('course.course_start_date')
-                                  ->orWhere(function ($query) use ($startDateTime) {
-                                    $query->where('course.course_start_date', '<=', $startDateTime)
-                                    ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$startDateTime]);
-                                });
-                        })
-                        ->get()->toArray();
+            ->where('course.course_id', '=', $request['selectedCourse'])
+            ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
+            ->where(function ($query) use ($startDateTime) {
+                $query->whereNull('course.course_start_date')
+                    ->orWhere(function ($query) use ($startDateTime) {
+                        $query->where('course.course_start_date', '<=', $startDateTime)
+                            ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$startDateTime]);
+                    });
+            })
+            ->get()->toArray();
         if (empty($courseCheck)) {
             echo json_encode(array(
                 'status' => 400,
@@ -276,11 +291,11 @@ class GroupScheduleController extends BaseController
         }
 
         $lessonCheck = DB::table('course_lesson')
-                        ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
-                        ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
-                        ->where('course.course_id', '=', $request['selectedCourse'])
-                        ->where('lesson.lesson_id', '=', $request['selectedLesson'])
-                        ->get()->toArray();
+            ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
+            ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
+            ->where('course.course_id', '=', $request['selectedCourse'])
+            ->where('lesson.lesson_id', '=', $request['selectedLesson'])
+            ->get()->toArray();
         if (empty($lessonCheck)) {
             echo json_encode(array(
                 'status' => 400,
@@ -290,11 +305,11 @@ class GroupScheduleController extends BaseController
         }
 
         $teacherCheck = DB::table('teacher_lesson')
-                        ->leftJoin('lesson', 'lesson.lesson_id', '=', 'teacher_lesson.lesson_id')
-                        ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
-                        ->where('teacher.teacher_id', '=', $request['selectedTeacher'])
-                        ->where('lesson.lesson_id', '=', $request['selectedLesson'])
-                        ->get()->toArray();
+            ->leftJoin('lesson', 'lesson.lesson_id', '=', 'teacher_lesson.lesson_id')
+            ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
+            ->where('teacher.teacher_id', '=', $request['selectedTeacher'])
+            ->where('lesson.lesson_id', '=', $request['selectedLesson'])
+            ->get()->toArray();
         if (empty($teacherCheck)) {
             echo json_encode(array(
                 'status' => 400,
@@ -309,9 +324,9 @@ class GroupScheduleController extends BaseController
         }
 
         $duplicateCheck = DB::table('lesson_schedule')
-                        ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
-                        ->where('lesson_schedule.lesson_starttime', '=', $startDateTime)
-                        ->where('lesson_schedule.lesson_endtime', '=', $endDateTime);
+            ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
+            ->where('lesson_schedule.lesson_starttime', '=', $startDateTime)
+            ->where('lesson_schedule.lesson_endtime', '=', $endDateTime);
         if ($editFlag) {
             $duplicateCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
         }
@@ -325,8 +340,8 @@ class GroupScheduleController extends BaseController
         }
 
         $scheduleCheck = DB::table('lesson_schedule')
-                        ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
-                        ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson']);
+            ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
+            ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson']);
         if ($editFlag) {
             $scheduleCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
         }
@@ -339,15 +354,96 @@ class GroupScheduleController extends BaseController
             return;
         }
 
+        if (!empty($request['selectedEvent']) && !empty($request['selectedEvent']['zoom_schedule_id'])) {
+            ZoomSchedule::where('zoom_schedule_id', $request['selectedEvent']['zoom_schedule_id'])->delete();
+        }
+
+        if ($request->linkZoomScheduleFlag) {
+            $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTime, $endDateTime) {
+                $query->where(function ($query) use ($startDateTime) {
+                    $query->where('start_time', '<=', $startDateTime)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$startDateTime]);
+                })->orWhere(function ($query) use ($endDateTime) {
+                    $query->where('start_time', '<=', $endDateTime)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$endDateTime]);
+                })->orWhere(function ($query) use ($startDateTime, $endDateTime) {
+                    $query->where('start_time', '<', $startDateTime)
+                        ->whereRaw('start_time + interval duration minute > ?', [$endDateTime]);
+                });
+            })->get();
+            if (!empty($request->zoomAccountId)) {
+                if (!in_array($request->zoomAccountId, $zoomAccounts->pluck('zoom_account_id')->toArray())) {
+                    echo json_encode(array(
+                        'status' => 400,
+                        'error_message' => __('選択されたZoomアカウントにすでにスケジュールが登録されている。')
+                    ));
+                    return;
+                }
+                $zoomAccountId = $request->zoomAccountId;
+            } else {
+                if (empty($zoomAccounts)) {
+                    echo json_encode(array(
+                        'status' => 400,
+                        'error_message' => __('全てZoomアカウントが利用される為、スケジュール登録できません。')
+                    ));
+                    return;
+                }
+                $zoomAccountId = $zoomAccounts[0]['zoom_account_id'];
+            }
+
+            $diff = abs(strtotime($endDateTime) - strtotime($startDateTime));
+            $course = Course::find($request['selectedCourse']);
+            $lesson = Lesson::find($request['selectedLesson']);
+
+            $object = [
+                'topic' => $course->course_name . $lesson->lesson_name,
+                'type => 2',
+                'start_time' => $startDateTime,
+                'duration' => $diff / 60,
+                'timezone' => 'Asia/Tokyo',
+                'password' => Str::random(8),
+                'settings' => [
+                    'host_video' => true,
+                    'participant_video' => true,
+                    'join_before_host' => $request->joinBeforeHost == Boolean::TRUE ? true : false,
+                    'jbh_time' => 5,
+                    'use_pmi' => false,
+                    'auto_recording' => AutoRecording::getDescription($request->autoRecording),
+                    'waiting_room' => $request->waitingRoom == Boolean::TRUE ? true : false
+                ]
+            ];
+
+            $zoomAccount = ZoomAccount::where('zoom_account_id', $zoomAccountId)->first();
+            $token = $zoomClientService->getZoomAccessToken($zoomAccount->api_key, $zoomAccount->api_secret);
+            $dataZoomMeeting = $zoomClientService->createZoomMeeting($token, $zoomAccount->zoom_user_id, $object)->json();
+
+            $zoomSchedule = new ZoomSchedule();
+            $zoomSchedule->zoom_account_id = $zoomAccountId;
+            $zoomSchedule->zoom_meeting_id = $dataZoomMeeting['id'];
+            $zoomSchedule->meeting_type = $dataZoomMeeting['type'];
+            $zoomSchedule->start_time = $dataZoomMeeting['start_time'];
+            $zoomSchedule->duration = $dataZoomMeeting['duration'];
+            $zoomSchedule->time_zone = $dataZoomMeeting['timezone'];
+            $zoomSchedule->join_before_host = $request->joinBeforeHost;
+            $zoomSchedule->auto_recording = $request->autoRecording;
+            $zoomSchedule->waiting_room = $request->waitingRoom;
+            $zoomSchedule->zoom_url = $dataZoomMeeting['start_url'];
+            $zoomSchedule->password = $dataZoomMeeting['password'];
+            $zoomSchedule->save();
+            $zoomUrl = $dataZoomMeeting['start_url'];
+        } else {
+            $zoomUrl = $request->zoomUrl;
+        }
+
         // update schedule
         if ($editFlag) {
             // check input
             $schedule = DB::table('lesson_schedule')
-                        ->where('lesson_schedule.lesson_schedule_id', '=', $request['selectedEvent']['lesson_schedule_id'])
-                        ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
-                        ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson'])
-                        ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
-                        ->get()->toArray();
+                ->where('lesson_schedule.lesson_schedule_id', '=', $request['selectedEvent']['lesson_schedule_id'])
+                ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
+                ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson'])
+                ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
+                ->get()->toArray();
             if (empty($schedule)) {
                 echo json_encode(array(
                     'status' => 400,
@@ -356,19 +452,22 @@ class GroupScheduleController extends BaseController
                 return;
             }
 
-        DB::table('lesson_schedule')
-            ->where('lesson_schedule_id', $request['selectedEvent']['lesson_schedule_id'])
-            ->update([
-                'course_id' => $request['selectedCourse'],
-                'lesson_id' => $request['selectedLesson'],
-                'teacher_id' => $request['selectedTeacher'],
-                'lesson_starttime' => $startDateTime,
-                'lesson_endtime' => $endDateTime,
-                'course_type' => CourseTypeEnum::GROUP_COURSE,
-                'last_update_date' => Carbon::now()
-            ]);
+            DB::table('lesson_schedule')
+                ->where('lesson_schedule_id', $request['selectedEvent']['lesson_schedule_id'])
+                ->update([
+                    'course_id' => $request['selectedCourse'],
+                    'lesson_id' => $request['selectedLesson'],
+                    'teacher_id' => $request['selectedTeacher'],
+                    'lesson_starttime' => $startDateTime,
+                    'lesson_endtime' => $endDateTime,
+                    'course_type' => CourseTypeEnum::GROUP_COURSE,
+                    'last_update_date' => Carbon::now(),
+                    'zoom_url' => $zoomUrl,
+                    'link_zoom_schedule_flag' => $request->linkZoomScheduleFlag,
+                    'zoom_schedule_id' => $request->linkZoomScheduleFlag ? $zoomSchedule->zoom_schedule_id : null
+                ]);
         } else {
-        // create schedule
+            // create schedule
             $result = DB::table('lesson_schedule')->insert([
                 'course_id' => $request['selectedCourse'],
                 'lesson_id' => $request['selectedLesson'],
@@ -377,13 +476,29 @@ class GroupScheduleController extends BaseController
                 'lesson_starttime' => $startDateTime,
                 'lesson_endtime' => $endDateTime,
                 'course_type' => CourseTypeEnum::GROUP_COURSE,
-                'last_update_date' => Carbon::now()
+                'last_update_date' => Carbon::now(),
+                'zoom_url' => $zoomUrl,
+                'link_zoom_schedule_flag' => $request->linkZoomScheduleFlag,
+                'zoom_schedule_id' => $request->linkZoomScheduleFlag ? $zoomSchedule->zoom_schedule_id : null
             ]);
         }
 
         echo json_encode(array(
             'status' => 200,
             'error_message' => ''
+        ));
+        return;
+    }
+
+    public function getZoom()
+    {
+        $zoomAccountList = ZoomAccount::get()->toArray();
+        $zoomSetting = ZoomSetting::first();
+        echo json_encode(array(
+            'status' => 200,
+            'error_message' => '',
+            'zoomAccountList' => $zoomAccountList,
+            'zoomSetting' => $zoomSetting,
         ));
         return;
     }

@@ -99,7 +99,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row" v-if="testInfo.test_type === 2">
+                                        <div class="form-group row" v-if="testInfo.test_type === 1 || testInfo.test_type === 2">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
@@ -237,6 +237,7 @@ export default {
                     max_value: "制限時間は1～1000000000 を入力してください",
                 },
                 expire_count: {
+                    required: "受講回数を入力してください",
                     decimal: "受講回数は半角数字を入力してください",
                     min_value: "受講回数は1～1000000000 を入力してください",
                     max_value: "受講回数は1～1000000000 を入力してください",

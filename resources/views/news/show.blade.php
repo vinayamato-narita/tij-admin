@@ -100,8 +100,8 @@ use App\Enums\LangType;
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="title-page">ベトナム語版</h5>
-                                    <a href="{{ route('editLangNews', [$newsInfo->news_id, LangType::VN]) }}" class="btn btn-primary">編集</a>     
+                                    <h5 class="title-page">中国語版</h5>
+                                    <a href="{{ route('editLangNews', [$newsInfo->news_id, LangType::ZH]) }}" class="btn btn-primary">編集</a>     
                                 </div>
                                 
                                 <div class="card-body">
@@ -112,7 +112,7 @@ use App\Enums\LangType;
                                             >タイトル:</label
                                         >
                                         <div class="col-md-3 pd-7">
-                                            {{ $newsVnInfo->news_title ?? "" }}
+                                            {{ $newsZhInfo->news_title ?? "" }}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -122,7 +122,7 @@ use App\Enums\LangType;
                                             >内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $newsVnInfo->news_body ?? "" }}
+                                            {{ $newsZhInfo->news_body ?? "" }}
                                         </div>
                                     </div>
                                 </div>

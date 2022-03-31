@@ -17,29 +17,10 @@
                             <div class="card">
                                 <form class="form-horizontal " style="width: 100%" method="POST" ref="registerForm"
                                       @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">予習情報
+                                    <div class="card-header">
+                                        <h5 class="title-page">予習情報</h5>
                                     </div>
                                     <div class="card-body">
-
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label text-md-right" for="displayOrder">表示順:
-                                                <span class="glyphicon glyphicon-star position-absolute"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number"
-                                                       name="displayOrder" @input="changeInput()"
-                                                       style="max-width: 100px" v-model="displayOrder" value="1"
-                                                       onKeyDown="return false"
-                                                       v-validate="'min_value:1|max_value:1000000000'"/>
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("displayOrder") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="displayOrder">予習ID:
 
@@ -275,7 +256,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listPreparationUrl;
+                                    window.location.href = that.detailPreparationUrl;
 
                                 });
                                 that.flagShowLoader = false;

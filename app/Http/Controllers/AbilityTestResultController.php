@@ -10,6 +10,7 @@ use App\Models\TestComment;
 use App\Models\TestQuestion;
 use App\Models\TestResult;
 use App\Models\TestResultDetail;
+use App\Models\TestTopScore;
 use Carbon\Carbon;
 use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
@@ -188,7 +189,7 @@ class AbilityTestResultController extends BaseController
 
         $analyticRaw = DB::select("
         		SELECT tc.parent_category_name,tq.navigation,tq.test_question_id, tsqs.test_sub_question_id, IF(trd.answer = trd.correct_answer, tsq.score, 0) as exam_score,
-				tsq.score as score
+				tsq.score as score, tc.test_category_id
 				
         FROM test_category as tc 
 				LEFT JOIN test_sub_question_category AS tsqs ON tc.test_category_id = tsqs.test_category_id 
@@ -207,12 +208,17 @@ class AbilityTestResultController extends BaseController
                 $numSubQuestion = $item->count();
                 $examScore = $item->sum('exam_score');
                 $score = $item->sum('score');
+                $topScr = TestTopScore::where([
+                    'test_id' => $testResult->test_id,
+                    'test_category_id' => $item[0]->test_category_id,
+                    'test_parrent_name' => $item[0]->parent_category_name])->first();
                 $analyticItem[] = [
                     'parent_category_name' => $item[0]->parent_category_name,
                     'navigation' => $item[0]->navigation,
                     'num_sub_question' => $numSubQuestion,
                     'score' => $score,
-                    'exam_score' => $examScore
+                    'exam_score' => $examScore,
+                    'top_score_avg' => empty($topScr) ? 0 : $topScr->top_score_avg
                 ];
             }
             $analyticList[] = $analyticItem;
@@ -273,7 +279,7 @@ class AbilityTestResultController extends BaseController
      */
     public function updateTestComment(Request $request, $id)
     {
-        $testComment = TestComment::find($id);
+        $testComment = TestComment::with('testResult')->find($id);
         if (!$testComment)
             return redirect()->route('abilityTestResult.index');
         if ($testComment->comment_end_time != null)
@@ -288,7 +294,10 @@ class AbilityTestResultController extends BaseController
         $testComment->comment3 = $request->comment3;
         $testComment->comment4 = $request->comment4;
         $testComment->comment5 = $request->comment5;
-        if ($testComment->save())
+
+        $testComment->testResult->is_reviewed = true;
+
+        if ($testComment->save() && $testComment->testResult->save())
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::OK);

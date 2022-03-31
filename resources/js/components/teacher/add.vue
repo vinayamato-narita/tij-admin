@@ -24,7 +24,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -278,7 +278,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> パスワード: </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> Zoomパスワード: </label>
 
                                             <div class="col-md-6">
 
@@ -434,9 +434,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = baseUrl + '/teacher/' + res.data.teacher_id;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

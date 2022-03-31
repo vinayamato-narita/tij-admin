@@ -110,6 +110,7 @@ Route::group([
     Route::delete('test/{id}/delete_question/{testQuestionId}', 'TestController@deleteQuestion')->name('test.deleteQuestion');
     Route::get('test/{id}/list_question_attach', 'TestController@listQuestionAttach')->name('test.listQuestionAttach');
     Route::post('test/{id}/list_question_attach', 'TestController@listQuestionAttachUpdate')->name('test.listQuestionAttachUpdate');
+    Route::post('test/{id}/check_navigation', 'TestController@checkNavigation')->name('test.checkNavigation');
     //tag
     Route::post('test/{id}/add_tag', 'TestController@addTag')->name('test.createTag');
 
@@ -141,16 +142,6 @@ Route::group([
 
     //file
     Route::get('files/get_files', 'FileController@getFiles')->name('files.getFiles');
-
-
-    //csvExport
-    Route::resource('csv', CsvController::class);
-    Route::post('/csv/exportPayment', 'CsvController@exportPayment')->name('csvExportPayment');
-    Route::post('/csv/exportLessonHistory', 'CsvController@exportLessonHistory')->name('csvExportLessonHistory');
-    Route::post('/csv/exportSuperGrace', 'CsvController@exportSuperGrace')->name('exportSuperGrace');
-    Route::post('/csv/exportLessonSummaryProcess', 'CsvController@exportLessonSummaryProcess')->name('exportLessonSummaryProcess');
-    Route::post('/csv/exportStudentBoughtCourse', 'CsvController@exportStudentBoughtCourse')->name('exportStudentBoughtCourse');
-    Route::post('/csv/exportSuperGraceNormal', 'CsvController@exportSuperGraceNormal')->name('exportSuperGraceNormal');
 
     //inquirySubject
     Route::resource('inquirySubject', InquirySubjectController::class);
@@ -227,6 +218,7 @@ Route::group([
     Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
     Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
     Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
+    Route::get('/groupSchedule/getZoom', 'GroupScheduleController@getZoom')->name('groupSchedule.getZoom');
 
     //zoom account
     Route::resource('zoomAccount', ZoomAccountController::class);
@@ -237,4 +229,16 @@ Route::group([
     Route::resource('groupLessonReserves', GroupLessonReserveController::class);
 
     Route::get('export-group-lesson', 'GroupLessonHistoryController@exportGroupLesson')->name('exportGroupLesson');
+    Route::get('/group_lesson_history/student_attendance/{id}', 'GroupLessonHistoryController@studentAttendance')->name('groupLessonHistory.studentAttendance');
+    Route::post('/group_lesson_history/update-student-attendace/{id}', 'GroupLessonHistoryController@updateStudentAttendance')->name('groupLessonHistory.updateStudentAttendance');
+
+    Route::get('/remindMail/{id}/edit-lang/{type}', 'RemindMailController@editLang')->name('editLangRemindMail');
+    Route::post('updateLangRemindMail', 'RemindMailController@updateLang')->name('updateLangRemindMail');
+
+    Route::get('/teacher/lesson-history/{id}', 'TeacherController@lessonHistory')->name('teacher.lessonHistory');
+    Route::get('/teacher/lesson-history-export/{id}', 'TeacherController@lessonHistoryExport')->name('teacher.lessonHistoryExport');
+    Route::get('/teacher/lesson-history-detail/{id}', 'TeacherController@lessonHistoryDetail')->name('teacher.lessonHistoryDetail');
+    Route::get('/teacher/{id}/edit-lang/{type}', 'TeacherController@editLang')->name('teacher.editLang');
+    Route::post('updateTeacherLang', 'TeacherController@updateLang')->name('teacher.updateLang');
+    Route::post('/teacher/update-password', 'TeacherController@updatePassword')->name('teacher.updatePassword');
 });

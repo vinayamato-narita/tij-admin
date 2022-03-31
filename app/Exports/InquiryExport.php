@@ -6,6 +6,7 @@ use App\Models\AdminInquiry;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Enums\InquiryFlag;
+use App\Components\CommonComponent;
 use DB;
 
 class InquiryExport implements FromCollection, WithHeadings
@@ -29,36 +30,24 @@ class InquiryExport implements FromCollection, WithHeadings
         
         if (isset($this->searchInput)) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($searchInput) {
-                $query->where($this->escapeLikeSentence('admin_inquiry.inquiry_subject', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('admin_inquiry.user_mail', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('student.student_email', $searchInput))
-                    ->orWhere($this->escapeLikeSentence('student.student_name', $searchInput));
+                $query->where(CommonComponent::escapeLikeSentence('admin_inquiry.inquiry_subject', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('admin_inquiry.user_mail', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_email', $searchInput))
+                    ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $searchInput));
             });
         }
         $inquiryList = $queryBuilder->get()->map(function($item, $key) {
         	$item['inquiry_flag'] = InquiryFlag::getDescription($item['inquiry_flag']);
         	return $item;
         });
+
         return $inquiryList;
     }
 
     public function headings(): array
     {
-        return ["問合せ番号", "日時", "問い合わせ件名", "学習者番号", "名前", "メールアドレス", "対応状況", "問い合わせ内容"];
-    }
-
-    public function escapeLikeSentence($column, $str, $before = true, $after = true)
-    {
-        $result = str_replace('\\', '[\]', $this->mb_trim($str)); // \ -> \\
-        $result = str_replace('%', '\%', $result); // % -> \%
-        $result = str_replace('_', '\_', $result); // _ -> \_
-        return [[$column, 'LIKE', (($before) ? '%' : '') . $result . (($after) ? '%' : '')]];
-    }
-
-    public function mb_trim($string)
-    {
-        $whitespace = '[\s\0\x0b\p{Zs}\p{Zl}\p{Zp}]';
-        $ret = preg_replace(sprintf('/(^%s+|%s+$)/u', $whitespace, $whitespace), '', $string);
-        return $ret;
+        $header = ["問合せ番号", "日時", "問い合わせ件名", "学習者番号", "名前", "メールアドレス", "対応状況", "問い合わせ内容"];
+        
+        return $header;
     }
 }

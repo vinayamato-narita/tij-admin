@@ -395,6 +395,26 @@ class BreadcrumbComponent
                 'text' => 'グループコース申込情報表示',
                 'route_str' => 'groupLessonReserves.show'
             ],
+            'student_attendance' => [
+                'text' => '欠席一覧',
+                'route_str' => 'groupLessonHistory.studentAttendance'
+            ],
+            'edit_lang_remind_mail' => [
+                'text' => 'リマインドメール情報',
+                'route_str' => "editLangRemindMail",
+            ],
+            'teacher_lesson_history' => [
+                'text' => 'レッスン履歴一覧',
+                'route_str' => "teacher.lessonHistory",
+            ],
+            'teacher_lesson_history_detail' => [
+                'text' => 'レッスン履歴詳細',
+                'route_str' => "teacher.lessonHistoryDetail",
+            ],
+            'edit_lang_teacher' => [
+                'text' => '講師情報多言語編集',
+                'route_str' => "teacher.editLang",
+            ],
         ];
     }
 

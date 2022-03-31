@@ -15,7 +15,7 @@ class CreateSpGetStudentHistoryList extends Migration
     {
         $procedure = "
         DROP PROCEDURE IF EXISTS `get_student_point_history_list`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `get_student_point_history_list`(
+        CREATE PROCEDURE `get_student_point_history_list`(
             IN _student_id int,
             IN _lang_type VARCHAR(10)
             )
@@ -67,7 +67,7 @@ class CreateSpGetStudentHistoryList extends Migration
 
         $procedureLms = "
         DROP PROCEDURE IF EXISTS `lms_get_student_point_history_list`;
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `lms_get_student_point_history_list`(
+        CREATE PROCEDURE `lms_get_student_point_history_list`(
         IN _student_id INT,
         IN _lang_type varchar(10)
         )

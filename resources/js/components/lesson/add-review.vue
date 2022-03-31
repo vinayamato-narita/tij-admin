@@ -221,9 +221,9 @@
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, { reviewId:  this.reviewId, lessonId : this.id})
+                    .post(that.registerUrl, { reviewId:  that.reviewId, lessonId : that.id})
                     .then(response => {
-                        window.location = this.detailUrl;
+                        window.location = that.detailUrl;
                     })
                     .catch(e => {
                     });

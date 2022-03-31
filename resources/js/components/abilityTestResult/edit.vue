@@ -50,7 +50,7 @@
                                                     <td  class="text-left" > {{ analyticItem.num_sub_question }}</td>
                                                     <td  class="text-left"> {{ analyticItem.exam_score }}</td>
                                                     <td  class="text-left"> {{ analyticItem.score }}</td>
-                                                    <td  class="text-left"></td>
+                                                    <td  class="text-left">{{ analyticItem.top_score_avg }}</td>
                                                 </tr>
                                             </template>
 
@@ -155,9 +155,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.detailUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.detailUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

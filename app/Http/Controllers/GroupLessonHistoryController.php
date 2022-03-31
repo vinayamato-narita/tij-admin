@@ -23,7 +23,7 @@ class GroupLessonHistoryController extends BaseController
             ['name' => 'group_lesson_history']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->withCount('studentPointHistory', 'lessonHistories');
+        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->whereHas('lesson')->whereHas('teacher')->whereHas('course')->withCount('studentPointHistory', 'lessonHistories');
 
         if (!empty($request['search_input'])) {
             $queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {

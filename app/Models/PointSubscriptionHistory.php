@@ -77,4 +77,9 @@ class PointSubscriptionHistory extends Authenticatable
     {
         return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
     }
+
+    public function studentPointHistories() 
+    {
+        return $this->hasMany(StudentPointHistory::class, 'point_subscription_id', 'point_subscription_history_id');
+    }
 }

@@ -51,8 +51,11 @@ class GroupCourseDecision extends Command
         Log::info('group course decision batch start');
 
         $yesterday = Carbon::yesterday()->format('Y-m-d');
-        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
-       
+        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)
+            ->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'pointSubscriptionHistories.studentPointHistories', 'pointSubscriptionHistories.studentPointHistories.lessonSchedule', 'pointSubscriptionHistories.studentPointHistories.lessonSchedule.teacher', 'pointSubscriptionHistories.studentPointHistories.lessonSchedule.lesson',
+             'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.lesson', 'lessonSchedules.teacher.teacherInfo'])
+            ->get();
+        
         foreach ($courses as $course) {
             $reserveNum = $course->pointSubscriptionHistories->count();
 
@@ -61,6 +64,23 @@ class GroupCourseDecision extends Command
                 //send mail student
                 foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
 
+                    $studentName = $pointSubscriptionHistory->student->student_name;
+                    $lessonDate = '';
+                    $lessonTime = '';
+                    $lessonName = '';
+                    $lessonTextName = '';
+                    $teacherNickname = '';
+
+                    foreach ($pointSubscriptionHistory->studentPointHistories as $studentPointHistory) {
+                        if ($studentPointHistory->student_id == $pointSubscriptionHistory->student_id && $studentPointHistory->course_id == $pointSubscriptionHistory->course_id) {
+                            $lessonDate = Carbon::parse($studentPointHistory->lessonSchedule->lesson_date)->format('Y年m月d日');
+                            $lessonTime = Carbon::parse($studentPointHistory->lessonSchedule->lesson_starttime)->format('H:i');
+                            $lessonName = $studentPointHistory->lessonSchedule->lesson->lesson_name;
+                            $lessonTextName = $studentPointHistory->lessonSchedule->lesson_text_name;
+                            $teacherNickname = $studentPointHistory->lessonSchedule->teacher->teacher_nickname;
+                        }
+                    }
+
                     $langType = $pointSubscriptionHistory->student->lang_type;
 
                     $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::STUDENT_CANCEL_LESSON, $langType);
@@ -68,7 +88,12 @@ class GroupCourseDecision extends Command
                     if ($mailPattern) {
                         $mailSubject = $mailPattern[0]->mail_subject;
                         $mailBody = $mailPattern[0]->mail_body;
-                        $mailBody = str_replace("#STUDENT_NAME#", $pointSubscriptionHistory->student->student_name, $mailBody);
+                        $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
+                        $mailBody = str_replace("#LESSON_DATE#", $lessonDate, $mailBody);
+                        $mailBody = str_replace("#LESSON_TIME#", $lessonTime, $mailBody);
+                        $mailBody = str_replace("#LESSON_NAME#", $lessonName, $mailBody);
+                        $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonTextName, $mailBody);
+                        $mailBody = str_replace("#TEACHER_NICKNAME#", $teacherNickname, $mailBody);
 
                         Mail::raw($mailBody, function ($message) use ($pointSubscriptionHistory, $mailSubject) {
                             $message->to($pointSubscriptionHistory->student->student_email)
@@ -86,6 +111,11 @@ class GroupCourseDecision extends Command
                     if ($mailPattern) {
                         $mailSubject = $mailPattern[0]->mail_subject;
                         $mailBody = $mailPattern[0]->mail_body;
+                        $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+                        $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+                        $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson->lesson_name, $mailBody);
+                        $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
+                        $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher->teacher_nickname, $mailBody);
 
                         Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                             $message->to($lessonSchedule->teacher->teacher_email)

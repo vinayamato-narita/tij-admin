@@ -162,7 +162,8 @@
                                 </div>
                             </div>
                             <div class="card" v-if="test.test_type === 0">
-                                <div class="card-header">レッスン一覧
+                                <div class="card-header">
+                                    <h5 class="title-page">レッスン一覧</h5>
                                     <div class="float-right">
                                         <div style="min-height: 38px">
 

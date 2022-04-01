@@ -127,7 +127,7 @@
                           v-model="zoomSetting.auto_recording"
                         >
                           <option value="0">ローカル</option>
-                          <option value="1">ウラウド</option>
+                          <option value="1">クラウド(編集済み)</option>
                           <option value="2">無効</option>
                         </select>
                       </div>

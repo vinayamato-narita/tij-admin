@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -82,7 +83,7 @@ Route::group([
     Route::get('course/{id}/lesson_attach', 'CourseController@lessonAttach')->name('course.lessonAttach');
     Route::post('course/{id}/lesson_attach', 'CourseController@lessonAttachUpdate')->name('course.lessonAttachUpdate');
     Route::post('update_lang_course', 'CourseController@updateLang')->name('course.updateLang');
-        //campaign
+    //campaign
     Route::get('/course/{courseId}/add-campaign', 'CourseController@campaignCreate')->name('course.campaignCreate');
     Route::post('/course/{courseId}/add-campaign-store', 'CourseController@addCampaignStore')->name('course.addCampaignStore');
     Route::post('/course/{courseId}/exists_campaign_datetime', 'CourseController@existCampaignDatetime')->name('course.existCampaignDatetime');
@@ -241,4 +242,5 @@ Route::group([
     Route::get('/teacher/{id}/edit-lang/{type}', 'TeacherController@editLang')->name('teacher.editLang');
     Route::post('updateTeacherLang', 'TeacherController@updateLang')->name('teacher.updateLang');
     Route::post('/teacher/update-password', 'TeacherController@updatePassword')->name('teacher.updatePassword');
+    Route::get('groupLessonStudentList/{id}', 'GroupLessonReserveController@getStudent')->name('groupLesson.getStudent');
 });

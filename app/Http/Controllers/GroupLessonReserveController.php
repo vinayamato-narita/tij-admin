@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\BreadcrumbComponent;
 use App\Enums\CourseTypeEnum;
 use App\Models\Course;
+use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -135,5 +136,46 @@ class GroupLessonReserveController extends BaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function getStudent($id, Request $request)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'group_lesson_reserve'],
+            ['name' => 'group_lesson_reserve_show', $id],
+            ['name' => 'group_lesson_student_list', $id]
+        ]);
+
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = Student::whereHas('pointSubscriptionHistories',  function ($query) use ($request, $id) {
+            if (!empty($request['reserve_end_date_start'])) {
+                $query->whereDate('payment_date', '>=', Carbon::createFromTimestamp($request['reserve_end_date_start']));
+            }
+            if (!empty($request['reserve_end_date_end'])) {
+                $query->whereDate('receive_payment_date', '<=', Carbon::createFromTimestamp($request['reserve_end_date_end']));
+            }
+            $query->whereHas('course', function ($query) use ($id) {
+                $query->where('course_id', $id);
+                $query->where('course_type', CourseTypeEnum::GROUP_COURSE);
+            });
+        });
+
+        if (!empty($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('student_id', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('student_name', $request['search_input']));
+            });
+        }
+
+        $studentList = $queryBuilder->with('pointSubscriptionHistories')->sortable(['student_id' => 'desc'])->paginate($pageLimit);
+
+        return view('groupLessonReserve.studentList', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'studentList' => $studentList,
+            'course_id' => $id,
+        ]);
     }
 }

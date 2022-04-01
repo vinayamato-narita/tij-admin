@@ -415,6 +415,10 @@ class BreadcrumbComponent
                 'text' => '講師情報多言語編集',
                 'route_str' => "teacher.editLang",
             ],
+            'group_lesson_student_list' => [
+                'text' => '学習者一覧',
+                'route_str' => 'groupLesson.getStudent'
+            ],
         ];
     }
 

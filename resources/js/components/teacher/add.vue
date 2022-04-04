@@ -296,10 +296,10 @@
                                             <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
                                             <div class="col-md-6">
                                                 <div class="d-flex flex-wrap" style="margin-top: 5px">
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="0" v-model="teacherFeature" name="teacherFeature">&nbsp;英語が話せる日本人講師</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="1" v-model="teacherFeature" name="teacherFeature">&nbsp;キッズ向け</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="2" v-model="teacherFeature" name="teacherFeature">&nbsp;講師歴3年以上</label>
-                                                    <label class="form-checkbox"><input type="checkbox" value="3" v-model="teacherFeature" name="teacherFeature">&nbsp;日本語能力試験対策</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature1" name="teacherFeature1">&nbsp;英語が話せる日本人講師</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature2" name="teacherFeature2">&nbsp;キッズ向け</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature3" name="teacherFeature3">&nbsp;講師歴3年以上</label>
+                                                    <label class="form-checkbox"><input type="checkbox" v-model="teacherFeature4" name="teacherFeature4">&nbsp;日本語能力試験対策</label>
                                                 </div>
 
                                             </div>
@@ -405,7 +405,10 @@
                 photoSavepath : '',
                 zoomPersonalMeetingId: '',
                 zoomPassword: '',
-                teacherFeature: []
+                teacherFeature1: false,
+                teacherFeature2: false,
+                teacherFeature3: false,
+                teacherFeature4: false,
 
             };
         },
@@ -433,9 +436,10 @@
                 formData.append("photoSavepath", this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
-                for (var i = 0; i < this.teacherFeature.length; i++) {
-                    formData.append('teacherFeature[]', this.teacherFeature[i]);
-                }
+                formData.append('teacherFeature1', this.teacherFeature1 ? 1 : 0);
+                formData.append('teacherFeature2', this.teacherFeature2 ? 1 : 0);
+                formData.append('teacherFeature3', this.teacherFeature3 ? 1 : 0);
+                formData.append('teacherFeature4', this.teacherFeature4 ? 1 : 0);
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;

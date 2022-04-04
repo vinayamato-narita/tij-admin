@@ -295,10 +295,10 @@
                                             <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
                                             <div class="col-md-6">
                                                 <div class="d-flex flex-wrap" style="margin-top: 5px">
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="0" v-model="teacherFeature" name="teacherFeature">&nbsp;英語が話せる日本人講師</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="1" v-model="teacherFeature" name="teacherFeature">&nbsp;キッズ向け</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="2" v-model="teacherFeature" name="teacherFeature">&nbsp;講師歴3年以上</label>
-                                                    <label class="form-checkbox"><input type="checkbox" value="3" v-model="teacherFeature" name="teacherFeature">&nbsp;日本語能力試験対策</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature1" name="teacherFeature1">&nbsp;英語が話せる日本人講師</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature2" name="teacherFeature2">&nbsp;キッズ向け</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature3" name="teacherFeature3">&nbsp;講師歴3年以上</label>
+                                                    <label class="form-checkbox"><input type="checkbox" v-model="teacherFeature4" name="teacherFeature4">&nbsp;日本語能力試験対策</label>
                                                 </div>
 
                                             </div>
@@ -409,24 +409,14 @@
                 photoSavepath : this.teacher.photo_savepath,
                 zoomPersonalMeetingId: this.teacher.zoom_personal_meeting_id,
                 zoomPassword: this.teacher.zoom_password ?? '',
-                teacherFeature: []
+                teacherFeature1: this.teacher.teacher_feature1 == 1 ? true : false,
+                teacherFeature2: this.teacher.teacher_feature2 == 1 ? true : false,
+                teacherFeature3: this.teacher.teacher_feature3 == 1 ? true : false,
+                teacherFeature4: this.teacher.teacher_feature4 == 1 ? true : false,
             };
         },
         props: ["listTeacherUrl", "timeZones", "updateUrl", 'teacher', 'deleteAction', 'detailTeacherUrl'],
-        mounted() {
-            if (this.teacher.teacher_feature1 == 1) {
-                this.teacherFeature.push(0);
-            }
-            if (this.teacher.teacher_feature2 == 1) {
-                this.teacherFeature.push(1);
-            }
-            if (this.teacher.teacher_feature3 == 1) {
-                this.teacherFeature.push(2);
-            }
-            if (this.teacher.teacher_feature4 == 1) {
-                this.teacherFeature.push(3);
-            }
-        },
+        mounted() {},
         methods: {
             showAlert() {
                 let that = this;
@@ -484,9 +474,10 @@
                 formData.append('photoSavepath', this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
-                for (var i = 0; i < this.teacherFeature.length; i++) {
-                    formData.append('teacherFeature[]', this.teacherFeature[i]);
-                }
+                formData.append('teacherFeature1', this.teacherFeature1 ? 1 : 0);
+                formData.append('teacherFeature2', this.teacherFeature2 ? 1 : 0);
+                formData.append('teacherFeature3', this.teacherFeature3 ? 1 : 0);
+                formData.append('teacherFeature4', this.teacherFeature4 ? 1 : 0);
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {

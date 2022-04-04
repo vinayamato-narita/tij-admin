@@ -116,10 +116,10 @@ class TeacherController extends BaseController
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
-                $teacher->teacher_feature1 = in_array(0 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature2 = in_array(1 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature3 = in_array(2 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature4 = in_array(3 ,$request->teacherFeature) ? Boolean::TRUE : null;
+                $teacher->teacher_feature1 = $request->teacherFeature1;
+                $teacher->teacher_feature2 = $request->teacherFeature2;
+                $teacher->teacher_feature3 = $request->teacherFeature3;
+                $teacher->teacher_feature4 = $request->teacherFeature4;
 
                 $teacher->save();
                 DB::commit();
@@ -294,10 +294,10 @@ class TeacherController extends BaseController
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
-                $teacher->teacher_feature1 = in_array(0 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature2 = in_array(1 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature3 = in_array(2 ,$request->teacherFeature) ? Boolean::TRUE : null;
-                $teacher->teacher_feature4 = in_array(3 ,$request->teacherFeature) ? Boolean::TRUE : null;
+                $teacher->teacher_feature1 = $request->teacherFeature1;
+                $teacher->teacher_feature2 = $request->teacherFeature2;
+                $teacher->teacher_feature3 = $request->teacherFeature3;
+                $teacher->teacher_feature4 = $request->teacherFeature4;
 
 
                 $teacher->save();

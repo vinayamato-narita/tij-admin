@@ -21,7 +21,10 @@ class ChangeSpTeacherList extends Migration
             IN _course_id VARCHAR(255),
             IN _lesson_id VARCHAR(255),
             IN _gender VARCHAR(255),
-            IN _teacher_feature VARCHAR(255),
+            IN _teacher_feature1 VARCHAR(255),
+            IN _teacher_feature2 VARCHAR(255),
+            IN _teacher_feature3 VARCHAR(255),
+            IN _teacher_feature4 VARCHAR(255),
             IN _teacher_age VARCHAR(255),
             IN _lang_type VARCHAR(19),
             IN _search_input VARCHAR(255))
@@ -123,11 +126,32 @@ class ChangeSpTeacherList extends Migration
                                         END
                             AND
                                  CASE
-                                    WHEN _teacher_feature = '' THEN
-                            1 = 1
-                        ELSE
-                                            FIND_IN_SET(te.teacher_feature,_teacher_feature)
-                        END
+                                    WHEN _teacher_feature1 = 1 THEN
+                                        te.teacher_feature1 = _teacher_feature1
+                                    ELSE
+                                        1 = 1
+                                    END
+                            AND
+                                    CASE
+                                    WHEN _teacher_feature2 = 1 THEN
+                                        te.teacher_feature2 = _teacher_feature2
+                                    ELSE
+                                        1 = 1
+                                    END
+                            AND
+                                    CASE
+                                    WHEN _teacher_feature3 = 1 THEN
+                                        te.teacher_feature3 = _teacher_feature3
+                                    ELSE
+                                        1 = 1
+                                    END
+                            AND
+                                    CASE
+                                    WHEN _teacher_feature4 = 1 THEN
+                                        te.teacher_feature4 = _teacher_feature4
+                                    ELSE
+                                        1 = 1
+                                    END
                      )
                 ORDER BY te.display_order ASC ,COALESCE(ti.teacher_nickname, te.teacher_nickname) ASC
                 ;

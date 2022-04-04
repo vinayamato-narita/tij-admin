@@ -290,6 +290,19 @@
 
                                             </div>
                                         </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-wrap" style="margin-top: 5px">
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="0" v-model="teacherFeature" name="teacherFeature">&nbsp;英語が話せる日本人講師</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="1" v-model="teacherFeature" name="teacherFeature">&nbsp;キッズ向け</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" value="2" v-model="teacherFeature" name="teacherFeature">&nbsp;講師歴3年以上</label>
+                                                    <label class="form-checkbox"><input type="checkbox" value="3" v-model="teacherFeature" name="teacherFeature">&nbsp;日本語能力試験対策</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -395,11 +408,25 @@
                 teacherNote : this.teacher.teacher_note,
                 photoSavepath : this.teacher.photo_savepath,
                 zoomPersonalMeetingId: this.teacher.zoom_personal_meeting_id,
-                zoomPassword: this.teacher.zoom_password ?? '' 
+                zoomPassword: this.teacher.zoom_password ?? '',
+                teacherFeature: []
             };
         },
         props: ["listTeacherUrl", "timeZones", "updateUrl", 'teacher', 'deleteAction', 'detailTeacherUrl'],
-        mounted() {},
+        mounted() {
+            if (this.teacher.teacher_feature1 == 1) {
+                this.teacherFeature.push(0);
+            }
+            if (this.teacher.teacher_feature2 == 1) {
+                this.teacherFeature.push(1);
+            }
+            if (this.teacher.teacher_feature3 == 1) {
+                this.teacherFeature.push(2);
+            }
+            if (this.teacher.teacher_feature4 == 1) {
+                this.teacherFeature.push(3);
+            }
+        },
         methods: {
             showAlert() {
                 let that = this;
@@ -457,7 +484,10 @@
                 formData.append('photoSavepath', this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
-                
+                for (var i = 0; i < this.teacherFeature.length; i++) {
+                    formData.append('teacherFeature[]', this.teacherFeature[i]);
+                }
+
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;

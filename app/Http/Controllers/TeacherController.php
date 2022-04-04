@@ -29,6 +29,7 @@ use Log;
 use Response;
 use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
+use App\Enums\Boolean;
 
 class TeacherController extends BaseController
 {
@@ -115,6 +116,10 @@ class TeacherController extends BaseController
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
+                $teacher->teacher_feature1 = $request->teacherFeature1;
+                $teacher->teacher_feature2 = $request->teacherFeature2;
+                $teacher->teacher_feature3 = $request->teacherFeature3;
+                $teacher->teacher_feature4 = $request->teacherFeature4;
 
                 $teacher->save();
                 DB::commit();
@@ -289,6 +294,10 @@ class TeacherController extends BaseController
                 $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
+                $teacher->teacher_feature1 = $request->teacherFeature1;
+                $teacher->teacher_feature2 = $request->teacherFeature2;
+                $teacher->teacher_feature3 = $request->teacherFeature3;
+                $teacher->teacher_feature4 = $request->teacherFeature4;
 
 
                 $teacher->save();
@@ -346,7 +355,7 @@ class TeacherController extends BaseController
             "Expires"             => "0"
         );
 
-        
+
         $header = [
             $this->convertShijis("講師名"),
             $this->convertShijis("ニックネーム"),
@@ -362,7 +371,7 @@ class TeacherController extends BaseController
             $this->convertShijis("イメージURL"),
             $this->convertShijis("動画URL")
         ];
-        
+
         $lessonList = Lesson::select("lesson_id", "lesson_name")->get()->toArray();
 
         foreach ($lessonList as $lesson) {
@@ -410,7 +419,7 @@ class TeacherController extends BaseController
             $input["日本語対応"] = $this->convertShijis($teacher['teacher_hobby']);
             $input["一覧への表示"] = $teacher['show_flag'] == 1 ? $this->convertShijis("する") : $this->convertShijis("しない");
             $input["自己紹介"] = $this->convertShijis($teacher['teacher_introduction']);
-            $input["イメージURL"] = $this->convertShijis($teacher['photo_savepath']);    
+            $input["イメージURL"] = $this->convertShijis($teacher['photo_savepath']);
             $input["動画URL"] = $this->convertShijis($teacher['movie_savepath']);
             foreach($lessionIds as $lessionId) {
                 if (array_key_exists($teacher['teacher_id'], $teacherLessonList) && array_key_exists($lessionId, $teacherLessonList[$teacher['teacher_id']])) {
@@ -554,8 +563,8 @@ class TeacherController extends BaseController
         $localPath = public_path().'/csv_file/users/'.$fileName;
         $file = fopen($localPath, 'w');
         fputcsv($file, $header);
-        
-    	$queryBuilder = LessonHistory::select('lesson_schedule.lesson_date', 
+
+    	$queryBuilder = LessonHistory::select('lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',

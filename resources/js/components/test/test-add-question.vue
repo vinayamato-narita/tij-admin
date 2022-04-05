@@ -134,30 +134,22 @@
                                                 設問{{ getIndex(index)}}
                                                 <button v-if="index !== 0" type="button" v-on:click="deleteSubQuestion(index)" class="float-right btn">                                                <font-awesome-icon icon="minus-circle"></font-awesome-icon>
                                                 </button>
-
                                             </h5>
-
-
-
-
                                         </div>
 
                                         <div class="card-body pl-5 pr-5" >　
-
-
                                             <div class="form-group row ">
                                                 <label class="col-md-2 col-form-label text-md-left"><b>問題文 :</b>
                                                     <span class="glyphicon glyphicon-star"></span>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
-                                                    <input
-                                                            class="form-control"
-                                                            :name="'subQuestion[' + index + '][question]'"
-                                                            v-model="item.question"
-                                                            v-validate="
-                                                        'required|max:255'
-                                                    "
-                                                    />
+                                                    <textarea
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][question]'"
+                                                        v-model="item.question"
+                                                        row="5"
+                                                        v-validate="'required'"
+                                                    ></textarea>
                                                     <div
                                                             class="input-group is-danger"
                                                             role="alert"
@@ -509,8 +501,7 @@
                         unique_custom: "このナビゲーションは既に登録されています。"
                     },
                     'subQuestion[0][question]': {
-                        required: "問題文を入力してください。",
-                        max: "問題文は255文字以内で入力してください。",
+                        required: "問題文を入力してください。"
 
                     },
                     'subQuestion[0][answer1]': {
@@ -578,8 +569,7 @@
                 };
 
                 messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
-                    max: "問題文は255文字以内で入力してください。",
+                    required: "問題文を入力してください"
                 };
                 messError.custom["subQuestion[" + index + "][reference_url]"] = {
                     max: "参考URLは255文字以内で入力してください。",
@@ -609,8 +599,7 @@
                 };
 
                 messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
-                    max: "問題文は255文字以内で入力してください。",
+                    required: "問題文を入力してください"
                 };
                 messError.custom["subQuestion[" + index + "][reference_url]"] = {
                     max: "参考URLは255文字以内で入力してください。",

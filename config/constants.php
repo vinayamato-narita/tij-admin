@@ -110,6 +110,8 @@ const ISPERMITTED = 'is_permitted';
 const CATEGORY = 'CATEGORY';
 const COURSE = 'COURSE';
 
+const COURSE_TAX = 0.1;
+
 const MENU = [
 	PAYMENTHISTORY => [
 		'paymentHistory.index',

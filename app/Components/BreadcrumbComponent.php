@@ -399,6 +399,14 @@ class BreadcrumbComponent
                 'text' => '欠席一覧',
                 'route_str' => 'groupLessonHistory.studentAttendance'
             ],
+            'group_course_user_import' => [
+                'text' => 'インポート',
+                'route_str' => 'courseGroupUser.import'
+            ],
+            'group_course_save_user_import' => [
+                'text' => 'インポート結果',
+                'route_str' => 'courseGroupUser.saveImport'
+            ],
         ];
     }
 

@@ -121,7 +121,7 @@
 受講開始日:#START_DATE#
 受講有効期限:#EXPIRE_DATE#
 
-【教師コメント登録メール】
+【講師コメント登録メール】
 先生ニックネーム:　#TEACHER_NICKNAME#
 レッスン日:　#LESSON_DATE#
 レッスン時間:　#LESSON_TIME#

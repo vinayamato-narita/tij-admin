@@ -1,6 +1,4 @@
 <template>
-
-
     <div class="c-body">
         <main class="c-main pt-0">
             <div class="container-fluid">
@@ -8,7 +6,6 @@
                     <div class="page-heading-left">
                         <h5>
                             コースカテゴリ新規作成
-
                         </h5>
                     </div>
                 </div>
@@ -17,21 +14,17 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
-                                    <div class="card-header">コースカテゴリ情報
-
-
+                                    <div class="card-header">
+                                        <h5 class="title-page">コースカテゴリ情報</h5>
                                     </div>
                                     <div class="card-body">
-
-
-
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="orderNum">表示順:
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="orderNum" type="number" name="orderNum" @input="changeInput()" style="max-width: 100px" v-model="orderNum" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="orderNum" type="number" name="orderNum" @input="changeInput()" style="max-width: 100px" v-model="orderNum" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("orderNum") }}
@@ -39,8 +32,6 @@
 
                                             </div>
                                         </div>
-
-
 
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="categoryName">カテゴリ名:
@@ -56,14 +47,6 @@
                                             </div>
                                         </div>
 
-
-
-
-
-
-
-
-
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -72,8 +55,6 @@
                                                     <a :href="listCategoryUrl" class="btn btn-default w-100">閉じる</a>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </form>
@@ -86,12 +67,9 @@
         </main>
         <loader :flag-show="flagShowLoader"></loader>
     </div>
-
-
 </template>
 
 <script>
-
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
 
@@ -155,7 +133,7 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
-                                    window.location.href = that.listCategoryUrl ;
+                                    window.location.href = baseUrl + '/category/' + res.data.category_id;
                                 });
                                 that.flagShowLoader = false;
                             })

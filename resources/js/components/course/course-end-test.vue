@@ -1,7 +1,7 @@
 <template>
     <modal name="course-end-test-modal"   :pivotY="0.1" :reset="true" :width="1000" :height="auto"  :scrollable="true" :adaptive="true" :clickToClose="false" @before-open="getData" >
         <div class="card">
-            <div class="card-header"> コース終了テスト
+            <div class="card-header"> コース修了テスト
 
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
@@ -82,7 +82,7 @@
                             <thead >
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input   v-on:click="checkAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input v-model="selectAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </th>
                                 <th class="text-center text-md-left bg-gray-100">テスト名</th>
                             </tr>
@@ -90,7 +90,14 @@
                             <tbody>
                             <tr v-for="test in dataList">
                                 <td class="text-center">
-                                    <input  v-on:click="checkedId(test.test_id)"   type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input  
+                                        v-on:click="checkedId(test.test_id)"   
+                                        type="checkbox" 
+                                        class=" checkbox" 
+                                        style="width: auto; height: auto; display: inline-block;"
+                                        v-model="checkedIds" 
+                                        :value="test.test_id"
+                                    >
                                 </td>
                                 <td class="text-md-left">{{  test.test_name }}</td>
 
@@ -219,23 +226,6 @@
                 this.getData();
 
             },
-            checkAll(event) {
-                if (event.target.checked) {
-                    $(':checkbox').prop('checked', true);
-                }
-                else {
-                    $(':checkbox').prop('checked', false);
-                }
-            },
-            checkedId(id) {
-                if(this.checkedIds.includes(id)) {
-                    this.checkedIds.remove(id);
-                }
-                else {
-                    this.checkedIds.push(id);
-                }
-
-            },
             submit() {
                 let that = this;
                 axios
@@ -247,7 +237,19 @@
                     });
             }
         },
-
+        computed: {
+            selectAll: {
+                get: function () {
+                   return this.dataList ? this.checkedIds.length == this.dataList.length : false;
+                },
+                set: function (value) {
+                    this.checkedIds = [];
+                    if (value) {
+                        this.checkedIds = this.dataList.map((test) => test.test_id); 
+                    }
+                }
+            }
+        }
     }
 </script>
 

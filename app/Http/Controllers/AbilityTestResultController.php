@@ -279,7 +279,7 @@ class AbilityTestResultController extends BaseController
      */
     public function updateTestComment(Request $request, $id)
     {
-        $testComment = TestComment::find($id);
+        $testComment = TestComment::with('testResult')->find($id);
         if (!$testComment)
             return redirect()->route('abilityTestResult.index');
         if ($testComment->comment_end_time != null)
@@ -294,7 +294,10 @@ class AbilityTestResultController extends BaseController
         $testComment->comment3 = $request->comment3;
         $testComment->comment4 = $request->comment4;
         $testComment->comment5 = $request->comment5;
-        if ($testComment->save())
+
+        $testComment->testResult->is_reviewed = true;
+
+        if ($testComment->save() && $testComment->testResult->save())
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::OK);

@@ -15,4 +15,9 @@ class StudentPointHistory extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'student_point_history_id';
+
+    public function lessonSchedule()
+    {
+        return $this->belongsTo(LessonSchedule::class, 'lesson_schedule_id', 'lesson_schedule_id');
+    }
 }

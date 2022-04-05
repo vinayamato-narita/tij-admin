@@ -12,6 +12,7 @@
             :tags="{{json_encode($tags)}}"
             :create-tag-url="{{json_encode(route('test.createTag', $test->test_id))}}"
             :test-categories="{{json_encode($testCategories)}}"
+            :check-navigation-url="{{json_encode(route('test.checkNavigation', $test->test_id))}}"
 
     ></test-add-question>
 @endsection

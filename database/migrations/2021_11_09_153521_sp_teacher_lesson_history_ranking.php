@@ -13,7 +13,7 @@ class SpTeacherLessonHistoryRanking extends Migration
      */
     public function up()
     {
-        $procedure1 = "CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_teacher_lesson_history_ranking`(IN _lesson_history_id int,
+        $procedure1 = "CREATE PROCEDURE `sp_teacher_lesson_history_ranking`(IN _lesson_history_id int,
 IN _student_rating int,
 IN _comment_from_teacher_to_student text,
 IN _note_from_teacher_to_student text,

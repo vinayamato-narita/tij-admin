@@ -66,6 +66,7 @@
 
                                         <div class="form-group row ">
                                             <label class="col-md-2 col-form-label text-md-left"><b>ナビゲーション :</b>
+                                                <span class="glyphicon glyphicon-star"></span>
                                             </label>
                                             <div class="col-md-10 text-md-left p-2">
                                                 <input
@@ -73,7 +74,7 @@
                                                         name="navigation"
                                                         v-model="navigation"
                                                         v-validate="
-                                                        'max:255'
+                                                        'required|max:255|unique_custom'
                                                     "
                                                 />
                                                 <div
@@ -289,21 +290,22 @@
 
                                                 </div>
                                             </div>
-                                            <div class="form-group row " v-if="test.test_type === 2">
+                                            <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
                                                 <label class="col-md-2 col-form-label text-md-left"><b>参考URL :</b>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
                                                     <input
                                                             class="form-control"
-                                                            :name="'subQuestion[' + index + '][answer4]'"
-                                                            v-model="item.answer4"
+                                                            :name="'subQuestion[' + index + '][reference_url]'"
+                                                            v-model="item.referenceUrl"
+                                                            v-validate="'max:30'"
                                                     />
                                                     <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('subQuestion['+ index +'][answer4]')"
+                                                            v-if="errors.has('subQuestion['+ index +'][reference_url]')"
                                                     >
-                                                        {{ errors.first("subQuestion["+ index +"][answer4]") }}
+                                                        {{ errors.first("subQuestion["+ index +"][reference_url]") }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -356,7 +358,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <div class="form-group row" v-if="test.show_category">
                                                 <label
                                                         class="col-md-2 col-form-label text-md-left"
                                                 ><b>カテゴリ</b><span v-if="test.test_type === 1" class="glyphicon glyphicon-star"
@@ -448,6 +450,22 @@
             this.tags.forEach(function (e) {
                 that.optionsTag.push({id: e.tag_id, name: e.tag_name})
             });
+            this.$validator.extend("unique_custom", {
+                validate(value, args) {
+                    return axios
+                        .post(that.checkNavigationUrl, {
+                            _token: Laravel.csrfToken,
+                            navigation: value,
+                            type: args[0],
+                        })
+                        .then(function (response) {
+                            return {
+                                valid: response.data.valid,
+                            };
+                        })
+                        .catch((error) => {});
+                },
+            });
         },
         components: {
             Loader,
@@ -477,6 +495,7 @@
                     fileName: '',
                     fileNameAttached: '',
                     score: 0,
+                    referenceUrl: this.test.test_type != 0 ? '' : null ,
                     value: [
                     ],
                     testCategory : null
@@ -485,27 +504,32 @@
                 }],
                 defaultCustomMessage : {
                     navigation: {
-                        max: "復習名は255文字以内で入力してください。",
+                        max: "ナビゲーションは255文字以内で入力してください。",
+                        required : "ナビゲーションを入力してください。",
+                        unique_custom: "このナビゲーションは既に登録されています。"
                     },
                     'subQuestion[0][question]': {
-                        required: "問題文を入力してください",
+                        required: "問題文を入力してください。",
                         max: "問題文は255文字以内で入力してください。",
 
                     },
                     'subQuestion[0][answer1]': {
-                        required: "選択肢1(正解)を入力してください"
+                        required: "選択肢1(正解)を入力してください。"
                     },
                     'subQuestion[0][answer2]': {
-                        required: "選択肢2(正解)を入力してください"
+                        required: "選択肢2(正解)を入力してください。"
+                    },
+                    'subQuestion[0][reference_url]': {
+                        max: "参考URLは255文字以内で入力してください。",
                     },
                     'subQuestion[0][score]': {
-                        required: "点数を入力してください",
-                        decimal: "点数は半角数字を入力してください",
-                        min_value: "点数は1～1000000000 を入力してください",
-                        max_value: "点数は1～1000000000 を入力してください",
+                        required: "点数を入力してください。",
+                        decimal: "点数は半角数字を入力してください。",
+                        min_value: "点数は1～1000000000 を入力してください。",
+                        max_value: "点数は1～1000000000 を入力してください。",
                     },
                     'subQuestion[0][testCategory]': {
-                        required: "カテゴリを選択してください",
+                        required: "カテゴリを選択してください。",
                     },
 
 
@@ -514,8 +538,20 @@
 
             };
         },
-        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail', 'createQuestionUrl', 'tags', 'createTagUrl', 'testCategories'],
+        props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail',
+            'createQuestionUrl', 'tags', 'createTagUrl', 'testCategories', 'checkNavigationUrl'],
         mounted() {
+            
+        },
+        watch : {
+            navigation() {
+                this.defaultCustomMessage.navigation.unique_custom ="ナビゲーション「" + this.navigation + "」が既に存在する為、登録できません";
+                let messError = {
+                    custom: this.defaultCustomMessage
+                };
+                this.$validator.localize("en", messError);
+
+            }
         },
         methods: {
             getIndex(index){ return ++index; },
@@ -534,6 +570,7 @@
                     fileNameAttached: '',
                     score: 0,
                     value: [],
+                    referenceUrl: this.test.test_type != 0 ? '' : null ,
                     testCategory : null
                 });
                 let messError = {
@@ -544,20 +581,23 @@
                     required: "問題文を入力してください",
                     max: "問題文は255文字以内で入力してください。",
                 };
+                messError.custom["subQuestion[" + index + "][reference_url]"] = {
+                    max: "参考URLは255文字以内で入力してください。",
+                };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください"
+                    required: "選択肢1(正解)を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください"
+                    required: "選択肢2(正解)を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
                     required: "点数を入力してください",
                     decimal: "点数は半角数字を入力してください",
-                    min_value: "点数は1～1000000000 を入力してください",
-                    max_value: "点数は1～1000000000 を入力してください",
+                    min_value: "点数は1～1000000000 を入力してください。",
+                    max_value: "点数は1～1000000000 を入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][testCategory]"] = {
-                    required: "カテゴリを選択してください",
+                    required: "カテゴリを選択してください。",
                 };
                 this.$validator.localize("en", messError);
 
@@ -571,6 +611,9 @@
                 messError.custom["subQuestion[" + index + "][question]"] = {
                     required: "問題文を入力してください",
                     max: "問題文は255文字以内で入力してください。",
+                };
+                messError.custom["subQuestion[" + index + "][reference_url]"] = {
+                    max: "参考URLは255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
                     required: "選択肢1(正解)を入力してください"

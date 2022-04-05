@@ -13,7 +13,7 @@ class TeacherForgotPassMigration extends Migration
      */
     public function up()
     {
-        $pc1 = "CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_check_forgot_teacher`(IN _teacher_email varchar(255),
+        $pc1 = "CREATE  PROCEDURE `sp_check_forgot_teacher`(IN _teacher_email varchar(255),
 	IN _lang_type VARCHAR(10))
 BEGIN
 	SELECT

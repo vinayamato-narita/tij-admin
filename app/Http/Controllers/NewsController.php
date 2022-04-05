@@ -150,6 +150,7 @@ class NewsController extends BaseController
         $newsInfo->news_lang_title = $newsLangInfo->news_title ?? "";
         $newsInfo->news_lang_body = $newsLangInfo->news_body ?? "";
         $newsInfo->lang = $langType;
+        $newsInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
 
         return view('news.edit_lang', [
             'breadcrumbs' => $breadcrumbs,

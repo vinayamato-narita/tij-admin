@@ -21,6 +21,6 @@ return [
     TestType::class => [
         TestType::CONFIRMED => '確認テスト',
         TestType::ABILITY => '実力テスト',
-        TestType::ENDCOURSE => 'コース終了テスト',
+        TestType::ENDCOURSE => 'コース修了テスト',
     ],
 ];

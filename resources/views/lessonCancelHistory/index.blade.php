@@ -32,6 +32,7 @@
                                         <cancel-history-search-multi :page-limit="{{ $pageLimit }}" :url="{{ json_encode(route('lessonCancelHistory.index')) }}" :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"></cancel-history-search-multi>
                                     </div>
                                     @if(!$historyList->isEmpty())
+                                        {{ $historyList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>

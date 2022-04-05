@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
+                                <form  class="form-horizontal " style="width: 100%" method="POST" @submit.prevent="register" autocomplete="off">
                                     <div class="card-header">講師情報</div>
                                     <div class="card-body">
 
@@ -25,7 +25,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -277,7 +277,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> パスワード: </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> Zoomパスワード: </label>
 
                                             <div class="col-md-6">
 
@@ -287,6 +287,19 @@
                                                     {{ errors.first("zoomPassword") }}
                                                 </div>
 
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-wrap" style="margin-top: 5px">
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature1" name="teacherFeature1">&nbsp;英語が話せる日本人講師</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature2" name="teacherFeature2">&nbsp;キッズ向け</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature3" name="teacherFeature3">&nbsp;講師歴3年以上</label>
+                                                    <label class="form-checkbox"><input type="checkbox" v-model="teacherFeature4" name="teacherFeature4">&nbsp;日本語能力試験対策</label>
+                                                </div>
 
                                             </div>
                                         </div>
@@ -391,12 +404,15 @@
                 teacherDepartment : this.teacher.teacher_department,
                 teacherHobby : this.teacher.teacher_hobby,
                 teacherIntroduction : this.teacher.teacher_introduction,
-                introduceFromAdmin : this.teacher.introduce_from_admin,
+                introduceFromAdmin : this.teacher.introduce_from_admin ?? '',
                 teacherNote : this.teacher.teacher_note,
                 photoSavepath : this.teacher.photo_savepath,
                 zoomPersonalMeetingId: this.teacher.zoom_personal_meeting_id,
-                zoomPassword: this.teacher.zoom_password
-
+                zoomPassword: this.teacher.zoom_password ?? '',
+                teacherFeature1: this.teacher.teacher_feature1 == 1 ? true : false,
+                teacherFeature2: this.teacher.teacher_feature2 == 1 ? true : false,
+                teacherFeature3: this.teacher.teacher_feature3 == 1 ? true : false,
+                teacherFeature4: this.teacher.teacher_feature4 == 1 ? true : false,
             };
         },
         props: ["listTeacherUrl", "timeZones", "updateUrl", 'teacher', 'deleteAction', 'detailTeacherUrl'],
@@ -458,6 +474,10 @@
                 formData.append('photoSavepath', this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
+                formData.append('teacherFeature1', this.teacherFeature1 ? 1 : 0);
+                formData.append('teacherFeature2', this.teacherFeature2 ? 1 : 0);
+                formData.append('teacherFeature3', this.teacherFeature3 ? 1 : 0);
+                formData.append('teacherFeature4', this.teacherFeature4 ? 1 : 0);
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
@@ -475,9 +495,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = that.detailTeacherUrl;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.detailTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

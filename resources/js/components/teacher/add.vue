@@ -24,7 +24,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" onKeyDown="return false" v-validate="'decimal|min_value:1|max_value:1000000000'" />
+                                                <input class="form-control" id="displayOrder" type="number" name="displayOrder" @input="changeInput()" style="max-width: 100px" v-model="displayOrder" value="1" v-validate="'decimal|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("displayOrder") }}
@@ -278,7 +278,7 @@
                                         </div>
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> パスワード: </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="photoSavepath"> Zoomパスワード: </label>
 
                                             <div class="col-md-6">
 
@@ -288,6 +288,19 @@
                                                     {{ errors.first("zoomPassword") }}
                                                 </div>
 
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-wrap" style="margin-top: 5px">
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature1" name="teacherFeature1">&nbsp;英語が話せる日本人講師</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature2" name="teacherFeature2">&nbsp;キッズ向け</label>
+                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature3" name="teacherFeature3">&nbsp;講師歴3年以上</label>
+                                                    <label class="form-checkbox"><input type="checkbox" v-model="teacherFeature4" name="teacherFeature4">&nbsp;日本語能力試験対策</label>
+                                                </div>
 
                                             </div>
                                         </div>
@@ -391,7 +404,11 @@
                 teacherNote : '',
                 photoSavepath : '',
                 zoomPersonalMeetingId: '',
-                zoomPassword: ''
+                zoomPassword: '',
+                teacherFeature1: false,
+                teacherFeature2: false,
+                teacherFeature3: false,
+                teacherFeature4: false,
 
             };
         },
@@ -399,6 +416,7 @@
         mounted() {},
         methods: {
             register() {
+                console.log(this.teacherFeature);
                 let that = this;
                 let formData = new FormData();
                 formData.append("teacherName", this.teacherName);
@@ -418,6 +436,10 @@
                 formData.append("photoSavepath", this.photoSavepath);
                 formData.append("zoomPersonalMeetingId", this.zoomPersonalMeetingId);
                 formData.append("zoomPassword", this.zoomPassword);
+                formData.append('teacherFeature1', this.teacherFeature1 ? 1 : 0);
+                formData.append('teacherFeature2', this.teacherFeature2 ? 1 : 0);
+                formData.append('teacherFeature3', this.teacherFeature3 ? 1 : 0);
+                formData.append('teacherFeature4', this.teacherFeature4 ? 1 : 0);
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;
@@ -434,9 +456,9 @@
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {
                                     that.flagShowLoader = false;
+                                    window.location.href = baseUrl + '/teacher/' + res.data.teacher_id;
                                 });
                                 that.flagShowLoader = false;
-                                window.location.href = this.listTeacherUrl;
                             })
                             .catch((err) => {
                                 switch (err.response.status) {

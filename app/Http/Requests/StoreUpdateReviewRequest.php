@@ -24,7 +24,6 @@ class StoreUpdateReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            'displayOrder' => 'required|digits_between:1,1000000000',
             'reviewName' => 'required|max:255',
         ];
     }

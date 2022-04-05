@@ -8,6 +8,9 @@ use App\Enums\StatusCode;
 use App\Models\SendRemindMailPattern;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\SendRemindMailPatternInfo;
+use App\Enums\LangType;
+use App\Http\Requests\RemindMailLangRequest;
 
 class RemindMailController extends BaseController
 {
@@ -83,10 +86,15 @@ class RemindMailController extends BaseController
             'send_remind_mail_pattern_id' => $id,
         ])->with(['sendRemindMailTiming'])->first();
 
+        $mailEnInfo = SendRemindMailPatternInfo::where(['send_remind_mail_pattern_id' => $id, 'lang_type' => LangType::EN])->first();
+        $mailZhInfo = SendRemindMailPatternInfo::where(['send_remind_mail_pattern_id' => $id, 'lang_type' => LangType::ZH])->first();
+
         if (!$remindMail) return redirect()->route('SendRemindMailPattern.index');
         return view('SendRemindMailPattern.show', [
             'breadcrumbs' => $breadcrumbs,
-            'remindMail' => $remindMail
+            'remindMail' => $remindMail,
+            'mailEnInfo' => $mailEnInfo,
+            'mailZhInfo' => $mailZhInfo,
         ]);
     }
 
@@ -159,14 +167,50 @@ class RemindMailController extends BaseController
         ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function editLang($id, $langType)
     {
-        //
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'remind_mail_list'],
+            ['name' => 'remind_mail_show', $id],
+            ['name' => 'edit_lang_remind_mail', $id, $langType],
+        ]);
+        $remindMail = SendRemindMailPattern::with(['sendRemindMailTiming'])->where('send_remind_mail_pattern_id', $id)->firstOrFail();
+        
+        $remindMailLang = SendRemindMailPatternInfo::where(['send_remind_mail_pattern_id' => $id, 'lang_type' => $langType])->first();
+
+        $remindMail->_token = csrf_token();
+        $remindMail->mail_lang_subject = $remindMailLang->mail_subject ?? "";
+        $remindMail->mail_lang_body = $remindMailLang->mail_body ?? "";
+        $remindMail->lang_type = $langType;
+        $remindMail->title = $langType == LangType::EN ? "英語版" : "中国語版";
+
+        return view('SendRemindMailPattern.edit_lang', [
+            'breadcrumbs' => $breadcrumbs,
+            'remindMail' => $remindMail,
+        ]);
+    }
+
+    public function updateLang(RemindMailLangRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);  
+        }
+        $remindMail = SendRemindMailPattern::where('send_remind_mail_pattern_id', $request->send_remind_mail_pattern_id)->first();
+        if ($remindMail == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
+        $remindMailLang = SendRemindMailPatternInfo::updateOrCreate(
+            ['send_remind_mail_pattern_id' => $request->send_remind_mail_pattern_id, 'lang_type' => $request->lang_type],
+            ['mail_subject' => $request->mail_lang_subject, 'mail_body' => $request->mail_lang_body]
+        );
+
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 }

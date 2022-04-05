@@ -13,7 +13,7 @@ class CreateMigrationMaterial extends Migration
      */
     public function up()
     {
-        $procedure1 = "CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_student_lesson_text_list_html`(
+        $procedure1 = "CREATE  PROCEDURE `sp_student_lesson_text_list_html`(
             IN _lesson_name varchar(255),
             IN _lesson_text_name varchar(255),
             IN _teacher_id INT

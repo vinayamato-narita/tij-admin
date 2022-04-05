@@ -116,11 +116,12 @@ class TestController extends BaseController
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'test_list'],
-            ['name' => 'show_test', $id],
+            ['name' => 'test_show', $id],
             ['name' => 'edit_test', $id],
         ]);
         $testInfo = Test::where('test_id', $id)->firstOrFail();
         $testInfo->_token = csrf_token();
+        $testInfo->type_name = TestType::getDescription($testInfo->test_type);
         $testTypes = TestType::asSelectArray();
 
         return view('test.edit', [
@@ -210,6 +211,9 @@ class TestController extends BaseController
         if (!$test) return redirect()->route('test.index');
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
+
+        $test->show_category = $test->test_type == TestType::ABILITY;
+
         return view('test.addQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
@@ -218,6 +222,24 @@ class TestController extends BaseController
         ]);
 
     }
+
+    public function checkNavigation($id, Request $request)
+    {
+        if (empty($request->navigation))
+            return response()->json([
+                'valid' => false,
+            ], StatusCode::OK);
+        $valid = !TestQuestion::where(function ($query) use ($request, $id) {
+            if (isset($request['test_question_id'])) {
+                $query->where('test_question_id', '!=', $request["test_question_id"]);
+            }
+            $query->where(['navigation' => $request["navigation"], 'test_id' => $id]);
+        })->exists();
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
+    }
+
 
     public function addTag(Request $request, $id)
     {
@@ -310,13 +332,14 @@ class TestController extends BaseController
             foreach ($subQuestions as $index => $subQuestion) {
                 $testSubQuestion = new TestSubQuestion();
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = $index;
+                $testSubQuestion->display_order = ++$index;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;
                 $testSubQuestion->answer3 = $subQuestion->answer3;
                 $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
+                $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
                     $storedFile = File::query()->find($request->fileId);
                     if ($storedFile)
@@ -382,7 +405,6 @@ class TestController extends BaseController
 
     public function editQuestion($id, $testQuestionId)
     {
-
         $breadcrumbComponent = new BreadcrumbComponent();
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'test_list'],
@@ -398,7 +420,8 @@ class TestController extends BaseController
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
         $isHasTestResult = TestResult::where('test_id', $id)->exists();
-
+        $test->show_category = $test->test_type == TestType::ABILITY;
+        
         return view('test.editQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
@@ -485,13 +508,14 @@ class TestController extends BaseController
 
                 }
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = $index;
+                $testSubQuestion->display_order = ++$index;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;
                 $testSubQuestion->answer3 = $subQuestion->answer3;
                 $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
+                $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
                     $storedFile = File::query()->find($request->fileId);
                     if ($storedFile)

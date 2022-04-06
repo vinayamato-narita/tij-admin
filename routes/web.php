@@ -243,4 +243,7 @@ Route::group([
     Route::post('updateTeacherLang', 'TeacherController@updateLang')->name('teacher.updateLang');
     Route::post('/teacher/update-password', 'TeacherController@updatePassword')->name('teacher.updatePassword');
     Route::get('groupLessonStudentList/{id}', 'GroupLessonReserveController@getStudent')->name('groupLesson.getStudent');
+    Route::get('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.import');
+    Route::post('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.importPost');
+    Route::get('/courseGroup/saveImport', 'CourseGroupUserController@saveImport')->name('courseGroupUser.saveImport');
 });

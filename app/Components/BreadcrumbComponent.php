@@ -419,6 +419,14 @@ class BreadcrumbComponent
                 'text' => '学習者一覧',
                 'route_str' => 'groupLesson.getStudent'
             ],
+            'group_course_user_import' => [
+                'text' => 'インポート',
+                'route_str' => 'courseGroupUser.import'
+            ],
+            'group_course_save_user_import' => [
+                'text' => 'インポート結果',
+                'route_str' => 'courseGroupUser.saveImport'
+            ],
         ];
     }
 

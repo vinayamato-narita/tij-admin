@@ -44,7 +44,7 @@
                                                 <tr>
                                                     <th class="text-left width-130">@sortablelink('course.course_name', ' コース名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('lesson.lesson_name', ' レッスン名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('teacher.teacher_name', ' 教師名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('teacher.teacher_name', ' 講師名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('student_point_history_count', ' 受講者数')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_histories_count', ' 出席者数')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_starttime', ' レッスン日時')</th>

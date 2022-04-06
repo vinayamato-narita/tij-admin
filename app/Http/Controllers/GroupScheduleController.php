@@ -145,7 +145,7 @@ class GroupScheduleController extends BaseController
                 $query->whereNull('course.course_start_date')
                     ->orWhere(function ($query) use ($time) {
                         $query->where('course.course_start_date', '<=', $time)
-                            ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$time]);
+                            ->where('course.publish_date_to', '>=', $time);
                     });
             })
             ->orderBy('course.display_order', 'ASC')
@@ -278,7 +278,7 @@ class GroupScheduleController extends BaseController
                 $query->whereNull('course.course_start_date')
                     ->orWhere(function ($query) use ($startDateTime) {
                         $query->where('course.course_start_date', '<=', $startDateTime)
-                            ->whereRaw('course.course_start_date + interval expire_day day >= ?', [$startDateTime]);
+                            ->where('course.publish_date_to', '>=', $startDateTime);
                     });
             })
             ->get()->toArray();
@@ -313,7 +313,7 @@ class GroupScheduleController extends BaseController
         if (empty($teacherCheck)) {
             echo json_encode(array(
                 'status' => 400,
-                'error_message' => __('有効な教師が存在しない為、登録できません。')
+                'error_message' => __('有効な講師が存在しない為、登録できません。')
             ));
             return;
         }

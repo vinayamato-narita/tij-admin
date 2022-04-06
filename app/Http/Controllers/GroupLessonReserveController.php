@@ -96,7 +96,8 @@ class GroupLessonReserveController extends BaseController
             ->with(['childCourse', 'lessonSchedules'])
             ->withCount(['studentPointHistories'])
             ->first();
-
+        $course['group_lesson'] = $course->group_lesson;
+        
         return view('groupLessonReserve.show', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,

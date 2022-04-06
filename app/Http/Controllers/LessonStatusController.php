@@ -352,7 +352,7 @@ class LessonStatusController extends BaseController
             $header2[] = "";
             $header2[] = "";
             $header2[] = "";
-            $header3[] = $this->convertShijis("予約数");
+            $header3[] = $this->convertShijis('予約数');
             $header3[] = $this->convertShijis("登録数");
             $header3[] = $this->convertShijis("予約数");
             $header3[] = $this->convertShijis("登録数");
@@ -403,9 +403,9 @@ class LessonStatusController extends BaseController
             $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 2, $lessonStatus));
             $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 3, $lessonStatus));
             $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 4, $lessonStatus));
-            $row[] = "-";
-            $row[] = "-";
-            $curColDate = date("Y-m-d", strtotime($curColDate. " +1 days"));
+            $row[] = $this->convertShijis("-");
+            $row[] = $this->convertShijis("-");
+            $curColDate = $this->convertShijis(date("Y-m-d", strtotime($curColDate. " +1 days")));
         }
 
         fputcsv($file, $row);

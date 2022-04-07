@@ -110,18 +110,6 @@ class BaseController extends Controller
         ]);
     }
 
-    public function adminCanEdit($view) 
-    {
-        $adminUser = Auth::user();
-        $adminCanEdit = AdminUserRight::select(CANEDIT)->where('admin_user_id', $adminUser->admin_user_id)
-            ->where('admin_rights_id', $view)
-            ->first();
-
-        $adminCanEdit = $adminCanEdit->can_edit ?? 0;
-
-        return $adminCanEdit;
-    }
-
     public function convertShijis($text) {
         return mb_convert_encoding($text, "SJIS", "UTF-8");
     }

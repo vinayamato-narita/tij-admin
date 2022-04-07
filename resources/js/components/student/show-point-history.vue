@@ -127,9 +127,9 @@
                                         <div class="form-group">
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary w-100 mr-2"
-                                                    :disabled="pointHistoryInfoEx.admin_can_edit == 0">登録</button>
+                                                    >登録</button>
                                                 <button type="button" class="btn btn-danger w-100 mr-2" @click="cancelPointHistory"
-                                                    :disabled="pointHistoryInfoEx.admin_can_edit == 0">削除</button>
+                                                    >削除</button>
                                                 <a :href="urlStudentPointHistoryList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>

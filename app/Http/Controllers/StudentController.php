@@ -79,15 +79,12 @@ class StudentController extends BaseController
         }
         $commentList = $queryBuilder->sortable(['update_date' => 'desc'])->paginate($pageLimit);
 
-        $adminCanEdit = $this->adminCanEdit(STUDENT);
-        
         return view('student.comment', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'commentList' => $commentList,
             'studentInfo' => $studentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -170,7 +167,6 @@ class StudentController extends BaseController
         ->where('student_public_comment_for_teacher.student_public_comment_for_teacher_id', $id)->firstOrFail();
 
         $commentInfo->_token = csrf_token();
-        $commentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'student_list'],
@@ -361,7 +357,6 @@ class StudentController extends BaseController
 
         $lessonHistoryInfo->_token = csrf_token();
         $lessonHistoryInfo->average = ($lessonHistoryInfo->teacher_rating + $lessonHistoryInfo->teacher_attitude + $lessonHistoryInfo->teacher_punctual + $lessonHistoryInfo->skype_voice_rating_from_student)/4;
-        $lessonHistoryInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         return view('student.show-lesson-history', [
             'breadcrumbs' => $breadcrumbs,
@@ -516,15 +511,12 @@ class StudentController extends BaseController
         }
         $paymentHistoryList = $queryBuilder->sortable(['point_subscription_history_id' => 'desc'])->paginate($pageLimit);
 
-        $adminCanEdit = $this->adminCanEdit(STUDENT);
-
         return view('student.payment-history', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'paymentHistoryList' => $paymentHistoryList,
             'studentInfo' => $studentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -695,7 +687,6 @@ class StudentController extends BaseController
         }
 
         $paymentInfo->_token = csrf_token();
-        $paymentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
         $paymentInfo->payment_type_list = $paymentType;
         $paymentInfo->is_payment_expired = 0;
         if (!empty($paymentInfo->point_expire_date)) {
@@ -1184,7 +1175,6 @@ class StudentController extends BaseController
         }
         
         $studentInfo->_token = csrf_token();
-        $studentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         return view('student.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -1390,7 +1380,6 @@ class StudentController extends BaseController
         ]);
 
         $pointHistoryInfo->_token = csrf_token();
-        $pointHistoryInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
        
         return view('student.show-point-history', [
             'breadcrumbs' => $breadcrumbs,

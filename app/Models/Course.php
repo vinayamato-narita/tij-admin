@@ -19,7 +19,7 @@ class Course extends Model
     public $timestamps = false;
     protected $appends = ['publication_status'];
 
-    public $sortable = ['publication_status', 'course_id', 'display_order', 'course_name', 'course_description', 'point_count', 'amount', 'group_lesson_status'];
+    public $sortable = ['publication_status', 'course_id', 'display_order', 'course_name', 'course_description', 'point_count', 'amount', 'group_lesson_status', 'min_reserve_count', 'max_reserve_count', 'decide_date', 'reserve_end_date', 'is_for_lms'];
     public function publicationStatusSortable(Builder $query, $direction)
     {
         return $query->selectRaw("course_id, display_order, course_name, course_name_short, course_description, point_count, amount, publish_date_to, publish_date_from,

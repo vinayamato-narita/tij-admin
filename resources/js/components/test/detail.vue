@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="test.test_type === 2">
+                                    <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
                                         <label class="col-md-4 col-form-label text-md-right">制限時間:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -68,7 +68,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row ">
+                                    <div class="form-group row " v-if="test.test_type === 1 || test.test_type === 2">
                                         <label class="col-md-4 col-form-label text-md-right">合格点:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">

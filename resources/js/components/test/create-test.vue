@@ -153,7 +153,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" v-if="testInfo.test_type  === 1">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
@@ -168,6 +168,36 @@
                                                     name="passing_score"
                                                     style="width: 100px"
                                                     v-model="testInfo.passing_score"
+                                                    v-validate="
+                                                        'required|decimal|min_value:0|max_value:1000000000'
+                                                    "
+                                                />
+
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                    v-if="errors.has('passing_score')"
+                                                >
+                                                    {{ errors.first("passing_score") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" v-if="testInfo.test_type  === 2">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >合格点<span class="glyphicon glyphicon-star"
+                                                    ></span
+                                                ></label
+                                            >
+                                            <div class="col-md-3">
+                                                <input
+                                                    type="number"
+                                                    class="form-control "
+                                                    disabled
+                                                    name="passing_score"
+                                                    style="width: 100px"
+                                                    value="70"
                                                     v-validate="
                                                         'required|decimal|min_value:0|max_value:1000000000'
                                                     "
@@ -266,6 +296,12 @@ export default {
     },
     props: ["urlAction", "urlTestList", "testTypes"],
     mounted() {},
+    watch: {
+        testInfo () {
+            if (this.testInfo.test_type === 2)
+                this.testInfo.passing_score = 70;
+        }
+    },
     methods: {
         save() {
             let that = this;

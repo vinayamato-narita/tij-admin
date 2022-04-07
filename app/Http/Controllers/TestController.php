@@ -101,7 +101,7 @@ class TestController extends BaseController
         $test->test_description = $request->test_description;
         $test->execution_time = $request->execution_time;
         $test->expire_count = $request->expire_count;
-        $test->passing_score = $request->passing_score;
+        $test->passing_score = $request->passing_score ?? 0;
         $test->total_score = $request->total_score ?? 0;
         $test->save();
 

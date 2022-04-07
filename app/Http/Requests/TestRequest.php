@@ -29,7 +29,7 @@ class TestRequest extends FormRequest
             'test_type' => 'required|enum_value:' . TestType::class . ',false',
             'test_name' => 'required|max:255',
             'test_description' => 'max:20000',
-            'passing_score' => 'required|integer',
+            'passing_score' => 'nullable',
             'total_score' => 'nullable|integer',
         ];
 

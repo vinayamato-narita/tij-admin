@@ -127,6 +127,33 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
+                                                >権限</label
+                                            >
+                                            <div class="col-md-6 pt-7">
+                                                <input
+                                                    class="checkbox"
+                                                    type="radio"
+                                                    name="role"
+                                                    id="role_business"
+                                                    v-model="adminInfoEx.role"
+                                                    value="1"
+                                                />
+                                                <label for="role_business" class="mr-2">システム管理者</label>
+                                                <input
+                                                    class="checkbox"
+                                                    type="radio"
+                                                    name="role"
+                                                    id="role_system"
+                                                    v-model="adminInfoEx.role"
+                                                    value="2"
+                                                />
+                                                <label for="role_system">業務管理者</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
                                                 >説明</label
                                             >
                                             <div class="col-md-6">

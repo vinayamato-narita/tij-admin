@@ -156,10 +156,9 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled = "lessonHistoryInfoEx.admin_can_edit == 0">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
                                                 <button type="button" class="btn btn-danger w-100 mr-2" 
                                                     @click="cancelLessonHistory"
-                                                    :disabled = "lessonHistoryInfoEx.admin_can_edit == 0"
                                                     >削除</button>
                                                 <a :href="urlStudentLessonHistoryList" class="btn btn-default w-100">閉じる</a>
                                               </div>

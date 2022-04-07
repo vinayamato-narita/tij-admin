@@ -17,7 +17,9 @@ use App\Enums\StatusCode;
 use App\Components\DateTimeComponent;
 use App\Components\CommonComponent;
 use Log; 
-use Response;
+use Response; 
+use App\Enums\AdminRole;
+use Auth;
 
 class PaymentHistoryController extends BaseController
 {
@@ -196,6 +198,8 @@ class PaymentHistoryController extends BaseController
         $total_amount = $queryBuilder->sum('point_subscription_history.amount');
         $paymentList = $queryBuilder->groupBy('point_subscription_history.point_subscription_history_id')->sortable(['update_date' => 'DESC'])->paginate($pageLimit);
 
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+
         return view('payment-history.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
@@ -204,11 +208,16 @@ class PaymentHistoryController extends BaseController
             'paymentType' => $paymentType,
             'total_amount' => $total_amount,
             'total_tax' => $total_tax,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
     public function export()
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('sessionPaymentHistory');
         $fileName = "payment_".date("Y-m-d").".csv";
 
@@ -460,12 +469,9 @@ class PaymentHistoryController extends BaseController
         $paymentInfo->_token = csrf_token();
         $paymentInfo->payment_types = PaidStatus::asSelectArray();
         
-        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
-
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
             'paymentInfo' => $paymentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -475,13 +481,6 @@ class PaymentHistoryController extends BaseController
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::BAD_REQUEST);  
-        }
-        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
-
-        if ($adminCanEdit == 0) {
-            return response()->json([
-                'status' => 'NG',
-            ], StatusCode::NOT_FOUND);
         }
 
         $paymentInfo = PointSubscriptionHistory::where('point_subscription_history.del_flag', 0)

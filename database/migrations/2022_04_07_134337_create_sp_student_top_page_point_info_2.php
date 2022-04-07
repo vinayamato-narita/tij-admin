@@ -27,6 +27,7 @@ class CreateSpStudentTopPagePointInfo2 extends Migration
                SELECT SUM(p.point_count) as remain_point,
                       p.point_expire_date as expire_date,
                       p.course_id,
+                      p.point_subscription_history_id,
                       COALESCE(ci.course_name, c.course_name) AS course_name
                FROM point_subscription_history  p
                INNER JOIN course c ON p.course_id = c.course_id

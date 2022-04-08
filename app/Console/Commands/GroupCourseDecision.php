@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\CourseTypeEnum;
+use App\Enums\GroupLessonStatus;
 use App\Enums\MailType;
 use App\Models\Course;
 use App\Models\LessonHistory;
@@ -51,55 +52,72 @@ class GroupCourseDecision extends Command
         Log::info('group course decision batch start');
 
         $yesterday = Carbon::yesterday()->format('Y-m-d');
-        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
-       
+        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->where('group_lesson_status', GroupLessonStatus::BEFORE_DECIDE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
+        $cancelCourseIds = [];
+        $decideCourseIds = [];
+
         foreach ($courses as $course) {
-            $reserveNum = $course->pointSubscriptionHistories->count();
+            try {
+                $reserveNum = $course->pointSubscriptionHistories->count();
 
-            if ($reserveNum < $course->min_reserve_count) {
-               
-                //send mail student
-                foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
+                if ($reserveNum < $course->min_reserve_count) {
+                    $cancelCourseIds[] = $course->course_id;
 
-                    $langType = $pointSubscriptionHistory->student->lang_type;
+                    //send mail student
+                    foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
 
-                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::STUDENT_CANCEL_LESSON, $langType);
+                        $langType = $pointSubscriptionHistory->student->lang_type;
 
-                    if ($mailPattern) {
-                        $mailSubject = $mailPattern[0]->mail_subject;
-                        $mailBody = $mailPattern[0]->mail_body;
-                        $mailBody = str_replace("#STUDENT_NAME#", $pointSubscriptionHistory->student->student_name, $mailBody);
+                        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::STUDENT_CANCEL_LESSON, $langType);
 
-                        Mail::raw($mailBody, function ($message) use ($pointSubscriptionHistory, $mailSubject) {
-                            $message->to($pointSubscriptionHistory->student->student_email)
-                                ->subject($mailSubject);
-                        });
+                        if ($mailPattern) {
+                            $mailSubject = $mailPattern[0]->mail_subject;
+                            $mailBody = $mailPattern[0]->mail_body;
+                            $mailBody = str_replace("#STUDENT_NAME#", $pointSubscriptionHistory->student->student_name, $mailBody);
+
+                            Mail::raw($mailBody, function ($message) use ($pointSubscriptionHistory, $mailSubject) {
+                                $message->to($pointSubscriptionHistory->student->student_email)
+                                    ->subject($mailSubject);
+                            });
+                        }
                     }
-                }
-                //send mail teacher
-                foreach ($course->lessonSchedules as $lessonSchedule) {
+                    //send mail teacher
+                    foreach ($course->lessonSchedules as $lessonSchedule) {
 
-                    $langTypeTeacher  = $lessonSchedule->teacher->teacherInfo->lang_type;
-                    
-                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langTypeTeacher);
+                        $langTypeTeacher  = $lessonSchedule->teacher->teacherInfo->lang_type;
 
-                    if ($mailPattern) {
-                        $mailSubject = $mailPattern[0]->mail_subject;
-                        $mailBody = $mailPattern[0]->mail_body;
-                        $mailBody = str_replace("#TEACHER_NAME#", $lessonSchedule->teacher->teacher_name, $mailBody);
+                        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langTypeTeacher);
 
-                        Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
-                            $message->to($lessonSchedule->teacher->teacher_email)
-                                ->subject($mailSubject);
-                        });
+                        if ($mailPattern) {
+                            $mailSubject = $mailPattern[0]->mail_subject;
+                            $mailBody = $mailPattern[0]->mail_body;
+                            $mailBody = str_replace("#TEACHER_NAME#", $lessonSchedule->teacher->teacher_name, $mailBody);
+
+                            Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
+                                $message->to($lessonSchedule->teacher->teacher_email)
+                                    ->subject($mailSubject);
+                            });
+                        }
                     }
+                } else {
+                    $decideCourseIds[] = $course->course_id;
                 }
-                //delete data
-                PointSubscriptionHistory::where('course_id', $course->course_id)->delete();
-                StudentPointHistory::where('course_id', $course->course_id)->delete();
-                LessonSchedule::where('course_id', $course->course_id)->delete();
-                LessonHistory::where('course_id', $course->course_id)->delete();
+
+            } catch (\Exception $e) {
+                Log::info($e->getMessage());
             }
+        }
+        
+        if (!empty($cancelCourseIds)) {
+            Course::whereIn('course_id', $cancelCourseIds)->update(['group_lesson_status' => GroupLessonStatus::CANCEL]);
+            PointSubscriptionHistory::whereIn('course_id', $cancelCourseIds)->delete();
+            StudentPointHistory::whereIn('course_id', $cancelCourseIds)->delete();
+            LessonSchedule::whereIn('course_id', $cancelCourseIds)->delete();
+            LessonHistory::whereIn('course_id', $cancelCourseIds)->delete();
+        }
+
+        if (!empty($decideCourseIds)) {
+            Course::whereIn('course_id', $decideCourseIds)->update(['group_lesson_status' => GroupLessonStatus::COURSE_DECIDE]);
         }
 
         Log::info('group course decision batch end');

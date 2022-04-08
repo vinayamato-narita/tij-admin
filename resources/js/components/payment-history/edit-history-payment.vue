@@ -37,7 +37,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-6">
                                                 <input
@@ -67,7 +67,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒名</label
+                                                >学習者名</label
                                             >
                                             <div class="col-md-6">
                                                 <input
@@ -91,84 +91,6 @@
                                                     v-model="paymentInfoEx.j_company_name"
                                                     :disabled="true"
                                                 />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >企業名</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="company_name"
-                                                    v-model="paymentInfoEx.company_name"
-                                                    :disabled="true"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >企業ID</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="j_project_code"
-                                                    v-model="paymentInfoEx.j_project_code"
-                                                    :disabled="true"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >法人コード</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="corporation_code"
-                                                    v-model="paymentInfoEx.corporation_code"
-                                                    v-validate="
-                                                        'payment_checkHankaku|max:255'
-                                                    "
-                                                />
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('corporation_code')"
-                                                >
-                                                    {{ errors.first("corporation_code") }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >得意先コード</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="customer_code"
-                                                    v-model="paymentInfoEx.customer_code"
-                                                    v-validate="
-                                                        'max:255'
-                                                    "
-                                                />
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('customer_code')"
-                                                >
-                                                    {{ errors.first("customer_code") }}
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -256,7 +178,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ポイント数</label
+                                                >付与回数</label
                                             >
                                             <div class="col-md-6">
                                                 <input

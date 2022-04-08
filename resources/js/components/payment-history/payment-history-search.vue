@@ -47,31 +47,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label>基準日</label>
-                                <div class="input text row">
-                                    <div class="col-md-5">
-                                        <date-picker
-                                            :input-attr="{ name: 'start_date_start'}"
-                                            :format="'YYYY/MM/DD'"
-                                            v-model="dataQueryEx.start_date_start"
-                                            type="date"
-                                        ></date-picker>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <span>～</span>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <date-picker
-                                            :input-attr="{ name: 'start_date_end'}"
-                                            :format="'YYYY/MM/DD'"
-                                            v-model="dataQueryEx.start_date_end"
-                                            type="date"
-                                        ></date-picker>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label>受講開始日</label>
                                 <div class="input text row">
                                     <div class="col-md-5">
@@ -122,16 +97,16 @@
                             </div>
 
                             <div class="form-group">
-                                <label>生徒番号</label>
+                                <label>学習者番号</label>
                                 <div class="input text">
-                                    <input type="text" name="student_id" class="form-control input-sm" placeholder="生徒番号を入力してください" :value="dataQuery.student_id">
+                                    <input type="text" name="student_id" class="form-control input-sm" placeholder="学習者番号を入力してください" :value="dataQuery.student_id">
                                 </div>
                             </div>  
 
                             <div class="form-group">
-                                <label>生徒名</label>
+                                <label>学習者名</label>
                                 <div class="input text">
-                                    <input type="text" name="student_name" class="form-control input-sm" placeholder="生徒名を入力してください" :value="dataQuery.student_name">
+                                    <input type="text" name="student_name" class="form-control input-sm" placeholder="学習者名を入力してください" :value="dataQuery.student_name">
                                 </div>
                             </div> 
 
@@ -150,30 +125,9 @@
                             </div> 
 
                             <div class="form-group">
-                                <label>企業ID</label>
-                                <div class="input text">
-                                    <input type="text" name="project_code" class="form-control input-sm" placeholder="企業IDを入力してください" :value="dataQuery.project_code">
-                                </div>
-                            </div> 
-
-                            <div class="form-group">
-                                <label>企業名</label>
-                                <div class="input text">
-                                    <input type="text" name="company_name" class="form-control input-sm" placeholder="企業名を入力してください" :value="dataQuery.company_name">
-                                </div>
-                            </div> 
-
-                            <div class="form-group">
-                                <label style="margin-right: 20px">法人コード</label> <input type="checkbox" name="check_corporation_code" v-model="dataQuery.check_corporation_code" @change="dataQueryEx.check_corporation_code = !dataQueryEx.check_corporation_code" value=1> 法人コード空白のみ
-                                <div class="input text" v-if="!dataQueryEx.check_corporation_code">
-                                    <input type="text" name="corporation_code" class="form-control input-sm" placeholder="法人コードを入力してください" :value="dataQuery.corporation_code">
-                                </div>
-                            </div> 
-
-                            <div class="form-group">
                                 <label>キャンペーンコード</label>
                                 <div class="input text">
-                                    <input type="text" name="campaign_code" class="form-control input-sm" placeholder="企業名を入力してください" :value="dataQuery.campaign_code">
+                                    <input type="text" name="campaign_code" class="form-control input-sm" placeholder="キャンペーンコードを入力してください" :value="dataQuery.campaign_code">
                                 </div>
                             </div> 
 
@@ -218,13 +172,10 @@
             dataQueryEx: {
                 payment_date_start: new Date(this.dataQuery.payment_date_start ?? ""),
                 payment_date_end: new Date(this.dataQuery.payment_date_end ?? ""),
-                start_date_start: new Date(this.dataQuery.start_date_start ?? ""),
-                start_date_end: new Date(this.dataQuery.start_date_end ?? ""),
                 begin_date_start: new Date(this.dataQuery.begin_date_start ?? ""),
                 begin_date_end: new Date(this.dataQuery.begin_date_end ?? ""),
                 point_expire_date_start: new Date(this.dataQuery.point_expire_date_start ?? ""),
                 point_expire_date_end: new Date(this.dataQuery.point_expire_date_end ?? ""),
-                check_corporation_code: this.dataQuery.check_corporation_code
             },
         };
     },

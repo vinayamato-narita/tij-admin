@@ -50,56 +50,64 @@ class AbilityTestReportCommand extends Command
             if (!empty($tests)) {
                 foreach ($tests as $test) {
                     // by test_category_name
-                    $data = TestResult::selectRaw("test_category.parent_category_name, test_category.test_category_id, test_category.test_category_id, test_category.category_name, avg(test_sub_question.score) as avg_score")
+                    $data = TestResult::selectRaw("test_category.test_category_id, test_category.category_name, sum(test_sub_question.score) as total_score,count(distinct(test_result_detail.test_result_id)) as test_time")
                         ->join('test_result_detail', 'test_result_detail.test_result_id', '=', 'test_result.test_result_id')
                         ->join('test_sub_question', 'test_result_detail.test_sub_question_id', '=', 'test_sub_question.test_sub_question_id')
                         ->join('test_sub_question_category', 'test_sub_question_category.test_sub_question_id', '=', 'test_sub_question.test_sub_question_id')
                         ->join('test_category', 'test_category.test_category_id', '=', 'test_sub_question_category.test_category_id')
                         ->where('test_result.test_id', $test->test_id)
+                        ->where('test_result.is_passed', true)
                         ->whereRaw('test_result_detail.answer = test_result_detail.correct_answer')
-                        ->groupBy('test_category.parent_category_name', 'test_category.test_category_id', 'test_category.category_name')
-                        ->first();
+                        ->groupBy('test_category.test_category_id', 'test_category.category_name')
+                        ->get()
+                        ->toArray();
 
                     // by test_parent_category_name
-                    $data2 = TestResult::selectRaw("test_category.parent_category_name, avg(test_sub_question.score) as avg_score")
+                    $data2 = TestResult::selectRaw("test_category.parent_category_name, SUM(test_sub_question.score) AS total_score ,COUNT(DISTINCT(test_result_detail.test_result_id)) AS test_time")
                         ->join('test_result_detail', 'test_result_detail.test_result_id', '=', 'test_result.test_result_id')
                         ->join('test_sub_question', 'test_result_detail.test_sub_question_id', '=', 'test_sub_question.test_sub_question_id')
                         ->join('test_sub_question_category', 'test_sub_question_category.test_sub_question_id', '=', 'test_sub_question.test_sub_question_id')
                         ->join('test_category', 'test_category.test_category_id', '=', 'test_sub_question_category.test_category_id')
                         ->where('test_result.test_id', $test->test_id)
                         ->whereRaw('test_result_detail.answer = test_result_detail.correct_answer')
+                        ->where('test_result.is_passed', true)
                         ->groupBy('test_category.parent_category_name')
-                        ->first();
+                        ->get()
+                        ->toArray();
 
                     // update test top score by data
                     if ($data) {
-                        TestTopScore::updateOrCreate(
-                            [
-                                'test_id' => $test->test_id,
-                                'test_parrent_name' => !empty($data['parent_category_name']) ? $data['parent_category_name'] : null,
-                                'test_category_id' => !empty($data['test_category_id']) ? $data['test_category_id'] : null
-                            ],
-                            [
-                                'category_name' => $data['category_name'],
-                                'top_score_avg' => $data['avg_score']
-                            ]
-                        );
+                        foreach ($data as $item) {
+                            TestTopScore::updateOrCreate(
+                                [
+                                    'test_id' => $test->test_id,
+                                    'test_parrent_name' => null,
+                                    'test_category_id' => !empty($item['test_category_id']) ? $item['test_category_id'] : null
+                                ],
+                                [
+                                    'category_name' => $item['category_name'],
+                                    'top_score_avg' => $item['total_score'] / $item['test_time']
+                                ]
+                            );
+                        }
                     }
 
 
                     // update test top score by data2
                     if ($data2) {
-                        TestTopScore::updateOrCreate(
-                            [
-                                'test_id' => $test->test_id,
-                                'test_parrent_name' => !empty($data2['parent_category_name']) ? $data2['parent_category_name'] : null,
-                                'test_category_id' => null
-                            ],
-                            [
-                                'category_name' => null,
-                                'top_score_avg' => $data2['avg_score']
-                            ]
-                        );
+                        foreach ($data2 as $item) {
+                            TestTopScore::updateOrCreate(
+                                [
+                                    'test_id' => $test->test_id,
+                                    'test_parrent_name' => !empty($item['parent_category_name']) ? $item['parent_category_name'] : null,
+                                    'test_category_id' => null
+                                ],
+                                [
+                                    'category_name' => null,
+                                    'top_score_avg' => (int)$item['total_score'] / (int)$item['test_time']
+                                ]
+                            );
+                        }
                     }
                 }
             }

@@ -52,6 +52,13 @@ Vue.filter("formatDateTime", function(value) {
     }
   });
 
+  Vue.filter("formatMoney", function(value) {
+    if (value) {
+        var formatter = new Intl.NumberFormat('en-US');
+
+        return formatter.format(value);    }
+  });
+
 var filter = function(text, length, clamp){
     clamp = clamp || '...';
     var node = document.createElement('div');
@@ -59,6 +66,7 @@ var filter = function(text, length, clamp){
     var content = node.textContent;
     return content.length > length ? content.slice(0, length) + clamp : content;
 };
+
 
 Vue.filter('truncate', filter);
 Vue.config.productionTip = false
@@ -343,7 +351,6 @@ new Vue({
         LessonHistorySearch,
         EditTeacherLang,
         TeacherLesson,
-        UpdateStudentAttendance,
         GroupCourseUserImport
     },
     methods: {},

@@ -301,7 +301,7 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center display-flex">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled="adminCanEdit == 0">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
                                                 <a :href="urlPaymentHistoryList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
@@ -345,7 +345,7 @@ export default {
             paymentInfoEx: this.paymentInfo
         };
     },
-    props: ["urlAction", "urlPaymentHistoryList", "paymentInfo", "adminCanEdit"],
+    props: ["urlAction", "urlPaymentHistoryList", "paymentInfo"],
     mounted() {},
     methods: {
         save() {

@@ -93,7 +93,8 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.amount}}
+                                            {{this.course.amount | formatMoney }}
+
 
                                         </div>
                                     </div>
@@ -117,7 +118,9 @@
                                         <label class="col-md-3 col-form-label text-md-right">コース概要:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{ this.course.course_description }}
+                                            <nl2br v-if="this.course.course_description" tag="p" :text="this.course.course_description" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
 
@@ -244,7 +247,9 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            {{ courseENDes }}
+                                            <nl2br v-if="courseENDes" tag="p" :text="courseENDes" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
                                 </div>
@@ -274,7 +279,9 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            {{ courseZHDes }}
+                                            <nl2br v-if="courseZHDes" tag="p" :text="courseZHDes" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
                                 </div>

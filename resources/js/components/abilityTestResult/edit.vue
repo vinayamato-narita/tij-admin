@@ -34,7 +34,7 @@
                                             <thead>
                                             <tr>
                                                 <th class="text-left min-width-150">科目</th>
-                                                <th class="text-left min-width-150">分類</th>
+                                                <th class="text-left min-width-150">大問</th>
                                                 <th   class="text-left min-width-150">問題数</th>
                                                 <th   class="text-left min-width-150">得点</th>
                                                 <th class="text-left min-width-150">　配点</th>
@@ -46,7 +46,7 @@
                                             <template v-for="analyticItemArr in analyticList">
                                                 <tr v-for="(analyticItem, index) in analyticItemArr ">
                                                     <td  :rowspan="analyticItemArr.length"  class="text-start tit" v-if="index === 0">{{ analyticItem.parent_category_name}}</td>
-                                                    <td  class="text-left" style="border-left: #d8dbe0 1px solid">{{ analyticItem.navigation}}</td>
+                                                    <td  class="text-left" style="border-left: #d8dbe0 1px solid">{{ analyticItem.category_name}}</td>
                                                     <td  class="text-left" > {{ analyticItem.num_sub_question }}</td>
                                                     <td  class="text-left"> {{ analyticItem.exam_score }}</td>
                                                     <td  class="text-left"> {{ analyticItem.score }}</td>

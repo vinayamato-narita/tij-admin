@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GroupLessonStatus;
 use App\Enums\TestType;
 use Carbon\Carbon;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -103,19 +104,19 @@ class Course extends Model
             $lessonMinDate = min($lessonDateArr);
         }
         
-        if ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) > $today) {
+        if ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) > $today) {
             return '公開前';
-        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) <= $today) {
+        }  elseif ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) <= $today) {
             return '公開中';
-        } elseif ($this->group_lesson_status == 1 && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
+        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
             return '開講決定';
-        } elseif ($this->group_lesson_status == 1 && $today >= Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
+        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
             return '開講中';
-        } elseif ($this->group_lesson_status == 1 && $today >= Carbon::parse($lessonMaxDate) && count($lessonDateArr) != 0) {
+        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMaxDate) && count($lessonDateArr) != 0) {
             return '終了';
-        } elseif ($this->group_lesson_status == 1 && count($lessonDateArr) == 0) {
+        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && count($lessonDateArr) == 0) {
             return '---';
-        }elseif ($this->group_lesson_status == 2) {
+        }elseif ($this->group_lesson_status == GroupLessonStatus::CANCEL) {
             return '不成立';
         }
     }

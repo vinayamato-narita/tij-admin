@@ -15,7 +15,7 @@ class Course extends Model
     use HasFactory, Sortable;
 
     protected $table = 'course';
-    
+
     public $timestamps = false;
     protected $appends = ['publication_status'];
 
@@ -29,14 +29,26 @@ class Course extends Model
     protected $primaryKey = 'course_id';
     public function childCourse()
     {
-        return $this->belongsToMany('App\Models\Course', 'course_set_course' ,
-            'set_course_id', 'course_id', 'course_id', 'course_id');
+        return $this->belongsToMany(
+            'App\Models\Course',
+            'course_set_course',
+            'set_course_id',
+            'course_id',
+            'course_id',
+            'course_id'
+        );
     }
 
     public function tags()
     {
-        return $this->belongsToMany('App\Models\Tag', 'course_tags' ,
-            'course_id', 'tag_id', 'course_id', 'tag_id');
+        return $this->belongsToMany(
+            'App\Models\Tag',
+            'course_tags',
+            'course_id',
+            'tag_id',
+            'course_id',
+            'tag_id'
+        );
     }
 
     public function campaigns()
@@ -46,39 +58,58 @@ class Course extends Model
 
     public function lesson()
     {
-        return $this->belongsToMany('App\Models\Lesson', 'course_lesson' ,
-            'course_id', 'lesson_id', 'course_id', 'lesson_id');
+        return $this->belongsToMany(
+            'App\Models\Lesson',
+            'course_lesson',
+            'course_id',
+            'lesson_id',
+            'course_id',
+            'lesson_id'
+        );
     }
 
-    public function course_infos() {
+    public function course_infos()
+    {
         return $this->hasMany('App\Models\CourseInfo', 'course_id', 'course_id');
     }
 
 
-    public function getSumAmountAttribute(){
+    public function getSumAmountAttribute()
+    {
         if (!$this->is_set_course) return $this->amount;
         return $this->childCourse()->sum('amount');
     }
 
-    public function getPublicationStatusAttribute():string
+    public function getPublicationStatusAttribute(): string
     {
         $status = '非公開';
         if (Carbon::parse($this->publish_date_from) <= Carbon::now() && Carbon::parse($this->publish_date_to) >= Carbon::now())
             $status = '公開中';
         return $status;
-
     }
 
     public function testAbilities()
     {
-        return $this->belongsToMany('App\Models\Test', 'course_test' ,
-            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestType::ABILITY);
+        return $this->belongsToMany(
+            'App\Models\Test',
+            'course_test',
+            'course_id',
+            'test_id',
+            'course_id',
+            'test_id'
+        )->where('test_type', TestType::ABILITY);
     }
 
     public function testCourseEnds()
     {
-        return $this->belongsToMany('App\Models\Test', 'course_test' ,
-            'course_id', 'test_id', 'course_id', 'test_id')->where('test_type', TestType::ENDCOURSE);
+        return $this->belongsToMany(
+            'App\Models\Test',
+            'course_test',
+            'course_id',
+            'test_id',
+            'course_id',
+            'test_id'
+        )->where('test_type', TestType::ENDCOURSE);
     }
 
     public function studentPointHistories()
@@ -102,10 +133,10 @@ class Course extends Model
             $lessonMaxDate = max($lessonDateArr);
             $lessonMinDate = min($lessonDateArr);
         }
-        
+
         if ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) > $today) {
             return '公開前';
-        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) <= $today) {
+        } elseif ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) <= $today) {
             return '公開中';
         } elseif ($this->group_lesson_status == 1 && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
             return '開講決定';
@@ -115,7 +146,7 @@ class Course extends Model
             return '終了';
         } elseif ($this->group_lesson_status == 1 && count($lessonDateArr) == 0) {
             return '---';
-        }elseif ($this->group_lesson_status == 2) {
+        } elseif ($this->group_lesson_status == 2) {
             return '不成立';
         }
     }
@@ -124,7 +155,9 @@ class Course extends Model
 
     public function pointSubscriptionHistories()
     {
-        return $this->hasMany('App\Models\PointSubscriptionHistory', 'course_id', 'course_id')->where('del_flag', NULL)->orWhere('del_flag', 0);
+        return $this->hasMany('App\Models\PointSubscriptionHistory', 'course_id', 'course_id')
+            ->where(function ($q) {
+                $q->where('del_flag', NULL)->orWhere('del_flag', 0);
+            });
     }
-
 }

@@ -103,9 +103,9 @@ class Course extends Model
             $lessonMinDate = min($lessonDateArr);
         }
         
-        if ($this->group_lesson_status == 0 && Carbon::parse($this->pushlish_date_from) > $today) {
+        if ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) > $today) {
             return '公開前';
-        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->pushlish_date_from) <= $today) {
+        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) <= $today) {
             return '公開中';
         } elseif ($this->group_lesson_status == 1 && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
             return '開講決定';

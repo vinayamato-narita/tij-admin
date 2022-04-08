@@ -16,9 +16,11 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('paymentHistory.export') }}" class="btn btn-primary pull-right"
-                        ><i class="las la-plus"></i> CSV出力
-                    </a>
+                    @if ($adminSystem)
+                        <a href="{{ route('paymentHistory.export') }}" class="btn btn-primary pull-right"
+                            ><i class="las la-plus"></i> CSV出力
+                        </a>
+                    @endif
                 </div>
             </div>
             <div class="clear"></div>
@@ -49,27 +51,23 @@
                                     </div>
                                 </div>
                                 @if(!$paymentList->isEmpty())
+                                    {{ $paymentList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
                                                     <th class="text-left width-130">@sortablelink('order_id', 'オーダーID')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('student_id', '生徒番号')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('student_id', '学習者番号')</th>
                                                     <th class="text-left min-width-150">@sortablelink('payment_date', '受注日時')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_start_date', '基準日')</th>
                                                     <th class="text-left min-width-150">@sortablelink('begin_date', '受講開始日')</th>
                                                     <th class="text-left min-width-150">@sortablelink('point_expire_date', '有効期限日')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_course_name', 'セットコース名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('item_name', '商品名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_student_name', '生徒名')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('j_student_name', '学習者名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_company_name', '法人名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('company_name', '企業名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_project_code', '企業ID')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('corporation_code', '法人コード')</th>
                                                     <th class="text-left min-width-150">@sortablelink('amount', '売上')</th>
                                                     <th class="text-left min-width-150">@sortablelink('tax', '消費税')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_campaign_code', 'キャンペーンコード')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('point_count', 'ポイント数')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('point_count', '付与回数')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_paid_status', '支払状況')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_receive_payment_date', '入金日')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_payment_term', '支払期限')</th>
@@ -83,16 +81,11 @@
                                                         <td class="text-left">{{ $payment->order_id }}</td>
                                                         <td class="text-left">{{ $payment->student_id }}</td>
                                                         <td class="text-left">{{ $payment->payment_date }}</td>
-                                                        <td class="text-left">{{ $payment->j_start_date }}</td>
                                                         <td class="text-left">{{ $payment->begin_date }}</td>
                                                         <td class="text-left">{{ $payment->point_expire_date }}</td>
-                                                        <td class="text-left">{{ $payment->j_course_name }}</td>
                                                         <td class="text-left">{{ $payment->item_name }}</td>
                                                         <td class="text-left">{{ $payment->j_student_name }}</td>
                                                         <td class="text-left">{{ $payment->j_company_name }}</td>
-                                                        <td class="text-left">{{ $payment->company_name }}</td>
-                                                        <td class="text-left">{{ $payment->j_project_code }}</td>
-                                                        <td class="text-left">{{ $payment->corporation_code }}</td>
                                                         <td class="text-left">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-left">{{ number_format($payment->tax) }}</td>
                                                         <td class="text-left">{{ $payment->j_campaign_code }}</td>

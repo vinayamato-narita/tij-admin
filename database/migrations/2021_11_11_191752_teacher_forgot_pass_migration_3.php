@@ -13,7 +13,9 @@ class TeacherForgotPassMigration3 extends Migration
      */
     public function up()
     {
-        $pc1 = "CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_check_teacher_changepass`(IN _teacher_email varchar(255))
+        $pc1 = "
+        DROP PROCEDURE IF EXISTS `sp_check_teacher_changepass`;
+        CREATE  PROCEDURE `sp_check_teacher_changepass`(IN _teacher_email varchar(255))
 BEGIN
 	SELECT
 		teacher_id,
@@ -24,7 +26,7 @@ BEGIN
 END";
         \Illuminate\Support\Facades\DB::unprepared($pc1);
 
-        $pc2 = "CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_chgpass_teacher`(IN _teacher_email varchar(255),
+        $pc2 = "CREATE  PROCEDURE `sp_chgpass_teacher`(IN _teacher_email varchar(255),
 	IN _teacher_password varchar(255))
 BEGIN
   UPDATE teacher

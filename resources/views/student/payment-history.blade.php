@@ -17,7 +17,7 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ $adminCanEdit == 1 ? route('student.createPaymentHistory', $studentInfo->student_id) : 'javascript:void(0)' }}" class="btn btn-primary pull-right {{ $adminCanEdit == 1 ? "" : "disabled-link" }}"
+                    <a href="{{ route('student.createPaymentHistory', $studentInfo->student_id) }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -45,6 +45,7 @@
                                     </div>
                                 </div>
                                 @if(!$paymentHistoryList->isEmpty())
+                                    {{ $paymentHistoryList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                     <div class="tanemaki-table">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>

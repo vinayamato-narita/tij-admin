@@ -24,7 +24,6 @@ class StoreUpdateTextRequest extends FormRequest
     public function rules()
     {
         return [
-            'lessonTextNo' => 'required|digits_between:1,1000000000',
             'lesson_text_url' => 'nullable|max:255|url',
             'lessonTextUrlForTeacher' => 'nullable|max:255|url',
             'lessonTextName' => 'required|max:255',

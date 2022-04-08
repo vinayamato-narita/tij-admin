@@ -49,7 +49,7 @@
                                     <td class="text-md-left">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                大問{{test_question.display_order}} {{test_question.question_content| truncate(30, '...')}}
+                                                {{test_question.navigation}}
                                             </div>
 
                                             <div class="col-md-2">
@@ -64,7 +64,7 @@
 
                                                 </div>
                                                 <div class="col-md-4"  style="">
-                                                    設問{{ getindexSee(test_sub_question.display_order) }}　{{test_sub_question.sub_question_content | truncate(30, '...')}}
+                                                    設問{{ getindexSee(test_sub_question.display_order) }} 　{{test_sub_question.sub_question_content | truncate(30, '...')}}
 
                                                 </div>
                                                 <div class="col-md-5">

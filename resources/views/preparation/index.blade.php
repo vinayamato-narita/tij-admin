@@ -36,11 +36,11 @@
                                         </div>
                                     </div>
                                     @if(!$preparationList->isEmpty())
+                                        {{ $preparationList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('display_order', ' 表示順')</th>
                                                     <th class="text-left min-width-150">@sortablelink('preparation_id', '予習ID')</th>
                                                     <th class="text-left min-width-120">@sortablelink('preparation_name', ' 予習名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('preparation_description', ' 説明')</th>
@@ -51,7 +51,6 @@
                                                 <tbody>
                                                 @foreach ($preparationList as $index => $preparation)
                                                     <tr>
-                                                        <td class="text-left">{{ $preparation->display_order }}</td>
                                                         <td class="text-left">{{ $preparation->preparation_id }}</td>
                                                         <td class="text-left">{{ $preparation->preparation_name }}</td>
                                                         <td class="text-left">{{ $preparation->preparation_description }}</td>

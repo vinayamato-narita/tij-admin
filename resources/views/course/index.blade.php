@@ -39,6 +39,7 @@
 
                                     </div>
                                     @if(!$courseList->isEmpty())
+                                        {{ $courseList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
@@ -65,7 +66,8 @@
                                                             <nl2br tag="span" :text="{{json_encode($course->course_description)}}"
                                                             /></td>
                                                         <td class="text-left">{{ $course->point_count }}</td>
-                                                        <td class="text-left">{{ $course->sumamount }}</td>
+                                                        <td class="text-left">  {{ number_format($course->sumamount, 0, ",", ",")  }}
+ </td>
 
                                                         <td class="text-left "></td>
                                                         <td class="text-left">

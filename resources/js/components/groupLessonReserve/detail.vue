@@ -13,11 +13,11 @@
                 </div>
                 <div class="fade-in">
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">グループコース申込情報
                                     <div class="float-right">
-                                        <a href="" class="btn btn-primary ">学習者一覧</a>
+                                        <a :href="listGroupLessonStudentUrl" class="btn btn-primary ">学習者一覧</a>
                                     </div>
 
                                 </div>
@@ -114,7 +114,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ["listGroupLessonReserveUrl", 'course'],
+        props: ["listGroupLessonReserveUrl", 'course', 'listGroupLessonStudentUrl'],
         mounted() {
 
         },

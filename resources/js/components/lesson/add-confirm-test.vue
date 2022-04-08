@@ -82,7 +82,7 @@
                             <thead >
                             <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input   v-on:click="checkAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input   type="radio" class=" checkbox" style="width: auto; height: auto; display: none;">
                                 </th>
                                 <th class="text-center text-md-left bg-gray-100">テスト名</th>
                             </tr>
@@ -90,7 +90,8 @@
                             <tbody>
                             <tr v-for="test in dataList">
                                 <td class="text-center">
-                                    <input  v-on:click="checkedId(test.test_id)"   type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
+                                    <input :value="test.test_id"  type="radio" class=" checkbox" style="width: auto; height: auto; display: inline-block;" v-model="testId" >
+
                                 </td>
                                 <td class="text-md-left">{{  test.test_name }}</td>
 
@@ -169,7 +170,7 @@
                 currentPage : 0,
                 lastPage : 0,
                 auto : 'auto',
-                checkedIds : [],
+                testId : null,
 
             };
         },
@@ -239,7 +240,7 @@
             submit() {
                 let that = this;
                 axios
-                    .post(that.registerUrl, that.checkedIds)
+                    .post(that.registerUrl, {testId:  this.testId, lessonId : this.id})
                     .then(response => {
                         window.location = this.detailUrl;
                     })

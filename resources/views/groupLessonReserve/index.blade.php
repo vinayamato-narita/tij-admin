@@ -3,7 +3,7 @@ use App\Components\SearchQueryComponent;
 @endphp
 
 @extends('layouts.default')
-@section('title', 'グループレッスン申込一覧')
+@section('title', 'グループレッスンコース申込一覧')
 @section('content')
     <div class="c-body">
         <main class="c-main pt-0">
@@ -11,7 +11,7 @@ use App\Components\SearchQueryComponent;
                 <div class="page-heading">
                     <div class="pull-left">
                         <h5>
-                            グループレッスン申込一覧
+                            グループレッスンコース申込一覧
                         </h5>
                     </div>
                 </div>
@@ -33,6 +33,7 @@ use App\Components\SearchQueryComponent;
 
                                     </div>
                                     @if (!$courseList->isEmpty())
+                                        {{ $courseList->appends(SearchQueryComponent::alterQuery($request))->links('pagination.paginate') }}
                                         <div class="tanemaki-table">
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>

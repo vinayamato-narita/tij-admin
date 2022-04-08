@@ -142,6 +142,7 @@ class FaqController extends BaseController
         $faqInfo->lang_question = $faqLangInfo->question ?? "";
         $faqInfo->lang_answer = $faqLangInfo->answer ?? "";
         $faqInfo->lang = $langType;
+        $faqInfo->title = $langType == LangType::EN ? '英語版' : '中国語版';
 
         return view('faq.edit_lang', [
             'breadcrumbs' => $breadcrumbs,

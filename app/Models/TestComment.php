@@ -14,4 +14,9 @@ class TestComment extends Model
 
     protected $primaryKey = 'test_comment_id';
 
+    public function testResult()
+    {
+        return $this->hasOne('\App\Models\TestResult', 'test_result_id', 'test_result_id');
+    }
+
 }

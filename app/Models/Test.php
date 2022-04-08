@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TestType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
@@ -16,8 +17,12 @@ class Test extends Model
 
     protected $primaryKey = 'test_id';
 
+    protected $appends = array('type_name');
 
-
+    public function getTypeNameAttribute()
+    {
+        return TestType::getDescription($this->test_type);
+    }
 
     public function testQuestions()
     {

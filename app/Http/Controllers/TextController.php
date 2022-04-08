@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
+use App\Enums\FileTypeEnum;
 use App\Enums\StatusCode;
 use App\Http\Requests\StoreUpdateTextRequest;
+use App\Models\File;
 use App\Models\LessonText;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -28,7 +32,7 @@ class TextController extends BaseController
             });
         }
 
-        $lessonTextList = $queryBuilder->sortable(['lesson_text_no' => 'asc', 'lesson_text_name' => 'asc'])->paginate($pageLimit);
+        $lessonTextList = $queryBuilder->sortable(['lesson_text_name' => 'asc'])->paginate($pageLimit);
 
         return view('text.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -76,16 +80,54 @@ class TextController extends BaseController
             DB::beginTransaction();
             try {
                 $lessonText = new LessonText();
-                $lessonText->lesson_text_no = $request->lessonTextNo;
                 $lessonText->lesson_text_url = $request->lessonTextUrl;
                 $lessonText->lesson_text_url_for_teacher = $request->lessonTextUrlForTeacher;
                 $lessonText->lesson_text_sound_url = $request->lessonTextSoundUrl;
                 $lessonText->lesson_text_name = $request->lessonTextName;
                 $lessonText->lesson_text_description = $request->lessonTextDescription;
 
+                if (isset($request->studentFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEXT, $request->studentFileSelected);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $request->studentFileSelected->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
+                        $file->file_type = FileTypeEnum::TEXT;
+                        $file->save();
+                        $lessonText->lesson_text_student_file_id = $file->file_id;
+                    }
+                }
+                if (isset($request->studentFileId)) {
+                    $storedFile = File::query()->find($request->studentFileId);
+                    if ($storedFile)
+                        $lessonText->lesson_text_student_file_id = $storedFile->file_id;
+
+                }
+
+                if (isset($request->teacherFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEXT, $request->teacherFileSelected);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $request->teacherFileSelected->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
+                        $file->file_type = FileTypeEnum::TEXT;
+                        $file->save();
+                        $lessonText->lesson_text_teacher_file_id = $file->file_id;
+                    }
+                }
+                if (isset($request->teacherFileId)) {
+                    $storedFile = File::query()->find($request->teacherFileId);
+                    if ($storedFile)
+                        $lessonText->lesson_text_teacher_file_id = $storedFile->file_id;
+
+                }
+
                 $lessonText->save();
                 DB::commit();
                 return response()->json([
+                    'lesson_text_id' => $lessonText->lesson_text_id,
                     'status' => 'OK',
                 ], StatusCode::OK);
             } catch (\Exception $exception) {
@@ -109,9 +151,8 @@ class TextController extends BaseController
             ['name' => 'text_show', $id]
         ]);
 
-        $lessonText = LessonText::where('lesson_text_id', $id)->with(['lesson'])->first();
+        $lessonText = LessonText::where('lesson_text_id', $id)->with(['lesson', 'studentFile', 'teacherFile'])->first();
 
-        $a = $lessonText->getQuery();
         if (!$lessonText) return redirect()->route('text.index');
         return view('text.show', [
             'breadcrumbs' => $breadcrumbs,
@@ -128,7 +169,7 @@ class TextController extends BaseController
             ['name' => 'text_edit', $id]
         ]);
 
-        $lessonText = LessonText::where('lesson_text_id', $id)->first();
+        $lessonText = LessonText::where('lesson_text_id', $id)->with('studentFile', 'teacherFile')->first();
         if (!$lessonText) return redirect()->route('text.index');
         return view('text.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -148,12 +189,49 @@ class TextController extends BaseController
 
             DB::beginTransaction();
             try {
-                $lessonText->lesson_text_no = $request->lessonTextNo;
                 $lessonText->lesson_text_url = $request->lessonTextUrl;
                 $lessonText->lesson_text_url_for_teacher = $request->lessonTextUrlForTeacher;
                 $lessonText->lesson_text_sound_url = $request->lessonTextSoundUrl;
                 $lessonText->lesson_text_name = $request->lessonTextName;
                 $lessonText->lesson_text_description = $request->lessonTextDescription;
+
+                if (isset($request->studentFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEXT, $request->studentFileSelected);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $request->studentFileSelected->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
+                        $file->file_type = FileTypeEnum::TEXT;
+                        $file->save();
+                        $lessonText->lesson_text_student_file_id = $file->file_id;
+                    }
+                }
+                if (isset($request->studentFileId)) {
+                    $storedFile = File::query()->find($request->studentFileId);
+                    if ($storedFile)
+                        $lessonText->lesson_text_student_file_id = $storedFile->file_id;
+
+                }
+
+                if (isset($request->teacherFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEXT, $request->teacherFileSelected);
+                    if ($name) {
+                        $file = new File();
+                        $file->file_name = $name;
+                        $file->file_name_original = $request->teacherFileSelected->getClientOriginalName();
+                        $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
+                        $file->file_type = FileTypeEnum::TEXT;
+                        $file->save();
+                        $lessonText->lesson_text_teacher_file_id = $file->file_id;
+                    }
+                }
+                if (isset($request->teacherFileId)) {
+                    $storedFile = File::query()->find($request->teacherFileId);
+                    if ($storedFile)
+                        $lessonText->lesson_text_teacher_file_id = $storedFile->file_id;
+
+                }
 
                 $lessonText->save();
                 DB::commit();

@@ -10,6 +10,9 @@ use App\Models\LessonSchedule;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GroupLessonExport;
+use Session;
 use App\Models\StudentPointHistory;
 use App\Models\LessonHistory;
 use App\Enums\StatusCode;
@@ -23,16 +26,16 @@ class GroupLessonHistoryController extends BaseController
             ['name' => 'group_lesson_history']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->withCount('studentPointHistory', 'lessonHistories');
+        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->whereHas('lesson')->whereHas('teacher')->whereHas('course')->withCount('studentPointHistory', 'lessonHistories');
 
         if (!empty($request['search_input'])) {
-            $queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
+            /*$queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
             })->orWhereHas('teacher', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('teacher_name', $request['search_input']));
             })->orWhereHas('lesson', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('lesson_name', $request['search_input']));
-            });
+            });*/
         }
 
         if (!empty($request['time_from']) || !empty($request['time_to'])) {
@@ -49,6 +52,8 @@ class GroupLessonHistoryController extends BaseController
             }
         }
 
+        Session::put('exportGroupLesson', collect($request));
+
         $groupLessonHistoryList = $queryBuilder->whereHas('course', function ($q) {
             return $q->where('course_type', CourseTypeEnum::GROUP_COURSE);
         })->where('lesson_endtime' , '<', Carbon::now())->sortable(['last_update_date' => 'desc'])->paginate($pageLimit);
@@ -60,6 +65,14 @@ class GroupLessonHistoryController extends BaseController
             'groupLessonHistoryList' => $groupLessonHistoryList,
         ]);
 
+    }
+
+    public function exportGroupLesson()
+    {
+        $request = Session::get('exportGroupLesson');
+        $fileName = "groupLesson".date("Y-m-d").".csv";
+
+        return Excel::download(new GroupLessonExport($request), $fileName);
     }
 
     public function studentAttendance(Request $request, $id)

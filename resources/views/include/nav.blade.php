@@ -29,7 +29,7 @@
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
-                生徒情報管理
+                学習者情報管理
             </a>
         </li>
 

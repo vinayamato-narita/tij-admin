@@ -191,9 +191,10 @@
                                                 ></label
                                             >
                                             <div class="col-md-3">
+                                                70
                                                 <input
                                                     type="number"
-                                                    class="form-control "
+                                                    class="form-control hidden"
                                                     disabled
                                                     name="passing_score"
                                                     style="width: 100px"
@@ -202,6 +203,7 @@
                                                         'required|decimal|min_value:0|max_value:1000000000'
                                                     "
                                                 />
+
 
                                                 <div
                                                     class="input-group is-danger"

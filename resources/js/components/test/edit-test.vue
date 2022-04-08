@@ -181,9 +181,10 @@
                                                     ></span></label
                                             >
                                             <div class="col-md-3">
+                                                {{ testInfoEx.passing_score }}
                                                 <input
                                                     type="number"
-                                                    class="form-control"
+                                                    class="form-control hidden"
                                                     name="passing_score"
                                                     disabled
                                                     style="width: 100px"

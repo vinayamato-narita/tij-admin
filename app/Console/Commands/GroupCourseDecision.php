@@ -23,7 +23,7 @@ class GroupCourseDecision extends Command
      *
      * @var string
      */
-    protected $signature = 'group_course_decision';
+    protected $signature = 'group_course_decision:run';
 
     /**
      * The console command description.

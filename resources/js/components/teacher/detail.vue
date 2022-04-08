@@ -176,7 +176,7 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">Zoomパスワード:
+                                        <label class="col-md-3 col-form-label text-md-right">Zoomパスコード:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             {{this.teacher.zoom_password}}

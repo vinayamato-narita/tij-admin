@@ -48,7 +48,9 @@
                                         <label class="col-md-4 col-form-label text-md-right">説明:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.test.test_description}}
+                                            <nl2br v-if="this.test.test_description" tag="p" :text="this.test.test_description" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
 

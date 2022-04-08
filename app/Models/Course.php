@@ -19,7 +19,7 @@ class Course extends Model
     public $timestamps = false;
     protected $appends = ['publication_status'];
 
-    public $sortable = ['publication_status', 'course_id', 'display_order', 'course_name', 'course_description', 'point_count', 'amount', 'group_lesson_status'];
+    public $sortable = ['publication_status', 'course_id', 'display_order', 'course_name', 'course_description', 'point_count', 'amount', 'group_lesson_status', 'min_reserve_count', 'max_reserve_count', 'decide_date', 'reserve_end_date', 'is_for_lms'];
     public function publicationStatusSortable(Builder $query, $direction)
     {
         return $query->selectRaw("course_id, display_order, course_name, course_name_short, course_description, point_count, amount, publish_date_to, publish_date_from,
@@ -103,9 +103,9 @@ class Course extends Model
             $lessonMinDate = min($lessonDateArr);
         }
         
-        if ($this->group_lesson_status == 0 && Carbon::parse($this->pushlish_date_from) > $today) {
+        if ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) > $today) {
             return '公開前';
-        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->pushlish_date_from) <= $today) {
+        }  elseif ($this->group_lesson_status == 0 && Carbon::parse($this->publish_date_from) <= $today) {
             return '公開中';
         } elseif ($this->group_lesson_status == 1 && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
             return '開講決定';

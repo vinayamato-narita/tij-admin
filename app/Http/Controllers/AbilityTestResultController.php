@@ -188,7 +188,7 @@ class AbilityTestResultController extends BaseController
             return redirect()->route('abilityTestResult.index');
 
         $analyticRaw = DB::select("
-        		SELECT tc.parent_category_name,tq.navigation,tq.test_question_id, tsqs.test_sub_question_id, IF(trd.answer = trd.correct_answer, tsq.score, 0) as exam_score,
+        		SELECT tc.parent_category_name, tc.category_name,tq.navigation,tq.test_question_id, tsqs.test_sub_question_id, IF(trd.answer = trd.correct_answer, tsq.score, 0) as exam_score,
 				tsq.score as score, tc.test_category_id
 				
         FROM test_category as tc 
@@ -214,6 +214,7 @@ class AbilityTestResultController extends BaseController
                     'test_parrent_name' => $item[0]->parent_category_name])->first();
                 $analyticItem[] = [
                     'parent_category_name' => $item[0]->parent_category_name,
+                    'category_name' => $item[0]->category_name,
                     'navigation' => $item[0]->navigation,
                     'num_sub_question' => $numSubQuestion,
                     'score' => $score,

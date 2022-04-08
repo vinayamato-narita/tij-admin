@@ -190,7 +190,7 @@
                                                     ></span
                                                 ></label
                                             >
-                                            <div class="col-md-3">
+                                            <div class="col-md-6 pt-7">
                                                 70
                                                 <input
                                                     type="number"

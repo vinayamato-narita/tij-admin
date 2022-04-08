@@ -181,7 +181,9 @@
                                                     ></span></label
                                             >
                                             <div class="col-md-3">
-                                                {{ testInfoEx.passing_score }}
+                                                <div class="col-md-6 pt-7">
+                                                    {{ testInfoEx.passing_score }}
+                                                </div>
                                                 <input
                                                     type="number"
                                                     class="form-control hidden"

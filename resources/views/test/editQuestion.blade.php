@@ -15,6 +15,7 @@
             :test-categories="{{json_encode($testCategories)}}"
             :is-has-test-result="{{json_encode($isHasTestResult)}}"
             :check-navigation-url="{{json_encode(route('test.checkNavigation', $test->test_id))}}"
+            :index="{{json_encode($index)}}"
 
 
 

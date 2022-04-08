@@ -209,7 +209,7 @@ class TestController extends BaseController
 
         ]);
 
-        $test = Test::where('test_id', $id)->first();
+        $test = Test::withCount('testQuestions')->where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
@@ -415,9 +415,11 @@ class TestController extends BaseController
 
         ]);
 
-        $test = Test::where('test_id', $id)->first();
+        $test = Test::with('testQuestions')->where('test_id', $id)->first();
         $testQuestion = TestQuestion::with(['testSubQuestions.testCategory', 'file', 'testSubQuestions.file', 'testSubQuestions.tags'])->where('test_question_id', $testQuestionId)->first();
         if (!$test || !$testQuestion) return redirect()->route('test.index');
+        $tqIds = $test->testQuestions->pluck('test_question_id')->toArray();
+        $index = array_search($testQuestionId, $tqIds) + 1;
 
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
@@ -428,6 +430,7 @@ class TestController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
             'testQuestion' => $testQuestion,
+            'index' => $index,
             'tags' => $tags,
             'testCategories' => $testCategories,
             'isHasTestResult' => $isHasTestResult

@@ -56,7 +56,7 @@
 
                                     <div class="div-deco">
                                         <h5>
-                                            大問
+                                            大問 {{index}}
                                         </h5>
 
 
@@ -288,7 +288,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
-                                                <label class="col-md-2 col-form-label text-md-left"><b>参考URL :</b>
+                                                <label class="col-md-2 col-form-label text-md-left"><b>参考URLリンク :</b>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
                                                     <input
@@ -337,6 +337,9 @@
                                                 <div class="col-md-9 text-md-left p-2">
                                                     <multiselect v-model="item.value" label="name" track-by="id"
                                                                  :options="optionsTag" :multiple="true"
+                                                                 :select-label="' '"
+                                                                 :selected-label="' '"
+                                                                 :deselect-label="' '"
                                                                  placeholder=""
                                                     >
 
@@ -527,10 +530,10 @@
 
                     },
                     'subQuestion[0][answer1]': {
-                        required: "選択肢1(正解)を入力してください。"
+                        required: "選択肢1を入力してください。"
                     },
                     'subQuestion[0][answer2]': {
-                        required: "選択肢2(正解)を入力してください。"
+                        required: "選択肢2を入力してください。。"
                     },
                     'subQuestion[0][score]': {
                         required: "点数を入力してください。",
@@ -551,7 +554,7 @@
             };
         },
         props: ['test', 'testTypes', 'pageSizeLimit', 'getFilesUrl', 'fileType', 'urlTestDetail',
-            'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion', 'testCategories', 'isHasTestResult', "checkNavigationUrl"],
+            'updateQuestionUrl', 'tags', 'createTagUrl', 'testQuestion', 'testCategories', 'isHasTestResult', "checkNavigationUrl", "index"],
         mounted() {
         },
         watch : {
@@ -576,14 +579,14 @@
                     max: "問題文は255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください。"
+                    required: "選択肢1を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください。"
+                    required: "選択肢2を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
-                    required: "点数を入力してください",
-                    decimal: "点数は半角数字を入力してください",
+                    required: "点数を入力してください。",
+                    decimal: "点数は半角数字を入力してください。",
                     min_value: "点数は1～1000000000 を入力してください。",
                     max_value: "点数は1～1000000000 を入力してください。",
                 };
@@ -626,19 +629,19 @@
                     max: "問題文は255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください"
+                    required: "選択肢1を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください"
+                    required: "選択肢2を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
-                    required: "点数を入力してください",
-                    decimal: "点数は半角数字を入力してください",
-                    min_value: "点数は1～1000000000 を入力してください",
-                    max_value: "点数は1～1000000000 を入力してください",
+                    required: "点数を入力してください。",
+                    decimal: "点数は半角数字を入力してください。",
+                    min_value: "点数は1～1000000000 を入力してください。",
+                    max_value: "点数は1～1000000000 を入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][testCategory]"] = {
-                    required: "カテゴリを選択してください",
+                    required: "カテゴリを選択してください。",
                 };
                 this.$validator.localize("en", messError);
 
@@ -747,7 +750,7 @@
                                         break;
                                     case 500:
                                         this.$swal({
-                                            title: "失敗したデータを追加しました",
+                                            title: "失敗したデータを追加しました。",
                                             icon: "error",
                                             confirmButtonText: "OK",
                                         }).then(function (confirm) {

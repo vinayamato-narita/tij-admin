@@ -4,7 +4,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', 'ポイント履歴一覧')
+@section('title', '受講回数履歴一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -12,7 +12,7 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        ポイント履歴一覧
+                        受講回数履歴一覧
                     </h5>
                 </div>
             </div>
@@ -27,11 +27,11 @@
                                         <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
-                                        <label>生徒 ID : </label> 
+                                        <label>学習者番号 : </label> 
                                         {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
-                                        <label>生徒名 : </label>
+                                        <label>学習者名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
@@ -50,7 +50,6 @@
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('pay_description', '内容')</th>
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('point_count', '付与/消費')</th>
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('expire_date', '有効期限')</th>
-                                                    <th class="text-center min-width-120" style="width: 15%">@sortablelink('set_course_id', 'セットコード')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -63,8 +62,7 @@
                                                         <td class="text-center">{{ $point->pay_description }}</td>
                                                         <td class="text-center">{{ (int)$point->point_count }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($point->expire_date) }}</td>
-                                                        <td class="text-center">{{ $point->set_course_id }}</td>
-                                                        <td>
+                                                        学習者番号                                                        <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">

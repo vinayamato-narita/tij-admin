@@ -53,8 +53,8 @@
                                                     <th class="text-center min-width-150">@sortablelink('course_name', 'コース名')</th>
                                                     <th class="text-center min-width-150">@sortablelink('lesson_name', 'レッスン名')</th>
                                                     <th class="text-center min-width-150">@sortablelink('lesson_text_name', 'テキスト名')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('student_name', '生徒名')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('student_id', '学習者番号')</th>
+                                                    <th class="text-center min-width-150">@sortablelink('student_name', '学習者名')</th>
                                                     <th style="width: 90px"></th>
                                                 </tr>
                                             </thead>

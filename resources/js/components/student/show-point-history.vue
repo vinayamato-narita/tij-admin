@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            ポイント履歴詳細
+                            受講回数履歴詳細
                         </h5>
                     </div>
                 </div>
@@ -15,14 +15,14 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
                                     <div class="card-header">
-                                        <h5 class="title-page">ポイント履歴情報</h5>
+                                        <h5 class="title-page">受講回数履歴情報</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                {{ pointHistoryInfoEx.student_id }}
@@ -32,7 +32,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒名</label
+                                                >学習者名</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ pointHistoryInfoEx.student_name }}
@@ -92,7 +92,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ポイント</label
+                                                >受講回数</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ parseInt(pointHistoryInfoEx.point_count) }}
@@ -208,7 +208,7 @@ export default {
         cancelPointHistory() {
             let that = this;
             this.$swal({
-                text: "このポイント履歴を削除しますか？",
+                text: "この受講回数履歴を削除しますか？",
                 icon: "warning",
                 confirmButtonText: "削除する",
                 cancelButtonText: "閉じる",
@@ -231,7 +231,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "ポイント削除が完了しました。",
+                            text: "受講回数削除が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

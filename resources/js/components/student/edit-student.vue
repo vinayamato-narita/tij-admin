@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            生徒情報編集
+                            学習者情報編集
                         </h5>
                     </div>
                 </div>
@@ -15,7 +15,7 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
                                     <div class="card-header">
-                                        <h5 class="title-page">生徒詳細</h5>
+                                        <h5 class="title-page">学習者詳細</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
@@ -31,7 +31,7 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >生徒番号</label
+                                                        >学習者番号</label
                                                     >
                                                     <div class="col-md-9 pt-7">
                                                         {{ studentInfoEx.student_id }}
@@ -381,7 +381,7 @@
                                                                 'max:50'
                                                             "
                                                         />
-                                                        <div>※日本語の生徒は居住地で日本を選択した場合には、必ず住所を入力してください。</div>
+                                                        <div>※日本語の学習者は居住地で日本を選択した場合には、必ず住所を入力してください。</div>
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
@@ -871,7 +871,7 @@
 
                     <div class="form-group text-center">
                         <div class="col-sm-offset-2 col-md-offset-2">
-                             ※パスワード変更を実施した場合、生徒宛にリマインドメールが送付されます
+                             ※パスワード変更を実施した場合、学習者宛にリマインドメールが送付されます
                         </div>
                     </div>
                 </div>
@@ -1004,7 +1004,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "生徒情報編集が完了しました。",
+                            text: "学習者情報編集が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

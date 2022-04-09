@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', 'ポイント履歴詳細')
+@section('title', '受講回数履歴詳細')
 @section('content')
     <show-point-history
     	:url-action="{{json_encode(route('student.updatePointHistory'))}}" 

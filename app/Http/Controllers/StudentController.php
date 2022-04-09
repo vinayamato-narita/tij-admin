@@ -1259,7 +1259,7 @@ class StudentController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => '生徒削除が完了しました',
+            'message' => '学習者削除が完了しました',
         ], StatusCode::OK);
     }
 

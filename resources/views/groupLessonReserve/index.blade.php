@@ -47,7 +47,8 @@ use App\Components\SearchQueryComponent;
                                                         <th class="text-left min-width-120">
                                                             @sortablelink('max_reserve_count', ' 最大申込人数')</th>
                                                         <th class="text-left min-width-120">
-                                                            @sortablelink('student_point_histories_count', ' 申込人数')</th>
+                                                            @sortablelink('point_subscription_histories_count', ' 申込人数')
+                                                        </th>
                                                         <th class="text-left min-width-120">@sortablelink('decide_date',
                                                             ' 開催決定日時')</th>
                                                         <th class="text-left min-width-120">
@@ -68,7 +69,7 @@ use App\Components\SearchQueryComponent;
                                                             <td class="text-left">{{ $course->max_reserve_count }}
                                                             </td>
                                                             <td class="text-left">
-                                                                {{ $course->student_point_histories_count }}</td>
+                                                                {{ $course->point_subscription_histories_count }}</td>
                                                             <td class="text-left">
                                                                 {{ Carbon\Carbon::parse($course->decide_date)->format('Y/m/d H:i') }}
                                                             </td>
@@ -79,8 +80,9 @@ use App\Components\SearchQueryComponent;
 
                                                             <td class="text-left">
                                                                 <div class="btn-group" style="float:right;">
-                                                                    <a href="{{ route('groupLessonReserves.show', $course->course_id) }}" class="btn btn-primary text-white" type="button"><i
-                                                                        class="fa fa-info mr-1"></i>詳細</a>
+                                                                    <a href="{{ route('groupLessonReserves.show', $course->course_id) }}"
+                                                                        class="btn btn-primary text-white" type="button"><i
+                                                                            class="fa fa-info mr-1"></i>詳細</a>
                                                                 </div>
                                                             </td>
                                                         </tr>

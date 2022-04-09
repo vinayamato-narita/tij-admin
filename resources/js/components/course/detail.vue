@@ -433,6 +433,29 @@
                                 </div>
 
                             </div>
+                            <div class="card" v-if="this.course.course_type === 1">
+                                <div class="card-header">
+                                    <h5 class="title-page">引き継ぎメモ</h5>
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+                                            <div class="float-right">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-group-memo')">
+                                                    追加
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {{ courseGroupMemo.memo }}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -451,6 +474,11 @@
                 <insert-video :id="this.course.course_id" :register-url="registerVideoUrl">
 
                 </insert-video>
+                <course-group-memo  
+                    :url-update-group-memo="urlUpdateGroupMemo" 
+                    :detailUrl="detailCourseUrl"
+                    :course-group-memo="courseGroupMemo">
+                </course-group-memo>
             </div>
         </main>
     </div>
@@ -467,8 +495,7 @@
     import DeleteItem from "./../../components/common/delete-item";
     import AbilityTest from "./../../components/course/ability-test";
     import CourseEndTest from "./../../components/course/course-end-test";
-
-
+    import CourseGroupMemo from "./../../components/course/course-group-memo";
 
     export default {
         created: function () {
@@ -492,7 +519,8 @@
             InsertVideo,
             DragableItem,
             AbilityTest,
-            CourseEndTest
+            CourseEndTest,
+            CourseGroupMemo
         },
         data() {
             return {
@@ -505,13 +533,11 @@
                 courseENDes : '',
                 courseZHName : '',
                 courseZHDes : ''
-
-
             };
         },
         props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
             'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl',
-            'addCampaignUrl'
+            'addCampaignUrl', 'courseGroupMemo', 'urlUpdateGroupMemo'
         ],
         mounted() {},
         methods: {

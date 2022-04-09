@@ -18,7 +18,7 @@ use App\Models\CourseSetCourse;
 use App\Models\CourseTag;
 use App\Models\CourseTest;
 use App\Models\CourseVideo;
-use App\Models\Lesson;
+use App\Models\Lesson; 
 use App\Models\Tag;
 use App\Models\Test;
 use Carbon\Carbon;
@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
+use App\Models\CourseGroupMemo;
 
 class CourseController extends BaseController
 {
@@ -330,10 +331,18 @@ class CourseController extends BaseController
         if (!$course) return redirect()->route('course.index');
         $course->lesson = $course->lesson()->with('courseLesson')->orderBy('course_lesson.display_order', 'asc')->get();
         $course->setRelation('lesson', $course->lesson()->with('courseLesson')->orderBy('course_lesson.display_order', 'asc')->get());
+
+        $courseGroupMemo = CourseGroupMemo::where('course_id', $id)->first();
+        if ($courseGroupMemo == null) {
+            $courseGroupMemo['course_id'] = $id;
+            $courseGroupMemo['memo'] = '';
+        }
+
         return view('course.show', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,
-            'courseVideo' => $courseVideo
+            'courseVideo' => $courseVideo,
+            'courseGroupMemo' => $courseGroupMemo,
         ]);
     }
 
@@ -886,14 +895,20 @@ class CourseController extends BaseController
         ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function updateGroupMemo(Request $request)
     {
-        //
+        if (!$request->isMethod('POST')) {
+            return response()->json([
+                'status' => 'OK',
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $courseGroupMemo = CourseGroupMemo::updateOrCreate(
+            ['course_id' => $request->course_id],
+            ['memo' => $request->memo, 'last_update_date' => Carbon::now()]
+        );
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
     }
 }

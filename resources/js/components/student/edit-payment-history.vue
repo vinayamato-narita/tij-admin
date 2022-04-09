@@ -22,7 +22,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-3 pt-7">
                                                 {{ paymentInfoEx.student_id }}
@@ -32,7 +32,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒名</label
+                                                >学習者名</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ paymentInfoEx.student_name }}
@@ -82,7 +82,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >付与ポイント</label
+                                                >付与受講回数</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 <div

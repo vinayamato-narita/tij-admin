@@ -41,8 +41,8 @@
                                                     <th class="text-left min-width-150">@sortablelink('lesson_date', ' レッスン日')</th>
                                                     <th class="text-left min-width-120">レッスン開始時間    </th>
                                                     <th class="text-left min-width-120">@sortablelink('teacher.teacher_name', ' 講師名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student_id', ' 生徒番号')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student.student_name', ' 生徒名')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_id', ' 学習者番号')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student.student_name', ' 学習者名')</th>
                                                     <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>

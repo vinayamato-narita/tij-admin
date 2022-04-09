@@ -33,11 +33,11 @@
                                         <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
-                                        <label>生徒番号 : </label> 
+                                        <label>学習者番号 : </label> 
                                         {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
-                                        <label>生徒名 : </label>
+                                        <label>学習者名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">

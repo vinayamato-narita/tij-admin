@@ -552,8 +552,8 @@ class TeacherController extends BaseController
             $this->convertShijis("コース名"),
             $this->convertShijis("レッスン名"),
             $this->convertShijis("テキスト名"),
-            $this->convertShijis("生徒番号"),
-            $this->convertShijis("生徒名")
+            $this->convertShijis("学習者番号"),
+            $this->convertShijis("学習者名")
         ];
 
 
@@ -627,8 +627,8 @@ class TeacherController extends BaseController
             $input["コース名"] = $this->convertShijis($item['course_name']).
             $input["レッスン名"] = $this->convertShijis($item['lesson_name']).
             $input["テキスト名"] = $this->convertShijis($item['lesson_text_name']).
-            $input["生徒番号"] = $this->convertShijis($item['student_id']).
-            $input["生徒名"] = $this->convertShijis($item['student_name']).
+            $input["学習者番号"] = $this->convertShijis($item['student_id']).
+            $input["学習者名"] = $this->convertShijis($item['student_name']).
             fputcsv($file, $item);
         }
 

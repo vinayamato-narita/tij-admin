@@ -23,15 +23,15 @@
                             <input type="hidden" name="limit" :value="pageLimit" />
                             <input type="hidden" name="search_detail" value="1" />
                             <div class="form-group">
-                                <label>生徒番号</label>
+                                <label>学習者番号</label>
                                 <div class="input text">
-                                    <input type="text" name="student_id" class="form-control input-sm" placeholder="生徒番号を入力してください" :value="dataQuery.student_id">
+                                    <input type="text" name="student_id" class="form-control input-sm" placeholder="学習者番号を入力してください" :value="dataQuery.student_id">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>生徒名</label>
+                                <label>学習者名</label>
                                 <div class="input text">
-                                    <input type="text" name="student_name" class="form-control input-sm" placeholder="生徒名を入力してください" :value="dataQuery.student_name">
+                                    <input type="text" name="student_name" class="form-control input-sm" placeholder="学習者名を入力してください" :value="dataQuery.student_name">
                                 </div>
                             </div>   
                             <div class="form-group">

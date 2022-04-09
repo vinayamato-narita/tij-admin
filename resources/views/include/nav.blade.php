@@ -140,7 +140,7 @@
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
-                        生徒単位
+                        学習者単位
                     </a>
                 </li>
             </ul>

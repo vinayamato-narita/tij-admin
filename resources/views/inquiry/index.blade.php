@@ -44,7 +44,7 @@
                                                     <th class="text-left width-130">@sortablelink('id', '問合せ番号')</th>
                                                     <th class="text-left min-width-150">@sortablelink('inquiry_date', '日時')</th>
                                                     <th class="text-left min-width-150">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student_id', '生徒番号')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('student_id', '学習者番号')</th>
                                                     <th class="text-left min-width-120">@sortablelink('student_name', '名前')</th>
                                                     <th class="text-left min-width-120">@sortablelink('j_student_email', 'メールアドレス')</th>
                                                     <th class="text-left min-width-120">@sortablelink('inquiry_flag', '対応状況')</th>

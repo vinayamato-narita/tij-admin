@@ -22,7 +22,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                {{ commentInfoEx.student_id }}
@@ -32,7 +32,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒名</label
+                                                >学習者名</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ commentInfoEx.student_name }}

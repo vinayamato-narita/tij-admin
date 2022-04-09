@@ -470,6 +470,9 @@
         },
         data() {
             return {
+                imageExtensions : ['jpg' , 'jpeg' , 'jfif' , 'pjpeg' , 'pjp', "png", 'svg', 'webp'],
+                videoExtensions : ['WEBM', 'MPG', 'MP2', 'MPEG', 'MPE', 'MPV', 'OGG', 'MP4', 'M4P', 'M4V', 'AVI', 'WMV', 'MOV', 'QT', 'FLV', 'SWF', 'AVCHD'],
+                mp3Extensions: ['MP3'],
                 flagShowLoader: false,
                 csrfToken: Laravel.csrfToken,
                 fileSelected: null,
@@ -646,6 +649,17 @@
                     }
                 });
             },
+            isAllowFileType (fileName) {
+                var re = /(?:\.([^.]+))?$/
+                var ext = re.exec(fileName)[1];
+                var returnType = '';
+                if (this.imageExtensions.includes(ext.toLowerCase()) || this.imageExtensions.includes(ext.toUpperCase()) ||
+                this.videoExtensions.includes(ext.toLowerCase()) || this.videoExtensions.includes(ext.toUpperCase()) ||
+                this.mp3Extensions.includes(ext.toLowerCase()) || this.mp3Extensions.includes(ext.toUpperCase()))
+                    return true
+                return false;
+
+            },
             showModalSubQuestion(modalName, index) {
                 this.$modal.show(modalName, {
                     fileType: this.fileType,
@@ -661,10 +675,13 @@
                 });
             },
             changeFile(e) {
-                this.fileId = null;
-                this.fileNameAttached = '';
-                this.fileSelected = e.target.files[0];
-                this.fileName = e.target.files[0].name;
+                if (this.isAllowFileType(e.target.files[0].name)) {
+                    this.fileId = null;
+                    this.fileNameAttached = '';
+                    this.fileSelected = e.target.files[0];
+                    this.fileName = e.target.files[0].name;
+                }
+
             },
             changeFileSubQuestion(e, index) {
                 this.subQuestion[index].fileId = null;

@@ -28,4 +28,15 @@ class TestSubQuestion extends Model
         return $this->belongsTo('App\Models\TestSubQuestionCategory', 'test_sub_question_id' , 'test_sub_question_id');
     }
 
+    public function testCategories()
+    {
+        return $this->belongsToMany('App\Models\TestCategory', 'test_sub_question_category' ,
+            'test_sub_question_id', 'test_category_id', 'test_sub_question_id', 'test_category_id');
+    }
+
+    public function testQuestion()
+    {
+        return $this->hasOne('App\Models\TestQuestion', 'test_question_id', 'test_question_id');
+    }
+
 }

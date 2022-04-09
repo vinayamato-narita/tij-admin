@@ -520,6 +520,7 @@ class TestController extends BaseController
                 $testSubQuestion->answer3 = $subQuestion->answer3;
                 $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
+                $testSubQuestion->score = $subQuestion->score;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
                     $storedFile = File::query()->find($request->fileId);

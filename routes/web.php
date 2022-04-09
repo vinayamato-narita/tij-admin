@@ -246,4 +246,5 @@ Route::group([
     Route::get('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.import');
     Route::post('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.importPost');
     Route::get('/courseGroup/saveImport', 'CourseGroupUserController@saveImport')->name('courseGroupUser.saveImport');
+    Route::post('/course/update-group-memo', 'CourseController@updateGroupMemo')->name('course.updateGroupMemo');
 });

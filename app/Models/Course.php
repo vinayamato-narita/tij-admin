@@ -152,7 +152,7 @@ class Course extends Model
         }
     }
 
-    protected $sortableAs = ['student_point_histories_count'];
+    protected $sortableAs = ['student_point_histories_count', 'point_subscription_histories_count'];
 
     public function pointSubscriptionHistories()
     {

@@ -13,7 +13,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save" autocomplete="off">
+                                <form
+                                    class="basic-form"
+                                    @submit.prevent="save"
+                                    autocomplete="off"
+                                >
                                     <div class="card-header">
                                         <h5 class="title-page">お知らせ情報</h5>
                                     </div>
@@ -22,27 +26,44 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >対象<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
+                                                >対象<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
                                             <div class="col-md-3">
                                                 <select
                                                     class="form-control"
                                                     name="news_subject_id"
-                                                    v-model="newsInfoEx.news_subject_id"
+                                                    v-model="
+                                                        newsInfoEx.news_subject_id
+                                                    "
                                                     v-validate="'required'"
                                                 >
-                                                    <option :value="subject.news_subject_id" v-for="subject in newsSubjects">
-                                                        {{ subject.news_subject_ja }}</option
+                                                    <option
+                                                        :value="
+                                                            subject.news_subject_id
+                                                        "
+                                                        v-for="subject in newsSubjects"
+                                                    >
+                                                        {{
+                                                            subject.news_subject_ja
+                                                        }}</option
                                                     >
                                                 </select>
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('news_subject_id')"
+                                                    v-if="
+                                                        errors.has(
+                                                            'news_subject_id'
+                                                        )
+                                                    "
                                                 >
-                                                    {{ errors.first("news_subject_id") }}
+                                                    {{
+                                                        errors.first(
+                                                            "news_subject_id"
+                                                        )
+                                                    }}
                                                 </div>
                                             </div>
                                         </div>
@@ -50,15 +71,17 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >タイトル<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
+                                                >タイトル<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
                                             <div class="col-md-6">
                                                 <input
                                                     class="form-control"
                                                     name="news_title"
-                                                    v-model="newsInfoEx.news_title"
+                                                    v-model="
+                                                        newsInfoEx.news_title
+                                                    "
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -67,9 +90,15 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('news_title')"
+                                                    v-if="
+                                                        errors.has('news_title')
+                                                    "
                                                 >
-                                                    {{ errors.first("news_title") }}
+                                                    {{
+                                                        errors.first(
+                                                            "news_title"
+                                                        )
+                                                    }}
                                                 </div>
                                             </div>
                                         </div>
@@ -77,39 +106,111 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >内容<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
+                                                >内容<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
                                             <div class="col-md-6">
                                                 <textarea
                                                     class="form-control"
-                                                    rows = "5"
+                                                    rows="5"
                                                     name="news_body"
-                                                    v-model="newsInfoEx.news_body"
+                                                    v-model="
+                                                        newsInfoEx.news_body
+                                                    "
                                                     v-validate="
                                                         'required|max:20000'
                                                     "
                                                 ></textarea>
-                                                
+
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('news_body')"
+                                                    v-if="
+                                                        errors.has('news_body')
+                                                    "
                                                 >
-                                                    {{ errors.first("news_body") }}
+                                                    {{
+                                                        errors.first(
+                                                            "news_body"
+                                                        )
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >トップ表示<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
+                                            <div class="col-md-6 flex">
+                                                <div
+                                                    class="form-check form-check-inline mr-1"
+                                                >
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="radio"
+                                                        value="0"
+                                                        name="topDisplay1"
+                                                        id="inline-radio2"
+                                                        v-validate="'required'"
+                                                        v-model="newsInfo.is_show_on_student_top"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="inline-radio2"
+                                                        >表示</label
+                                                    >
+                                                </div>
+                                                <div
+                                                    class="form-check form-check-inline mr-1"
+                                                >
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="radio"
+                                                        value="1"
+                                                        name="topDisplay"
+                                                        id="inline-radio2"
+                                                        v-validate="'required'"
+                                                        v-model="newsInfo.is_show_on_student_top"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="inline-radio2"
+                                                        >非表示</label
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="line"></div>
                                         <div class="form-group">
-                                            <div class="text-center display-flex">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
-                                                <btn-delete :delete-action="deleteAction"
-                                                            :message-confirm="messageConfirm" 
-                                                            :url-redirect="urlRedirect"></btn-delete>
-                                                <a :href="urlNewsDetail" class="btn btn-default w-100">閉じる</a>
-                                              </div>
+                                            <div
+                                                class="text-center display-flex"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-primary w-100 mr-2"
+                                                >
+                                                    登録
+                                                </button>
+                                                <btn-delete
+                                                    :delete-action="
+                                                        deleteAction
+                                                    "
+                                                    :message-confirm="
+                                                        messageConfirm
+                                                    "
+                                                    :url-redirect="urlRedirect"
+                                                ></btn-delete>
+                                                <a
+                                                    :href="urlNewsDetail"
+                                                    class="btn btn-default w-100"
+                                                    >閉じる</a
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -133,16 +234,16 @@ export default {
         let messError = {
             custom: {
                 news_subject_id: {
-                    required: "対象を選択してください",
+                    required: "対象を選択してください"
                 },
                 news_title: {
                     required: "タイトルを入力してください",
-                    max: "タイトルは255文字以内で入力してください",
+                    max: "タイトルは255文字以内で入力してください"
                 },
                 news_body: {
                     required: "内容を入力してください",
-                    max: "内容は20000文字以内で入力してください",
-                },
+                    max: "内容は20000文字以内で入力してください"
+                }
             }
         };
         this.$validator.localize("en", messError);
@@ -154,10 +255,18 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            newsInfoEx: this.newsInfo
+            newsInfoEx: this.newsInfo,
         };
     },
-    props: ["urlAction", "urlNewsDetail", "newsSubjects", "newsInfo", 'deleteAction', 'messageConfirm', 'urlRedirect'],
+    props: [
+        "urlAction",
+        "urlNewsDetail",
+        "newsSubjects",
+        "newsInfo",
+        "deleteAction",
+        "messageConfirm",
+        "urlRedirect"
+    ],
     mounted() {},
     methods: {
         save() {

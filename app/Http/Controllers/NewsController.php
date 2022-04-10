@@ -100,6 +100,7 @@ class NewsController extends BaseController
         $news->news_subject_id = $request->news_subject_id;
         $news->news_title = $request->news_title;
         $news->news_body = $request->news_body;
+        $news->is_show_on_student_top = $request->is_show_on_student_top;
         $news->news_update_date = Carbon::now();
         $news->save();  
 
@@ -231,6 +232,7 @@ class NewsController extends BaseController
         $newsInfo->news_subject_id = $request->news_subject_id;
         $newsInfo->news_title = $request->news_title;
         $newsInfo->news_body = $request->news_body;
+        $newsInfo->is_show_on_student_top = $request->is_show_on_student_top;
         $newsInfo->news_update_date = Carbon::now();
         
         $newsInfo->save();  

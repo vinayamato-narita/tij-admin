@@ -117,34 +117,6 @@
                                             </div>
                                         </div> 
 
-                                        <div class="form-group row" v-if="paymentInfoEx.is_lms_user">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >開講希望月<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <date-picker
-                                                    name="course_begin_month"
-                                                    v-model="paymentInfoEx.course_begin_month"
-                                                    :format="'YYYY/MM'"
-                                                    type="month"
-                                                    v-validate="
-                                                        'required'
-                                                    "
-                                                ></date-picker>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('course_begin_month')"
-                                                >
-                                                    {{ errors.first("course_begin_month") }}
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -177,35 +149,6 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >基準日<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <date-picker
-                                                    name="start_date"
-                                                    v-model="paymentInfoEx.start_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
-                                                    @change=changeStartDate
-                                                ></date-picker>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('start_date')"
-                                                >
-                                                    {{ errors.first("start_date") }}
-                                                </div>
-                                            </div>
-                                        </div> 
-
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
                                                 >受講開始日<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
@@ -216,7 +159,6 @@
                                                     v-model="paymentInfoEx.begin_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"
-                                                    :disabled="!paymentInfoEx.is_lms_user"
                                                     v-validate="
                                                         'required'
                                                     "
@@ -339,7 +281,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
-import moment from "moment";
+import moment from "moment-timezone";
 
 export default {
     created: function() {
@@ -352,14 +294,8 @@ export default {
                     management_number: "半角英数記号を入力してください",
                     max: "共通管理番号は10文字以内で入力してください",
                 },
-                course_begin_month: {
-                    required: "開講希望月を入力してください",
-                },
                 payment_date: {
                     required: "受注日を入力してください",
-                },
-                start_date: {
-                    required: "基準日を入力してください",
                 },
                 begin_date: {
                     required: "受講開始日を入力してください",
@@ -397,8 +333,6 @@ export default {
                 is_lms_user: this.paymentInfo.is_lms_user,
                 point_count: this.paymentInfo.point_count,
                 management_number: this.paymentInfo.management_number,
-                course_begin_month: new Date(this.paymentInfo.course_begin_month),
-                start_date: new Date(this.paymentInfo.start_date),
                 payment_date: new Date(this.paymentInfo.payment_date),
                 begin_date: new Date(this.paymentInfo.begin_date),
                 point_expire_date: new Date(this.paymentInfo.point_expire_date),
@@ -421,6 +355,11 @@ export default {
                     if (valid) {
                         let date1 = moment(that.paymentInfo.point_expire_date).format("YYYY/MM/DD");
                         let date2 = moment(that.paymentInfoEx.point_expire_date).format("YYYY/MM/DD");
+
+                        that.paymentInfoEx.payment_date = moment(that.paymentInfoEx.payment_date).format('YYYY-MM-DD');
+                        that.paymentInfoEx.begin_date = moment(that.paymentInfoEx.begin_date).format('YYYY-MM-DD');
+                        that.paymentInfoEx.point_expire_date = moment(that.paymentInfoEx.point_expire_date).format('YYYY-MM-DD');
+                        
                         if (that.paymentInfo.is_payment_expired == 1 && date1 != date2) {
                             that.$swal({
                                 title: 'この履歴は"期限失効"となっています。"期限失効"データを削除して、有効期限を変更しますか？',
@@ -463,11 +402,6 @@ export default {
                 .catch(e => {
                     this.flagShowLoader = false;
                 });
-        },
-        changeStartDate (event) {
-            if (!this.paymentInfoEx.is_lms_user) {
-                this.paymentInfoEx.begin_date = event != null ? new Date(event) : ""
-            }
         },
         destroyPaymentHistory() {
             let that = this;

@@ -229,31 +229,11 @@
         </li>
 
         <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(GUIDE) }}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                ガイド管理
-
-            </a>
-        </li>
-
-        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(REMINDMAIL) }}" href="{{route('remindmail.index')}}">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 リマインドメール管理
-
-            </a>
-        </li>
-
-        <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(NOTIFICATION) }}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                お知らせメール（送付先）
 
             </a>
         </li>
@@ -285,15 +265,6 @@
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 問い合わせ履歴
-            </a>
-        </li>
-
-        <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ACCESSLOG) }}">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
-                </svg>
-                アクセスログ管理
             </a>
         </li>
 

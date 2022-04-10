@@ -483,14 +483,10 @@ class StudentController extends BaseController
             'point_subscription_history.receive_payment_date as receive_payment_date',
             'point_subscription_history.set_course_id as set_course_id',
             'course.course_name as course_name',
-            'student_point_history.start_date as start_date',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
         )
         ->leftJoin('course', function($join) {
             $join->on('point_subscription_history.course_id', '=', 'course.course_id');
-        })
-        ->leftJoin('student_point_history', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
         })
         ->where('point_subscription_history.del_flag', 0)
         ->where('point_subscription_history.student_id', $id)
@@ -502,9 +498,6 @@ class StudentController extends BaseController
             });
         }
         if (isset($request['sort'])) {
-            if ($request['sort'] == "start_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_history.start_date','ASC') : $queryBuilder->orderBy('student_point_history.start_date','DESC');
-            }
             if ($request['sort'] == "j_paid_status") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_paid_status','ASC') : $queryBuilder->orderBy('j_paid_status','DESC');
             }
@@ -534,7 +527,6 @@ class StudentController extends BaseController
         $paymentType = [];
         $courseList = [];
         if ($studentInfo->is_lms_user) {
-            $studentInfo->course_begin_month = Carbon::now();
             $paymentType = PaidStatus::asSelectArray();
             $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->student_id, COURSE_FREE_ID));
         }else {
@@ -542,14 +534,12 @@ class StudentController extends BaseController
                 0 => 'G',
                 1 => 'CSV'
             ];
-
             $courseList = DB::select('CALL sp_admin_get_course_list');
         }
 
         $studentInfo->_token = csrf_token();
         $studentInfo->payment_type_list = $paymentType;
         $studentInfo->payment_type = PaidStatus::G;
-        $studentInfo->course_id = 0;
         $studentInfo->course_list = $courseList;
         $studentInfo->payment_date = Carbon::now();
         $studentInfo->start_date = Carbon::now();
@@ -596,11 +586,6 @@ class StudentController extends BaseController
             $orderId = "$random"."$orderId";
         }
 
-        $course_begin_month = "";
-        if (isset($request->course_begin_month)) {
-            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
-        }
-
         $course = Course::where('course_id', $request->course_id)->first();
 
         $listCourseBySetCourse = [];
@@ -623,7 +608,7 @@ class StudentController extends BaseController
                 $course->parent_id = isset($course1->parent_id) ? $course1->parent_id : 0;
             }
         }
-
+        
         if(empty($listCourseBySetCourse)) {
             DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                 array(
@@ -635,11 +620,11 @@ class StudentController extends BaseController
                     $course->parent_id,
                     $request->payment_type,
                     $request->payment_date,
-                    $request->start_date,
+                    '',
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
                     $request->amount,
                     $request->management_number ?? "",
-                    $course_begin_month
+                    ''
                 ));
         } else {
             foreach($listCourseBySetCourse as $courseSetCourse) {
@@ -653,11 +638,11 @@ class StudentController extends BaseController
                         $course->parent_id,
                         $request->payment_type,
                         $request->payment_date,
-                        $request->start_date,
+                        '',
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
                         $request->amount,
                         $request->management_number ?? "",
-                        $course_begin_month
+                        ''
                     ));
             }
         }
@@ -696,11 +681,6 @@ class StudentController extends BaseController
                 $paymentInfo->is_payment_expired = 1;
             }
         }
-        if(!empty($paymentInfo->course_begin_month)) {
-            $paymentInfo->course_begin_month = Carbon::createFromFormat('Ymd', $paymentInfo->course_begin_month . "01")->format('Y-m');
-        }else {
-            $paymentInfo->course_begin_month = "";
-        }
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'student_list'],
@@ -732,16 +712,12 @@ class StudentController extends BaseController
         if ($request->point_expire_date != $paymentInfo->point_expire_date) {
             $studentPointHistoryIds = StudentPointHistory::where('point_subscription_id', $request->point_subscription_history_id)
                 ->where('pay_type', 5)
-                ->pluck('id')
+                ->pluck('student_point_history_id')
                 ->toArray();
 
-            StudentPointHistory::whereIn('id', $studentPointHistoryIds)->delete();
+            StudentPointHistory::whereIn('student_point_history_id', $studentPointHistoryIds)->delete();
         }
-        $course_begin_month = "";
-        if (isset($request->course_begin_month)) {
-            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
-        }
-
+       
         $management_number = $request->management_number ?? "";
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(
@@ -755,7 +731,7 @@ class StudentController extends BaseController
                 $request->amount,
                 $request->tax,
                 $management_number,
-                $course_begin_month
+                ''
             ));
 
         return response()->json([

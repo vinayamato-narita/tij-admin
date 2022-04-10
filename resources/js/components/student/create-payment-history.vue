@@ -72,7 +72,6 @@
                                                     v-validate="'required'"
                                                     @change = changeCourse
                                                 >
-                                                    <option></option>
                                                     <option :value="course.course_id" v-for="course in courseList">
                                                         {{ course.course_name }}</option
                                                     >
@@ -81,9 +80,9 @@
                                                 <div
                                                     class="input-group is-danger"
                                                     role="alert"
-                                                    v-if="errors.has('course_name')"
+                                                    v-if="errors.has('course_id')"
                                                 >
-                                                    {{ errors.first("course_name") }}
+                                                    {{ errors.first("course_id") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -132,34 +131,6 @@
                                             </div>
                                         </div> 
 
-                                        <div class="form-group row" v-if="studentInfoEx.is_lms_user">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >開講希望月<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <date-picker
-                                                    name="course_begin_month"
-                                                    v-model="studentInfoEx.course_begin_month"
-                                                    :format="'YYYY/MM'"
-                                                    type="month"
-                                                    v-validate="
-                                                        'required'
-                                                    "
-                                                ></date-picker>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('course_begin_month')"
-                                                >
-                                                    {{ errors.first("course_begin_month") }}
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -192,35 +163,6 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >基準日<span class="glyphicon glyphicon-star"
-                                                    ></span
-                                                ></label
-                                            >
-                                            <div class="col-md-6">
-                                                <date-picker
-                                                    name="start_date"
-                                                    v-model="studentInfoEx.start_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
-                                                    @change=changeStartDate
-                                                ></date-picker>
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('start_date')"
-                                                >
-                                                    {{ errors.first("start_date") }}
-                                                </div>
-                                            </div>
-                                        </div> 
-
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
                                                 >受講開始日<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
@@ -231,7 +173,6 @@
                                                     v-model="studentInfoEx.begin_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"
-                                                    :disabled="!studentInfoEx.is_lms_user"
                                                     v-validate="
                                                         'required'
                                                     "
@@ -296,6 +237,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
+import moment from "moment-timezone";
 
 export default {
     created: function() {
@@ -308,14 +250,8 @@ export default {
                     management_number: "半角英数記号を入力してください",
                     max: "共通管理番号は10文字以内で入力してください",
                 },
-                course_begin_month: {
-                    required: "開講希望月を入力してください",
-                },
                 payment_date: {
                     required: "受注日を入力してください",
-                },
-                start_date: {
-                    required: "基準日を入力してください",
                 },
                 begin_date: {
                     required: "受講開始日を入力してください",
@@ -342,12 +278,9 @@ export default {
                 student_id: this.studentInfo.student_id,
                 student_name: this.studentInfo.student_name,
                 payment_type: this.studentInfo.payment_type,
-                course_id: this.studentInfo.course_id,
                 is_lms_user: this.studentInfo.is_lms_user,
                 point_count: this.studentInfo.point_count,
                 management_number: this.studentInfo.management_number,
-                course_begin_month: new Date(this.studentInfo.course_begin_month),
-                start_date: new Date(this.studentInfo.start_date),
                 payment_date: new Date(this.studentInfo.payment_date),
                 begin_date: new Date(this.studentInfo.begin_date),
                 amount: new Date(this.studentInfo.amount),
@@ -372,6 +305,9 @@ export default {
         submit(e) {
             let that = this;
 
+            that.studentInfoEx.payment_date = moment(that.studentInfoEx.payment_date).format('YYYY-MM-DD');
+            that.studentInfoEx.begin_date = moment(that.studentInfoEx.begin_date).format('YYYY-MM-DD');
+            
             axios
                 .post(that.urlAction, that.studentInfoEx)
                 .then(response => {

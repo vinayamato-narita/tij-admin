@@ -199,6 +199,29 @@ class TestController extends BaseController
         ]);
     }
 
+    public  function preview($id)
+    {
+
+        $test = Test::with('testQuestions.testSubQuestions.file')->find($id);
+        if (!$test)
+            return redirect()->route('test.show', $id);
+
+        $testQuestions = TestQuestion::with('testSubQuestions', 'file')->where('test_id', $id)->orderBy('display_order')->get()->toArray();
+
+        $timeRemain = [
+            'h' => floor($test->execution_time / 60),
+            'm' => $test->execution_time - (floor($test->execution_time / 60) * 60),
+            's' => 0
+        ];
+
+        return view('test.preview', [
+            'timeRemain' => $timeRemain,
+            'countDown' => true,
+            'test' => $test,
+            'testQuestions' => $testQuestions,
+        ]);
+    }
+
     public function addQuestion($id)
     {
         $breadcrumbComponent = new BreadcrumbComponent();

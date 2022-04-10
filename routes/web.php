@@ -102,6 +102,7 @@ Route::group([
     Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
 
     //TEST
+    Route::get('test/{id}/preview', 'TestController@preview')->name('test.preview');
     Route::get('test/demo', 'TestController@demo')->name('test.demo');
     Route::resource('test', TestController::class);
     Route::get('test/{id}/add_question', 'TestController@addQuestion')->name('test.addQuestion');

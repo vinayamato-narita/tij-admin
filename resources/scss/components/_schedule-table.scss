@@ -1,0 +1,76 @@
+.schedule-table{
+    --schedule-item-width: 7rem;
+    --schedule-item-height: 3rem;
+    --schedule-max-height: calc(100vh - 13rem);
+    @include sm {
+        --schedule-item-width: 7.5rem;
+        --schedule-item-height: 3.75rem;
+        --schedule-max-height: 50rem;
+    }
+    max-height: var(--schedule-max-height);
+    overflow: scroll;
+    position: relative;
+    border: 1px solid $bd-light;
+    table {
+        position: relative;
+        border-collapse: collapse;
+        width: max-content;
+    }
+    th, td {
+        font-size: 0.875rem;
+        font-weight: $font-weight-normal;
+        width: var(--schedule-item-width);
+        min-height: var(--schedule-item-height);
+        padding: 0.5rem 0;
+        text-align: center;
+        border-bottom: 1px solid $bd-light;
+        border-right: 1px solid $bd-light;
+    }
+    thead th {
+        position: sticky;
+        top: 0;
+        background-color: #5F5F5F;
+        color: #fff;
+        z-index: 11;
+        font-size: 0.75rem;
+        font-weight: $font-weight-bold;
+        height: var(--schedule-item-height);
+        &:first-child{
+            width: 5rem;
+            left: 0;
+            border-right: 2px solid $bd-light;
+        }
+        &:last-child{
+            border-right: 0;
+        }
+    }
+    tbody{
+        th {
+            position: sticky;
+            left: 0;
+            font-size: 0.75rem;
+            width: 5rem;
+            font-weight: $font-weight-bold;
+            height: var(--schedule-item-height);
+            border-right: 2px solid $bd-light;
+            background-color: #FFF;
+            z-index: 10;
+        }
+        td {
+            &:last-child{
+                border-right: 0;
+            }
+        }
+        tr{
+            &:nth-child(2n+1){
+                background-color: $bg-light;
+            }
+            &:last-child{
+                th, td {
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+
+}

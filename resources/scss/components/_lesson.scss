@@ -1,0 +1,107 @@
+
+.lesson-item {
+    position: relative;
+    padding: 1rem;
+    border-top: 1px solid $bd-light;
+    background: $bg-light;
+    @include sm {
+        padding: 0.75rem 1.5rem;
+    }
+    .txt {
+        position: relative;
+        margin-left: 1rem;
+        vertical-align: top;
+        margin-top: 0.5rem;
+        width: calc(100% - #{$avatar-size-base} - 1rem);
+        .f-1 {
+            font-size: 1.125rem;
+            font-weight: $font-weight-normal;
+            color: $primary;
+            @include text-truncate();
+        }
+        .f-2 {
+            font-size: 1rem;
+            @include text-truncate();
+        }
+    }
+    .cancel {
+        position: absolute;
+        top: 0.5rem;
+        right: 0rem;
+        color: $accent;
+        min-width: auto;
+        .icon {margin-right: 0;}
+        span{
+            display: none;
+        }
+        @include sm{
+            top: 0.75rem;
+            right: 1.5rem;
+            .icon {margin-right: 0.5rem;}
+            span{
+                display: inline-block;
+            }
+        }
+        &:hover{
+            color: $accent;
+        }
+    }
+    .cont__bt {
+        @include sm {
+            margin-top: 0.25rem;
+            display: flex;
+            align-items:flex-end;
+            justify-content: space-between;
+        }
+    }
+    .date {
+        margin: 0.75rem 0;
+        font-size: 0.875rem;
+        color: $text-muted;
+        text-align: center;
+        border: 1px solid $grey-200;
+        padding: 0.5rem 0;
+        @include sm {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+    }
+    .actions{
+        display: flex;
+        justify-content: space-between;
+        .btn{
+            width: 48%;
+            @include sm {
+                width: auto;
+                margin-left: 0.75rem;
+            }
+        }
+    }
+}
+
+.lesson-clip{
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+    overflow: hidden;
+    .lesson-clip-item:last-child{
+        border: none;
+    }
+}
+
+.lesson-clip-item{
+    padding: 1rem;
+    border-bottom: 1px solid $bd-light;
+    @include sm {
+        padding: 1.5rem;
+    }
+    .tit{
+        font-size: 0.875rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .cont{
+        font-size: 0.875rem;
+        font-weight: normal;
+    }
+}

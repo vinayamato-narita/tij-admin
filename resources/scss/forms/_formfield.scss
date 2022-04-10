@@ -1,0 +1,29 @@
+.formfield {
+    position: relative;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    .helper{
+        font-size: 0.75rem;
+        color: $text-muted;
+        margin-top: 0.5rem;
+    }
+    .feedback {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: none;
+    }
+}
+
+.formfield-invalid {   
+    .form-label{
+        color: $error;
+    }
+    .form-control, .form-select {
+        border-bottom-color: $error;
+        box-shadow: 0 1px 0 0 $error;
+    }
+    .feedback {
+        display: block;
+        color: $error;
+    }
+}

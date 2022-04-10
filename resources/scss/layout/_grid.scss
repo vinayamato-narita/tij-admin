@@ -1,0 +1,90 @@
+
+$grid-columns:       12;
+$grid-row-columns:   6;
+$gutter:             2rem;
+$gutters:            $spacers;
+
+.row {
+    --gutter-x: #{$gutter};
+    --gutter-y: 0;
+    display: flex;
+    flex-flow: wrap;
+    margin-top: calc(var(--gutter-y) * -1);
+    margin-left: calc(var(--gutter-x)/ -2);
+    margin-right: calc(var(--gutter-x)/ -2);
+    & > * {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+        margin-top: var(--gutter-y);
+        padding-left: calc(var(--gutter-x)/ 2);
+        padding-right: calc(var(--gutter-x)/ 2);
+    }
+}
+
+.col {
+    flex: 1 0 0%;
+}
+
+[class*=row-] > .col {
+    flex: 0 0 auto;
+}
+
+[class^=col-] {
+    flex: 0 0 auto;
+}
+
+// Loop over each breakpoint
+@each $breakpoint in map-keys($grid-breakpoints) {
+
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+        // Row columns
+        .row#{$infix}-auto > * {
+            width: auto;
+        }
+        @for $i from 1 through $grid-row-columns {
+            .row#{$infix}-#{$i} > * {
+                width:100% / $i;
+            }
+        }
+
+
+        // Cols
+        .col#{$infix}-auto {
+            width: auto;
+        }
+        @for $i from 1 through $grid-columns {   
+            .col#{$infix}-#{$i} {
+                width: percentage($i / $grid-columns);
+            }
+        }
+
+        // Offsets
+        //
+        // `$columns - 1` because offsetting by the width of an entire row isn't possible
+        @for $i from 0 through ($grid-columns - 1) {
+            @if not ($infix == "" and $i == 0) { // Avoid emitting useless .offset-0
+                .offset#{$infix}-#{$i} {
+                    $num: $i / $grid-columns;
+                    margin-left: if($num == 0, 0, percentage($num));
+                }
+            }
+        }
+
+        // Gutters
+        //
+        // Make use of `.g-*`, `.gx-*` or `.gy-*` utilities to change spacing between the columns.
+        @each $key, $val in $gutters {
+            .g#{$infix}-#{$key}, 
+            .gx#{$infix}-#{$key} {
+                --gutter-x: #{$val};
+            }
+            .g#{$infix}-#{$key}, 
+            .gy#{$infix}-#{$key} {
+                --gutter-y: #{$val};
+            }
+        }
+    }
+}

@@ -137,6 +137,9 @@ import EditLangCategory from "./components/category/edit-lang-category.vue"
 import CreateTest from "./components/test/create-test.vue"
 import EditTest from "./components/test/edit-test.vue"
 import TestShow from "./components/test/detail.vue"
+import Preview from "./components/test/preview.vue"
+import PreviewHeader from "./components/test/preview-header.vue"
+import PreviewNav from "./components/test/preview-nav.vue"
 import TestAddQuestion from "./components/test/test-add-question.vue"
 import TestEditQuestion from "./components/test/test-edit-question.vue"
 import PreparationAdd from "./components/preparation/add"
@@ -351,7 +354,10 @@ new Vue({
         LessonHistorySearch,
         EditTeacherLang,
         TeacherLesson,
-        GroupCourseUserImport
+        GroupCourseUserImport,
+        Preview,
+        PreviewHeader,
+        PreviewNav
     },
     methods: {},
     mounted() {}

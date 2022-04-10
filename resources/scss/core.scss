@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+@media (max-width: 768px) {
+  body.wrap-boss {
+    width: 100% !important;
+    padding-left:0 !important;
+  }
+
+
+
+}
+
+body.wrap-boss {
+  .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #6CBB5A;
+    border: none;
+  }
+
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  box-sizing: border-box;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto","Noto Sans JP",sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .05em;
+  color: #212529;
+  background-color: #fff;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  padding-bottom: 0;
+  padding-top: 7.5rem;
+  padding-left: 240px;
+  // Configuration
+  @import './functions';
+  @import './variables';
+  @import './mixins';
+  @import './utilities';
+
+  // Normalize
+  @import './reboot';
+  @import './type';
+  @import './transitions';
+
+  // Layout
+  @import './layout/containers';
+  @import './layout/grid';
+  @import './layout/base';
+  @import './layout/header';
+  @import './layout/footer';
+  @import './layout/side';
+
+  // components
+  @import './components/avatar';
+  @import './components/badge';
+  @import './components/bottom-nav';
+  @import './components/button';
+  @import './components/drawer';
+  @import './components/dropdown';
+  @import './components/form';
+  @import './components/list';
+  @import './components/modal';
+  @import './components/navbar';
+  @import './components/pagination';
+  @import './components/panel';
+  @import './components/sort';
+  @import './components/table';
+
+  @import './components/news';
+  @import './components/course';
+  @import './components/lesson';
+  @import './components/teacher';
+  @import './components/info';
+  @import './components/exam';
+  @import './components/schedule-table';
+  @import './components/title-bar';
+  @import './components/comment';
+
+  // modal
+
+  // plugin
+  @import './plugin/snackbar';
+  @import './plugin/plugins';
+
+  // Helpers
+  @import "./helpers";
+
+  // pages
+  @import './pages/login';
+  @import './pages/faq';
+  @import './pages/manual';
+  @import './pages/pages';
+
+  // Utilities
+  @import "./utilities/api";
+}

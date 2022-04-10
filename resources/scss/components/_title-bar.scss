@@ -1,0 +1,24 @@
+.title-bar {
+    position: relative;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid $bd-light;
+    @include lg {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0;
+    }
+    .tips {
+        font-size: $h5-font-size;
+        color: $accent;
+        padding-top: 0.5rem;
+        @include lg {
+            padding-top: 0;
+        }
+    }
+}

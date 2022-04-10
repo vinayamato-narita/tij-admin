@@ -1,0 +1,336 @@
+.exam-clip {
+    position: relative;
+    font-size: 0.875rem;
+    padding: 1rem;
+    border-top: 1px solid $bd-light;
+    @include sm{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem;
+
+    }
+    .type-1{
+        display: flex;
+        justify-content: space-between;
+    }
+    .tit {
+        font-size: 1rem;
+        font-weight: $font-weight-normal;
+        margin-bottom: 0.5rem;
+        @include sm{
+            margin: 0;
+        }
+        a {
+            color: $text-default;
+            &:hover {
+                opacity: .6;
+            }
+        }
+    }
+    .status {
+        font-size: 1.35rem;
+        font-weight: $font-weight-bold;
+        line-height: 1;
+        margin-left: 2rem;
+        vertical-align: baseline;
+        color: $primary;
+    }
+}
+
+.exam-navbar {
+    z-index: $zindex-navbar;
+    @include lg {
+        display: none;
+    }
+}
+
+.exam-drawer {
+    top: 0;
+    @extend %drawer;
+    .status {
+        padding: 24px 0;
+        text-align: center;
+        color: $accent;
+        border-bottom: 1px solid $bd-light;
+        p {
+            font-size: 20px;
+        }
+        span {
+            display: block;
+        }
+    }
+
+    .action {
+        font-size: 1rem;
+        position: relative;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        box-sizing: border-box;
+        min-height: 3rem;
+        padding: 0 0.5rem;
+        cursor: pointer;
+        transition: background-color .3s $transition-curve;
+        text-decoration: none;
+        color: #FFF;
+        background: $primary;
+        a {
+            width: 3rem;
+            height: 3rem;
+            margin-right: 0.75rem;
+            padding: 6px;
+            color: #FFF;
+            i {
+                font-size: 24px;
+                margin-right: 20px;
+            }
+        }
+    }
+}
+
+
+
+.quiz-item {
+    position: relative;
+    margin-bottom: 1rem;
+    border: 1px solid $bd-light;
+    border-top: 0.25rem solid $primary;
+    border-radius: $border-radius;
+    background-color: $bg-light;
+    .quiz-head {
+        padding: 0.75rem 1.5rem;
+        border-bottom: 1px solid $bd-light;
+        h2 {
+            font-size: 18px;
+        }
+        @include sm {
+            padding: 1rem 2rem;
+        }
+    }
+    .quiz-body {
+        font-size: 14px;
+        padding: 1rem 1.5rem;
+        @include sm {
+            padding: 1.5rem 2rem;
+        }
+    }
+}
+
+.quiz-card {
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+    background: #FFF;
+    &.right, &.wrong {
+        .result, .comment {
+            display: block !important;
+        }
+    }
+    &.right {
+        border-color: $success;
+        background-color: mix($success,#FFF,5%);
+
+        .result, .comment h4 {
+            color: $success;
+        }
+    }
+    &.wrong {
+        border-color: $error;
+        background-color: mix($error,#FFF,5%);
+        .result, .comment h4 {
+            color: $error;
+        }
+    }
+    .quiz-head {
+        position: relative;
+        padding: 1rem 1.5rem;
+        @include sm {
+            padding: 2rem 2rem 1.25rem;
+        }
+        .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .tit {
+            font-size: .875rem;
+        }
+        .result {
+            font-size: 1.5rem;
+            display: none;
+            margin-left: 0.75rem;
+        }
+        .spacer {
+            flex-grow: 1;
+            margin: 0;
+        }
+        .desc {
+            font-size: .875rem;
+            font-weight: $font-weight-base;
+            span {
+                color: $accent;
+            }
+        }
+        .tips {
+            font-size: .75rem;
+            font-weight: $font-weight-base;
+            color: $text-muted;
+        }
+    }
+    .quiz-body {
+        font-size: 0.875rem;
+        padding: 0.5rem 1.5rem 1rem;
+        @include sm {
+            padding: 0 2rem 1rem;
+        }
+        .quiz {
+            font-size: .875rem;
+            position: relative;
+            margin-bottom: 10px;
+            span.judge {
+                position: absolute;
+                top: 2px;
+                right: 22px;
+                display: block;
+                width: 38px;
+                height: 38px;
+                &.wrong {
+                    // background: url(../img/judge_w.png) 0 0 no-repeat;
+                }
+                &.right {
+                    // background: url(../img/judge_r.png) 0 0 no-repeat;
+                }
+            }
+        }
+        .comment {
+            font-size: .875rem;
+            display: none;
+            margin-top: 24px;
+            padding: 30px;
+            border-radius: $border-radius;
+            background: #FFF;
+            h4 {
+                margin-bottom: 12px;
+            }
+            p {
+                line-height: 2;
+            }
+        }
+    }
+}
+.d_ra label {
+    position: relative;
+    display: block;
+    width: 100%;
+    span {
+        line-height: 40px;
+        position: absolute;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        text-align: center;
+        vertical-align: bottom;
+        border: 1px solid $bd-light;
+        border-radius: 50%;
+        background-color: #FFF;
+    }
+    input {
+        position: absolute;
+        visibility: hidden;
+    }
+    input:checked + span {
+        border-color: $blue;
+        background: lighten($blue, 37%);
+    }
+    i {
+        font-weight: normal;
+        font-style: normal;
+        line-height: 42px;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        height: 42px;
+        padding-left: 60px;
+        cursor: pointer;
+    }
+}
+.d_ck label {
+    position: relative;
+    display: block;
+    width: 100%;
+    span {
+        line-height: 40px;
+        position: absolute;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        text-align: center;
+        vertical-align: bottom;
+        border: 1px solid $bd-light;
+        border-radius: 50%;
+        background-color: #FFF;
+    }
+    input {
+        position: absolute;
+        visibility: hidden;
+    }
+    input:checked + span {
+        border-color: $blue;
+        background: lighten($blue, 37%);
+    }
+    i {
+        font-weight: normal;
+        font-style: normal;
+        line-height: 42px;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        height: 42px;
+        padding-left: 60px;
+        cursor: pointer;
+    }
+}
+
+.progress-rate {
+    text-align: center;
+    .progress-circle{
+        margin: 0 auto;
+        position: relative;
+        &.sm{
+            .txt p strong{
+                font-size: 1.5rem;
+            }
+        }
+    }
+    .txt{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        h5{
+            font-size: 0.75rem;
+            font-weight: normal;
+            margin-bottom: 4px;
+            color: #5b5b5b;
+        }
+        p {
+            font-size: 1rem;
+            line-height: 1.2; 
+            strong {
+                font-size: 2rem;
+                margin-top: 20px;
+            }
+        }
+    }
+    .txt-2{
+        font-size: 0.875rem;
+        margin-top: 10px;
+    }
+}

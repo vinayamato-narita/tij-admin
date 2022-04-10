@@ -16,6 +16,8 @@
                                 <div class="card-header">
                                     <h5 class="title-page">テスト情報</h5>
                                     <div class="float-right">
+                                        <a :href="this.previewUrl" class="btn btn-primary ">プレビュー</a>
+
                                         <a :href="this.editTestUrl" class="btn btn-primary ">編集</a>
                                     </div>
                                 </div>
@@ -212,7 +214,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl', 'isHasTestResult'],
+        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl', 'isHasTestResult', 'previewUrl'],
         mounted() {
         },
         methods: {

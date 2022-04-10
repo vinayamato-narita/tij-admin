@@ -1,0 +1,21 @@
+@import './../forms/formfield';
+@import './../forms/labels';
+@import './../forms/form-control';
+@import './../forms/form-check';
+@import './../forms/form-select';
+
+
+@include sm {
+    #datetimepicker1, #datetimepicker2, #datetimepicker3 {
+        position: relative;
+    }
+    #datetimepicker2 .label_t, #datetimepicker3 .label_t {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+    }
+    #datetimepicker2 .form-select, #datetimepicker3 .form-select {
+        padding-left: 4rem;
+    }
+    
+}

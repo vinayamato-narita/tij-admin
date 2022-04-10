@@ -1,0 +1,43 @@
+.main-drawer {
+    @extend %drawer;
+    .profile {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        padding: 1.25rem 1rem;
+        background: $primary;
+        figure {
+            overflow: hidden;
+            width: 3.75rem;
+            height: 3.75rem;
+            margin-bottom: 0;
+            border: 2px solid #FFF;
+            border-radius: 50%;
+        }
+        ul {
+            padding-left: 1.25rem;
+            vertical-align: middle;
+            .name {
+                font-size: 1rem;
+                font-weight: $font-weight-base;
+                line-height: $line-height-sm;
+                color: #FFF;
+                border-bottom: none;
+            }
+            .txt-1 {
+                font-size: 0.75rem;
+                margin-top: 0.25rem;
+                color: #FFF;
+                border-bottom: none;
+                a {
+                    color: #FFF;
+                }
+            }
+            .txt-2 {
+                font-size: 0.75rem;
+                color: #FFF;
+                border-bottom: none;
+            }
+        }
+    }
+}

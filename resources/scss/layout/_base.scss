@@ -1,0 +1,23 @@
+$navbar-height: 3.5rem;
+$navbar-height-pc: 4.5rem;
+
+body {
+    padding-top: $navbar-height + 1rem;
+    padding-bottom: $navbar-height;
+    &.no-bottom{
+        padding-bottom: 0;
+    }
+    @include md {
+        padding-top: $navbar-height-pc + 2rem;
+        padding-bottom: 0;
+    }
+    @include lg {
+        padding-top: $navbar-height-pc + 3rem;
+        &.mdui-drawer-body-left {
+            padding-left: 240px;
+        }
+        &.no-header{
+            padding-top:3rem;
+        }
+    }
+}

@@ -15,4 +15,11 @@ class File extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'file_id';
+    protected $appends = array('azure_storage_path');
+
+
+    public function getAzureStoragePathAttribute()
+    {
+        return env('AZURE_STORAGE_URL') .  '/' . $this->file_path;
+    }
 }

@@ -155,7 +155,7 @@
                                                         name="topDisplay1"
                                                         id="inline-radio2"
                                                         v-validate="'required'"
-                                                       v-model="topDisplay"
+                                                       v-model="newsInfo.is_show_on_student_top"
                                                     />
                                                     <label
                                                         class="form-check-label"
@@ -173,7 +173,7 @@
                                                         name="topDisplay"
                                                         id="inline-radio2"
                                                         v-validate="'required'"
-                                                        v-model="topDisplay"
+                                                        v-model="newsInfo.is_show_on_student_top"
                                                     />
                                                     <label
                                                         class="form-check-label"
@@ -241,9 +241,9 @@ export default {
         return {
             flagShowLoader: false,
             newsInfo: {
-                _token: Laravel.csrfToken
+                _token: Laravel.csrfToken,
+                is_show_on_student_top: 1
             },
-            topDisplay: 1
         };
     },
     props: ["urlAction", "urlNewsList", "newsSubjects"],

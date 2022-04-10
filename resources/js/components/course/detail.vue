@@ -450,7 +450,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            {{ courseGroupMemo.memo }}
+                                            <pre style="font-size: 11px;z-index: ">{{ courseGroupMemo.memo }}</pre>
                                         </div>
                                     </div>
                                     

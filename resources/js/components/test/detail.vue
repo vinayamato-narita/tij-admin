@@ -103,7 +103,7 @@
                                         <li v-for="test_question in this.test.test_questions">
                                             <div class="row"
                                                  style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-4 wrap-long-text"><span class="wrap-long-text"
+                                                <div class="col-md-3 wrap-long-text"><span class="wrap-long-text"
                                                                                             style="color: inherit"> {{test_question.navigation}}</span>
                                                 </div>
                                                 <div class="col-md-3">
@@ -115,7 +115,7 @@
                                                     <a :href="getEditQuestionUrl(test.test_id, test_question.test_question_id)" class="btn btn-primary text-nowrap">問題編集
                                                     </a>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
 
                                                 </div>
 

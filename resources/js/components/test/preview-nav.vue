@@ -1,8 +1,8 @@
 <template>
     <nav id="examDrawer" class="exam-drawer">
         <div class="action">
-            <a :href="backUrl"><i class="icon bi-arrow-left-short"></i></a>
-            <span>戻る</span>
+<!--            <a :href="backUrl"><i class="icon bi-arrow-left-short"></i></a>
+            <span>戻る</span>-->
         </div>
         <div class="status">
 

@@ -90,10 +90,10 @@
                         v-if="currIndex < this.testQuestions.length - 1 && !this.ajaxProceed ">次へ
 
                 </button>
-                <a class="btn btn-red btn-lg" v-if="currIndex === this.testQuestions.length - 1 && this.ajaxProceed"
+<!--                <a class="btn btn-red btn-lg" v-if="currIndex === this.testQuestions.length - 1 && this.ajaxProceed"
                    v-on:click="submit">提出</a>
                 <a class="btn btn-red btn-lg" disabled=""
-                   v-if="currIndex === this.testQuestions.length - 1 && !this.ajaxProceed">提出</a>
+                   v-if="currIndex === this.testQuestions.length - 1 && !this.ajaxProceed">提出</a>-->
             </div>
 
 

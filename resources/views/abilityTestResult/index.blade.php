@@ -58,9 +58,9 @@
                                                         <td class="text-left">{{ $testResult->student->student_id }}</td>
                                                         <td class="text-left">{{ $testResult->student->student_name }}</td>
                                                         <td class="text-left">{{ $testResult->test->test_name }}</td>
-                                                        <td class="text-left">{{ \Carbon\Carbon::parse($testResult->test_start_time)->format('Y/m/d H:m') }}</td>
+                                                        <td class="text-left">{{ \Carbon\Carbon::parse($testResult->test_start_time)->format('Y/m/d H:i') }}</td>
                                                         @if($testResult->test_comment !== null)
-                                                        <td class="text-left">{{ \Carbon\Carbon::parse($testResult->test_comment->comment_start_time)->format('Y/m/d H:m') }}</td>
+                                                        <td class="text-left">{{ \Carbon\Carbon::parse($testResult->test_comment->comment_start_time)->format('Y/m/d H:i') }}</td>
                                                         @else
                                                             <td class="text-left"></td>
                                                         @endif

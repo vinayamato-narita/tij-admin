@@ -17,7 +17,7 @@ class SendRemindMailPattern extends Model
 
     protected $primaryKey = 'send_remind_mail_pattern_id';
     
-    public $sortable = ['timing_minutes'];
+    public $sortable = ['timing_minutes', 'sendRemindMailTiming.send_remind_mail_timing_type_name'];
     public function sendRemindMailTiming() {
         return $this->hasOne('App\Models\SendRemindMailTiming', 'send_remind_mail_timing_type', 'send_remind_mail_timing_type');
     }

@@ -140,7 +140,7 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             <span v-if="this.course.course_type === 0">
-                                                通常コース
+                                                プライベートコース
 
                                             </span>
 

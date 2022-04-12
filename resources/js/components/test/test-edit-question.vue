@@ -117,11 +117,20 @@
                                                         class="btn btn-primary  mr-2">新規ファイル追加
                                                 </button>
                                                 <input type="file" name="newFile" id="newFile" ref="newFile"
-                                                       v-on:change="changeFile" class="hidden">
+                                                       v-on:change="changeFile" class="hidden" v-validate="'max_sz_50'">
                                                 <span class="text-nowrap">
                                                     {{fileName}}
 
                                                 </span>
+
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('newFile')"
+                                                >
+                                                    {{ errors.first("newFile") }}
+                                                </div>
 
                                             </div>
                                         </div>
@@ -496,6 +505,15 @@
                 },
             });
 
+            this.$validator.extend("max_sz_50", {
+                validate(value, args) {
+                    console.log(Math.round(((value[0].size / 1024))));
+                    if (Math.round(((value[0].size / 1024))) > (50 * 1000))
+                        return {valid : false};
+                    return { valid : true};
+                },
+            });
+
 
 
 
@@ -526,6 +544,9 @@
                         max: "ナビゲーションは255文字以内で入力してください。",
                         required : "ナビゲーションを入力してください。",
                         unique_custom: "このナビゲーションは既に登録されています。"
+                    },
+                    newFile : {
+                        max_sz_50 : "ファイルサイズを50MBを超えた為、アップロードできません。"
                     },
                     'subQuestion[0][question]': {
                         required: "問題文を入力してください。",

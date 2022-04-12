@@ -187,23 +187,6 @@ class AdminController extends BaseController
         ], StatusCode::OK);
     }
 
-    public function changeStatus(Request $request, $id)
-    {
-        try {
-            $user = AdminUser::where('admin_user_id', $id)->firstOrFail();
-            $user->is_online = $user->is_online == 0 ? 1 : 0;
-            $user->save();
-
-        } catch (ModelNotFoundException $ex) {
-            return response()->json([
-                'status' => 'NG',
-            ], StatusCode::NOT_FOUND);
-        }
-        return response()->json([
-            'status' => 'OK',
-        ], StatusCode::OK);
-    }
-
     public function editRole($id)
     {
         $breadcrumbComponent = new BreadcrumbComponent();

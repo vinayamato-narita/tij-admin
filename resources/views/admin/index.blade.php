@@ -45,8 +45,6 @@
                                                     <th class="text-left width-130">@sortablelink('admin_user_name', ' ユーザ名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
                                                     <th class="text-left min-width-120">説明</th>
-                                                    <th class="text-left min-width-150">権限</th>
-                                                    <th class="text-left min-width-150">業務優先度設定</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -57,16 +55,10 @@
                                                         <td class="text-left">{{ $user->admin_user_email }}</td>
                                                         <td class="text-left">{{ $user->admin_user_description }}</td>
                                                         <td class="text-left">{{ AdminRole::getDescription($user->role) }}</td>
-                                                        <td class="text-left">
-                                                            <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->admin_user_id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
-                                                        </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>
                                                                 <ul class="dropdown-menu dropdown-menu-right">
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="{{ route('admin.edit', $user->admin_user_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
-                                                                    </li>
                                                                     <li>
                                                                         <delete-item
                                                                             :delete-action="{{ json_encode(route('admin.destroy', $user->admin_user_id)) }}"

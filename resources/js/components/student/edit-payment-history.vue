@@ -92,30 +92,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >共通管理番号</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="management_number"
-                                                    v-model="paymentInfoEx.management_number"
-                                                    v-validate="
-                                                        'management_number|max:10'
-                                                    "
-                                                />
-                                                <div
-                                                    class="input-group is-danger"
-                                                    role="alert"
-                                                    v-if="errors.has('management_number')"
-                                                >
-                                                    {{ errors.first("management_number") }}
-                                                </div>
-                                            </div>
-                                        </div> 
 
                                         <div class="form-group row">
                                             <label
@@ -290,10 +266,6 @@ export default {
                 point_expire_date: {
                     required: "有効期限日を入力してください",
                 },
-                management_number: {
-                    management_number: "半角英数記号を入力してください",
-                    max: "共通管理番号は10文字以内で入力してください",
-                },
                 payment_date: {
                     required: "受注日を入力してください",
                 },
@@ -332,7 +304,6 @@ export default {
                 course_name: this.paymentInfo.course_name,
                 is_lms_user: this.paymentInfo.is_lms_user,
                 point_count: this.paymentInfo.point_count,
-                management_number: this.paymentInfo.management_number,
                 payment_date: new Date(this.paymentInfo.payment_date),
                 begin_date: new Date(this.paymentInfo.begin_date),
                 point_expire_date: new Date(this.paymentInfo.point_expire_date),

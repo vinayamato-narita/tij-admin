@@ -623,7 +623,7 @@ class StudentController extends BaseController
                     '',
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
                     $request->amount,
-                    $request->management_number ?? "",
+                    "",
                     ''
                 ));
         } else {
@@ -641,7 +641,7 @@ class StudentController extends BaseController
                         '',
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
                         $request->amount,
-                        $request->management_number ?? "",
+                        "",
                         ''
                     ));
             }
@@ -718,7 +718,6 @@ class StudentController extends BaseController
             StudentPointHistory::whereIn('student_point_history_id', $studentPointHistoryIds)->delete();
         }
        
-        $management_number = $request->management_number ?? "";
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(
                 $paymentInfo->student_id,
@@ -730,7 +729,7 @@ class StudentController extends BaseController
                 $request->point_expire_date,
                 $request->amount,
                 $request->tax,
-                $management_number,
+                '',
                 ''
             ));
 

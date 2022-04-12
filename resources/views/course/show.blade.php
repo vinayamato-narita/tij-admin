@@ -23,6 +23,8 @@ use App\Enums\LangType;
             :edit-lang-en-url ="{{json_encode(route('course.editLang', [$course->course_id, LangType::EN]))}}"
             :edit-lang-zh-url ="{{json_encode(route('course.editLang', [$course->course_id, LangType::ZH]))}}"
             :add-campaign-url="{{json_encode(route('course.campaignCreate', $course->course_id))}}"
+            :course-group-memo ="{{json_encode($courseGroupMemo)}}"
+            :url-update-group-memo ="{{ json_encode(route('course.updateGroupMemo')) }}"
     >
 
     </course-show>

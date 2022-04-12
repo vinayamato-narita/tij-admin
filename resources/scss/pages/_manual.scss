@@ -1,0 +1,21 @@
+/*-----------------------------------------------
+
+ マニュアルページ
+
+------------------------------------------------*/
+.manual-list {
+    dt {
+        font-size: 0.875rem;
+        font-weight: $font-weight-bold;
+        clear: both;
+        margin-bottom: 0.5rem;
+        padding-top:1rem;
+        &:first-child{
+            padding-top: 0;
+        }
+    }
+    dd {
+        float: left;
+        margin: 0 0.75rem 0.75rem 0;
+    }
+}

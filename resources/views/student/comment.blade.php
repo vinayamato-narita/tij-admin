@@ -15,7 +15,7 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ $adminCanEdit == 1 ? route('student.createComment', $studentInfo->student_id) : 'javascript:void(0)' }}" class="btn btn-primary pull-right {{ $adminCanEdit == 1 ? "" : "disabled-link" }}"
+                    <a href="{{ route('student.createComment', $studentInfo->student_id) }}" class="btn btn-primary pull-right"
                         ><i class="las la-plus"></i>新規作成
                     </a>
                 </div>
@@ -31,11 +31,11 @@
                                         <page-size :page-size="{{ json_encode(PAGE_SIZE_LIMIT) }}" :page-limit="{{ $pageLimit }}"></page-size>
                                     </div>
                                     <div class="col-md-2 fwb pt-7">
-                                        <label>生徒番号 : </label> 
+                                        <label>学習者番号 : </label> 
                                         {{ $studentInfo->student_id }}
                                     </div>
                                     <div class="col-md-3 fwb pt-7">
-                                        <label>生徒名 : </label>
+                                        <label>学習者名 : </label>
                                         {{ $studentInfo->student_name }}
                                     </div>
                                     <div class="col-md-4">
@@ -69,19 +69,11 @@
                                                                     <li>
                                                                         <a class="dropdown-item" href="{{ route('student.editComment', $comment->id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
-                                                                    @php
-                                                                        if ($adminCanEdit == 1):
-                                                                    @endphp
-                                                                    <li>
-                                                                        <delete-item
-                                                                            :delete-action="{{ json_encode(route('student.destroyComment', $comment->id)) }}"
-                                                                            :message-confirm="{{ json_encode('このコメントを削除しますか？') }}"
-                                                                        >
-                                                                        </delete-item>
-                                                                    </li>
-                                                                    @php
-                                                                        endif;
-                                                                    @endphp
+                                                                    <delete-item
+                                                                        :delete-action="{{ json_encode(route('student.destroyComment', $comment->id)) }}"
+                                                                        :message-confirm="{{ json_encode('このコメントを削除しますか？') }}"
+                                                                    >
+                                                                    </delete-item>
                                                                 </ul>
                                                             </div>
                                                         </td>

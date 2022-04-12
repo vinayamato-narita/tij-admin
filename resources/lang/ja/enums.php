@@ -3,6 +3,7 @@ use App\Enums\InquiryFlag;
 use App\Enums\StudentEntryType;
 use App\Enums\LangTypeOption;
 use App\Enums\TestType;
+use App\Enums\AdminRole;
 return [
     InquiryFlag::class => [
         InquiryFlag::SUPPORTED => '対応済',
@@ -22,5 +23,9 @@ return [
         TestType::CONFIRMED => '確認テスト',
         TestType::ABILITY => '実力テスト',
         TestType::ENDCOURSE => 'コース修了テスト',
+    ],
+    AdminRole::class => [
+        AdminRole::BUSINESS => 'システム管理者',
+        AdminRole::SYSTEM => '業務管理者',
     ],
 ];

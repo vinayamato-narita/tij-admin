@@ -243,7 +243,19 @@
                                                         value="0"
                                                         @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_0">
-                                                        通常コース
+                                                        プライベートコース
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <input class=" checkbox" id="courseType_1" name="courseType"
+                                                           disabled=""
+                                                           type="radio"
+                                                           value="1"
+                                                           @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                    <label class="" for="courseType_1">
+                                                        グループコース
+
                                                     </label>
                                                 </div>
 
@@ -258,17 +270,7 @@
                                                     </label>
                                                 </div>
 
-                                                <div>
-                                                    <input class=" checkbox" id="courseType_1" name="courseType"
-                                                        disabled=""
-                                                        type="radio"
-                                                        value="1"
-                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
-                                                    <label class="" for="courseType_1">
-                                                        グループコース
 
-                                                    </label>
-                                                </div>
 
 
                                                 <div class="input-group is-danger" role="alert">

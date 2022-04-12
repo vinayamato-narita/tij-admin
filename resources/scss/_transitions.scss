@@ -1,0 +1,54 @@
+// stylelint-disable property-disallowed-list
+@mixin transition($transition...) {
+    @if length($transition) == 0 {
+        $transition: $transition-base;
+    }
+
+    @if length($transition) > 1 {
+        @each $value in $transition {
+            @if $value == null or $value == none {
+            @warn "The keyword 'none' or 'null' must be used as a single argument.";
+            }
+        }
+    }
+  
+    @if $enable-transitions {
+        @if nth($transition, 1) != null {
+            transition: $transition;
+        }
+    
+        @if $enable-reduced-motion and nth($transition, 1) != null and nth($transition, 1) != none {
+            @media (prefers-reduced-motion: reduce) {
+            transition: none;
+            }
+        }
+    }
+}
+  
+
+.fade {
+    @include transition($transition-fade);
+
+    &:not(.show) {
+        opacity: 0;
+    }
+}
+  
+// scss-docs-start collapse-classes
+.collapsed .bi-chevron-up::before{
+    // change to chevron-down (bootstrap icon5)
+    content: "\f282"; 
+}
+
+.collapse {
+    &:not(.show) {
+        display: none;
+    }
+}
+  
+.collapsing {
+    height: 0;
+    overflow: hidden;
+    @include transition($transition-collapse);
+}
+// scss-docs-end collapse-classes  

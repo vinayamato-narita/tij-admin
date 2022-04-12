@@ -131,22 +131,21 @@
         mounted() {},
         methods: {
             register() {
-                const payload = {
-                    iss: this.apiKey,
-                    exp: new Date().getTime() + 5000
-                }
-                const token = jwt.sign(payload, this.apiSecret)
-
                 let that = this;
-                let formData = new FormData();
-                formData.append('token', token);
-                formData.append('zoom_account_name', this.zoomAccountName);
-                formData.append('api_key', this.apiKey);
-                formData.append('api_secret', this.apiSecret);
-                formData.append('_method', 'PUT');
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
                         that.flagShowLoader = true;
+                        const payload = {
+                            iss: that.apiKey,
+                            exp: new Date().getTime() + 5000
+                        }
+                        const token = jwt.sign(payload, this.apiSecret)
+                        let formData = new FormData();
+                        formData.append('token', token);
+                        formData.append('zoom_account_name', this.zoomAccountName);
+                        formData.append('api_key', this.apiKey);
+                        formData.append('api_secret', this.apiSecret);
+                        formData.append('_method', 'PUT');
                         axios
                             .post(that.updateUrl , formData, {
                                 header: {

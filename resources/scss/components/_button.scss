@@ -1,0 +1,135 @@
+$button-height-base: 2.25rem;
+$button-height-sm: 2rem;
+$button-height-lg: 2.75rem;
+
+// Base styles
+//
+.btn {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    font-size: .875rem;
+    font-weight: $font-weight-bold;
+    line-height: $button-height-base;
+    zoom: 1;
+    min-width: 5.5rem;
+    height: $button-height-base;
+    margin: 0;
+    padding: 0 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: all .2s $transition-curve, box-shadow .2s $transition-curve-fast-out-linear-in;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: inherit;
+    letter-spacing: .04em;
+    text-decoration: none;
+    border: none;
+    border-radius: $border-radius;
+    outline: none;
+    background: transparent;
+    will-change: background-color;
+    @include text-truncate();
+
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+    // 透明按钮 hover、active 时颜色加深
+    &:hover {
+        color: initial;
+        background-color: $grey-100;
+    }
+    .icon {
+        font-size: 1rem;
+        margin-right: .5rem;
+        vertical-align: middle;
+    }
+}
+
+/* 禁用按钮 */
+.btn {
+    &[disabled] {
+        &, &:hover, &:active, &:focus {
+            cursor: default !important;
+            opacity: 1 !important;
+            color: #FFF !important;
+            background-color: #DDD !important;
+            .icon {
+                color: #FFF !important;
+            }
+        }
+    }
+}
+
+/* 图标按钮 */
+.btn-icon {
+    line-height: $line-height-base;
+    width: $button-height-base;
+    min-width: $button-height-base;
+    padding: 0;
+    border-radius: 50%;
+    .icon {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1.5rem;
+        margin: 0;
+        transform: translate(-.75rem, -.75rem);
+    }
+}
+
+.btn-link{
+    color: $link;
+    box-shadow: none;
+    &:hover{
+        color: darken($link, 10);
+        background-color: $grey-100;
+    }
+}
+
+/* 按钮 100% 宽度 */
+.btn-block {
+    display: block;
+    width: 100% !important;
+}
+
+/* 密集型按钮 */
+.btn-sm {
+    font-size: .75rem;
+    line-height: $button-height-sm;
+    height: $button-height-sm;
+}
+
+.btn-lg {
+    font-size: 1rem;
+    line-height: $button-height-lg;
+    height: $button-height-lg;
+    @include md {
+        min-width: 13.75rem;
+    }
+}
+.btn-pill {
+    border-radius: $border-radius-pill;
+}
+
+@each $key, $val in $colors {
+    .btn-#{$key} {
+        color: #FFF;
+        background-color: $val;
+        &:hover {
+            color: #FFF;
+            background-color: darken($val, 10%);
+        }
+    }
+    .btn-outline-#{$key} {
+        color: $val;
+        border: 1px solid $val;
+        background-color: #FFF;
+        &:hover {
+            color: #FFF;
+            background-color: $val;
+        }
+    }
+}

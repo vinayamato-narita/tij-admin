@@ -9,6 +9,7 @@
             :list-question-attach-url="{{json_encode(route('test.listQuestionAttach', $test->test_id))}}"
             :list-question-attach-update-url="{{json_encode(route('test.listQuestionAttachUpdate', $test->test_id))}}"
             :is-has-test-result="{{json_encode($isHasTestResult)}}"
+            :preview-url="{{json_encode(route('test.preview', $test->test_id))}}"
     >
 
     </test-show>

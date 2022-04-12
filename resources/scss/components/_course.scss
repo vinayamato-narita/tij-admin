@@ -1,0 +1,229 @@
+.course {
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+    .intro {
+        font-size: 0.875rem;
+        padding: 1rem;
+        background-color: $bg-light;
+        line-height: $line-height-lg;
+        @include sm {
+            padding: 1.5rem;
+        }
+    }
+    .course-cat {
+        font-size: .875rem;
+        font-weight: $font-weight-bold;
+        padding: 1rem;
+        border-top: 1px solid $bd-light;
+        background: $bg-light;
+        @include sm {
+            padding: 1rem 1.5rem;
+        }
+    }
+    &.is-private {
+        .course-type, .lesson-cat {
+            color: $green;
+        }
+        .course-hd {
+            background: url("/assets/img/course_01.jpg") right 50% no-repeat;
+        }
+    }
+    &.is-group {
+        .course-type, .lesson-cat {
+            color: $blue;
+        }
+        .course-hd {
+            background: url("/assets/img/course_02.jpg") right 50% no-repeat;
+        }
+    }
+    &.is-exam {
+        .course-type, .lesson-cat {
+            color: $purple;
+        }
+        .course-hd {
+            background: url("/assets/img/course_03.jpg") right 50% no-repeat;
+        }
+    }
+}
+.course-hd {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    height: 5rem;
+    padding: 1rem;
+    background: #FFF;
+    @include sm {
+        padding: 1.5rem;
+    }
+    .course-type {
+        font-size: 1.125rem;
+    }
+    .lesson-cat {
+        font-size: 0.75rem;
+        font-weight: $font-weight-bolder;
+        margin-bottom: 0.25rem;
+    }
+    .lesson-name {
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
+        span{
+            font-size: 0.75rem;
+            display: block;
+            font-weight: $font-weight-normal;
+            @include sm {
+                margin-left: 0.75rem;
+                display: inline-block;
+            }
+        }
+    }
+}
+.course-clip {
+    position: relative;
+    padding: 1rem;
+    border-top: 1px solid $bd-light;
+    @include sm{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem;
+    }
+    .tit {
+        font-size: 1rem;
+        font-weight: $font-weight-normal;
+        margin-bottom: 0.5rem;
+        @include sm{
+            margin-bottom: 0;
+        }
+        a {
+            color: $text-default;
+            &:hover {
+                opacity: .6;
+            }
+        }
+    }
+    .date {
+        font-size: .875rem;
+        color: $pink;
+    }
+    // private
+    .type-1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        .txt-1{
+            font-size: 0.875rem;
+            .num {
+                font-size: 1.5em;
+                line-height: 1;
+                margin: 0 0.5rem;
+                vertical-align: baseline;
+                color: $pink;
+                @include sm{
+                    font-size: 2em;
+                }
+            }
+        }
+        .txt-2 {
+            font-size: .75rem;
+            margin-left: 1.5rem;
+            vertical-align: baseline;
+        }
+    }
+    // group
+    .type-2 {
+        font-size: .75rem;
+        @include sm {
+            text-align: right;
+        }
+        span {
+            display: block;
+        }
+    }
+    // exam
+    .type-3 {
+        font-size: .75rem;
+    }
+}
+
+.course-item {
+    padding: 1.25rem 1rem;
+    border-top: 1px solid $bd-light;
+    @include sm {
+        padding: 1.25rem 1.5rem;
+    }
+    .cat {
+        font-size: .75rem;
+        font-weight: $font-weight-bolder;
+        margin-bottom: .5rem;
+        &.is-private{
+            color: $green;
+        }
+        &.is-group{
+            color: $blue;
+        }
+        &.is-exam{
+            color: $purple;
+        }
+    }
+    .tit {
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
+        margin-bottom: .75rem;
+        .badge {
+            margin-right: .75rem;
+        }
+    }
+    .summary {
+        font-size: .875rem;
+        margin-bottom: .25rem;
+    }
+    .tips {
+        font-size: .75rem;
+        color: $accent;
+    }
+    .cont__bt {
+        @include sm{
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+        padding-top: 1.25rem;
+    }
+    .actions{
+        border-top: 1px solid $bd-light;
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+        display: flex;
+        .btn{
+            width: 50%;
+        }
+
+        @include sm {
+            border: none;
+            padding-top: 0;
+            margin-top: 0;
+            .btn {
+                width: auto;
+            }
+        }
+    }
+    .price {
+        font-size: 0.75rem;
+        margin-right: 1rem;
+        .num {
+            font-size: 1.25rem;
+            font-weight: $font-weight-bold;
+            color: $pink;
+            margin: 0 0.25rem;
+        }
+    }
+    .details {
+        font-size: .75rem;
+        line-height: 2;
+        margin-top: 0.75rem;
+        padding: 1.25rem;
+        background-color: $bg-light;
+    }
+}

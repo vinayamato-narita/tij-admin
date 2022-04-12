@@ -42,7 +42,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ inquiryInfoEx.user_id }}
@@ -95,7 +95,7 @@
                                                 >問い合わせ内容</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ inquiryInfoEx.inquiry_body }}
+                                                <pre style="font-size: 11px;">{{ inquiryInfoEx.inquiry_body }}</pre>
                                             </div>
                                         </div>
                                         <div class="form-group row">

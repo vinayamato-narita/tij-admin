@@ -1,0 +1,16 @@
+.container {
+    position: relative;
+    width: 96%;
+    max-width: 1280px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--gutter-x, 0.5rem);
+    padding-left: var(--gutter-x, 0.5rem);
+    overflow: hidden;
+    @include md {
+        width: 94%;
+    }
+    @include lg {
+        width: 92%;
+    }
+}

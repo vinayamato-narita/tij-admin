@@ -239,29 +239,31 @@
                                                         value="0"
                                                         @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_0">
-                                                        通常コース
+                                                        プライベートコース
                                                     </label>
                                                 </div>
 
                                                 <div>
                                                     <input class=" checkbox" id="courseType_1" name="courseType"
-                                                        type="radio"
-                                                        value="2"
-                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                           type="radio"
+                                                           value="1"
+                                                           @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_1">
-                                                        実力テスト用コース
+                                                        グループコース
                                                     </label>
                                                 </div>
 
                                                 <div>
                                                     <input class=" checkbox" id="courseType_2" name="courseType"
                                                         type="radio"
-                                                        value="1"
+                                                        value="2"
                                                         @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_2">
-                                                        グループコース
+                                                        実力テスト用コース
                                                     </label>
                                                 </div>
+
+
 
 
 

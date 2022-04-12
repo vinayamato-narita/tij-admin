@@ -1,0 +1,71 @@
+.teacher-card {
+    position: relative;
+    display: block;
+    background-color: $bg-light;
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+    padding: 1rem 0;
+    color: initial;
+    .caption {
+        margin-top: 1rem;
+        padding: 0 1rem;
+        position: relative;
+        .name {
+            font-size: 0.875rem;
+            font-weight: $font-weight-normal;
+            overflow: hidden;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.teacher-item {
+    background-color: $bg-light;
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+    padding: 1rem 1.5rem;
+    @include sm{
+        display: flex;
+
+    }
+    .thumbnail{
+        flex: none;
+        text-align: center;
+        @include sm {
+            padding-right: 1.5rem;
+        }
+        @include md {
+            padding: 0 1.5rem;
+        }
+    }
+    .intro{
+        margin-top: 1.5rem;
+        padding: 1rem 0 0;
+        border-top: 1px solid $bd-light;
+        @include sm {
+            padding: 0;
+            border: none;
+        }
+        @include md {
+            padding: 0 1.5rem;
+        }
+        .name{
+            font-size: 1.125rem;
+            font-weight: $font-weight-bold;
+            line-height: $line-height-base;
+            color: $primary;
+            margin-bottom: 1rem;
+        }
+        .info{
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+    }
+}
+
+.booking-modal {
+    top: 200px !important;
+    left: 275px !important;
+}

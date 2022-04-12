@@ -1,0 +1,11 @@
+@mixin img-fluid() {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+@mixin video-fluid() {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

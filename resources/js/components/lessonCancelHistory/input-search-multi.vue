@@ -65,15 +65,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label >生徒番号</label>
+                        <label >学習者番号</label>
                         <div class="input text">
-                            <input type="text" name="studentId" id="student_id" class="form-control input-sm" placeholder="生徒番号を入力してください" :value="dataQuery.studentId">
+                            <input type="text" name="studentId" id="student_id" class="form-control input-sm" placeholder="学習者番号を入力してください" :value="dataQuery.studentId">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label >生徒名</label>
+                        <label >学習者名</label>
                         <div class="input text">
-                            <input type="text" name="studentName" id="studentName" class="form-control input-sm" placeholder="生徒名を入力してください" :value="dataQuery.studentName">
+                            <input type="text" name="studentName" id="studentName" class="form-control input-sm" placeholder="学習者名を入力してください" :value="dataQuery.studentName">
                         </div>
                     </div>
 

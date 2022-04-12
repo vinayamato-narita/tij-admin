@@ -81,20 +81,20 @@
                                                 <textarea rows="20" class="form-control" value=""  disabled>
                                                     【無料会員登録】
 本登録用URL:　#CONFIRM_URL#
-送信先生徒名:　#STUDENT_NAME
+送信先学習者名:　#STUDENT_NAME
 【レッスン予約時】
 【レッスン予約後】
 【レッスンキャンセル時】
 【レッスン開始前】
 先生名:　#TEACHER_NAME#
 先生ニックネーム:　#TEACHER_NICKNAME#
-生徒名:　#STUDENT_NAME#
-生徒ニックネーム:　#STUDENT_NICKNAME#
+学習者名:　#STUDENT_NAME#
+学習者ニックネーム:　#STUDENT_NICKNAME#
 レッスン日:　#LESSON_DATE#
 レッスン時間:　#LESSON_TIME#
 レッスン名:　#LESSON_NAME#
 テキスト名:　#LESSON_TEXT_NAME#
-生徒スカイプ名: #STUDENT_SKYPENAME#
+学習者スカイプ名: #STUDENT_SKYPENAME#
 講師スカイプ名: #TEACHER_SKYPENAME#
 
 【GMO決済時】
@@ -121,7 +121,7 @@
 受講開始日:#START_DATE#
 受講有効期限:#EXPIRE_DATE#
 
-【教師コメント登録メール】
+【講師コメント登録メール】
 先生ニックネーム:　#TEACHER_NICKNAME#
 レッスン日:　#LESSON_DATE#
 レッスン時間:　#LESSON_TIME#
@@ -154,7 +154,7 @@
 コースリスト終わり:　#COURSE_LIST_END#
 
 【一括登録　法人会員　継続メール】
-先生徒名:　#STUDENT_NAME#
+先学習者名:　#STUDENT_NAME#
 メールアドレス:　#STUDENT_EMAIL#
                                                 </textarea>
 

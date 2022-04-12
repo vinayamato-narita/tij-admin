@@ -1,0 +1,25 @@
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    color: #FFF;
+    background-color: $pink;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+    border-radius: $border-radius;
+    font-size: 0.75em;
+    font-weight: normal;
+    
+    // Empty badges collapse automatically
+    &:empty {
+      display: none;
+    }
+  }
+  
+  // Quick fix for badges in buttons
+  .btn .badge {
+    position: relative;
+    top: -1px;
+  }
+  

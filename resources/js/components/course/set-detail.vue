@@ -39,7 +39,7 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">生徒に公開する:
+                                        <label class="col-md-3 col-form-label text-md-right">学習者に公開する:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             {{this.course.is_show ? '公開' : '非公開'}}

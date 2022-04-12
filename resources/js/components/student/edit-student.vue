@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            生徒情報編集
+                            学習者情報編集
                         </h5>
                     </div>
                 </div>
@@ -15,14 +15,13 @@
                             <div class="card">
                                 <form class="basic-form" @submit.prevent="save">
                                     <div class="card-header">
-                                        <h5 class="title-page">生徒詳細</h5>
+                                        <h5 class="title-page">学習者詳細</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-md-6">
                                                 <label style="margin-right: 20px">基本情報</label>
-                                                <a data-toggle="modal" data-target="#student_change_password" href="" class="student-change-password" style="text-decoration: underline"
-                                                v-if = "studentInfoEx.admin_can_edit == 1">+パスワード変更</a>
+                                                <a data-toggle="modal" data-target="#student_change_password" href="" class="student-change-password" style="text-decoration: underline">+パスワード変更</a>
                                             </div>
                                             
                                         </div>
@@ -32,7 +31,7 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >生徒番号</label
+                                                        >学習者番号</label
                                                     >
                                                     <div class="col-md-9 pt-7">
                                                         {{ studentInfoEx.student_id }}
@@ -382,7 +381,7 @@
                                                                 'max:50'
                                                             "
                                                         />
-                                                        <div>※日本語の生徒は居住地で日本を選択した場合には、必ず住所を入力してください。</div>
+                                                        <div>※日本語の学習者は居住地で日本を選択した場合には、必ず住所を入力してください。</div>
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
@@ -783,12 +782,11 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center display-flex">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled = "studentInfoEx.admin_can_edit == 0">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
                                                 <btn-delete :delete-action="deleteAction"
                                                             :message-confirm="messageConfirm" 
                                                             :url-redirect="urlStudentList"
-                                                            v-if = "studentInfoEx.admin_can_edit == 1"></btn-delete>
-                                                <button type="button" class="btn btn-danger w-100 mr-2 cursor-pointer" disabled v-if= "studentInfoEx.admin_can_edit == 0">登録</button>
+                                                            ></btn-delete>
                                                 <a :href="urlStudentList" class="btn btn-default w-100">閉じる</a>
                                               </div>
                                         </div>
@@ -873,7 +871,7 @@
 
                     <div class="form-group text-center">
                         <div class="col-sm-offset-2 col-md-offset-2">
-                             ※パスワード変更を実施した場合、生徒宛にリマインドメールが送付されます
+                             ※パスワード変更を実施した場合、学習者宛にリマインドメールが送付されます
                         </div>
                     </div>
                 </div>
@@ -1006,7 +1004,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "生徒情報編集が完了しました。",
+                            text: "学習者情報編集が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

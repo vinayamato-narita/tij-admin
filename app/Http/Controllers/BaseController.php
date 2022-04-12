@@ -110,18 +110,6 @@ class BaseController extends Controller
         ]);
     }
 
-    public function adminCanEdit($view) 
-    {
-        $adminUser = Auth::user();
-        $adminCanEdit = AdminUserRight::select(CANEDIT)->where('admin_user_id', $adminUser->admin_user_id)
-            ->where('admin_rights_id', $view)
-            ->first();
-
-        $adminCanEdit = $adminCanEdit->can_edit ?? 0;
-
-        return $adminCanEdit;
-    }
-
     public function convertShijis($text) {
         return mb_convert_encoding($text, "SJIS", "UTF-8");
     }
@@ -140,4 +128,21 @@ class BaseController extends Controller
         
         return $comment;
     }
+
+    /**
+     * get client of IP
+     * @return [type] [description]
+     */
+    static function getClientIp() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+
 }

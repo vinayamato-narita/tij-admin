@@ -1,0 +1,73 @@
+/*-----------------------------------------------
+
+FAQページ
+
+------------------------------------------------*/
+.faq-cat{
+    font-size: 1.5rem;
+    color: $primary;
+    padding: 0.5rem;
+    background: $bg-light;
+    position: relative;
+    margin-bottom: 1.25rem;
+    h3{
+        background-color: #fff !important;
+        padding-left: 2.5rem;
+        height: 5rem;
+        line-height: 5rem;
+        border: 1px solid $bd-light;
+        font-weight: $font-weight-bolder;
+    }
+}
+
+.faq-subcat {
+    border-left: 4px solid $primary;
+    padding-left: 2rem;
+    margin: 1.5rem 0 1.5rem;
+    color: $primary;
+}
+
+.faq-list{
+    padding-bottom: 1px; // fix margin-bottom issue
+    .faq-q {
+        position: relative;
+        font-size: 0.875rem;
+        font-weight: $font-weight-bold;
+        margin-bottom: 1rem;
+        color: #FFF;
+        cursor: pointer;
+        p{
+            padding: 0.25rem 0.5rem 0.25rem 2.5rem;
+            display: inline-block;
+            border-radius: $border-radius;
+            background: $primary;
+        }
+        &.active p {
+            background: darken($primary, 15);
+        }
+        .icon {
+            font-size: 1rem;
+            font-weight: $font-weight-bolder;
+            position: absolute;
+            top: 0.25rem;
+            left: 0.75rem;
+            margin-right: 1.25rem;
+        }
+    }
+    .faq-a > div {
+        font-size: 0.875rem;
+        position: relative;
+        margin-bottom: 1.5rem;
+        padding: 0 0 0 2.5rem;
+        word-break: break-all;
+        .icon {
+            font-size: 1rem;
+            font-weight: $font-weight-bolder;
+            position: absolute;
+            left: 0.75rem;
+            margin-right: 1.25rem;
+            vertical-align: baseline;
+            color: $primary;
+        }
+    }
+}

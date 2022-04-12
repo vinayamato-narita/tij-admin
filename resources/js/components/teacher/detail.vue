@@ -176,11 +176,30 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">Zoomパスワード:
+                                        <label class="col-md-3 col-form-label text-md-right">Zoomパスコード:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             {{this.teacher.zoom_password}}
 
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">特徴:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <div v-if="this.teacher.teacher_feature1">
+                                                英語が話せる日本人講師
+                                            </div>
+                                            <div v-if="this.teacher.teacher_feature2">
+                                                子供向け
+                                            </div>
+                                            <div v-if="this.teacher.teacher_feature3">
+                                                講師歴3年以上
+                                            </div>
+                                            <div v-if="this.teacher.teacher_feature4">
+                                                日本語能力試験対策
+                                            </div>
                                         </div>
                                     </div>
 
@@ -325,13 +344,13 @@
                         </div>
                     </div>
                 </div>
-                <teacher-lesson 
-                    :detailUrl="detailTeacherUrl" 
-                    :url="lessonListUrl"  
-                    :pageSizeLimit="pageSizeLimit" 
-                    :id="teacher.id" 
+                <teacher-lesson
+                    :detailUrl="detailTeacherUrl"
+                    :url="lessonListUrl"
+                    :pageSizeLimit="pageSizeLimit"
+                    :id="teacher.id"
                     :register-url="registerUrl">
-                    
+
                 </teacher-lesson>
             </div>
         </main>
@@ -369,7 +388,7 @@
                                             v-if="errors.has('password')"
                                         >
                                             {{ errors.first("password") }}
-                                        </div>                                  
+                                        </div>
                                     </div>
                                 </div>
 
@@ -392,7 +411,7 @@
                                             v-if="errors.has('password_confirm')"
                                         >
                                             {{ errors.first("password_confirm") }}
-                                        </div>  
+                                        </div>
                                     </div>
                                 </div>
                             </div>

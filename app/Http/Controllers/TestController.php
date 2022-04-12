@@ -101,7 +101,9 @@ class TestController extends BaseController
         $test->test_description = $request->test_description;
         $test->execution_time = $request->execution_time;
         $test->expire_count = $request->expire_count;
-        $test->passing_score = $request->passing_score;
+        if ($test->test_type === TestType::ABILITY)
+            $test->expire_count = 1;
+        $test->passing_score = $request->passing_score ?? 0;
         $test->total_score = $request->total_score ?? 0;
         $test->save();
 
@@ -197,6 +199,29 @@ class TestController extends BaseController
         ]);
     }
 
+    public  function preview($id)
+    {
+
+        $test = Test::with('testQuestions.testSubQuestions.file')->find($id);
+        if (!$test)
+            return redirect()->route('test.show', $id);
+
+        $testQuestions = TestQuestion::with('testSubQuestions', 'file')->where('test_id', $id)->orderBy('display_order')->get()->toArray();
+
+        $timeRemain = [
+            'h' => floor($test->execution_time / 60),
+            'm' => $test->execution_time - (floor($test->execution_time / 60) * 60),
+            's' => 0
+        ];
+
+        return view('test.preview', [
+            'timeRemain' => $timeRemain,
+            'countDown' => true,
+            'test' => $test,
+            'testQuestions' => $testQuestions,
+        ]);
+    }
+
     public function addQuestion($id)
     {
         $breadcrumbComponent = new BreadcrumbComponent();
@@ -207,7 +232,7 @@ class TestController extends BaseController
 
         ]);
 
-        $test = Test::where('test_id', $id)->first();
+        $test = Test::withCount('testQuestions')->where('test_id', $id)->first();
         if (!$test) return redirect()->route('test.index');
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
@@ -413,9 +438,11 @@ class TestController extends BaseController
 
         ]);
 
-        $test = Test::where('test_id', $id)->first();
+        $test = Test::with('testQuestions')->where('test_id', $id)->first();
         $testQuestion = TestQuestion::with(['testSubQuestions.testCategory', 'file', 'testSubQuestions.file', 'testSubQuestions.tags'])->where('test_question_id', $testQuestionId)->first();
         if (!$test || !$testQuestion) return redirect()->route('test.index');
+        $tqIds = $test->testQuestions->pluck('test_question_id')->toArray();
+        $index = array_search($testQuestionId, $tqIds) + 1;
 
         $tags = Tag::all();
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
@@ -426,6 +453,7 @@ class TestController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
             'testQuestion' => $testQuestion,
+            'index' => $index,
             'tags' => $tags,
             'testCategories' => $testCategories,
             'isHasTestResult' => $isHasTestResult
@@ -515,6 +543,7 @@ class TestController extends BaseController
                 $testSubQuestion->answer3 = $subQuestion->answer3;
                 $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
+                $testSubQuestion->score = $subQuestion->score;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
                     $storedFile = File::query()->find($request->fileId);

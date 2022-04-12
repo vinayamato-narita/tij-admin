@@ -1,0 +1,23 @@
+.sort{
+    margin:24px 0;
+    overflow: auto;
+    .wrap{
+        width: max-content;
+    }
+}
+.sort-item{
+    float: left;
+    font-size: 0.75rem;
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+    background-color: transparent;
+    color: $prehold;
+    margin-right: 0.75rem;
+    font-weight: $font-weight-bold;
+    border-radius: $border-radius;
+    &.active{
+        color: $link;
+        background-color: #F2F2F3;
+    }
+}

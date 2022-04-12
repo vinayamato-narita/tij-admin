@@ -192,7 +192,7 @@ class BreadcrumbComponent
                 'route_str' => "course.setEdit",
             ],
             'student_list' => [
-                'text' => '生徒情報一覧',
+                'text' => '学習者情報一覧',
                 'route_str' => "student.index",
             ],
             'student_comment_list' => [
@@ -264,7 +264,7 @@ class BreadcrumbComponent
                 'route_str' => "category.editLang",
             ],
             'edit_student' => [
-                'text' => '生徒情報編集',
+                'text' => '学習者情報編集',
                 'route_str' => "student.edit",
             ],
             'payment_history_list' => [
@@ -284,11 +284,11 @@ class BreadcrumbComponent
                 'route_str' => 'groupSchedule.index'
             ],
             'student_point_history_list' => [
-                'text' => 'ポイント履歴一覧',
+                'text' => '受講回数履歴一覧',
                 'route_str' => "student.pointHistoryList",
             ],
             'show_student_point_history' => [
-                'text' => 'ポイント履歴詳細',
+                'text' => '受講回数履歴詳細',
                 'route_str' => "student.showPointHistory",
             ],
             'edit_role' => [
@@ -388,7 +388,7 @@ class BreadcrumbComponent
                 'route_str' => 'group_lesson_history.index'
             ],
             'group_lesson_reserve' => [
-                'text' => 'グループレッスン申込一覧',
+                'text' => 'グループレッスンコース申込一覧',
                 'route_str' => 'groupLessonReserves.index'
             ],
             'group_lesson_reserve_show' => [
@@ -414,6 +414,18 @@ class BreadcrumbComponent
             'edit_lang_teacher' => [
                 'text' => '講師情報多言語編集',
                 'route_str' => "teacher.editLang",
+            ],
+            'group_lesson_student_list' => [
+                'text' => '学習者一覧',
+                'route_str' => 'groupLesson.getStudent'
+            ],
+            'group_course_user_import' => [
+                'text' => 'インポート',
+                'route_str' => 'courseGroupUser.import'
+            ],
+            'group_course_save_user_import' => [
+                'text' => 'インポート結果',
+                'route_str' => 'courseGroupUser.saveImport'
             ],
         ];
     }

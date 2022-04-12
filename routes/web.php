@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -82,7 +83,7 @@ Route::group([
     Route::get('course/{id}/lesson_attach', 'CourseController@lessonAttach')->name('course.lessonAttach');
     Route::post('course/{id}/lesson_attach', 'CourseController@lessonAttachUpdate')->name('course.lessonAttachUpdate');
     Route::post('update_lang_course', 'CourseController@updateLang')->name('course.updateLang');
-        //campaign
+    //campaign
     Route::get('/course/{courseId}/add-campaign', 'CourseController@campaignCreate')->name('course.campaignCreate');
     Route::post('/course/{courseId}/add-campaign-store', 'CourseController@addCampaignStore')->name('course.addCampaignStore');
     Route::post('/course/{courseId}/exists_campaign_datetime', 'CourseController@existCampaignDatetime')->name('course.existCampaignDatetime');
@@ -101,6 +102,7 @@ Route::group([
     Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
 
     //TEST
+    Route::get('test/{id}/preview', 'TestController@preview')->name('test.preview');
     Route::get('test/demo', 'TestController@demo')->name('test.demo');
     Route::resource('test', TestController::class);
     Route::get('test/{id}/add_question', 'TestController@addQuestion')->name('test.addQuestion');
@@ -227,6 +229,8 @@ Route::group([
 
     //group lesson
     Route::resource('groupLessonReserves', GroupLessonReserveController::class);
+
+    Route::get('export-group-lesson', 'GroupLessonHistoryController@exportGroupLesson')->name('exportGroupLesson');
     Route::get('/group_lesson_history/student_attendance/{id}', 'GroupLessonHistoryController@studentAttendance')->name('groupLessonHistory.studentAttendance');
     Route::post('/group_lesson_history/update-student-attendace/{id}', 'GroupLessonHistoryController@updateStudentAttendance')->name('groupLessonHistory.updateStudentAttendance');
 
@@ -239,4 +243,9 @@ Route::group([
     Route::get('/teacher/{id}/edit-lang/{type}', 'TeacherController@editLang')->name('teacher.editLang');
     Route::post('updateTeacherLang', 'TeacherController@updateLang')->name('teacher.updateLang');
     Route::post('/teacher/update-password', 'TeacherController@updatePassword')->name('teacher.updatePassword');
+    Route::get('groupLessonStudentList/{id}', 'GroupLessonReserveController@getStudent')->name('groupLesson.getStudent');
+    Route::get('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.import');
+    Route::post('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.importPost');
+    Route::get('/courseGroup/saveImport', 'CourseGroupUserController@saveImport')->name('courseGroupUser.saveImport');
+    Route::post('/course/update-group-memo', 'CourseController@updateGroupMemo')->name('course.updateGroupMemo');
 });

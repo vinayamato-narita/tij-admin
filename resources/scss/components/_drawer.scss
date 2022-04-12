@@ -1,0 +1,56 @@
+$zindex-drawer:                     2030 !default;
+$zindex-drawer-overlay:             2000 !default;
+
+%drawer {
+    position: fixed;
+    z-index: $zindex-drawer;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: calc(100% - 56px);
+    max-width: 280px;
+    transition: all .3s $transition-curve;
+    transform: translateX(-330px);
+    white-space: nowrap;
+    background: #FFF;
+    box-shadow: $box-shadow;
+    will-change: transform;
+    -webkit-overflow-scrolling: touch;
+    &.mdui-drawer-open {
+        transform: translateX(0)!important;
+    }
+    @include md {
+        top: $navbar-height-pc;
+    }
+    @include lg {
+        width: 240px;
+        max-width: none;
+        transform: translateX(0);
+    }
+}
+
+.mdui-overlay {
+    position: fixed;
+    top: -5000px;
+    right: -5000px;
+    bottom: -5000px;
+    left: -5000px;
+    z-index: $zindex-drawer-overlay;
+    background: rgba(0,0,0,.4);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
+    -webkit-transition-property: opacity,visibility;
+    transition-property: opacity,visibility;
+    will-change: opacity;
+}
+
+.mdui-overlay-show {
+    visibility: visible;
+    opacity: 1;
+}

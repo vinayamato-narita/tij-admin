@@ -10,6 +10,7 @@ use App\Models\TestComment;
 use App\Models\TestQuestion;
 use App\Models\TestResult;
 use App\Models\TestResultDetail;
+use App\Models\TestSubQuestion;
 use App\Models\TestTopScore;
 use Carbon\Carbon;
 use Carbon\Exceptions\Exception;
@@ -187,41 +188,54 @@ class AbilityTestResultController extends BaseController
         if (!$testResult)
             return redirect()->route('abilityTestResult.index');
 
-        $analyticRaw = DB::select("
-        		SELECT tc.parent_category_name,tq.navigation,tq.test_question_id, tsqs.test_sub_question_id, IF(trd.answer = trd.correct_answer, tsq.score, 0) as exam_score,
-				tsq.score as score, tc.test_category_id
-				
-        FROM test_category as tc 
-				LEFT JOIN test_sub_question_category AS tsqs ON tc.test_category_id = tsqs.test_category_id 
-				LEFT JOIN test_sub_question AS tsq ON tsqs.test_sub_question_id = tsq.test_sub_question_id
-				LEFT JOIN test_question AS tq ON tq.test_question_id = tsq.test_question_id 
-				LEFT JOIN test_result_detail AS trd ON trd.test_sub_question_id = tsq.test_sub_question_id AND trd.test_result_id = :testResultId
-				WHERE tq.test_id = :testId
-        ORDER BY tc.display_order 
-        ",  [":testResultId" => $id, 'testId' => $testResult->test_id]);
-
         $analyticList = [];
-        $collectionByParentCategoryName = collect($analyticRaw)->groupBy('parent_category_name')->all();
-        foreach ($collectionByParentCategoryName as  $byCatItem) {
-            $analyticItem = [];
-            foreach ($bySubCategoryId = $byCatItem->groupBy('test_question_id')->all() as $index => $item) {
-                $numSubQuestion = $item->count();
-                $examScore = $item->sum('exam_score');
-                $score = $item->sum('score');
-                $topScr = TestTopScore::where([
-                    'test_id' => $testResult->test_id,
-                    'test_category_id' => $item[0]->test_category_id,
-                    'test_parrent_name' => $item[0]->parent_category_name])->first();
-                $analyticItem[] = [
-                    'parent_category_name' => $item[0]->parent_category_name,
-                    'navigation' => $item[0]->navigation,
-                    'num_sub_question' => $numSubQuestion,
-                    'score' => $score,
-                    'exam_score' => $examScore,
-                    'top_score_avg' => empty($topScr) ? 0 : $topScr->top_score_avg
+        $tcParents = TestCategory::get()->groupBy('parent_category_name')->toArray();
+        foreach ($tcParents as $parentIndex => $tcParent) {
+            $addItems = [];
+            foreach ($tcParent as $tc) {
+
+                $testSubQuestionsCount = TestSubQuestion::with('testCategories', 'testQuestion')->where([
+                ])->whereHas('testCategories', function ($q) use ($tc) {
+                    return $q->where('test_sub_question_category.test_category_id', $tc['test_category_id']);
+                })->whereHas('testQuestion', function ($q) use ($testResult) {
+                    return $q->where('test_id', $testResult->test->test_id);
+
+                })->get()->count();
+
+                $sumScore = TestResultDetail::with('testSubQuestion.testCategories')->whereHas('testSubQuestion',
+                    function ($q) use ($tc) {
+                        $q->whereHas('testCategories', function ($q) use ($tc) {
+                            return $q->where('test_sub_question_category.test_category_id', $tc['test_category_id']);
+
+                        });
+                    })->where('test_result_id', $id)->whereColumn('answer', '=', 'correct_answer')->withSum('testSubQuestion', 'score')->get();
+
+                $sumTotalScore = TestResultDetail::with('testSubQuestion.testCategories')->whereHas('testSubQuestion',
+                    function ($q) use ($tc) {
+                        $q->whereHas('testCategories', function ($q) use ($tc) {
+                            return $q->where('test_sub_question_category.test_category_id', $tc['test_category_id']);
+
+                        });
+                    })->where('test_result_id', $id)->withSum('testSubQuestion', 'score')->get();
+
+                $topScore = TestTopScore::where([
+                    'test_id' => $testResult->test->test_id,
+                    'test_category_id' => $tc['test_category_id']
+                ])->first();
+                $addItems[] = [
+                    'category_name' => $tc['category_name'],
+                    'parent_category_name' => $tc['parent_category_name'],
+                    'num_sub_question' => empty($testSubQuestionsCount) ? '-' : $testSubQuestionsCount,
+                    'exam_score' => empty($testSubQuestionsCount) ? '-' : $sumScore->sum('test_sub_question_sum_score'),
+                    'score' => empty($testSubQuestionsCount) ? '-' : $sumTotalScore->sum('test_sub_question_sum_score'),
+                    'top_score_avg' => empty($testSubQuestionsCount) || empty($topScore) ? '-' : $topScore->top_score_avg
+
                 ];
+
             }
-            $analyticList[] = $analyticItem;
+            $analyticList[] = $addItems;
+
+
         }
 
         $testComment = $testResult->test_comment;
@@ -279,7 +293,7 @@ class AbilityTestResultController extends BaseController
      */
     public function updateTestComment(Request $request, $id)
     {
-        $testComment = TestComment::find($id);
+        $testComment = TestComment::with('testResult')->find($id);
         if (!$testComment)
             return redirect()->route('abilityTestResult.index');
         if ($testComment->comment_end_time != null)
@@ -294,7 +308,10 @@ class AbilityTestResultController extends BaseController
         $testComment->comment3 = $request->comment3;
         $testComment->comment4 = $request->comment4;
         $testComment->comment5 = $request->comment5;
-        if ($testComment->save())
+
+        $testComment->testResult->is_reviewed = true;
+
+        if ($testComment->save() && $testComment->testResult->save())
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::OK);

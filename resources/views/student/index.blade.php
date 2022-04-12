@@ -4,7 +4,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', '生徒情報一覧')
+@section('title', '学習者情報一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -12,7 +12,7 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        生徒情報一覧
+                        学習者情報一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
@@ -53,8 +53,8 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('student_name', '生徒名')</th>
+                                                    <th class="text-left width-130">@sortablelink('student_id', '学習者番号')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('student_name', '学習者名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('student_nickname', 'ニックネーム')</th>
                                                     <th class="text-left min-width-120">@sortablelink('student_skypename', 'スカイプ名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('custom_company_name', '法人名')</th>
@@ -103,7 +103,7 @@
                                                                         <a class="dropdown-item" href="{{ route('student.paymentHistoryList', $student->student_id) }}"><i class="fa fa-comment mr-2"></i>支払い履歴</a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" href="{{ route('student.pointHistoryList', $student->student_id) }}"><i class="fa fa-list-alt mr-2"></i>ポイント履歴</a>
+                                                                        <a class="dropdown-item" href="{{ route('student.pointHistoryList', $student->student_id) }}"><i class="fa fa-list-alt mr-2"></i>受講回数履歴</a>
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item" href="{{ route('student.commentList', $student->student_id) }}"><i class="fa fa-comment mr-2"></i>コメント履歴</a>

@@ -40,8 +40,8 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-left">レッスン日時</th>
-                                                    <th class="text-left">@sortablelink('student_id', '生徒番号')</th>
-                                                    <th class="text-left">@sortablelink('student_nickname', '生徒のニックネーム')</th>
+                                                    <th class="text-left">@sortablelink('student_id', '学習者番号')</th>
+                                                    <th class="text-left">@sortablelink('student_nickname', '学習者のニックネーム')</th>
                                                     <th class="text-left">講師のニックネーム</th>
                                                     <th class="text-left">@sortablelink('course_name', 'コース')</th>
                                                     <th class="text-left">@sortablelink('teacher_rating', '教え方')</th>
@@ -50,7 +50,7 @@
                                                     <th class="text-left">@sortablelink('skype_voice_rating_from_student', 'Skypeの音声')</th>
                                                     <th class="text-left">@sortablelink('comment_from_student_to_office', 'レッスンに対する感想')</th>
                                                     <th class="text-left">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
-                                                    <th class="text-left">@sortablelink('comment_from_teacher_to_student', '生徒へのコメント')</th>
+                                                    <th class="text-left">@sortablelink('comment_from_teacher_to_student', '学習者へのコメント')</th>
                                                     <th class="text-left">@sortablelink('comment_from_teacher_to_office', '事務局へのコメント')</th>
                                                     <th class="text-left">@sortablelink('note_from_student_to_teacher', '講義メモ')</th>
                                                 </tr>
@@ -124,7 +124,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>生徒番号</b>
+                                        <b>学習者番号</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="student_id" class="content"></p>
@@ -138,7 +138,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>生徒のニックネーム</b>
+                                        <b>学習者のニックネーム</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="student_nickname" class="content"></p>
@@ -172,7 +172,7 @@
                         </div>
                     </div>
                     <div class="col-md-12" style="color: black; background-color:lightblue; padding:5px;">        
-                        <b style="padding-left: 15px;">生徒からのコメント</b>        
+                        <b style="padding-left: 15px;">学習者からのコメント</b>        
                     </div>
 
                     <div class="col-md-12" style="margin: 10px 0px;">
@@ -260,7 +260,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <b>生徒へのコメント</b>
+                                        <b>学習者へのコメント</b>
                                     </div>
                                     <div class="col-md-9 cm-content">
                                         <p style="white-space: pre-line" id="comment_from_teacher_to_student" class="content"></p>

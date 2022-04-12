@@ -93,7 +93,8 @@
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
-                                            {{this.course.amount}}
+                                            {{this.course.amount | formatMoney }}
+
 
                                         </div>
                                     </div>
@@ -117,7 +118,9 @@
                                         <label class="col-md-3 col-form-label text-md-right">コース概要:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{ this.course.course_description }}
+                                            <nl2br v-if="this.course.course_description" tag="p" :text="this.course.course_description" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
 
@@ -244,7 +247,9 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            {{ courseENDes }}
+                                            <nl2br v-if="courseENDes" tag="p" :text="courseENDes" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
                                 </div>
@@ -274,7 +279,9 @@
                                         >コース概要:</label
                                         >
                                         <div class="col-md-3 pd-7" >
-                                            {{ courseZHDes }}
+                                            <nl2br v-if="courseZHDes" tag="p" :text="courseZHDes" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
                                 </div>
@@ -426,6 +433,29 @@
                                 </div>
 
                             </div>
+                            <div class="card" v-if="this.course.course_type === 1">
+                                <div class="card-header">
+                                    <h5 class="title-page">引き継ぎメモ</h5>
+                                    <div class="float-right">
+                                        <div style="min-height: 38px">
+                                            <div class="float-right">
+                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-group-memo')">
+                                                    追加
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <pre style="font-size: 11px;z-index: ">{{ courseGroupMemo.memo }}</pre>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -444,6 +474,11 @@
                 <insert-video :id="this.course.course_id" :register-url="registerVideoUrl">
 
                 </insert-video>
+                <course-group-memo  
+                    :url-update-group-memo="urlUpdateGroupMemo" 
+                    :detailUrl="detailCourseUrl"
+                    :course-group-memo="courseGroupMemo">
+                </course-group-memo>
             </div>
         </main>
     </div>
@@ -460,8 +495,7 @@
     import DeleteItem from "./../../components/common/delete-item";
     import AbilityTest from "./../../components/course/ability-test";
     import CourseEndTest from "./../../components/course/course-end-test";
-
-
+    import CourseGroupMemo from "./../../components/course/course-group-memo";
 
     export default {
         created: function () {
@@ -485,7 +519,8 @@
             InsertVideo,
             DragableItem,
             AbilityTest,
-            CourseEndTest
+            CourseEndTest,
+            CourseGroupMemo
         },
         data() {
             return {
@@ -498,13 +533,11 @@
                 courseENDes : '',
                 courseZHName : '',
                 courseZHDes : ''
-
-
             };
         },
         props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
             'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl',
-            'addCampaignUrl'
+            'addCampaignUrl', 'courseGroupMemo', 'urlUpdateGroupMemo'
         ],
         mounted() {},
         methods: {

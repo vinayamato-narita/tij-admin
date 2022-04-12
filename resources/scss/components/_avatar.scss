@@ -1,0 +1,23 @@
+$avatar-size-base: 60px;
+$avatar-size-lg: 120px;
+
+%avatar{
+    overflow: hidden;
+    transition: .2s;
+    border: 2px solid #FFF;
+    border-radius: 50%;
+    a:hover{
+        opacity: 0.8;
+    }
+}
+
+.avatar {
+    width: $avatar-size-base;
+    height: $avatar-size-base;
+    @extend %avatar;
+}
+.avatar-lg {
+    width: $avatar-size-lg;
+    height: $avatar-size-lg;
+    @extend %avatar;
+}

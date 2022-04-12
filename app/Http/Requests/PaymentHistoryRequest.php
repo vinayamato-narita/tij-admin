@@ -27,7 +27,6 @@ class PaymentHistoryRequest extends FormRequest
         return [
             'student_id' => 'required|integer',
             'course_id' => 'required|integer',
-            'management_number' => 'nullable|regex:/^[!-~]+$/i|max:10',
             'payment_date' => 'required|date',
             'begin_date' => 'required|date',
             'amount' => 'required|integer|between:0,1000000000',

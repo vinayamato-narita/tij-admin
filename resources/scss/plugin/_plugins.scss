@@ -1,0 +1,23 @@
+// jquery star review
+
+div.rating-cancel {
+    display: none !important;
+}
+
+.starContainer {
+    font-size: 0.75rem;
+    .rate-text {margin-left: 0.5rem;}
+}
+
+
+// vdp-datepicker__calendar
+.vdp-datepicker__calendar .cell.selected{
+    background-color: $primary !important;
+    color: #FFF !important;
+}
+.vdp-datepicker__calendar .cell.selected:hover{
+    background-color: $primary !important;
+}
+.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover, .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover{
+    border-color: $primary !important;
+}

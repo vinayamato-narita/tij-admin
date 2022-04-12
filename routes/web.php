@@ -102,6 +102,7 @@ Route::group([
     Route::post('course/set/{id}/update', 'CourseController@setUpdate')->name('course.setUpdate');
 
     //TEST
+    Route::get('test/{id}/preview', 'TestController@preview')->name('test.preview');
     Route::get('test/demo', 'TestController@demo')->name('test.demo');
     Route::resource('test', TestController::class);
     Route::get('test/{id}/add_question', 'TestController@addQuestion')->name('test.addQuestion');
@@ -246,4 +247,5 @@ Route::group([
     Route::get('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.import');
     Route::post('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.importPost');
     Route::get('/courseGroup/saveImport', 'CourseGroupUserController@saveImport')->name('courseGroupUser.saveImport');
+    Route::post('/course/update-group-memo', 'CourseController@updateGroupMemo')->name('course.updateGroupMemo');
 });

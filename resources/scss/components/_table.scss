@@ -1,0 +1,180 @@
+.table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+    background-color: #FFF;
+}
+
+@include md {
+    .table {
+        position: relative;
+        width: 100%;
+        border-top: 1px solid $bd-light;
+        border-bottom: none;
+        border-left: 1px solid $bd-light;
+        thead {
+            tr {
+                border-bottom: 1px solid $bd-light;
+            }
+        }
+        tbody {
+            tr {
+                position: relative;
+                transition: background-color .28s $transition-curve;
+            }
+        }
+
+        th, td {
+            position: relative;
+            box-sizing: border-box;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            vertical-align: middle;
+            border-right: 1px solid $bd-light;
+            border-bottom: 1px solid $bd-light;
+            //   .divider-bottom-dark();
+        }
+
+        th {
+            font-size: 11px;
+            //   color: $color-black-secondary;
+            border-bottom-width: 2px;
+            //   .text-truncate();
+        }
+
+        td {
+            //   color: $color-black-text;
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+
+    /* 每一行前面的复选框 */
+    .table-cell-checkbox {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-left: 24px !important;
+
+        .checkbox {
+            margin-top: 7px;
+        }
+
+        & + td, & + th {
+            padding-left: 6px !important;
+        }
+    }
+    th.table-cell-checkbox {
+        .checkbox {
+            margin-top: 11px;
+        }
+    }
+
+    // .table {
+    //   th, td {
+    //     &:last-child {
+    //       padding-right: 24px;
+    //     }
+    //     &:first-child {
+    //       padding-right: 0;
+    //       padding-left: 24px
+    //     }
+    //     &:nth-child(2) {
+    //       padding-left: 24px;
+    //     }
+    //   }
+    // }
+
+    /* 鼠标悬浮时行背景加深 */
+    .table-hoverable {
+        tbody tr {
+            &:hover {
+                background-color: #dddddd;
+            }
+        }
+    }
+
+    /* 表格放到该元素内，使表格产生滚动条时只在该元素内滚动 */
+    .table-fluid {
+        overflow-x: auto;
+        width: 100%;
+        border: 1px solid $bd-light;
+        border-bottom: none;
+
+        -webkit-overflow-scrolling: touch;
+        // .shadow(2);
+
+        .table {
+            //   .shadow(0);
+            margin: 0;
+            border: none;
+        }
+    }
+
+    /* 数字列，右对齐 */
+    .table-col-numeric {
+        text-align: right !important;
+    }
+
+    /* 行处于选中状态 */
+    .table-row-selected {
+        background-color: grey;
+    }
+
+    .table-wrap {
+        overflow: auto;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .no-more-tables {
+        table {
+            display: block;
+            width: 100%;
+        }
+        thead, tbody, tr, th, td {
+            display: block;
+        }
+        thead {
+            display: none;
+        }
+        tbody tr {
+            margin-bottom: 20px;
+            border: 1px solid $bd-light;
+            border-bottom: none;
+        }
+        td {
+            font-size: .875rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: .75rem;
+            text-align: left;
+            white-space: normal;
+            border: none;
+            border-bottom: 1px solid $bd-light;
+            &.tit{
+                background-color: $bg-light;
+                span{
+                    width: 100%;
+                    margin-left: -100px;
+                    font-weight: $font-weight-bold;
+                }
+            }
+            & > * {
+                flex: 1 1 100px;
+            }
+            &::before {
+                font-size: .75rem;
+                font-weight: $font-weight-bolder;
+                width: 100px;
+                padding-right: 1rem;
+                content: attr(data-title);
+                text-align: left;
+            }
+            a {
+                width: 100%;
+            }
+        }
+    }
+}

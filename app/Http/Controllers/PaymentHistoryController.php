@@ -17,7 +17,9 @@ use App\Enums\StatusCode;
 use App\Components\DateTimeComponent;
 use App\Components\CommonComponent;
 use Log; 
-use Response;
+use Response; 
+use App\Enums\AdminRole;
+use Auth;
 
 class PaymentHistoryController extends BaseController
 {
@@ -40,19 +42,11 @@ class PaymentHistoryController extends BaseController
         	'point_subscription_history.order_id as order_id',
         	'point_subscription_history.student_id as student_id',
         	'point_subscription_history.payment_date as payment_date',
-        	'student_point_history.start_date as j_start_date',
         	'point_subscription_history.begin_date as begin_date',
         	'point_subscription_history.point_expire_date as point_expire_date',
-        	'course.course_name as j_course_name',
-        	'point_subscription_history.customer_code as customer_code',
         	'point_subscription_history.item_name as item_name',
         	'student.student_name as j_student_name',
-        	'student.is_lms_user as j_is_lms_user',
-        	'point_subscription_history.course_code as course_code',
         	DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
-        	'lms_company.company_name as company_name',
-        	'lms_project.project_code as j_project_code',
-        	'point_subscription_history.corporation_code as corporation_code',
         	'point_subscription_history.amount as amount',
         	'point_subscription_history.tax as tax',
         	'order.campaign_code as j_campaign_code',
@@ -67,34 +61,15 @@ class PaymentHistoryController extends BaseController
         ->leftJoin('student', function($join) {
             $join->on('point_subscription_history.student_id', '=', 'student.student_id');
         })
-        ->leftJoin('student_point_history', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('point_subscription_history.course_id', '=', 'course.course_id');
-        })
-        ->leftJoin('lms_project_course_student', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'lms_project_course_student.point_subscription_id');
-        })
-        ->leftJoin('lms_project', function($join) {
-            $join->on('lms_project_course_student.project_id', '=', 'lms_project.project_id');
-        })
-        ->leftJoin('lms_company', function($join) {
-            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
-        })
         ->where('point_subscription_history.del_flag', 0);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lms_company.company_name', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('student.company_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lms_project.project_code', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('order.campaign_code', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('point_subscription_history.item_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('course.course_name', $request['search_input']));
+                    ->orWhere($this->escapeLikeSentence('point_subscription_history.item_name', $request['search_input']));
             });
         }
         if(isset($request['payment_date_start'])) {
@@ -103,12 +78,6 @@ class PaymentHistoryController extends BaseController
             }
             if ($request['payment_date_end'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.payment_date', '<=', date('Y/m/d 23:59:59', strtotime($request['payment_date_end'])));
-            }
-            if ($request['start_date_start'] != "") {
-                $queryBuilder = $queryBuilder->where('student_point_history.start_date', '>=', $request['start_date_start']);
-            }
-            if ($request['start_date_end'] != "") {
-                $queryBuilder = $queryBuilder->where('student_point_history.start_date', '<=', date('Y/m/d 23:59:59', strtotime($request['start_date_end'])));
             }
             if ($request['begin_date_start'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.begin_date', '>=', $request['begin_date_start']);
@@ -134,21 +103,6 @@ class PaymentHistoryController extends BaseController
             if ($request['item_name'] != "") {
                 $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
             }
-            if ($request['project_code'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('lms_project.project_code', $request['project_code']));
-            }
-            if ($request['company_name'] != "") {
-                $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('lms_company.company_name', $request['company_name']));
-            }
-            if ($request['corporation_code'] != "" && !isset($request['check_corporation_code'])) {
-                $queryBuilder = $queryBuilder->where('point_subscription_history.corporation_code', $request['corporation_code']);
-            }
-            if (isset($request['check_corporation_code'])) {
-                $queryBuilder = $queryBuilder->where(function ($query) {
-                    $query->where('point_subscription_history.corporation_code', "")
-                        ->orWhereNull('point_subscription_history.corporation_code');
-                });
-            }
             if ($request['campaign_code'] != "") {
                 $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
             }
@@ -158,23 +112,11 @@ class PaymentHistoryController extends BaseController
         }
 
         if (isset($request['sort'])) {
-            if ($request['sort'] == "j_start_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_history.start_date','ASC') : $queryBuilder->orderBy('student_point_history.start_date','DESC');
-            }
-            if ($request['sort'] == "j_course_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course.course_name','ASC') : $queryBuilder->orderBy('course.course_name','DESC');
-            }
             if ($request['sort'] == "j_student_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student.student_name','ASC') : $queryBuilder->orderBy('student.student_name','DESC');
             }
             if ($request['sort'] == "j_company_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) DESC');
-            }
-            if ($request['sort'] == "company_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lms_company.company_name','ASC') : $queryBuilder->orderBy('lms_company.company_name','DESC');
-            }
-            if ($request['sort'] == "j_project_code") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lms_project.project_code','ASC') : $queryBuilder->orderBy('lms_project.project_code','DESC');
             }
             if ($request['sort'] == "j_campaign_code") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('order.campaign_code','ASC') : $queryBuilder->orderBy('order.campaign_code','DESC');
@@ -194,7 +136,9 @@ class PaymentHistoryController extends BaseController
 
         $total_tax = $queryBuilder->sum('point_subscription_history.tax');
         $total_amount = $queryBuilder->sum('point_subscription_history.amount');
-        $paymentList = $queryBuilder->groupBy('point_subscription_history.point_subscription_history_id')->sortable(['update_date' => 'DESC'])->paginate($pageLimit);
+        $paymentList = $queryBuilder->sortable(['update_date' => 'DESC'])->paginate($pageLimit);
+
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('payment-history.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -204,11 +148,16 @@ class PaymentHistoryController extends BaseController
             'paymentType' => $paymentType,
             'total_amount' => $total_amount,
             'total_tax' => $total_tax,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
     public function export()
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('sessionPaymentHistory');
         $fileName = "payment_".date("Y-m-d").".csv";
 
@@ -224,11 +173,9 @@ class PaymentHistoryController extends BaseController
             $this->convertShijis("オーダーID"),
             $this->convertShijis("学習者番号"),
             $this->convertShijis("受注日"),
-            $this->convertShijis("基準日"),
             $this->convertShijis("受講開始日"),
             $this->convertShijis("有効期限日"),
             $this->convertShijis("受注番号"),
-            $this->convertShijis("コースコード"),
             $this->convertShijis("商品名"),
             $this->convertShijis("学習者名"),
             $this->convertShijis("法人名"),
@@ -252,14 +199,12 @@ class PaymentHistoryController extends BaseController
         $queryBuilder = PointSubscriptionHistory::select('point_subscription_history.order_id as order_id',
             'point_subscription_history.student_id as student_id',
             'point_subscription_history.payment_date as payment_date',
-            'student_point_history.start_date as j_start_date',
             'point_subscription_history.begin_date as begin_date',
             'point_subscription_history.point_expire_date as point_expire_date',
             'point_subscription_history.point_subscription_history_id as id',
             'point_subscription_history.course_code as course_code',
-            'course.course_name as j_course_name',
             'student.student_name as j_student_name',
-            'lms_company.company_name as company_name',  
+            DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
@@ -272,36 +217,16 @@ class PaymentHistoryController extends BaseController
         ->leftJoin('student', function($join) {
             $join->on('point_subscription_history.student_id', '=', 'student.student_id');
         })
-        ->leftJoin('student_point_history', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('point_subscription_history.course_id', '=', 'course.course_id');
-        })
-        ->leftJoin('lms_project_course_student', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'lms_project_course_student.point_subscription_id');
-        })
-        ->leftJoin('lms_project', function($join) {
-            $join->on('lms_project_course_student.project_id', '=', 'lms_project.project_id');
-        })
-        ->leftJoin('lms_company', function($join) {
-            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
-        })
         ->where('point_subscription_history.del_flag', 0)
-        ->groupBy('point_subscription_history.point_subscription_history_id')
         ->orderByDesc('point_subscription_history.update_date');
         	
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where(CommonComponent::escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('student.company_name', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.corporation_code', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('order.campaign_code', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('course.course_name', $request['search_input']));
+                    ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['search_input']));
             });
         }
 
@@ -311,12 +236,6 @@ class PaymentHistoryController extends BaseController
             }
             if ($request['payment_date_end'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.payment_date', '<=', date('Y/m/d 23:59:59', strtotime($request['payment_date_end'])));
-            }
-            if ($request['start_date_start'] != "") {
-                $queryBuilder = $queryBuilder->where('student_point_history.start_date', '>=', $request['start_date_start']);
-            }
-            if ($request['start_date_end'] != "") {
-                $queryBuilder = $queryBuilder->where('student_point_history.start_date', '<=', date('Y/m/d 23:59:59', strtotime($request['start_date_end'])));
             }
             if ($request['begin_date_start'] != "") {
                 $queryBuilder = $queryBuilder->where('point_subscription_history.begin_date', '>=', $request['begin_date_start']);
@@ -342,21 +261,6 @@ class PaymentHistoryController extends BaseController
             if ($request['item_name'] != "") {
                 $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
             }
-            if ($request['project_code'] != "") {
-                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['project_code']));
-            }
-            if ($request['company_name'] != "") {
-                $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['company_name']));
-            }
-            if (isset($request['corporation_code']) && $request['corporation_code'] != "" && !isset($request['check_corporation_code'])) {
-                $queryBuilder = $queryBuilder->where('point_subscription_history.corporation_code', $request['corporation_code']);
-            }
-            if (isset($request['check_corporation_code']) && $request['check_corporation_code'] == 1) {
-                $queryBuilder = $queryBuilder->where(function ($query) {
-                    $query->where('point_subscription_history.corporation_code', "")
-                        ->orWhereNull('point_subscription_history.corporation_code');
-                });
-            }
             if ($request['campaign_code'] != "") {
                 $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
             }
@@ -367,7 +271,6 @@ class PaymentHistoryController extends BaseController
 
         $paymentList = $queryBuilder->get()->map(function($item, $key) {
             $item['payment_date'] = DateTimeComponent::getDate($item['payment_date']);
-            $item['j_start_date'] = DateTimeComponent::getDate($item['j_start_date']);
             $item['begin_date'] = DateTimeComponent::getDate($item['begin_date']);
             $item['point_expire_date'] = DateTimeComponent::getDate($item['point_expire_date']);
             $item['amount'] = number_format($item['amount']);
@@ -381,19 +284,17 @@ class PaymentHistoryController extends BaseController
             $input['オーダーID'] = $this->convertShijis($item['order_id']);
             $input['学習者番号'] = $this->convertShijis($item['student_id']);
             $input['受注日'] = $this->convertShijis($item['payment_date']);
-            $input['基準日'] = $this->convertShijis($item['j_start_date']);
             $input['受講開始日'] = $this->convertShijis($item['begin_date']);
             $input['有効期限日'] = $this->convertShijis($item['point_expire_date']);
             $input['受注番号'] = $this->convertShijis($item['id']);
-            $input['コースコード'] = $this->convertShijis($item['course_code']);
-            $input['商品名'] = $this->convertShijis($item['j_course_name']);
+            $input['商品名'] = $this->convertShijis($item['item_name']);
             $input['学習者名'] = $this->convertShijis($item['j_student_name']);
-            $input['法人名'] = $this->convertShijis($item['company_name']);
+            $input['法人名'] = $this->convertShijis($item['j_company_name']);
             $input['売上'] = $this->convertShijis($item['amount']);
             $input['消費税'] = $this->convertShijis($item['tax']);
             $input['支払い状況'] = $this->convertShijis($item['j_paid_status']);
-            $input['入金日'] = $this->convertShijis($item['j_paid_status']);
-            $input['支払期限'] = $this->convertShijis($item['j_paid_status']);
+            $input['入金日'] = $this->convertShijis($item['j_receive_payment_date']);
+            $input['支払期限'] = $this->convertShijis($item['j_payment_term']);
             fputcsv($file, $input);
         }
 
@@ -412,19 +313,10 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.order_id as order_id',
             'point_subscription_history.student_id as student_id',
             'point_subscription_history.payment_date as payment_date',
-            'student_point_history.start_date as j_start_date',
-            'point_subscription_history.begin_date as begin_date',
-            'point_subscription_history.point_expire_date as point_expire_date',
-            'course.course_name as j_course_name',
-            'point_subscription_history.customer_code as customer_code',
             'point_subscription_history.item_name as item_name',
             'student.student_name as j_student_name',
             'student.is_lms_user as is_lms_user',
-            'point_subscription_history.course_code as course_code',
             DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS j_company_name"),
-            'lms_company.company_name as company_name',
-            'lms_project.project_code as j_project_code',
-            'point_subscription_history.corporation_code as corporation_code',
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
             'order.campaign_code as j_campaign_code',
@@ -439,33 +331,15 @@ class PaymentHistoryController extends BaseController
         ->leftJoin('student', function($join) {
             $join->on('point_subscription_history.student_id', '=', 'student.student_id');
         })
-        ->leftJoin('student_point_history', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('point_subscription_history.course_id', '=', 'course.course_id');
-        })
-        ->leftJoin('lms_project_course_student', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'lms_project_course_student.point_subscription_id');
-        })
-        ->leftJoin('lms_project', function($join) {
-            $join->on('lms_project_course_student.project_id', '=', 'lms_project.project_id');
-        })
-        ->leftJoin('lms_company', function($join) {
-            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
-        })
         ->where('point_subscription_history.del_flag', 0)
         ->where('point_subscription_history.point_subscription_history_id', $id)->firstOrFail();
 
         $paymentInfo->_token = csrf_token();
         $paymentInfo->payment_types = PaidStatus::asSelectArray();
         
-        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
-
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
             'paymentInfo' => $paymentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -475,13 +349,6 @@ class PaymentHistoryController extends BaseController
             return response()->json([
                 'status' => 'OK',
             ], StatusCode::BAD_REQUEST);  
-        }
-        $adminCanEdit = $this->adminCanEdit(PAYMENTHISTORY);
-
-        if ($adminCanEdit == 0) {
-            return response()->json([
-                'status' => 'NG',
-            ], StatusCode::NOT_FOUND);
         }
 
         $paymentInfo = PointSubscriptionHistory::where('point_subscription_history.del_flag', 0)
@@ -499,9 +366,6 @@ class PaymentHistoryController extends BaseController
             $payment_type = 2;
             $paid_status = $request->j_paid_status - 2;
         }
-        $corporation_code = $this->hankakuConvert($request->corporation_code);
-        $paymentInfo->corporation_code = $corporation_code;
-        $paymentInfo->customer_code = $request->customer_code;
         $paymentInfo->payment_way = $payment_type;
         $paymentInfo->paid_status = $paid_status;
 
@@ -510,10 +374,6 @@ class PaymentHistoryController extends BaseController
         DB::table('student_point_history')
             ->where('point_subscription_id', $request->id)
             ->update(['paid_status' => $paid_status]);
-
-        DB::table('order')
-            ->where('order_id', $request->order_id)
-            ->update(['corporation_code' => $corporation_code]);
 
         return response()->json([
             'status' => 'OK',

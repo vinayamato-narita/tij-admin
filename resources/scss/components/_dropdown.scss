@@ -1,0 +1,77 @@
+$zindex-dropdown:                   1000 !default;
+$dropdown-min-width:                10rem !default;
+
+$dropdown-link-hover-color:         shade-color($grey-900, 10%) !default;
+$dropdown-link-active-color:        $black;
+$dropdown-link-disabled-color:      $grey-500 !default;
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    z-index: $zindex-dropdown;
+    display: none; // none by default, but block on "open" of the menu
+    min-width: $dropdown-min-width;
+    padding: 0.5rem 1rem;
+    margin: 0; // Override default margin of ul
+    text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+    background-color: #FFF;
+    background-clip: padding-box;
+    border: 1px solid $bd-light;
+    border-radius: $border-radius;
+}
+
+.dropdown-menu-start {
+    right: auto #{"/* rtl:ignore */"};
+    left: 0 #{"/* rtl:ignore */"};
+}
+
+.dropdown-menu-end {
+    right: 0 #{"/* rtl:ignore */"};
+    left: auto #{"/* rtl:ignore */"};
+}
+
+
+.dropdown-divider {
+    @extend .divider;
+}
+
+// Links, buttons, and more within the dropdown menu
+//
+// `<button>`-specific styles are denoted with `// For <button>s`
+.dropdown-item {
+    display: block;
+    width: 100%; // For `<button>`s
+    padding: 0.75rem 0.5rem;
+    clear: both;
+    color: initial;
+    font-size: 0.875rem;
+    font-weight: $font-weight-normal;
+    text-align: inherit; // For `<button>`s
+    text-decoration: none;
+    white-space: nowrap; // prevent links from randomly breaking onto new lines
+    background-color: transparent; // For `<button>`s
+    border: 0; // For `<button>`s
+
+    &:hover,
+    &:focus {
+        color: $dropdown-link-hover-color;
+        text-decoration: none;
+    }
+
+    &.active,
+    &:active {
+        color: $dropdown-link-active-color;
+        text-decoration: none;
+    }
+
+    &.disabled,
+    &:disabled {
+        color: $dropdown-link-disabled-color;
+        pointer-events: none;
+        background-color: transparent;
+    }
+}
+
+.dropdown-menu.show {
+  display: block;
+}

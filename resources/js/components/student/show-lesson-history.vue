@@ -22,7 +22,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒番号</label
+                                                >学習者番号</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                {{ lessonHistoryInfoEx.lesson_history_id }}
@@ -32,7 +32,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >生徒名</label
+                                                >学習者名</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.student_name }}
@@ -102,7 +102,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >評価（生徒→先生）</label
+                                                >評価（学習者→先生）</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.average }}
@@ -112,7 +112,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >レッスンに対する感想（生徒）</label
+                                                >レッスンに対する感想（学習者）</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.comment_from_student_to_office }}
@@ -122,7 +122,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >コメント（先生→生徒）</label
+                                                >コメント（先生→学習者）</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.comment_from_teacher_to_student }}
@@ -156,10 +156,9 @@
                                         <div class="line"></div>
                                         <div class="form-group">
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary w-100 mr-2" :disabled = "lessonHistoryInfoEx.admin_can_edit == 0">登録</button>
+                                                <button type="submit" class="btn btn-primary w-100 mr-2">登録</button>
                                                 <button type="button" class="btn btn-danger w-100 mr-2" 
                                                     @click="cancelLessonHistory"
-                                                    :disabled = "lessonHistoryInfoEx.admin_can_edit == 0"
                                                     >削除</button>
                                                 <a :href="urlStudentLessonHistoryList" class="btn btn-default w-100">閉じる</a>
                                               </div>

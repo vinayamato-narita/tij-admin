@@ -101,8 +101,8 @@ class TeacherLessonHistoryExport implements FromCollection, WithHeadings
             "コース名",
             "レッスン名",
             "テキスト名",
-            "生徒番号",
-            "生徒名"
+            "学習者番号",
+            "学習者名"
         ];
 
         foreach ($header as $item) {

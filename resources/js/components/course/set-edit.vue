@@ -27,7 +27,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="isShow"> 生徒に公開する :
+                                            <label class="col-md-3 col-form-label text-md-right" for="isShow"> 学習者に公開する :
                                             </label>
 
                                             <div class="col-md-6 col-form-label">

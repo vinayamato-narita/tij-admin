@@ -192,7 +192,7 @@ class BreadcrumbComponent
                 'route_str' => "course.setEdit",
             ],
             'student_list' => [
-                'text' => '生徒情報一覧',
+                'text' => '学習者情報一覧',
                 'route_str' => "student.index",
             ],
             'student_comment_list' => [
@@ -264,7 +264,7 @@ class BreadcrumbComponent
                 'route_str' => "category.editLang",
             ],
             'edit_student' => [
-                'text' => '生徒情報編集',
+                'text' => '学習者情報編集',
                 'route_str' => "student.edit",
             ],
             'payment_history_list' => [
@@ -284,11 +284,11 @@ class BreadcrumbComponent
                 'route_str' => 'groupSchedule.index'
             ],
             'student_point_history_list' => [
-                'text' => 'ポイント履歴一覧',
+                'text' => '受講回数履歴一覧',
                 'route_str' => "student.pointHistoryList",
             ],
             'show_student_point_history' => [
-                'text' => 'ポイント履歴詳細',
+                'text' => '受講回数履歴詳細',
                 'route_str' => "student.showPointHistory",
             ],
             'edit_role' => [
@@ -388,7 +388,7 @@ class BreadcrumbComponent
                 'route_str' => 'group_lesson_history.index'
             ],
             'group_lesson_reserve' => [
-                'text' => 'グループレッスン申込一覧',
+                'text' => 'グループレッスンコース申込一覧',
                 'route_str' => 'groupLessonReserves.index'
             ],
             'group_lesson_reserve_show' => [

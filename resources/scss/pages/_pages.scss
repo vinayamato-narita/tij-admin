@@ -1,0 +1,26 @@
+.search-form {
+    padding: 1rem;
+    box-shadow: $box-shadow-lighter;
+    border-radius: $border-radius;
+    border: 1px solid $bd-lighter;
+
+    @include sm {
+        padding: 2rem;
+    }
+
+    @include lg {
+        padding: 3rem;
+    }
+}
+
+.fav-btn {
+    &:hover {
+        color: $rose;
+    }
+    &.active {
+        color: $rose;
+        .bi-heart::before {
+            content: "\f415";
+        }
+    }
+}

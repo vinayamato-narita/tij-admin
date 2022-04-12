@@ -52,6 +52,13 @@ Vue.filter("formatDateTime", function(value) {
     }
   });
 
+  Vue.filter("formatMoney", function(value) {
+    if (value) {
+        var formatter = new Intl.NumberFormat('en-US');
+
+        return formatter.format(value);    }
+  });
+
 var filter = function(text, length, clamp){
     clamp = clamp || '...';
     var node = document.createElement('div');
@@ -59,6 +66,7 @@ var filter = function(text, length, clamp){
     var content = node.textContent;
     return content.length > length ? content.slice(0, length) + clamp : content;
 };
+
 
 Vue.filter('truncate', filter);
 Vue.config.productionTip = false
@@ -129,6 +137,9 @@ import EditLangCategory from "./components/category/edit-lang-category.vue"
 import CreateTest from "./components/test/create-test.vue"
 import EditTest from "./components/test/edit-test.vue"
 import TestShow from "./components/test/detail.vue"
+import Preview from "./components/test/preview.vue"
+import PreviewHeader from "./components/test/preview-header.vue"
+import PreviewNav from "./components/test/preview-nav.vue"
 import TestAddQuestion from "./components/test/test-add-question.vue"
 import TestEditQuestion from "./components/test/test-edit-question.vue"
 import PreparationAdd from "./components/preparation/add"
@@ -343,8 +354,10 @@ new Vue({
         LessonHistorySearch,
         EditTeacherLang,
         TeacherLesson,
-        UpdateStudentAttendance,
-        GroupCourseUserImport
+        GroupCourseUserImport,
+        Preview,
+        PreviewHeader,
+        PreviewNav
     },
     methods: {},
     mounted() {}

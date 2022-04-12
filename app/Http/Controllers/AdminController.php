@@ -83,6 +83,7 @@ class AdminController extends BaseController
         $admin->admin_user_email = $request->admin_user_email;
         $admin->password = Hash::make($request->password);
         $admin->admin_user_description = $request->admin_user_description;
+        $admin->role = $request->role;
         $admin->save();  
 
         return response()->json([
@@ -151,6 +152,7 @@ class AdminController extends BaseController
         $adminInfo = AdminUser::where('admin_user_id', $id)->firstOrFail();
         $adminInfo->admin_user_name = $request->admin_user_name;
         $adminInfo->admin_user_email = $request->admin_user_email;
+        $adminInfo->role = $request->role;
         if ($request->password != "") {
             $adminInfo->password = Hash::make($request->password);
         }

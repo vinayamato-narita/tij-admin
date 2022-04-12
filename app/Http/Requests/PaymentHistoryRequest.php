@@ -27,10 +27,7 @@ class PaymentHistoryRequest extends FormRequest
         return [
             'student_id' => 'required|integer',
             'course_id' => 'required|integer',
-            'management_number' => 'nullable|regex:/^[!-~]+$/i|max:10',
-            'course_begin_month' => 'required_if:is_lms_user,1|nullable|date',
             'payment_date' => 'required|date',
-            'start_date' => 'required|date',
             'begin_date' => 'required|date',
             'amount' => 'required|integer|between:0,1000000000',
             'payment_type' => 'required|enum_value:' . PaidStatus::class . ',false'

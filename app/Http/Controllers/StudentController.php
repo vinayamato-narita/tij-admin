@@ -79,15 +79,12 @@ class StudentController extends BaseController
         }
         $commentList = $queryBuilder->sortable(['update_date' => 'desc'])->paginate($pageLimit);
 
-        $adminCanEdit = $this->adminCanEdit(STUDENT);
-        
         return view('student.comment', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'commentList' => $commentList,
             'studentInfo' => $studentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -170,7 +167,6 @@ class StudentController extends BaseController
         ->where('student_public_comment_for_teacher.student_public_comment_for_teacher_id', $id)->firstOrFail();
 
         $commentInfo->_token = csrf_token();
-        $commentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
             ['name' => 'student_list'],
@@ -361,7 +357,6 @@ class StudentController extends BaseController
 
         $lessonHistoryInfo->_token = csrf_token();
         $lessonHistoryInfo->average = ($lessonHistoryInfo->teacher_rating + $lessonHistoryInfo->teacher_attitude + $lessonHistoryInfo->teacher_punctual + $lessonHistoryInfo->skype_voice_rating_from_student)/4;
-        $lessonHistoryInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         return view('student.show-lesson-history', [
             'breadcrumbs' => $breadcrumbs,
@@ -488,14 +483,10 @@ class StudentController extends BaseController
             'point_subscription_history.receive_payment_date as receive_payment_date',
             'point_subscription_history.set_course_id as set_course_id',
             'course.course_name as course_name',
-            'student_point_history.start_date as start_date',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
         )
         ->leftJoin('course', function($join) {
             $join->on('point_subscription_history.course_id', '=', 'course.course_id');
-        })
-        ->leftJoin('student_point_history', function($join) {
-            $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
         })
         ->where('point_subscription_history.del_flag', 0)
         ->where('point_subscription_history.student_id', $id)
@@ -507,16 +498,11 @@ class StudentController extends BaseController
             });
         }
         if (isset($request['sort'])) {
-            if ($request['sort'] == "start_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_point_history.start_date','ASC') : $queryBuilder->orderBy('student_point_history.start_date','DESC');
-            }
             if ($request['sort'] == "j_paid_status") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_paid_status','ASC') : $queryBuilder->orderBy('j_paid_status','DESC');
             }
         }
         $paymentHistoryList = $queryBuilder->sortable(['point_subscription_history_id' => 'desc'])->paginate($pageLimit);
-
-        $adminCanEdit = $this->adminCanEdit(STUDENT);
 
         return view('student.payment-history', [
             'breadcrumbs' => $breadcrumbs,
@@ -524,7 +510,6 @@ class StudentController extends BaseController
             'pageLimit' => $pageLimit,
             'paymentHistoryList' => $paymentHistoryList,
             'studentInfo' => $studentInfo,
-            'adminCanEdit' => $adminCanEdit,
         ]);
     }
 
@@ -542,7 +527,6 @@ class StudentController extends BaseController
         $paymentType = [];
         $courseList = [];
         if ($studentInfo->is_lms_user) {
-            $studentInfo->course_begin_month = Carbon::now();
             $paymentType = PaidStatus::asSelectArray();
             $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->student_id, COURSE_FREE_ID));
         }else {
@@ -550,14 +534,12 @@ class StudentController extends BaseController
                 0 => 'G',
                 1 => 'CSV'
             ];
-
             $courseList = DB::select('CALL sp_admin_get_course_list');
         }
 
         $studentInfo->_token = csrf_token();
         $studentInfo->payment_type_list = $paymentType;
         $studentInfo->payment_type = PaidStatus::G;
-        $studentInfo->course_id = 0;
         $studentInfo->course_list = $courseList;
         $studentInfo->payment_date = Carbon::now();
         $studentInfo->start_date = Carbon::now();
@@ -604,11 +586,6 @@ class StudentController extends BaseController
             $orderId = "$random"."$orderId";
         }
 
-        $course_begin_month = "";
-        if (isset($request->course_begin_month)) {
-            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
-        }
-
         $course = Course::where('course_id', $request->course_id)->first();
 
         $listCourseBySetCourse = [];
@@ -631,7 +608,7 @@ class StudentController extends BaseController
                 $course->parent_id = isset($course1->parent_id) ? $course1->parent_id : 0;
             }
         }
-
+        
         if(empty($listCourseBySetCourse)) {
             DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                 array(
@@ -643,11 +620,11 @@ class StudentController extends BaseController
                     $course->parent_id,
                     $request->payment_type,
                     $request->payment_date,
-                    $request->start_date,
+                    '',
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
                     $request->amount,
-                    $request->management_number ?? "",
-                    $course_begin_month
+                    "",
+                    ''
                 ));
         } else {
             foreach($listCourseBySetCourse as $courseSetCourse) {
@@ -661,11 +638,11 @@ class StudentController extends BaseController
                         $course->parent_id,
                         $request->payment_type,
                         $request->payment_date,
-                        $request->start_date,
+                        '',
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
                         $request->amount,
-                        $request->management_number ?? "",
-                        $course_begin_month
+                        "",
+                        ''
                     ));
             }
         }
@@ -695,7 +672,6 @@ class StudentController extends BaseController
         }
 
         $paymentInfo->_token = csrf_token();
-        $paymentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
         $paymentInfo->payment_type_list = $paymentType;
         $paymentInfo->is_payment_expired = 0;
         if (!empty($paymentInfo->point_expire_date)) {
@@ -704,11 +680,6 @@ class StudentController extends BaseController
             if ($currentExpireDate < $today) {
                 $paymentInfo->is_payment_expired = 1;
             }
-        }
-        if(!empty($paymentInfo->course_begin_month)) {
-            $paymentInfo->course_begin_month = Carbon::createFromFormat('Ymd', $paymentInfo->course_begin_month . "01")->format('Y-m');
-        }else {
-            $paymentInfo->course_begin_month = "";
         }
 
         $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
@@ -741,17 +712,12 @@ class StudentController extends BaseController
         if ($request->point_expire_date != $paymentInfo->point_expire_date) {
             $studentPointHistoryIds = StudentPointHistory::where('point_subscription_id', $request->point_subscription_history_id)
                 ->where('pay_type', 5)
-                ->pluck('id')
+                ->pluck('student_point_history_id')
                 ->toArray();
 
-            StudentPointHistory::whereIn('id', $studentPointHistoryIds)->delete();
+            StudentPointHistory::whereIn('student_point_history_id', $studentPointHistoryIds)->delete();
         }
-        $course_begin_month = "";
-        if (isset($request->course_begin_month)) {
-            $course_begin_month = (new Carbon($request->course_begin_month))->format('Ym');
-        }
-
-        $management_number = $request->management_number ?? "";
+       
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(
                 $paymentInfo->student_id,
@@ -763,8 +729,8 @@ class StudentController extends BaseController
                 $request->point_expire_date,
                 $request->amount,
                 $request->tax,
-                $management_number,
-                $course_begin_month
+                '',
+                ''
             ));
 
         return response()->json([
@@ -1184,7 +1150,6 @@ class StudentController extends BaseController
         }
         
         $studentInfo->_token = csrf_token();
-        $studentInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
 
         return view('student.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -1269,7 +1234,7 @@ class StudentController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => '生徒削除が完了しました',
+            'message' => '学習者削除が完了しました',
         ], StatusCode::OK);
     }
 
@@ -1390,7 +1355,6 @@ class StudentController extends BaseController
         ]);
 
         $pointHistoryInfo->_token = csrf_token();
-        $pointHistoryInfo->admin_can_edit = $this->adminCanEdit(STUDENT);
        
         return view('student.show-point-history', [
             'breadcrumbs' => $breadcrumbs,

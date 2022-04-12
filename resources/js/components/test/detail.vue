@@ -16,6 +16,8 @@
                                 <div class="card-header">
                                     <h5 class="title-page">テスト情報</h5>
                                     <div class="float-right">
+                                        <a :href="this.previewUrl" target="_blank" class="btn btn-primary ">プレビュー</a>
+
                                         <a :href="this.editTestUrl" class="btn btn-primary ">編集</a>
                                     </div>
                                 </div>
@@ -48,11 +50,13 @@
                                         <label class="col-md-4 col-form-label text-md-right">説明:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.test.test_description}}
+                                            <nl2br v-if="this.test.test_description" tag="p" :text="this.test.test_description" class-name="mb-0">
+
+                                            </nl2br>
                                         </div>
                                     </div>
 
-                                    <div class="form-group row " v-if="test.test_type === 2">
+                                    <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
                                         <label class="col-md-4 col-form-label text-md-right">制限時間:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -68,7 +72,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row ">
+                                    <div class="form-group row " v-if="test.test_type === 1 || test.test_type === 2">
                                         <label class="col-md-4 col-form-label text-md-right">合格点:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -101,7 +105,7 @@
                                         <li v-for="test_question in this.test.test_questions">
                                             <div class="row"
                                                  style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-4 wrap-long-text"><span class="wrap-long-text"
+                                                <div class="col-md-3 wrap-long-text"><span class="wrap-long-text"
                                                                                             style="color: inherit"> {{test_question.navigation}}</span>
                                                 </div>
                                                 <div class="col-md-3">
@@ -113,7 +117,7 @@
                                                     <a :href="getEditQuestionUrl(test.test_id, test_question.test_question_id)" class="btn btn-primary text-nowrap">問題編集
                                                     </a>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
 
                                                 </div>
 
@@ -210,7 +214,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl', 'isHasTestResult'],
+        props: ['test', 'editTestUrl', 'addQuestionUrl', 'detailTestUrl', 'listQuestionAttachUrl', 'listQuestionAttachUpdateUrl', 'isHasTestResult', 'previewUrl'],
         mounted() {
         },
         methods: {

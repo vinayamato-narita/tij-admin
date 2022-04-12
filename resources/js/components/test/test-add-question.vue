@@ -56,7 +56,7 @@
 
                                     <div class="div-deco">
                                         <h5>
-                                            大問
+                                            大問 {{index =  this.test.test_questions_count + 1}}
                                         </h5>
 
 
@@ -117,11 +117,19 @@
                                                         class="btn btn-primary  mr-2">新規ファイル追加
                                                 </button>
                                                 <input type="file" name="newFile" id="newFile" ref="newFile"
-                                                       v-on:change="changeFile" class="hidden">
+                                                       v-on:change="changeFile" v-validate="'max_sz_50'" class="hidden" />
                                                 <span class="text-nowrap">
                                                     {{fileName}}
 
                                                 </span>
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('newFile')"
+                                                >
+                                                    {{ errors.first("newFile") }}
+                                                </div>
 
                                             </div>
                                         </div>
@@ -134,30 +142,22 @@
                                                 設問{{ getIndex(index)}}
                                                 <button v-if="index !== 0" type="button" v-on:click="deleteSubQuestion(index)" class="float-right btn">                                                <font-awesome-icon icon="minus-circle"></font-awesome-icon>
                                                 </button>
-
                                             </h5>
-
-
-
-
                                         </div>
 
                                         <div class="card-body pl-5 pr-5" >　
-
-
                                             <div class="form-group row ">
                                                 <label class="col-md-2 col-form-label text-md-left"><b>問題文 :</b>
                                                     <span class="glyphicon glyphicon-star"></span>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
-                                                    <input
-                                                            class="form-control"
-                                                            :name="'subQuestion[' + index + '][question]'"
-                                                            v-model="item.question"
-                                                            v-validate="
-                                                        'required|max:255'
-                                                    "
-                                                    />
+                                                    <textarea
+                                                        class="form-control"
+                                                        :name="'subQuestion[' + index + '][question]'"
+                                                        v-model="item.question"
+                                                        row="5"
+                                                        v-validate="'required'"
+                                                    ></textarea>
                                                     <div
                                                             class="input-group is-danger"
                                                             role="alert"
@@ -291,7 +291,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
-                                                <label class="col-md-2 col-form-label text-md-left"><b>参考URL :</b>
+                                                <label class="col-md-2 col-form-label text-md-left"><b>参考URLリンク :</b>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
                                                     <input
@@ -340,6 +340,9 @@
                                                 <div class="col-md-9 text-md-left p-2">
                                                     <multiselect v-model="item.value" label="name" track-by="id"
                                                                  :options="optionsTag" :multiple="true"
+                                                                 :select-label="' '"
+                                                                 :selected-label="' '"
+                                                                 :deselect-label="' '"
                                                                  placeholder=""
                                                     >
 
@@ -466,6 +469,15 @@
                         .catch((error) => {});
                 },
             });
+
+            this.$validator.extend("max_sz_50", {
+                validate(value, args) {
+                    console.log(Math.round(((value[0].size / 1024))));
+                    if (Math.round(((value[0].size / 1024))) > (50 * 1000))
+                        return {valid : false};
+                    return { valid : true};
+                },
+            });
         },
         components: {
             Loader,
@@ -475,6 +487,9 @@
         },
         data() {
             return {
+                imageExtensions : ['jpg' , 'jpeg' , 'jfif' , 'pjpeg' , 'pjp', "png", 'svg', 'webp'],
+                videoExtensions : ['WEBM', 'MPG', 'MP2', 'MPEG', 'MPE', 'MPV', 'OGG', 'MP4', 'M4P', 'M4V', 'AVI', 'WMV', 'MOV', 'QT', 'FLV', 'SWF', 'AVCHD'],
+                mp3Extensions: ['MP3'],
                 flagShowLoader: false,
                 csrfToken: Laravel.csrfToken,
                 fileSelected: null,
@@ -508,16 +523,18 @@
                         required : "ナビゲーションを入力してください。",
                         unique_custom: "このナビゲーションは既に登録されています。"
                     },
+                    newFile : {
+                        max_sz_50 : "ファイルサイズを50MBを超えた為、アップロードできません。"
+                    },
                     'subQuestion[0][question]': {
-                        required: "問題文を入力してください。",
-                        max: "問題文は255文字以内で入力してください。",
+                        required: "問題文を入力してください。"
 
                     },
                     'subQuestion[0][answer1]': {
-                        required: "選択肢1(正解)を入力してください。"
+                        required: "選択肢1を入力してください。"
                     },
                     'subQuestion[0][answer2]': {
-                        required: "選択肢2(正解)を入力してください。"
+                        required: "選択肢２を入力してください。"
                     },
                     'subQuestion[0][reference_url]': {
                         max: "参考URLは255文字以内で入力してください。",
@@ -578,21 +595,20 @@
                 };
 
                 messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
-                    max: "問題文は255文字以内で入力してください。",
+                    required: "問題文を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][reference_url]"] = {
                     max: "参考URLは255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください。"
+                    required: "選択肢1を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください。"
+                    required: "選択肢2を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
-                    required: "点数を入力してください",
-                    decimal: "点数は半角数字を入力してください",
+                    required: "点数を入力してください。",
+                    decimal: "点数は半角数字を入力してください。",
                     min_value: "点数は1～1000000000 を入力してください。",
                     max_value: "点数は1～1000000000 を入力してください。",
                 };
@@ -609,23 +625,22 @@
                 };
 
                 messError.custom["subQuestion[" + index + "][question]"] = {
-                    required: "問題文を入力してください",
-                    max: "問題文は255文字以内で入力してください。",
+                    required: "問題文を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][reference_url]"] = {
                     max: "参考URLは255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
-                    required: "選択肢1(正解)を入力してください"
+                    required: "選択肢1を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][answer2]"] = {
-                    required: "選択肢2(正解)を入力してください"
+                    required: "選選択肢2を入力してください。"
                 };
                 messError.custom["subQuestion[" + index + "][score]"] = {
-                    required: "点数を入力してください",
-                    decimal: "点数は半角数字を入力してください",
-                    min_value: "点数は1～1000000000 を入力してください",
-                    max_value: "点数は1～1000000000 を入力してください",
+                    required: "点数を入力してください。",
+                    decimal: "点数は半角数字を入力してください。",
+                    min_value: "点数は1～1000000000 を入力してください。",
+                    max_value: "点数は1～1000000000 を入力してください。",
                 };
                 this.$validator.localize("en", messError);
 
@@ -654,6 +669,17 @@
                     }
                 });
             },
+            isAllowFileType (fileName) {
+                var re = /(?:\.([^.]+))?$/
+                var ext = re.exec(fileName)[1];
+                var returnType = '';
+                if (this.imageExtensions.includes(ext.toLowerCase()) || this.imageExtensions.includes(ext.toUpperCase()) ||
+                this.videoExtensions.includes(ext.toLowerCase()) || this.videoExtensions.includes(ext.toUpperCase()) ||
+                this.mp3Extensions.includes(ext.toLowerCase()) || this.mp3Extensions.includes(ext.toUpperCase()))
+                    return true
+                return false;
+
+            },
             showModalSubQuestion(modalName, index) {
                 this.$modal.show(modalName, {
                     fileType: this.fileType,
@@ -669,10 +695,13 @@
                 });
             },
             changeFile(e) {
-                this.fileId = null;
-                this.fileNameAttached = '';
-                this.fileSelected = e.target.files[0];
-                this.fileName = e.target.files[0].name;
+                if (this.isAllowFileType(e.target.files[0].name)) {
+                    this.fileId = null;
+                    this.fileNameAttached = '';
+                    this.fileSelected = e.target.files[0];
+                    this.fileName = e.target.files[0].name;
+                }
+
             },
             changeFileSubQuestion(e, index) {
                 this.subQuestion[index].fileId = null;

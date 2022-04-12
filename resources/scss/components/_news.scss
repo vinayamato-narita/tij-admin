@@ -1,0 +1,17 @@
+.news-item {
+    margin-bottom: 1rem;
+    .date {
+        font-size: 0.875rem;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .txt {
+        a {
+            font-size: 1rem;
+            border-bottom: 1px dotted $link;
+            &:hover {
+                border-bottom: 1px solid $link;
+            }
+        }
+    }
+}

@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GroupLessonReserveController extends BaseController
 {
@@ -48,7 +49,12 @@ class GroupLessonReserveController extends BaseController
             $queryBuilder = $queryBuilder->whereDate('reserve_end_date', '<', Carbon::createFromTimestamp($request['reserve_end_date_end']));
         }
 
-        $courseList = $queryBuilder->with(['childCourse', 'lessonSchedules'])->withCount(['studentPointHistories'])->sortable(['course_name' => 'desc'])->paginate($pageLimit);
+        $courseList = $queryBuilder->with(['childCourse', 'lessonSchedules'])
+            ->withCount(['pointSubscriptionHistories' => function ($query) {
+                $query->select(DB::raw('count(distinct(student_id))'));
+            }])
+            ->sortable(['course_name' => 'desc'])
+            ->paginate($pageLimit);
 
         return view('groupLessonReserve.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -96,7 +102,8 @@ class GroupLessonReserveController extends BaseController
             ->with(['childCourse', 'lessonSchedules'])
             ->withCount(['studentPointHistories'])
             ->first();
-
+        $course['group_lesson'] = $course->group_lesson;
+        
         return view('groupLessonReserve.show', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,

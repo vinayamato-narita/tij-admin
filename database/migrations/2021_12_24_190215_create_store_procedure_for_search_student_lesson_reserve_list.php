@@ -67,16 +67,12 @@ class CreateStoreProcedureForSearchStudentLessonReserveList extends Migration
                 INNER JOIN teacher_lesson tl ON tchr.teacher_id = tl.teacher_id  AND tl.lesson_id = _lesson_id
                 LEFT JOIN course_lesson cl ON cl.lesson_id = ls.lesson_id
                 INNER JOIN course c ON c.course_id = _course_id
-                LEFT JOIN course_schedule_setting css ON c.course_id = css.course_id
-                         AND INSTR (css.date_type, DATE_FORMAT(ls.lesson_date , '%w')) > 0
-                         AND DATE_FORMAT(ls.lesson_starttime,'%H:%i') BETWEEN css.start_time AND css.end_time
             WHERE
                 ls.is_lesson_end = 0
                 AND ls.teacher_id = _teacher_id
                 AND DATE_FORMAT(DATE_ADD(DATE_ADD(lesson_starttime,INTERVAL -@time_diff_from MINUTE),INTERVAL @time_diff_to MINUTE),'%Y-%m-%d %H:%i:%s')
                     BETWEEN DATE_FORMAT(_lesson_reserve_date_from,'%Y-%m-%d %H:%i:%s')
                     AND DATE_FORMAT(_lesson_reserve_date_to, '%Y-%m-%d 23:59:59')
-                AND css.id IS NOT NULL
                 AND CASE WHEN c.reserve_end_date IS NULL
                     THEN ls.lesson_starttime >= NOW()
                     ELSE c.reserve_end_date <= ls.lesson_starttime

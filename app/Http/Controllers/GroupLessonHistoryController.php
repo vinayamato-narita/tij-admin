@@ -18,7 +18,7 @@ use App\Models\LessonHistory;
 use App\Enums\StatusCode;
 
 class GroupLessonHistoryController extends BaseController
-{
+{ 
     public function index(Request $request)
     {
         $breadcrumbComponent = new BreadcrumbComponent();
@@ -26,16 +26,23 @@ class GroupLessonHistoryController extends BaseController
             ['name' => 'group_lesson_history']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->whereHas('lesson')->whereHas('teacher')->whereHas('course')->withCount('studentPointHistory', 'lessonHistories');
+        $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->whereHas('lesson')->whereHas('teacher')->whereHas('course')->withCount(
+                [
+                    'studentPointHistory', 
+                    'lessonHistories' => function($query) {
+                        $query->whereNotNull('student_lesson_start');
+                    }
+                ]
+            );
 
         if (!empty($request['search_input'])) {
-            /*$queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
+            $queryBuilder = $queryBuilder->whereHas('course', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
             })->orWhereHas('teacher', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('teacher_name', $request['search_input']));
             })->orWhereHas('lesson', function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('lesson_name', $request['search_input']));
-            });*/
+            });
         }
 
         if (!empty($request['time_from']) || !empty($request['time_to'])) {
@@ -89,10 +96,6 @@ class GroupLessonHistoryController extends BaseController
             ->join('lesson_history', function($join) use ($id) {
                 $join->on('student.student_id', '=', 'lesson_history.student_id')
                 ->where('lesson_history.lesson_schedule_id', $id);
-            })
-           ->join('student_point_history', function($join) use ($id) {
-                $join->on('student.student_id', '=', 'student_point_history.student_id')
-                ->where('student_point_history.lesson_schedule_id', $id);
             });
 
         if (!empty($request['search_input'])) {

@@ -363,7 +363,7 @@
                                 </div>
 
                             </div>
-                            <div class="card" v-if="this.course.course_type === 1">
+                            <div class="card" v-if="this.course.course_type === 1 || this.course.course_type === 0">
                                 <div class="card-header">
                                     <h5 class="title-page">コース修了テスト</h5>
                                     <div class="float-right">

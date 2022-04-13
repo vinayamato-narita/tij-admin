@@ -151,7 +151,7 @@
                                                     <input
                                                         class="form-check-input"
                                                         type="radio"
-                                                        value="0"
+                                                        value="1"
                                                         name="topDisplay1"
                                                         id="inline-radio2"
                                                         v-validate="'required'"
@@ -169,7 +169,7 @@
                                                     <input
                                                         class="form-check-input"
                                                         type="radio"
-                                                        value="1"
+                                                        value="0"
                                                         name="topDisplay"
                                                         id="inline-radio2"
                                                         v-validate="'required'"

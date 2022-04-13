@@ -71,6 +71,9 @@
                                             {{this.teacher.time_zone.timezone_name_native}}
 
                                         </div>
+                                        <div class="col-md-6 text-md-left p-2" v-else>
+                                            未選択
+                                        </div>
                                     </div>
 
                                     <div class="form-group row ">

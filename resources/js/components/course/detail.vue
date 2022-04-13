@@ -103,7 +103,7 @@
 
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">商品コード:
+                                        <label class="col-md-3 col-form-label text-md-right">コースコード:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 

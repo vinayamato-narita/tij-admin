@@ -168,7 +168,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">商品コード :
+                                            <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">コースコード :
                                             </label>
                                             <div class="col-md-6">
                                                 <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="'max:45'" />
@@ -514,7 +514,7 @@
                         max_value: "価格（税抜）は0～1000000000 を入力してください"
                     },
                     paypalItemNumber : {
-                        max: "商品コードは45文字以内で入力してください。"
+                        max: "コースコードは45文字以内で入力してください。"
                     },
                     minReserveCount : {
                         required: "最小開催人数はを入力してください",

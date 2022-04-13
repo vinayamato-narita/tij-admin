@@ -283,7 +283,6 @@ new Vue({
         TextAdd,
         TextShow,
         TextEdit,
-        ChangeStatusNews,
         CreateNews,
         EditNews,
         EditLangNews,

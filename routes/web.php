@@ -44,7 +44,6 @@ Route::group([
 
 
     Route::resource('news', NewsController::class);
-    Route::post('changeStatusNews/{id}', 'NewsController@changeStatus')->name('changeStatusNews');
     Route::get('/news/{id}/edit-lang/{type}', 'NewsController@editLang')->name('editLangNews');
     Route::post('updateLangNews', 'NewsController@updateLang')->name('updateLangNews');
     Route::get('/faq/{id}/edit-lang/{type}', 'FaqController@editLang')->name('editLangFaq');

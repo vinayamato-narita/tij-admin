@@ -65,9 +65,6 @@
                                                                         <a class="dropdown-item" href="{{ route('news.show', $news->news_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
                                                                     <li>
-                                                                        <change-status-news :url-action="{{ json_encode(route('changeStatusNews', $news->news_id)) }}" :status="{{ $news->is_show_on_student_top }}"></change-status-news>
-                                                                    </li>
-                                                                    <li>
                                                                         <delete-item
                                                                             :delete-action="{{ json_encode(route('news.destroy', $news->news_id)) }}"
                                                                             :message-confirm="{{ json_encode('このお知らせを削除しますか？') }}"

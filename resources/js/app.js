@@ -92,6 +92,7 @@ import TeacherShow from "./components/teacher/detail.vue"
 import TextAdd from "./components/text/add.vue"
 import TextShow from "./components/text/detail.vue"
 import TextEdit from "./components/text/edit.vue"
+import ChangeStatusNews from "./components/news/change-status.vue"
 import CreateNews from "./components/news/create-news.vue"
 import EditNews from "./components/news/edit-news.vue"
 import EditLangNews from "./components/news/edit-lang-news.vue"
@@ -283,6 +284,7 @@ new Vue({
         TextAdd,
         TextShow,
         TextEdit,
+        ChangeStatusNews,
         CreateNews,
         EditNews,
         EditLangNews,

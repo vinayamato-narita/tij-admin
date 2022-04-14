@@ -42,7 +42,7 @@
                                                 <tr>
                                                     <th class="text-left width-130">@sortablelink('no_faq', ' No.')</th>
                                                     <th class="text-left min-width-150">@sortablelink('question', ' 質問・Q')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('answer', ' 答え・A')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('faqCategory.faq_category_name', ' 中カテゴリ')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -51,7 +51,7 @@
                                                     <tr>
                                                         <td class="text-left">{{ $faq->no_faq }}</td>
                                                         <td class="text-left">{{ $faq->question }}</td>
-                                                        <td class="text-left">{{ $faq->answer }}</td>
+                                                        <td class="text-left">{{ $faq->faqCategory->faq_category_name }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

@@ -31,9 +31,11 @@ class CreateStoreProcedureForStudentLessonReserveCancel extends Migration
           UPDATE lesson_schedule
           SET
             lesson_reserve_type = 1
-            #,lesson_id = 0
-            #,lesson_text_id = 0
-            #,lesson_text_name = NULL
+            ,lesson_id = 0
+            ,course_id = 0
+            ,lesson_text_id = 0
+            ,lesson_text_name = NULL
+            ,zoom_url = NULL
           WHERE
             lesson_schedule_id = _lesson_schedule_id
           ;

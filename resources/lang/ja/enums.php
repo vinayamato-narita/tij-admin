@@ -25,7 +25,7 @@ return [
         TestType::ENDCOURSE => 'コース修了テスト',
     ],
     AdminRole::class => [
-        AdminRole::BUSINESS => 'システム管理者',
-        AdminRole::SYSTEM => '業務管理者',
+        AdminRole::SYSTEM => 'システム管理者',
+        AdminRole::BUSINESS => '業務管理者',
     ],
 ];

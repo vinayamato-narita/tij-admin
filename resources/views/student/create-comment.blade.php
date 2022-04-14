@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', 'FAQ新規作成')
+@section('title', 'コメント新規作成')
 @section('content')
     <student-create-comment
     	:url-action="{{json_encode(route('student.storeComment'))}}" 

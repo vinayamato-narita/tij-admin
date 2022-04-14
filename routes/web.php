@@ -34,7 +34,6 @@ Route::group([
     Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');
     Route::post('teacher/{id}/lesson', 'TeacherController@registerLesson')->name('teacher.registerLesson');
     Route::delete('teacher/{id}/lesson/{lessonId}/delete', 'TeacherController@teacherLessonDelete')->name('teacher.teacherLessonDelete');
-    Route::post('changeStatusAdmin/{id}', 'AdminController@changeStatus')->name('changeStatusAdmin');
     Route::resource('faq', FaqController::class);
     Route::get('export-teacher', 'TeacherController@exportTeacher')->name('exportTeacher');
 

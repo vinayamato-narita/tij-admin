@@ -46,7 +46,6 @@
                                                     <th class="text-left min-width-150">@sortablelink('admin_user_email', ' メールアドレス')</th>
                                                     <th class="text-left min-width-120">説明</th>
                                                     <th class="text-left min-width-150">権限</th>
-                                                    <th class="text-left min-width-150">業務優先度設定</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -57,9 +56,6 @@
                                                         <td class="text-left">{{ $user->admin_user_email }}</td>
                                                         <td class="text-left">{{ $user->admin_user_description }}</td>
                                                         <td class="text-left">{{ AdminRole::getDescription($user->role) }}</td>
-                                                        <td class="text-left">
-                                                            <change-status-admin :url-action="{{ json_encode(route('changeStatusAdmin', $user->admin_user_id)) }}" :status="{{ $user->is_online }}"></change-status-admin>
-                                                        </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

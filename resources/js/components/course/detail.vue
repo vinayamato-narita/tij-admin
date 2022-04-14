@@ -103,7 +103,7 @@
 
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">商品コード:
+                                        <label class="col-md-3 col-form-label text-md-right">コースコード:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
 
@@ -363,7 +363,7 @@
                                 </div>
 
                             </div>
-                            <div class="card" v-if="this.course.course_type === 1">
+                            <div class="card" v-if="this.course.course_type === 1 || this.course.course_type === 0">
                                 <div class="card-header">
                                     <h5 class="title-page">コース修了テスト</h5>
                                     <div class="float-right">

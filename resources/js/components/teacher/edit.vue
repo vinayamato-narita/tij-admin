@@ -89,7 +89,7 @@
                                             <div class="col-md-6">
                                                 <select name="timeZone" class="form-control valid" id="timeZone" v-model="timeZone" aria-invalid="false">
                                                     <option value="0" ></option>
-                                                    <option v-for="tz in timeZones" :value="tz.id" :selected="(tz.timeZone_id == timeZone) ? true : false">
+                                                    <option v-for="tz in timeZones" :value="tz.timezone_id" :selected="(tz.timeZone_id == timeZone) ? true : false">
                                                     {{tz.timezone_name_native}}
                                                     </option>
                                                 </select>

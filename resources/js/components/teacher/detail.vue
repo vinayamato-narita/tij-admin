@@ -195,7 +195,7 @@
                                                 英語が話せる日本人講師
                                             </div>
                                             <div v-if="this.teacher.teacher_feature2">
-                                                子供向け
+                                                キッズ向け
                                             </div>
                                             <div v-if="this.teacher.teacher_feature3">
                                                 講師歴3年以上

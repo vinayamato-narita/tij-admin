@@ -25,11 +25,15 @@ use App\Exports\TeacherLessonHistoryExport;
 use App\Models\TeacherInfo;
 use App\Enums\LangType;
 use App\Http\Requests\TeacherLangRequest;
-use Log;
 use Response;
 use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
 use App\Enums\Boolean;
+use App\Enums\FileTypeEnum;
+use App\Models\File;
+use Illuminate\Support\Facades\Log;
 
 class TeacherController extends BaseController
 {
@@ -113,13 +117,18 @@ class TeacherController extends BaseController
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->password = Hash::make(Str::random(8));
-                $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
                 $teacher->teacher_feature1 = $request->teacherFeature1;
                 $teacher->teacher_feature2 = $request->teacherFeature2;
                 $teacher->teacher_feature3 = $request->teacherFeature3;
                 $teacher->teacher_feature4 = $request->teacherFeature4;
+                if (isset($request->teacherFileSelected)) {
+                  $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherFileSelected);
+                  if (!empty($teacher->photo_savepath))
+                    TIJAdminAzureComponent::remove($teacher->photo_savepath);
+                  $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
 
                 $teacher->save();
                 DB::commit();
@@ -291,14 +300,18 @@ class TeacherController extends BaseController
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
                 $teacher->teacher_feature1 = $request->teacherFeature1;
                 $teacher->teacher_feature2 = $request->teacherFeature2;
                 $teacher->teacher_feature3 = $request->teacherFeature3;
                 $teacher->teacher_feature4 = $request->teacherFeature4;
-
+                if (isset($request->teacherFileSelected)) {
+                  $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherFileSelected);
+                  if (!empty($teacher->photo_savepath))
+                    TIJAdminAzureComponent::remove($teacher->photo_savepath);
+                  $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
 
                 $teacher->save();
                 DB::commit();

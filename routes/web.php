@@ -231,7 +231,7 @@ Route::group([
 
     Route::get('export-group-lesson', 'GroupLessonHistoryController@exportGroupLesson')->name('exportGroupLesson');
     Route::get('/group_lesson_history/student_attendance/{id}', 'GroupLessonHistoryController@studentAttendance')->name('groupLessonHistory.studentAttendance');
-    Route::post('/group_lesson_history/update-student-attendace/{id}', 'GroupLessonHistoryController@updateStudentAttendance')->name('groupLessonHistory.updateStudentAttendance');
+    Route::post('/group_lesson_history/update-student-attendace', 'GroupLessonHistoryController@updateStudentAttendance')->name('groupLessonHistory.updateStudentAttendance');
 
     Route::get('/remindMail/{id}/edit-lang/{type}', 'RemindMailController@editLang')->name('editLangRemindMail');
     Route::post('updateLangRemindMail', 'RemindMailController@updateLang')->name('updateLangRemindMail');

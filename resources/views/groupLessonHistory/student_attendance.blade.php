@@ -46,7 +46,7 @@
                                                         <td class="text-left">{{ $student->student_id }}</td>
                                                         <td class="text-left">{{ $student->student_name }}</td>
                                                         <td class="text-left">
-                                                            <update-student-attendance :url-action="{{ json_encode(route('groupLessonHistory.updateStudentAttendance', $student->lesson_history_id)) }}" :status="{{ json_encode($student->student_lesson_start != null) }}"></update-student-attendance>
+                                                            <update-student-attendance :url-action="{{ json_encode(route('groupLessonHistory.updateStudentAttendance')) }}" :status="{{ json_encode($student->student_lesson_start != null) }}" :student-info="{{ json_encode($student) }}"></update-student-attendance>
                                                         </td>
                                                     </tr>
                                                 @endforeach

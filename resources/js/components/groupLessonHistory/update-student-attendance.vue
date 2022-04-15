@@ -22,14 +22,20 @@ export default {
     data() {
         return {
             flagShowLoader: false,
+            studentInfoEx: {
+                lesson_history_id : this.studentInfo.lesson_history_id,
+                student_id : this.studentInfo.student_id,
+                lesson_schedule_id : this.studentInfo.lesson_schedule_id,
+                _token: Laravel.csrfToken
+            }
         }
     },
     components: {
         Loader
     },
-    props: ['urlAction', 'status'],
+    props: ['urlAction', 'status', 'studentInfo'],
     mounted() {
-        console.log(this.status)
+        
     },
     methods: {
         changeStatus() {
@@ -37,9 +43,7 @@ export default {
             that.flagShowLoader = true;
             $('.loading-div').removeClass('hidden');
             axios
-                .post(that.urlAction, {
-                  _token: Laravel.csrfToken
-                })
+                .post(that.urlAction, that.studentInfoEx)
                 .then(function (response) {
                     that.flagShowLoader = false;
                     location.reload();

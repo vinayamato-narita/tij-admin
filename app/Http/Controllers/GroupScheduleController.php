@@ -234,8 +234,7 @@ class GroupScheduleController extends BaseController
                             zoom_schedule.auto_recording as auto_recording
                             ')
             ->leftJoin('lesson', 'lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-            ->leftJoin('course_lesson', 'course_lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-            ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
+            ->leftJoin('course', 'course.course_id', '=', 'lesson_schedule.course_id')
             ->leftJoin('zoom_schedule', 'zoom_schedule.zoom_schedule_id', '=', 'lesson_schedule.zoom_schedule_id')
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
             ->where('lesson_schedule.lesson_starttime', '>=', $startDate)

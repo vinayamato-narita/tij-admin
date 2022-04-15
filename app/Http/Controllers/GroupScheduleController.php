@@ -321,10 +321,10 @@ class GroupScheduleController extends BaseController
             ->where(function($query) {
                 $query->where(function($q) {
                     $q->where('lesson_schedule.lesson_starttime', '>', $startDateTime)
-                      ->where('lesson_schedule.lesson_starttime', '<=', $endDateTime);
+                      ->where('lesson_schedule.lesson_starttime', '<', $endDateTime);
                 })
                 ->orWhere(function($q) {
-                    $q->where('lesson_schedule.lesson_endtime', '>=', $startDateTime)
+                    $q->where('lesson_schedule.lesson_endtime', '>', $startDateTime)
                       ->where('lesson_schedule.lesson_endtime', '<', $endDateTime);
                 })
                 ->orWhere(function($q) {

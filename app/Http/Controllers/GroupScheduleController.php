@@ -318,16 +318,16 @@ class GroupScheduleController extends BaseController
 
         $duplicateCheck = DB::table('lesson_schedule')
             ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
-            ->where(function($query) {
-                $query->where(function($q) {
+            ->where(function($query) use ($startDateTime, $endDateTime) {
+                $query->where(function($q) use ($startDateTime, $endDateTime) {
                     $q->where('lesson_schedule.lesson_starttime', '>', $startDateTime)
                       ->where('lesson_schedule.lesson_starttime', '<', $endDateTime);
                 })
-                ->orWhere(function($q) {
+                ->orWhere(function($q) use ($startDateTime, $endDateTime) {
                     $q->where('lesson_schedule.lesson_endtime', '>', $startDateTime)
                       ->where('lesson_schedule.lesson_endtime', '<', $endDateTime);
                 })
-                ->orWhere(function($q) {
+                ->orWhere(function($q) use ($startDateTime, $endDateTime) {
                     $q->where('lesson_schedule.lesson_starttime', '<=', $startDateTime)
                       ->where('lesson_schedule.lesson_endtime', '>=', $endDateTime);
                 });

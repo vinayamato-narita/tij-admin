@@ -25,13 +25,17 @@ use App\Exports\TeacherLessonHistoryExport;
 use App\Models\TeacherInfo;
 use App\Enums\LangType;
 use App\Http\Requests\TeacherLangRequest;
-use Log;
 use Response;
 use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
 use App\Enums\Boolean;
 use App\Enums\AdminRole;
 use Auth;
+use App\Enums\FileTypeEnum;
+use App\Models\File;
+use Illuminate\Support\Facades\Log;
 
 class TeacherController extends BaseController
 {
@@ -87,7 +91,6 @@ class TeacherController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'timeZones' => $timeZones
         ]);
-
     }
 
     /**
@@ -98,7 +101,7 @@ class TeacherController extends BaseController
      */
     public function store(CreateTeacherRequest $request)
     {
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             DB::beginTransaction();
             try {
                 $teacher = new Teacher();
@@ -109,7 +112,7 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d", strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity ?? "";
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
@@ -117,13 +120,18 @@ class TeacherController extends BaseController
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
                 $teacher->password = Hash::make(Str::random(8));
-                $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
                 $teacher->teacher_feature1 = $request->teacherFeature1;
                 $teacher->teacher_feature2 = $request->teacherFeature2;
                 $teacher->teacher_feature3 = $request->teacherFeature3;
                 $teacher->teacher_feature4 = $request->teacherFeature4;
+                if (isset($request->teacherFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherFileSelected);
+                    if (!empty($teacher->photo_savepath))
+                        TIJAdminAzureComponent::remove($teacher->photo_savepath);
+                    $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
 
                 $teacher->save();
                 DB::commit();
@@ -137,7 +145,6 @@ class TeacherController extends BaseController
                     'status' => 'INTERNAL_ERR',
                 ], StatusCode::INTERNAL_ERR);
             }
-
         }
         return response()->json([
             'status' => 'METHOD_NOT_ALLOWED',
@@ -189,10 +196,10 @@ class TeacherController extends BaseController
             'status' => 'OK',
             'dataList' => $dataList
         ], StatusCode::OK);
-
     }
 
-    public function registerLesson(Request $request, $id) {
+    public function registerLesson(Request $request, $id)
+    {
         DB::beginTransaction();
         try {
             foreach ($request->all() as $rq) {
@@ -201,8 +208,7 @@ class TeacherController extends BaseController
                 $tc->lesson_id = $rq;
                 $tc->save();
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             DB::rollBack();
             return response()->json([
                 'status' => 'INTERNAL_ERR',
@@ -223,7 +229,6 @@ class TeacherController extends BaseController
                 'teacher_id' => $id,
                 'lesson_id' => $lessonId
             ])->delete();
-
         } catch (ModelNotFoundException $ex) {
             return response()->json([
                 'status' => 'NG',
@@ -271,7 +276,7 @@ class TeacherController extends BaseController
      */
     public function update(UpdateTeacherRequest $request, $id)
     {
-        if($request->isMethod('PUT')){
+        if ($request->isMethod('PUT')) {
             $teacher = Teacher::where('teacher_id', $id)->first();
             if (!$teacher) {
                 return response()->json([
@@ -288,21 +293,25 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d",strtotime($request->teacherBirthday));
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d", strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity ?? "";
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
                 $teacher->teacher_introduction = $request->teacherIntroduction ?? "";
                 $teacher->introduce_from_admin = $request->introduceFromAdmin ?? "";
                 $teacher->teacher_note = $request->teacherNote ?? "";
-                $teacher->photo_savepath = $request->photoSavepath ?? "";
                 $teacher->zoom_personal_meeting_id = $request->zoomPersonalMeetingId;
                 $teacher->zoom_password = $request->zoomPassword ?? "";
                 $teacher->teacher_feature1 = $request->teacherFeature1;
                 $teacher->teacher_feature2 = $request->teacherFeature2;
                 $teacher->teacher_feature3 = $request->teacherFeature3;
                 $teacher->teacher_feature4 = $request->teacherFeature4;
-
+                if (isset($request->teacherFileSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherFileSelected);
+                    if (!empty($teacher->photo_savepath))
+                        TIJAdminAzureComponent::remove($teacher->photo_savepath);
+                    $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
 
                 $teacher->save();
                 DB::commit();
@@ -315,7 +324,6 @@ class TeacherController extends BaseController
                     'status' => 'INTERNAL_ERR',
                 ], StatusCode::INTERNAL_ERR);
             }
-
         }
         return response()->json([
             'status' => 'METHOD_NOT_ALLOWED',
@@ -332,7 +340,6 @@ class TeacherController extends BaseController
     {
         try {
             $teacher = Teacher::where('teacher_id', $id)->delete();
-
         } catch (ModelNotFoundException $ex) {
             return response()->json([
                 'status' => 'NG',
@@ -353,7 +360,7 @@ class TeacherController extends BaseController
             return;
         }
         $request = Session::get('sessionTeacherList');
-        $fileName = "teacherlist_".date("Y-m-d").".csv";
+        $fileName = "teacherlist_" . date("Y-m-d") . ".csv";
 
         $headers = array(
             "Content-type"        => "text/csv",
@@ -383,10 +390,10 @@ class TeacherController extends BaseController
         $lessonList = Lesson::select("lesson_id", "lesson_name")->get()->toArray();
 
         foreach ($lessonList as $lesson) {
-            $header[] = $this->convertShijis($this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name']));
+            $header[] = $this->convertShijis($this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name']));
         }
 
-    	$queryBuilder = new Teacher();
+        $queryBuilder = new Teacher();
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -400,17 +407,17 @@ class TeacherController extends BaseController
         $teacherIds = $queryBuilder->pluck("teacher_id");
         $teacherLessons = TeacherLesson::select("teacher_id", "lesson_id")->whereIn('teacher_id', $teacherIds)->get()->toArray();
         $teacherLessonList = [];
-        foreach($teacherLessons as $item) {
+        foreach ($teacherLessons as $item) {
             $teacherLessonList[$item['teacher_id']][$item['lesson_id']] = $item['lesson_id'];
         }
 
         $lessionIds = Lesson::pluck('lesson_id');
         $dataExport = [];
 
-        if (!file_exists(public_path().'/csv_file/users')) {
-            mkdir(public_path().'/csv_file/users', 0777, true);
+        if (!file_exists(public_path() . '/csv_file/users')) {
+            mkdir(public_path() . '/csv_file/users', 0777, true);
         }
-        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $localPath = public_path() . '/csv_file/users/' . $fileName;
         $file = fopen($localPath, 'w');
         fputcsv($file, $header);
 
@@ -429,18 +436,18 @@ class TeacherController extends BaseController
             $input["自己紹介"] = $this->convertShijis($teacher['teacher_introduction']);
             $input["イメージURL"] = $this->convertShijis($teacher['photo_savepath']);
             $input["動画URL"] = $this->convertShijis($teacher['movie_savepath']);
-            foreach($lessionIds as $lessionId) {
+            foreach ($lessionIds as $lessionId) {
                 if (array_key_exists($teacher['teacher_id'], $teacherLessonList) && array_key_exists($lessionId, $teacherLessonList[$teacher['teacher_id']])) {
-                    $input[$this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name'])] = "1";
-                }else {
-                    $input[$this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name'])] = "0";
+                    $input[$this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name'])] = "1";
+                } else {
+                    $input[$this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name'])] = "0";
                 }
             }
             $dataExport[] = $input;
             fputcsv($file, $input);
         }
 
-        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
+        return Response::download(public_path() . '/csv_file/users/' . $fileName, $fileName, $header);
     }
 
     public function lessonHistory(Request $request, $id)
@@ -456,7 +463,8 @@ class TeacherController extends BaseController
 
         Session::put('teacherLessonHistory', collect($request));
 
-        $queryBuilder = LessonHistory::select('lesson_schedule.lesson_date',
+        $queryBuilder = LessonHistory::select(
+            'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
@@ -466,23 +474,23 @@ class TeacherController extends BaseController
             'student.student_name',
             'lesson_history.lesson_history_id'
         )
-        ->join('lesson_schedule', function($join) use ($id) {
-            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
-            ->where('lesson_schedule.teacher_id', $id);
-        })
-        ->leftJoin('lesson', function($join) {
-            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
-        })
-        ->leftJoin('lesson_text', function($join) {
-            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
-        })
-        ->leftJoin('student', function($join) {
-            $join->on('lesson_history.student_id', '=', 'student.student_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('lesson_history.course_id', '=', 'course.course_id');
-        })
-        ->where('lesson_history.student_lesson_reserve_type', '!=', 2);
+            ->join('lesson_schedule', function ($join) use ($id) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                    ->where('lesson_schedule.teacher_id', $id);
+            })
+            ->leftJoin('lesson', function ($join) {
+                $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+            })
+            ->leftJoin('lesson_text', function ($join) {
+                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            })
+            ->leftJoin('student', function ($join) {
+                $join->on('lesson_history.student_id', '=', 'student.student_id');
+            })
+            ->leftJoin('course', function ($join) {
+                $join->on('lesson_history.course_id', '=', 'course.course_id');
+            })
+            ->where('lesson_history.student_lesson_reserve_type', '!=', 2);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -506,28 +514,28 @@ class TeacherController extends BaseController
 
         if (isset($request['sort'])) {
             if ($request['sort'] == "lesson_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_date','ASC') : $queryBuilder->orderBy('lesson_date','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_date', 'ASC') : $queryBuilder->orderBy('lesson_date', 'DESC');
             }
             if ($request['sort'] == "lesson_starttime") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_starttime','ASC') : $queryBuilder->orderBy('lesson_starttime','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_starttime', 'ASC') : $queryBuilder->orderBy('lesson_starttime', 'DESC');
             }
             if ($request['sort'] == "course_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name','ASC') : $queryBuilder->orderBy('course_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name', 'ASC') : $queryBuilder->orderBy('course_name', 'DESC');
             }
             if ($request['sort'] == "lesson_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_name','ASC') : $queryBuilder->orderBy('lesson_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_name', 'ASC') : $queryBuilder->orderBy('lesson_name', 'DESC');
             }
             if ($request['sort'] == "lesson_text_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_text_name','ASC') : $queryBuilder->orderBy('lesson_text_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_text_name', 'ASC') : $queryBuilder->orderBy('lesson_text_name', 'DESC');
             }
             if ($request['sort'] == "student_id") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id','ASC') : $queryBuilder->orderBy('student_id','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id', 'ASC') : $queryBuilder->orderBy('student_id', 'DESC');
             }
             if ($request['sort'] == "student_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_name','ASC') : $queryBuilder->orderBy('student_name','DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_name', 'ASC') : $queryBuilder->orderBy('student_name', 'DESC');
             }
-        }else {
-            $queryBuilder = $queryBuilder->orderBy('lesson_date','DESC');
+        } else {
+            $queryBuilder = $queryBuilder->orderBy('lesson_date', 'DESC');
         }
 
         $lessonHistories = $queryBuilder->paginate($pageLimit);
@@ -550,7 +558,7 @@ class TeacherController extends BaseController
             return;
         }
         $request = Session::get('teacherLessonHistory');
-        $fileName = "teacher_lesson_history_".date("Y-m-d").".csv";
+        $fileName = "teacher_lesson_history_" . date("Y-m-d") . ".csv";
 
         $headers = array(
             "Content-type"        => "text/csv",
@@ -571,14 +579,15 @@ class TeacherController extends BaseController
         ];
 
 
-        if (!file_exists(public_path().'/csv_file/users')) {
-            mkdir(public_path().'/csv_file/users', 0777, true);
+        if (!file_exists(public_path() . '/csv_file/users')) {
+            mkdir(public_path() . '/csv_file/users', 0777, true);
         }
-        $localPath = public_path().'/csv_file/users/'.$fileName;
+        $localPath = public_path() . '/csv_file/users/' . $fileName;
         $file = fopen($localPath, 'w');
         fputcsv($file, $header);
 
-    	$queryBuilder = LessonHistory::select('lesson_schedule.lesson_date',
+        $queryBuilder = LessonHistory::select(
+            'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
@@ -588,24 +597,24 @@ class TeacherController extends BaseController
             'student.student_name',
             'lesson_history.lesson_history_id'
         )
-        ->join('lesson_schedule', function($join) use ($id) {
-            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
-            ->where('lesson_schedule.teacher_id', $id);
-        })
-        ->leftJoin('lesson', function($join) {
-            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
-        })
-        ->leftJoin('lesson_text', function($join) {
-            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
-        })
-        ->leftJoin('student', function($join) {
-            $join->on('lesson_history.student_id', '=', 'student.student_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('lesson_history.course_id', '=', 'course.course_id');
-        })
-        ->where('lesson_history.student_lesson_reserve_type', '!=', 2)
-        ->orderByDesc('lesson_schedule.lesson_starttime');
+            ->join('lesson_schedule', function ($join) use ($id) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                    ->where('lesson_schedule.teacher_id', $id);
+            })
+            ->leftJoin('lesson', function ($join) {
+                $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+            })
+            ->leftJoin('lesson_text', function ($join) {
+                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            })
+            ->leftJoin('student', function ($join) {
+                $join->on('lesson_history.student_id', '=', 'student.student_id');
+            })
+            ->leftJoin('course', function ($join) {
+                $join->on('lesson_history.course_id', '=', 'course.course_id');
+            })
+            ->where('lesson_history.student_lesson_reserve_type', '!=', 2)
+            ->orderByDesc('lesson_schedule.lesson_starttime');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -628,7 +637,7 @@ class TeacherController extends BaseController
             });
         }
 
-        $dataExport = $queryBuilder->get()->map(function($item, $key) {
+        $dataExport = $queryBuilder->get()->map(function ($item, $key) {
             $item['lesson_date'] = DateTimeComponent::getDate($item['lesson_date']);
             $item['lesson_starttime'] = DateTimeComponent::getStartEndTime($item['lesson_starttime'], $item['lesson_endtime']);
             return $item;
@@ -636,22 +645,23 @@ class TeacherController extends BaseController
 
         foreach ($dataExport as &$item) {
             $input = [];
-            $input["レッスン日"] = $this->convertShijis($item['lesson_date']).
-            $input["レッスン時間"] = $this->convertShijis($item['lesson_starttime']).
-            $input["コース名"] = $this->convertShijis($item['course_name']).
-            $input["レッスン名"] = $this->convertShijis($item['lesson_name']).
-            $input["テキスト名"] = $this->convertShijis($item['lesson_text_name']).
-            $input["学習者番号"] = $this->convertShijis($item['student_id']).
-            $input["学習者名"] = $this->convertShijis($item['student_name']).
-            fputcsv($file, $item);
+            $input["レッスン日"] = $this->convertShijis($item['lesson_date']) .
+                $input["レッスン時間"] = $this->convertShijis($item['lesson_starttime']) .
+                $input["コース名"] = $this->convertShijis($item['course_name']) .
+                $input["レッスン名"] = $this->convertShijis($item['lesson_name']) .
+                $input["テキスト名"] = $this->convertShijis($item['lesson_text_name']) .
+                $input["学習者番号"] = $this->convertShijis($item['student_id']) .
+                $input["学習者名"] = $this->convertShijis($item['student_name']) .
+                fputcsv($file, $item);
         }
 
-        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
+        return Response::download(public_path() . '/csv_file/users/' . $fileName, $fileName, $header);
     }
 
     public function lessonHistoryDetail($id)
     {
-        $lesson = LessonHistory::select('lesson_schedule.lesson_date',
+        $lesson = LessonHistory::select(
+            'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
@@ -670,25 +680,25 @@ class TeacherController extends BaseController
             'lesson_history.comment_from_teacher_to_student',
             'lesson_history.comment_from_admin_to_student'
         )
-        ->join('lesson_schedule', function($join) {
-            $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
-        })
-        ->leftJoin('lesson', function($join) {
-            $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
-        })
-        ->leftJoin('lesson_text', function($join) {
-            $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
-        })
-        ->leftJoin('teacher', function($join) {
-            $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
-        })
-        ->leftJoin('student', function($join) {
-            $join->on('lesson_history.student_id', '=', 'student.student_id');
-        })
-        ->leftJoin('course', function($join) {
-            $join->on('lesson_history.course_id', '=', 'course.course_id');
-        })
-        ->where('lesson_history.lesson_history_id', $id)->firstOrFail();
+            ->join('lesson_schedule', function ($join) {
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+            })
+            ->leftJoin('lesson', function ($join) {
+                $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
+            })
+            ->leftJoin('lesson_text', function ($join) {
+                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            })
+            ->leftJoin('teacher', function ($join) {
+                $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
+            })
+            ->leftJoin('student', function ($join) {
+                $join->on('lesson_history.student_id', '=', 'student.student_id');
+            })
+            ->leftJoin('course', function ($join) {
+                $join->on('lesson_history.course_id', '=', 'course.course_id');
+            })
+            ->where('lesson_history.lesson_history_id', $id)->firstOrFail();
 
         $teacherId = $lesson->teacher_id;
 
@@ -737,7 +747,7 @@ class TeacherController extends BaseController
 
     public function updateLang(TeacherLangRequest $request)
     {
-        if(!$request->isMethod('POST')){
+        if (!$request->isMethod('POST')) {
             return response()->json([
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);
@@ -767,7 +777,7 @@ class TeacherController extends BaseController
 
     public function updatePassword(Request $request)
     {
-        if(!$request->isMethod('POST')) {
+        if (!$request->isMethod('POST')) {
             return response()->json([
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);

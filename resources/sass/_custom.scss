@@ -1119,3 +1119,10 @@ div > .draggable-test-sub-question:first-child {
 .flex{
   display: flex;
 }
+
+.avatar-src {
+    width: 50px;
+    border-radius: 50%;
+    height: 50px;
+    object-fit: cover;
+}

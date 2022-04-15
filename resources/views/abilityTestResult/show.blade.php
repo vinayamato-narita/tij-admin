@@ -5,6 +5,7 @@
             :test-result="{{json_encode($testResult)}}"
             :comments="{{json_encode($comments)}}"
             :ability-test-result-edit-url="{{json_encode(route('abilityTestResult.edit', $testResult->test_result_id))}}"
+            :disable-comment="{{json_encode($disableComment)}}"
     >
 
     </ability-test-result-show>

@@ -161,10 +161,17 @@ class AbilityTestResultController extends BaseController
                 'comment_desc' => empty($testResult->test_comment) ? '' : $testResult->test_comment->$propName
             ];
         }
+        $disableComment = false;
+        $now = Carbon::now();
+
+        if (!empty($testResult->test_comment) && $testResult->test_comment->comment_end_time === null && $now->diffInHours($testResult->test_comment->comment_start_time) <= env('MAX_HOURS_COMMENT') && $testResult->test_comment->teacher_admin_id != Auth::user()->admin_user_id)
+            $disableComment = true;
+
         return view('abilityTestResult.show', [
             'testResult' => $testResult,
             'comments' => $comments,
             'breadcrumbs' => $breadcrumbs,
+            'disableComment' => $disableComment
         ]);
 
     }
@@ -296,11 +303,6 @@ class AbilityTestResultController extends BaseController
         $testComment = TestComment::with('testResult')->find($id);
         if (!$testComment)
             return redirect()->route('abilityTestResult.index');
-        if ($testComment->comment_end_time != null)
-            return response()->json([
-                'status' => 'BAD_REQUEST',
-                'message' => '他の方が評価を実施した為、保存できません。'
-            ], StatusCode::BAD_REQUEST);
         $testComment->teacher_admin_id = Auth::user()->admin_user_id;
         $testComment->comment_end_time = Carbon::now();
         $testComment->comment1 = $request->comment1;

@@ -11,4 +11,5 @@ final class FileTypeEnum extends Enum
     const PREPARATION_VIDEO =   1;
     const REVIEW_VIDEO = 2;
     const TEST_RELATED = 3;
+    const TEACHER = 4;
 }

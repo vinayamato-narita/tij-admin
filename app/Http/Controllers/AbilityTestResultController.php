@@ -161,10 +161,17 @@ class AbilityTestResultController extends BaseController
                 'comment_desc' => empty($testResult->test_comment) ? '' : $testResult->test_comment->$propName
             ];
         }
+        $disableComment = false;
+        $now = Carbon::now();
+
+        if (!empty($testResult->test_comment) && $testResult->test_comment->comment_end_time === null && $now->diffInHours($testResult->test_comment->comment_start_time) <= env('MAX_HOURS_COMMENT') && $testResult->test_comment->teacher_admin_id != Auth::user()->admin_user_id)
+            $disableComment = true;
+
         return view('abilityTestResult.show', [
             'testResult' => $testResult,
             'comments' => $comments,
             'breadcrumbs' => $breadcrumbs,
+            'disableComment' => $disableComment
         ]);
 
     }

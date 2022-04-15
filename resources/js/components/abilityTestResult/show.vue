@@ -56,7 +56,9 @@
                             <div class="card">
                                 <div class="card-header">評価
                                     <div class="float-right">
-                                        <a :href="abilityTestResultEditUrl" class="btn btn-primary ">評価開始</a>
+                                        <a v-if="disableComment" disabled="" :href="abilityTestResultEditUrl" class="btn btn-primary  disabled ">評価開始</a>
+
+                                        <a v-else :href="abilityTestResultEditUrl" class="btn btn-primary   ">評価開始</a>
                                     </div>
 
 
@@ -103,7 +105,7 @@
                 csrfToken: Laravel.csrfToken,
             };
         },
-        props: ['testResult', 'comments', 'abilityTestResultEditUrl'],
+        props: ['testResult', 'comments', 'abilityTestResultEditUrl', 'disableComment'],
         mounted() {},
         methods: {
         },

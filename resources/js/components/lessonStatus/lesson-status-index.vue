@@ -18,7 +18,7 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="well">
+                                    <div class="well" v-if="adminSystem">
                                         <div class="form-inline">
                                             <div class="input text">
                                                 <label for="lesson_date_from">レッスン日&nbsp;</label>
@@ -213,6 +213,7 @@ import Loader from "../common/loader.vue";
 
 export default {
     created: function() {
+        
     },
     components: {
         Loader,
@@ -241,7 +242,7 @@ export default {
             flgShowTable : false
         };
     },
-    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree'],
+    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree', 'adminSystem'],
     mounted() {
         this.getData()
     },

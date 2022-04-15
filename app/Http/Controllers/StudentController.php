@@ -43,6 +43,9 @@ use Log;
 use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
 use Response;
+use App\Enums\AdminRole;
+use Auth;
+
 class StudentController extends BaseController
 {
     /**
@@ -941,6 +944,9 @@ class StudentController extends BaseController
         $studentList = $queryBuilder->paginate($pageLimit);
         $number_published = $queryBuilderCount->count();
         $number_unpublished = $studentList->total() - $number_published;
+
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+
         return view('student.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
@@ -948,11 +954,16 @@ class StudentController extends BaseController
             'studentList' => $studentList,
             'number_published' => $number_published,
             'number_unpublished' => $number_unpublished,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
     public function export()
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('sessionStudent');
         $fileName = "student_list_".date("Y-m-d").".csv";
 

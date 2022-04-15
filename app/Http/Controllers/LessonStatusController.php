@@ -11,6 +11,8 @@ use App\Enums\StatusCode;
 use App\Models\FreeTeacherLessonSetting;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use App\Enums\AdminRole;
+use Auth;
 
 class LessonStatusController extends BaseController
 {
@@ -44,6 +46,7 @@ class LessonStatusController extends BaseController
             $curRowTime = date("Y-m-d H:i:s", strtotime($startDate. " +" .$i * $nextLessonTime . " minutes"));
             $dataTime[] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
         }
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('lessonStatus.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -51,7 +54,8 @@ class LessonStatusController extends BaseController
             'nextLessonTime' => $nextLessonTime,
             'numRow' => $numRow,
             'startDate' => $startDate,
-            'endDate' => $endDate
+            'endDate' => $endDate,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
@@ -200,6 +204,10 @@ class LessonStatusController extends BaseController
 
 
     public function lessoninfomationdetailexportcsv(Request $request) {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $data = $request->all();
 
         if (empty($data)) {
@@ -274,6 +282,10 @@ class LessonStatusController extends BaseController
     }
 
     public function lessoninfomationstatusexportcsv(Request $request) {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         set_time_limit(1200);
         $data = $request->all();
 

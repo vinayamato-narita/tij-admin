@@ -674,17 +674,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right"> 特徴: </label>
-                                            <div class="col-md-6">
-                                                <div class="d-flex flex-wrap" style="margin-top: 5px">
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature1" name="teacherFeature1">&nbsp;英語が話せる日本人講師</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature2" name="teacherFeature2">&nbsp;キッズ向け</label>
-                                                    <label class="form-checkbox mr-2"><input type="checkbox" v-model="teacherFeature3" name="teacherFeature3">&nbsp;講師歴3年以上</label>
-                                                    <label class="form-checkbox"><input type="checkbox" v-model="teacherFeature4" name="teacherFeature4">&nbsp;日本語能力試験対策</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="studentNewFile"

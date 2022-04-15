@@ -1,4 +1,4 @@
-<?php 
+<?php
 use App\Enums\LangType;
 ?>
 @extends('layouts.default')
@@ -16,7 +16,8 @@ use App\Enums\LangType;
             :teacher-zh-info ="{{json_encode($teacherZhInfo)}}"
             :url-teacher-en ="{{json_encode(route('teacher.editLang', [$teacher->teacher_id, LangType::EN]))}}"
             :url-teacher-zh ="{{json_encode(route('teacher.editLang', [$teacher->teacher_id, LangType::ZH]))}}"
-            :url-update-password="{{json_encode(route('teacher.updatePassword'))}}" 
+            :url-update-password="{{json_encode(route('teacher.updatePassword'))}}"
+            :avatar-src  ="{{json_encode($teacher->avatar_src)}}"
     >
 
     </teacher-show>

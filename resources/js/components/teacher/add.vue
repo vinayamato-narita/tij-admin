@@ -530,7 +530,7 @@
                                         <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
-                                                for="photoSavepath"
+                                                for="zoomPersonalMeetingId"
                                             >
                                                 個人ミーティングID:
                                                 <span
@@ -569,7 +569,7 @@
                                         <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
-                                                for="photoSavepath"
+                                                for="zoomPassword"
                                             >
                                                 Zoomパスコード:
                                             </label>
@@ -655,7 +655,7 @@
                                         <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
-                                                for="photoSavepath"
+                                                for="studentNewFile"
                                             >
                                                 プロフィール画像:
                                             </label>
@@ -746,9 +746,6 @@ export default {
                 teacherHobby: {
                     max: "英語対応は255文字以内で入力してください。"
                 },
-                photoSavepath: {
-                    url: "イメージ画像をURL形で入力してください。"
-                },
                 zoomPersonalMeetingId: {
                     required: "個人ミーティングIDを入力してください",
                     max: "個人ミーティングIDは15文字以内で入力してください。"
@@ -783,7 +780,6 @@ export default {
             teacherIntroduction: "",
             introduceFromAdmin: "",
             teacherNote: "",
-            photoSavepath: "",
             zoomPersonalMeetingId: "",
             zoomPassword: "",
             teacherFeature1: false,
@@ -821,7 +817,6 @@ export default {
             formData.append("teacherIntroduction", this.teacherIntroduction);
             formData.append("introduceFromAdmin", this.introduceFromAdmin);
             formData.append("teacherNote", this.teacherNote);
-            formData.append("photoSavepath", this.photoSavepath);
             formData.append(
                 "zoomPersonalMeetingId",
                 this.zoomPersonalMeetingId

@@ -19,6 +19,7 @@ use App\Enums\StatusCode;
 use App\Enums\AdminRole;
 use Auth;
 use Log;
+use DB;
 
 class GroupLessonHistoryController extends BaseController
 { 
@@ -31,7 +32,9 @@ class GroupLessonHistoryController extends BaseController
         $pageLimit = $this->newListLimit($request);
         $queryBuilder = (new LessonSchedule())::with('teacher', 'course', 'lesson', 'studentPointHistory')->whereHas('lesson')->whereHas('teacher')->whereHas('course')->withCount(
                 [
-                    'studentPointHistory', 
+                    'studentPointHistory' => function($query) {
+                        $query->select(DB::raw('count(distinct(student_id))'));
+                    }, 
                     'lessonHistories' => function($query) {
                         $query->whereNotNull('student_lesson_start');
                     }
@@ -110,7 +113,8 @@ class GroupLessonHistoryController extends BaseController
             ->leftJoin('lesson_history', function($join) use ($id) {
                 $join->on('student.student_id', '=', 'lesson_history.student_id')
                 ->where('lesson_history.lesson_schedule_id', $id);
-            });
+            })
+            ->groupBy('student.student_id');
 
         if (!empty($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

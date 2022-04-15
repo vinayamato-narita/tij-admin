@@ -94,6 +94,7 @@ class CreateStoreProcedureForStudentLessonReserveRegister extends Migration
                 UPDATE lesson_schedule
                  SET
                    lesson_id = _lesson_id
+                   ,course_id = _course_id
                    ,lesson_text_id = _lesson_text_id
                    ,lesson_text_name = @lesson_text_name
                    ,lesson_reserve_type = 2

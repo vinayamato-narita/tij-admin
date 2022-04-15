@@ -18,6 +18,7 @@ use App\Models\LessonHistory;
 use App\Enums\StatusCode;
 use App\Enums\AdminRole;
 use Auth;
+use Log;
 
 class GroupLessonHistoryController extends BaseController
 { 
@@ -101,8 +102,12 @@ class GroupLessonHistoryController extends BaseController
 
         $pageLimit = $this->newListLimit($request);
 
-        $queryBuilder = Student::select('lesson_history.lesson_history_id', 'student.student_id', 'student.student_name', 'lesson_history.student_lesson_start')
-            ->join('lesson_history', function($join) use ($id) {
+        $queryBuilder = Student::select('lesson_history.lesson_history_id', 'student.student_id', 'student.student_name', 'lesson_history.student_lesson_start', 'student_point_history.lesson_schedule_id')
+            ->join('student_point_history', function($join) use ($id) {
+                $join->on('student.student_id', '=', 'student_point_history.student_id')
+                ->where('student_point_history.lesson_schedule_id', $id);
+            })
+            ->leftJoin('lesson_history', function($join) use ($id) {
                 $join->on('student.student_id', '=', 'lesson_history.student_id')
                 ->where('lesson_history.lesson_schedule_id', $id);
             });
@@ -125,16 +130,28 @@ class GroupLessonHistoryController extends BaseController
         ]);
     }
 
-    public function updateStudentAttendance(Request $request, $id)
+    public function updateStudentAttendance(Request $request)
     {
         try {
-            $result = LessonHistory::where('lesson_history_id', $id)->firstOrFail();
-            if($result->student_lesson_start == null) {
-                $result->student_lesson_start = Carbon::now();
+            $lesson_history_id = $request->lesson_history_id;
+            if ($lesson_history_id != null) {
+                $result = LessonHistory::where('lesson_history_id', $lesson_history_id)->first();
+                if($result->student_lesson_start == null) {
+                    $result->student_lesson_start = Carbon::now();
+                }else {
+                    $result->student_lesson_start = null;
+                }
+                $result->save();
             }else {
-                $result->student_lesson_start = null;
+                $lesson_history = new LessonHistory;
+                $lesson_history->lesson_schedule_id = $request->lesson_schedule_id;
+                $lesson_history->student_id = $request->student_id;
+                $lesson_history->note_from_student_to_teacher = '';
+                $lesson_history->student_lesson_reserve_type = 2;
+                $lesson_history->reserve_date = Carbon::now();
+                $lesson_history->student_lesson_start = Carbon::now();
+                $lesson_history->save();  
             }
-            $result->save();
 
         } catch (ModelNotFoundException $ex) {
             return response()->json([

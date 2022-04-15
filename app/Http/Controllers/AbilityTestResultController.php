@@ -296,11 +296,6 @@ class AbilityTestResultController extends BaseController
         $testComment = TestComment::with('testResult')->find($id);
         if (!$testComment)
             return redirect()->route('abilityTestResult.index');
-        if ($testComment->comment_end_time != null)
-            return response()->json([
-                'status' => 'BAD_REQUEST',
-                'message' => '他の方が評価を実施した為、保存できません。'
-            ], StatusCode::BAD_REQUEST);
         $testComment->teacher_admin_id = Auth::user()->admin_user_id;
         $testComment->comment_end_time = Carbon::now();
         $testComment->comment1 = $request->comment1;

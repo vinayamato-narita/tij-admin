@@ -7,6 +7,7 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\AutoRecording;
 use App\Enums\Boolean;
 use App\Enums\StatusCode;
+use App\Enums\LangType;
 use App\Models\Teacher;
 use App\Models\Lesson;
 use App\Models\LessonText;
@@ -131,12 +132,14 @@ class GroupScheduleController extends BaseController
                             teacher.teacher_id,
                             teacher.teacher_name')
             ->leftJoin('course_info', function ($join) {
-                $join->on('course_info.course_id', '=', 'course.course_id');
+                $join->on('course_info.course_id', '=', 'course.course_id')
+                ->where('course_info.lang_type', LangType::EN);
             })
             ->leftJoin('course_lesson', 'course_lesson.course_id', '=', 'course.course_id')
             ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
             ->leftJoin('lesson_info', function ($join) {
-                $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id');
+                $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id')
+                ->where('lesson_info.lang_type', LangType::EN);
             })
             ->leftJoin('teacher_lesson', 'teacher_lesson.lesson_id', '=', 'lesson.lesson_id')
             ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
@@ -239,10 +242,16 @@ class GroupScheduleController extends BaseController
                             zoom_schedule.auto_recording as auto_recording
                             ')
             ->leftJoin('lesson', 'lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-            ->leftJoin('lesson_info', 'lesson_info.lesson_id', '=', 'lesson.lesson_id')
+            ->leftJoin('lesson_info', function ($join) {
+                $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id')
+                ->where('lesson_info.lang_type', LangType::EN);
+            })
             ->leftJoin('course_lesson', 'course_lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
             ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
-            ->leftJoin('course_info', 'course_info.course_id', '=', 'course.course_id')
+            ->leftJoin('course_info', function ($join) {
+                $join->on('course_info.course_id', '=', 'course.course_id')
+                ->where('course_info.lang_type', LangType::EN);
+            })
             ->leftJoin('zoom_schedule', 'zoom_schedule.zoom_schedule_id', '=', 'lesson_schedule.zoom_schedule_id')
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
             ->where('lesson_schedule.lesson_starttime', '>=', $startDate)

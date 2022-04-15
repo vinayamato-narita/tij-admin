@@ -157,15 +157,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">イメージ画像::
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-md-3 col-form-label text-md-right">イメージ画像:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <a :href="this.teacher.photo_savepath" class="text-dark">
-                                                {{this.teacher.photo_savepath}}
-
-                                            </a>
-
+                                            <img v-if="this.avatarSrc" class="avatar-src" :src="this.avatarSrc" alt="">
                                         </div>
                                     </div>
 
@@ -475,7 +471,7 @@
                 messageConfirm : 'このレッスンを解除しますか？',
             };
         },
-        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword'],
+        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword', 'avatarSrc'],
         mounted() {
 
         },

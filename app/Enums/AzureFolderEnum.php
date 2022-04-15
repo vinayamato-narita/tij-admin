@@ -10,5 +10,5 @@ final class AzureFolderEnum extends Enum
     const REVIEW =  'review';
     const TEST =  'test';
     const TEXT = 'text';
-
+    const TEACHER = 'teacher';
 }

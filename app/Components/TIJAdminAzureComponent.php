@@ -35,4 +35,10 @@ class TIJAdminAzureComponent
     }
 
 
+    public static function remove($destinationName)
+    {
+        Storage::disk('azure')->delete($destinationName);
+    }
+
+
 }

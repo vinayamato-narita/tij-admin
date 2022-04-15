@@ -16,9 +16,11 @@
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">
-                    <a href="{{ route('student.export') }}" class="btn btn-primary pull-right"
-                        ><i class="las la-plus"></i> CSV出力
-                    </a>
+                    @if ($adminSystem)
+                        <a href="{{ route('student.export') }}" class="btn btn-primary pull-right"
+                            ><i class="las la-plus"></i> CSV出力
+                        </a>
+                    @endif
                 </div>
             </div>
             <div class="clear"></div>

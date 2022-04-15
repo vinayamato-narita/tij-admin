@@ -16,6 +16,8 @@ use Session;
 use App\Models\StudentPointHistory;
 use App\Models\LessonHistory;
 use App\Enums\StatusCode;
+use App\Enums\AdminRole;
+use Auth;
 
 class GroupLessonHistoryController extends BaseController
 { 
@@ -65,17 +67,24 @@ class GroupLessonHistoryController extends BaseController
             return $q->where('course_type', CourseTypeEnum::GROUP_COURSE);
         })->where('lesson_endtime' , '<', Carbon::now())->sortable(['last_update_date' => 'desc'])->paginate($pageLimit);
 
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+
         return view('groupLessonHistory.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'groupLessonHistoryList' => $groupLessonHistoryList,
+            'adminSystem' => $adminSystem,
         ]);
 
     }
 
     public function exportGroupLesson()
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('exportGroupLesson');
         $fileName = "groupLesson".date("Y-m-d").".csv";
 

@@ -18,6 +18,9 @@ use DB;
 use Log;
 use App\Components\CommonComponent;
 use Response;
+use App\Enums\AdminRole;
+use Auth;
+
 class InquiryController extends BaseController
 {
     /**
@@ -52,12 +55,14 @@ class InquiryController extends BaseController
             $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_student_email','ASC') : $queryBuilder->orderBy('j_student_email','DESC');
         }
         $inquiryList = $queryBuilder->sortable(['inquiry_date' => 'desc'])->paginate($pageLimit);
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('inquiry.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'inquiryList' => $inquiryList,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
@@ -184,6 +189,10 @@ class InquiryController extends BaseController
 
     public function exportInquiry($searchInput = null)
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $fileName = "contact_".date("Y_m_d").".csv";
 
         $headers = array(

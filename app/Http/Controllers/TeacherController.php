@@ -30,6 +30,8 @@ use Response;
 use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
 use App\Enums\Boolean;
+use App\Enums\AdminRole;
+use Auth;
 
 class TeacherController extends BaseController
 {
@@ -56,12 +58,14 @@ class TeacherController extends BaseController
         Session::put('sessionTeacherList', collect($request));
 
         $teacherList = $queryBuilder->sortable(['display_order' => 'asc'])->paginate($pageLimit);
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('teacher.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'teacherList' => $teacherList,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
@@ -344,6 +348,10 @@ class TeacherController extends BaseController
 
     public function exportTeacher()
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('sessionTeacherList');
         $fileName = "teacherlist_".date("Y-m-d").".csv";
 
@@ -523,6 +531,7 @@ class TeacherController extends BaseController
         }
 
         $lessonHistories = $queryBuilder->paginate($pageLimit);
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('teacher.lesson-history', [
             'breadcrumbs' => $breadcrumbs,
@@ -530,11 +539,16 @@ class TeacherController extends BaseController
             'pageLimit' => $pageLimit,
             'teacher' => $teacher,
             'lessonHistories' => $lessonHistories,
+            'adminSystem' => $adminSystem,
         ]);
     }
 
     public function lessonHistoryExport($id)
     {
+        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
+        if (!$adminSystem) {
+            return;
+        }
         $request = Session::get('teacherLessonHistory');
         $fileName = "teacher_lesson_history_".date("Y-m-d").".csv";
 

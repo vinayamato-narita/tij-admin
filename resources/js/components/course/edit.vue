@@ -330,18 +330,20 @@
 
                                         <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" > 開催決定日時 :
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
+
                                             </label>
 
                                             <div class="col-md-9 col-form-label row">
                                                 <div class="row ml-0">
-                                                    <div class="col-md-4 pr-0">
-                                                        <date-picker
+                                                    <div class="col-md-12 pr-0">
+                                                        <span v-if="this.decideDateDate">
+                                                            {{ getFormattedDate(this.decideDateDate)}}
+                                                        </span>
+<!--                                                        <date-picker
                                                                 v-model="decideDateDate"
                                                                 :format="'YYYY/MM/DD'"
                                                                 type="date"
-                                                        ></date-picker>
+                                                        ></date-picker>-->
                                                         <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateDate">
 
 
@@ -350,11 +352,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 pr-0">
-                                                        <date-picker
+<!--                                                        <date-picker
                                                                 v-model="decideDateTime"
                                                                 :format="'HH:mm'"
                                                                 type="time"
-                                                        ></date-picker>
+                                                        ></date-picker>-->
                                                         <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateTime">
 
                                                     </div>
@@ -367,18 +369,20 @@
                                         </div>
                                         <div class="form-group row " v-if="courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" > 申込期限 :
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
+
                                             </label>
 
                                             <div class="col-md-9 col-form-label row">
                                                 <div class="row ml-0">
-                                                    <div class="col-md-4 pr-0">
-                                                        <date-picker
+                                                    <div class="col-md-12 pr-0">
+                                                       <span v-if="this.reverseEndDateDate">
+                                                            {{ getFormattedDate(this.reverseEndDateDate)}}
+                                                        </span>
+<!--                                                        <date-picker
                                                                 v-model="reverseEndDateDate"
                                                                 :format="'YYYY/MM/DD'"
                                                                 type="date"
-                                                        ></date-picker>
+                                                        ></date-picker>-->
                                                         <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateDate">
 
 
@@ -387,11 +391,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 pr-0">
-                                                        <date-picker
+<!--                                                        <date-picker
                                                                 v-model="reverseEndDateTime"
                                                                 :format="'HH:mm'"
                                                                 type="time"
-                                                        ></date-picker>
+                                                        ></date-picker>-->
                                                         <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateTime">
 
                                                     </div>
@@ -596,7 +600,32 @@
         mounted() {},
         computed : {
         },
+        watch: {
+            courseStartDateDate () {
+                this.refreshRelatedDateTime();
+            },
+
+            courseStartDateTime () {
+                this.refreshRelatedDateTime();
+            }
+        },
         methods: {
+            getFormattedDate(date) {
+                return moment(date).format("YYYY/MM/DD HH:mm")
+            },
+            refreshRelatedDateTime() {
+                if (this.courseStartDateDate !== null && this.courseStartDateTime !== null) {
+                    this.courseStartDateDate.setHours(this.courseStartDateTime.getHours(), this.courseStartDateTime.getMinutes());
+
+                    // set time for reverse_end_date
+                    this.reverseEndDateDate =  moment(this.courseStartDateDate).subtract(12, 'h').toDate();
+                    this.reverseEndDateTime = this.reverseEndDateDate;
+
+                    // set time for decide_date
+                    this.decideDateDate =  moment(this.courseStartDateDate).subtract(24 * 7, 'h').toDate();
+                    this.decideDateTime = this.decideDateDate;
+                }
+            },
             register() {
                 let that = this;
                 let formData = new FormData();

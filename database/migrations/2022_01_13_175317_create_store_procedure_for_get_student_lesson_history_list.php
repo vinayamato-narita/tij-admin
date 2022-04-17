@@ -77,9 +77,10 @@ class CreateStoreProcedureForGetStudentLessonHistoryList extends Migration
             LEFT JOIN category_info cai ON cai.category_id = ca.category_id AND cai.lang_type = _lang_type
             WHERE
                 lh.student_id = _student_id
-                AND lh.student_lesson_reserve_type = 3
-                        AND CASE _course_id  WHEN 0 THEN 1=1 ELSE p.course_id = _course_id END
-                        AND CASE _lesson_id WHEN 0 THEN 1=1 ELSE lsn.lesson_id = _lesson_id END
+                AND lh.lesson_schedule.course_id IS NOT NULL
+                AND lh.lesson_schedule.lesson_endtime < NOW()
+                AND CASE _course_id  WHEN 0 THEN 1=1 ELSE p.course_id = _course_id END
+                AND CASE _lesson_id WHEN 0 THEN 1=1 ELSE lsn.lesson_id = _lesson_id END
             ORDER BY
                  ls.lesson_date DESC,
                 ls.lesson_starttime DESC

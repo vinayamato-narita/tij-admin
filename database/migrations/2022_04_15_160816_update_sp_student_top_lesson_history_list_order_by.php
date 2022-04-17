@@ -66,8 +66,7 @@ class UpdateSpStudentTopLessonHistoryListOrderBy extends Migration
                 lh.student_id = _student_id
                 AND DATE_FORMAT(ls.lesson_starttime,'%Y-%m-%d %H-%i') >= DATE_FORMAT(DATE_ADD( NOW(),INTERVAL -24 HOUR),'%Y-%m-%d %H-%i')
                 AND lh.student_lesson_reserve_type <> 2
-                AND is_lesson_end = 0
-								AND ls.course_id IS NOT NULL
+                AND ls.course_id IS NOT NULL
             ORDER BY
                 lesson_date DESC
                 ,lesson_starttime DESC

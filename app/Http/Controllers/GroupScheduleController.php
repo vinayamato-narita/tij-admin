@@ -7,6 +7,7 @@ use App\Components\BreadcrumbComponent;
 use App\Enums\AutoRecording;
 use App\Enums\Boolean;
 use App\Enums\StatusCode;
+use App\Enums\LangType;
 use App\Models\Teacher;
 use App\Models\Lesson;
 use App\Models\LessonText;
@@ -125,19 +126,13 @@ class GroupScheduleController extends BaseController
         // get course and lesson list of teacher
         $courseList = DB::table('course')
             ->selectRaw('course.course_id,
-                            coalesce(course_info.course_name, course.course_name) as course_name,
+                            course.course_name as course_name,
                             lesson.lesson_id,
-                            coalesce(lesson_info.lesson_name, lesson.lesson_name) as lesson_name,
+                            lesson.lesson_name as lesson_name,
                             teacher.teacher_id,
                             teacher.teacher_name')
-            ->leftJoin('course_info', function ($join) {
-                $join->on('course_info.course_id', '=', 'course.course_id');
-            })
             ->leftJoin('course_lesson', 'course_lesson.course_id', '=', 'course.course_id')
             ->leftJoin('lesson', 'lesson.lesson_id', '=', 'course_lesson.lesson_id')
-            ->leftJoin('lesson_info', function ($join) {
-                $join->on('lesson_info.lesson_id', '=', 'lesson.lesson_id');
-            })
             ->leftJoin('teacher_lesson', 'teacher_lesson.lesson_id', '=', 'lesson.lesson_id')
             ->leftJoin('teacher', 'teacher.teacher_id', '=', 'teacher_lesson.teacher_id')
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
@@ -226,9 +221,9 @@ class GroupScheduleController extends BaseController
                             lesson_schedule.link_zoom_schedule_flag,
                             lesson_schedule.zoom_schedule_id,
                             course.course_id,
-                            coalesce(course_info.course_name, course.course_name) as title,
+                            course.course_name as title,
                             lesson.lesson_id,
-                            coalesce(lesson_info.lesson_name, lesson.lesson_name) as lesson_name,
+                            lesson.lesson_name as lesson_name,
                             CONCAT("color-", MOD(course.course_id, 11)) as class,
                             false as deletable,
                             false as resizable,
@@ -239,10 +234,7 @@ class GroupScheduleController extends BaseController
                             zoom_schedule.auto_recording as auto_recording
                             ')
             ->leftJoin('lesson', 'lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-            ->leftJoin('lesson_info', 'lesson_info.lesson_id', '=', 'lesson.lesson_id')
-            ->leftJoin('course_lesson', 'course_lesson.lesson_id', '=', 'lesson_schedule.lesson_id')
-            ->leftJoin('course', 'course.course_id', '=', 'course_lesson.course_id')
-            ->leftJoin('course_info', 'course_info.course_id', '=', 'course.course_id')
+            ->leftJoin('course', 'course.course_id', '=', 'lesson_schedule.course_id')
             ->leftJoin('zoom_schedule', 'zoom_schedule.zoom_schedule_id', '=', 'lesson_schedule.zoom_schedule_id')
             ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
             ->where('lesson_schedule.lesson_starttime', '>=', $startDate)
@@ -325,8 +317,20 @@ class GroupScheduleController extends BaseController
 
         $duplicateCheck = DB::table('lesson_schedule')
             ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
-            ->where('lesson_schedule.lesson_starttime', '=', $startDateTime)
-            ->where('lesson_schedule.lesson_endtime', '=', $endDateTime);
+            ->where(function($query) use ($startDateTime, $endDateTime) {
+                $query->where(function($q) use ($startDateTime, $endDateTime) {
+                    $q->where('lesson_schedule.lesson_starttime', '>', $startDateTime)
+                      ->where('lesson_schedule.lesson_starttime', '<', $endDateTime);
+                })
+                ->orWhere(function($q) use ($startDateTime, $endDateTime) {
+                    $q->where('lesson_schedule.lesson_endtime', '>', $startDateTime)
+                      ->where('lesson_schedule.lesson_endtime', '<', $endDateTime);
+                })
+                ->orWhere(function($q) use ($startDateTime, $endDateTime) {
+                    $q->where('lesson_schedule.lesson_starttime', '<=', $startDateTime)
+                      ->where('lesson_schedule.lesson_endtime', '>=', $endDateTime);
+                });
+            });
         if ($editFlag) {
             $duplicateCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
         }

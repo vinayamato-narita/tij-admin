@@ -18,8 +18,8 @@
                             <div class="card">
                                 <div class="card-header">実力テスト情報
                                     <div class="float-right">
-                                        <a :href="answerDetailUrl" class="btn btn-primary ">学習者の回答</a>
-                                        <a href="#" class="btn btn-primary ">マニュアル</a>
+                                        <a :href="answerDetailUrl" target="_blank" class="btn btn-primary ">学習者の回答</a>
+                                        <a :href="groupLessonGuideUrl" target="_blank" class="btn btn-primary ">マニュアル</a>
 
                                     </div>
 
@@ -129,7 +129,7 @@
         created(){
 
         },
-        props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl', 'answerDetailUrl'],
+        props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl', 'answerDetailUrl', 'groupLessonGuideUrl'],
         mounted() {},
         methods: {
             register() {

@@ -98,7 +98,7 @@ class LessonScheduleController extends BaseController
         if (!empty($data['teacher_id']) && is_numeric($data['teacher_id'])) {
             $lessonSchedule = DB::select("CALL sp_admin_get_lesson_schedule_list('".(int) $data['teacher_id']."','".$lessonStart."')");
         }
-
+        
         $lessonTiming = LessonTiming::LESSON_TIMING;
         $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
         $numRow = 24 * 60/ $nextLessonTime;
@@ -141,7 +141,11 @@ class LessonScheduleController extends BaseController
                         'lesson_text_id' => 0,
                         'lesson_name' => '-(-)',
                         'start_time' => $curCellTime,
-                        'time_format' => $timeFormat
+                        'time_format' => $timeFormat,
+                        'lesson_name_selected' => '',
+                        'student_id' => '',
+                        'student_name' => '',
+                        'student_nickname' => ''
                     ];
                 }
             }

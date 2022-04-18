@@ -92,13 +92,14 @@
                                                             {{ itemSelected['time_format'] }}
                                                         </li>
                                                         <li class="lesson-detail-item" id="lessonName">
+                                                            {{ lessonNameSelected }}
                                                         </li>
                                                         <li class="lesson-detail-item" id="lessonTextName">
                                                         </li>
                                                     </ul>
                                                     <ul class="lesson-detail student-detail">
-                                                        <li class="lesson-detail-item" id="studentId"></li>
-                                                        <li class="lesson-detail-item" id="studentNickName"></li>
+                                                        <li class="lesson-detail-item" id="studentId">{{ itemSelected['student_id'] }}</li>
+                                                        <li class="lesson-detail-item" id="studentNickName">{{ itemSelected['student_nickname'] }}</li>
                                                         <li class="lesson-detail-item" id="studentName"></li>
                                                         <li class="lesson-detail-item" id="registerDate"></li>
                                                     </ul>
@@ -156,7 +157,8 @@ export default {
             submitFlgConds : false,
             currentIndex : 0,
             removeFlgConds : false,
-            itemSelected : []
+            itemSelected : [],
+            lessonNameSelected : ''
         }
     },
     methods :{
@@ -208,7 +210,12 @@ export default {
             this.dataSelected[i][j] = !this.dataSelected[i][j]
             this.$set(this.dataSelected[i], j, this.dataSelected[i][j])
             this.itemSelected = this.dataLessonSchedule[i][j][0]
-            console.log('xxx :' + this.itemSelected['time_format'])
+            this.lessonNameSelected = ''
+
+            if (this.itemSelected['lesson_name'].includes('registered')) {
+                this.lessonNameSelected = this.itemSelected['lesson_name_selected']
+            }
+            
             this.checkConditionSubmit()
             this.checkConditionRemove()
         },

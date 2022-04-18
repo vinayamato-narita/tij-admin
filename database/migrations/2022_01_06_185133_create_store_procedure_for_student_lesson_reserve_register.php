@@ -27,7 +27,7 @@ class CreateStoreProcedureForStudentLessonReserveRegister extends Migration
            SET @lesson_text_name = (SELECT SUBSTRING(lesson_text_name,1,45) FROM lesson_text WHERE lesson_text_id = _lesson_text_id);
         CASE
           WHEN @lesson_count <> 0 THEN
-                SET @c = (SELECT count(*) FROM lesson_history WHERE student_id = student_id AND lesson_schedule_id = _lesson_schedule_id);
+                SET @c = (SELECT count(*) FROM lesson_history WHERE student_id = _student_id AND lesson_schedule_id = _lesson_schedule_id);
                 CASE @c
                   WHEN 0 THEN
                          INSERT INTO lesson_history (

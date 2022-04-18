@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Log;
+
 class EditAdminRequest extends FormRequest
 {
     /**
@@ -24,7 +24,6 @@ class EditAdminRequest extends FormRequest
      */
     public function rules()
     {
-        Log::info($this);
         return [
             'admin_user_name' => 'required|max:255',
             'admin_user_email' => [

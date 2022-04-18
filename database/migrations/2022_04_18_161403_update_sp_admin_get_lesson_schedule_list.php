@@ -26,6 +26,7 @@ class UpdateSpAdminGetLessonScheduleList extends Migration
                 ,COALESCE(ls.lesson_schedule_id,0) AS lesson_schedule_id
                 ,COALESCE(ls.lesson_id,0) AS lesson_id
                 ,CONCAT(IF (ls.lesson_type_id = 0,'-', 'registered' ), '(',COALESCE(lesson_name,'-'),')') AS lesson_name
+                ,IF(ls.lesson_type_id != 0,COALESCE(lesson_name,''), '') as lesson_name_selected
                 ,COALESCE(ls.lesson_type_id,0) AS lesson_type_id
                 ,COALESCE(ls.lesson_text_id,0) AS lesson_text_id
                 ,COALESCE(ls.lesson_subscription_type,0) AS lesson_subscription_type

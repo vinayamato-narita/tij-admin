@@ -420,6 +420,7 @@ class GroupScheduleController extends BaseController
             $zoomAccount = ZoomAccount::where('zoom_account_id', $zoomAccountId)->first();
             $token = $zoomClientService->getZoomAccessToken($zoomAccount->api_key, $zoomAccount->api_secret);
             $dataZoomMeeting = $zoomClientService->createZoomMeeting($token, $zoomAccount->zoom_user_id, $object)->json();
+            Log::info($dataZoomMeeting);
 
             $zoomSchedule = new ZoomSchedule();
             $zoomSchedule->zoom_account_id = $zoomAccountId;

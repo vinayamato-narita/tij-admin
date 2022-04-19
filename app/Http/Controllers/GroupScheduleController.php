@@ -402,7 +402,7 @@ class GroupScheduleController extends BaseController
             $object = [
                 'topic' => $course->course_name . $lesson->lesson_name,
                 'type => 2',
-                'start_time' => $startDateTime,
+                'start_time' => $startDateTime->toAtomString(),
                 'duration' => $diff / 60,
                 'timezone' => 'Asia/Tokyo',
                 'password' => Str::random(8),
@@ -420,22 +420,21 @@ class GroupScheduleController extends BaseController
             $zoomAccount = ZoomAccount::where('zoom_account_id', $zoomAccountId)->first();
             $token = $zoomClientService->getZoomAccessToken($zoomAccount->api_key, $zoomAccount->api_secret);
             $dataZoomMeeting = $zoomClientService->createZoomMeeting($token, $zoomAccount->zoom_user_id, $object)->json();
-            Log::info($dataZoomMeeting);
 
             $zoomSchedule = new ZoomSchedule();
             $zoomSchedule->zoom_account_id = $zoomAccountId;
             $zoomSchedule->zoom_meeting_id = $dataZoomMeeting['id'];
             $zoomSchedule->meeting_type = $dataZoomMeeting['type'];
-            $zoomSchedule->start_time = $dataZoomMeeting['start_time'];
+            $zoomSchedule->start_time = Carbon::create($dataZoomMeeting['start_time'])->setTimezone($dataZoomMeeting['timezone']);
             $zoomSchedule->duration = $dataZoomMeeting['duration'];
             $zoomSchedule->time_zone = $dataZoomMeeting['timezone'];
             $zoomSchedule->join_before_host = $request->joinBeforeHost;
             $zoomSchedule->auto_recording = $request->autoRecording;
             $zoomSchedule->waiting_room = $request->waitingRoom;
-            $zoomSchedule->zoom_url = $dataZoomMeeting['start_url'];
+            $zoomSchedule->zoom_url = $dataZoomMeeting['join_url'];
             $zoomSchedule->password = $dataZoomMeeting['password'];
             $zoomSchedule->save();
-            $zoomUrl = $dataZoomMeeting['start_url'];
+            $zoomUrl = $dataZoomMeeting['join_url'];
         } else {
             $zoomUrl = $request->zoomUrl;
         }

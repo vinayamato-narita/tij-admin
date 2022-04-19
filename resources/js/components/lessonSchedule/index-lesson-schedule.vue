@@ -92,13 +92,14 @@
                                                             {{ itemSelected['time_format'] }}
                                                         </li>
                                                         <li class="lesson-detail-item" id="lessonName">
+                                                            {{ lessonNameSelected }}
                                                         </li>
                                                         <li class="lesson-detail-item" id="lessonTextName">
                                                         </li>
                                                     </ul>
                                                     <ul class="lesson-detail student-detail">
-                                                        <li class="lesson-detail-item" id="studentId"></li>
-                                                        <li class="lesson-detail-item" id="studentNickName"></li>
+                                                        <li class="lesson-detail-item" id="studentId">{{ studentId }}</li>
+                                                        <li class="lesson-detail-item" id="studentNickName">{{ studentNickname }}</li>
                                                         <li class="lesson-detail-item" id="studentName"></li>
                                                         <li class="lesson-detail-item" id="registerDate"></li>
                                                     </ul>
@@ -153,10 +154,15 @@ export default {
             nextWeek : new Date(),
             flgShowTable : false,
             dataSelected : [],
+            dataRegisted : [],
             submitFlgConds : false,
             currentIndex : 0,
             removeFlgConds : false,
-            itemSelected : []
+            itemSelected : [],
+            lessonNameSelected : '',
+            studentId : '',
+            studentNickname : '',
+            teacherZoomId: null
         }
     },
     methods :{
@@ -180,9 +186,12 @@ export default {
                         that.dataLessonSchedule = response.data.dataLessonSchedule
                         that.numRow = response.data.numRow
                         that.dataSelected = response.data.dataSelected
+                        that.dataRegisted = response.data.dataRegisted
                         that.currentIndex = response.data.currentIndex
+                        that.teacherZoomId = response.data.teacherZoomId
                         this.submitFlgConds = false
                         this.removeFlgConds = false
+                        console.log(that.teacherZoomId)
                     } else {
                         this.$swal({
                             text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
@@ -208,9 +217,28 @@ export default {
             this.dataSelected[i][j] = !this.dataSelected[i][j]
             this.$set(this.dataSelected[i], j, this.dataSelected[i][j])
             this.itemSelected = this.dataLessonSchedule[i][j][0]
-            console.log('xxx :' + this.itemSelected['time_format'])
-            this.checkConditionSubmit()
-            this.checkConditionRemove()
+            this.lessonNameSelected = ''
+            this.studentId = ''
+            this.studentNickname = ''
+
+            if (this.itemSelected['lesson_name'].includes('registered')) {
+                this.lessonNameSelected = this.itemSelected['lesson_name_selected']
+            }
+
+            if (this.itemSelected['course_type'] == 0) {
+                this.studentId = this.itemSelected['student_id']
+                this.studentNickname = this.itemSelected['student_name']
+            }
+
+            if (this.dataSelected[i][j]) {
+                this.submitFlgConds = false;
+                if (!this.dataRegisted[i][j]) {
+                    this.submitFlgConds = true;
+                }
+            } else {
+                this.checkConditionSubmit()
+                this.checkConditionRemove()
+            }
         },
         checkConditionSubmit() {
             this.submitFlgConds = false;
@@ -233,16 +261,16 @@ export default {
             }
         },
         bulkResistration() {
-            if (!this.submitFlgConds) {
-                this.$swal({
-                    text: "レッスンを登録しますか？",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    showCancelButton : true,
-                    cancelButtonText : "閉じる"
-                }).then(result => {
-                });
-            }
+            // if (!this.submitFlgConds) {
+            //     this.$swal({
+            //         text: "レッスンを登録しますか？",
+            //         icon: "error",
+            //         confirmButtonText: "OK",
+            //         showCancelButton : true,
+            //         cancelButtonText : "閉じる"
+            //     }).then(result => {
+            //     });
+            // }
 
             let dataBulkResistration = new Array()
             let idx = 0
@@ -265,7 +293,8 @@ export default {
                 .post(that.urlRegisterMultiLesson, {
                     data_bulk_resistration : dataBulkResistration,
                     teacher_id : this.teacherId,
-                    lesson_timing : this.lessonTiming
+                    lesson_timing : this.lessonTiming,
+                    teacher_zoom_id : this.teacherZoomId
                 })
                 .then(response => {
                     that.flagShowLoader = false;
@@ -285,16 +314,16 @@ export default {
                 }); 
         },
         bulkRemove() {
-            if (!this.removeFlgConds) {
-                this.$swal({
-                    text: "レッスンを登録しますか？",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    showCancelButton : true,
-                    cancelButtonText : "閉じる"
-                }).then(result => {
-                });
-            }
+            // if (!this.removeFlgConds) {
+            //     this.$swal({
+            //         text: "レッスンを登録しますか？",
+            //         icon: "error",
+            //         confirmButtonText: "OK",
+            //         showCancelButton : true,
+            //         cancelButtonText : "閉じる"
+            //     }).then(result => {
+            //     });
+            // }
 
             let dataBulkResistration = new Array()
             let idx = 0
@@ -331,16 +360,16 @@ export default {
                 }); 
         },
         resistration() {
-            if (!this.submitFlgConds) {
-                this.$swal({
-                    text: "レッスンを登録しますか？",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    showCancelButton : true,
-                    cancelButtonText : "閉じる"
-                }).then(result => {
-                });
-            }
+            // if (!this.submitFlgConds) {
+            //     this.$swal({
+            //         text: "レッスンを登録しますか？",
+            //         icon: "error",
+            //         confirmButtonText: "OK",
+            //         showCancelButton : true,
+            //         cancelButtonText : "閉じる"
+            //     }).then(result => {
+            //     });
+            // }
 
             let that = this
 
@@ -349,7 +378,8 @@ export default {
                     lesson_schedule_id : this.itemSelected['lesson_schedule_id'],
                     teacher_id : this.teacherId,
                     start_time : this.itemSelected['start_time'],
-                    lesson_timing : this.lessonTiming
+                    lesson_timing : this.lessonTiming,
+                    teacher_zoom_id : this.teacherZoomId
                 })
                 .then(response => {
                     that.flagShowLoader = false;

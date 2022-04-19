@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Components\BreadcrumbComponent;
+use App\Enums\CourseTypeEnum;
 use App\Enums\StatusCode;
 use App\Models\Teacher;
 use App\Models\Lesson;
@@ -36,7 +37,7 @@ class LessonScheduleController extends BaseController
             date('M d (D)', strtotime($lessonStart. ' +5 day')),
             date('M d (D)', strtotime($lessonStart. ' +6 day')),
         );
-       
+        
         $lessonTiming = LessonTiming::LESSON_TIMING;
         $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
         $numRow = 24 * 60/ $nextLessonTime;
@@ -94,19 +95,34 @@ class LessonScheduleController extends BaseController
         );
 
         $lessonSchedule = [];
+        $teacherZoomId = null;
 
         if (!empty($data['teacher_id']) && is_numeric($data['teacher_id'])) {
             $lessonSchedule = DB::select("CALL sp_admin_get_lesson_schedule_list('".(int) $data['teacher_id']."','".$lessonStart."')");
+            $teacher = DB::table('teacher')
+                ->select('teacher.zoom_personal_meeting_id')
+                ->where('teacher.teacher_id', $data['teacher_id'])
+                ->get();
+            if ($teacher) {
+                $teacherZoomId = $teacher[0]->zoom_personal_meeting_id;
+            }
         }
-
         $lessonTiming = LessonTiming::LESSON_TIMING;
         $nextLessonTime = LessonTiming::NEXT_LESSON_TIME;
         $numRow = 24 * 60/ $nextLessonTime;
         $dataLessonSchedule = [];
         $dataSelected = [];
+        $dataRegisted = [];
 
         if (!empty($lessonSchedule)) {
             $lessonSchedule = collect($lessonSchedule)->keyBy('lesson_starttime');
+        }
+
+        foreach ($lessonSchedule as &$item) {
+            if ($item->course_type == CourseTypeEnum::GROUP_COURSE) {
+                $startTime = date("Y-m-d H:i:s", strtotime($item->lesson_starttime. " +" . $nextLessonTime . " minutes"));
+                $lessonSchedule[$startTime] = $item;
+            }
         }
 
         $currentIndex = 0;
@@ -126,6 +142,7 @@ class LessonScheduleController extends BaseController
             for($j = 0; $j < 7; $j++) {
                 $dataLessonSchedule[$i][$j] = [];
                 $dataSelected[$i][$j] = false;
+                $dataRegisted[$i][$j] = false;
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
                 $timeFormat = date('M d (D) ', strtotime($curRowTime. " + $j days")).$dataLessonSchedule[$i]['time'];
 
@@ -133,6 +150,7 @@ class LessonScheduleController extends BaseController
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
                     $lessonSchedule[$curCellTime]->time_format = $timeFormat;
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
+                    $dataRegisted[$i][$j] = true;
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
                         'lesson_schedule_id' => 0,
@@ -141,7 +159,11 @@ class LessonScheduleController extends BaseController
                         'lesson_text_id' => 0,
                         'lesson_name' => '-(-)',
                         'start_time' => $curCellTime,
-                        'time_format' => $timeFormat
+                        'time_format' => $timeFormat,
+                        'lesson_name_selected' => '',
+                        'student_id' => '',
+                        'student_name' => '',
+                        'student_nickname' => ''
                     ];
                 }
             }
@@ -156,8 +178,10 @@ class LessonScheduleController extends BaseController
             'dataLessonSchedule' => $dataLessonSchedule,
             'numRow' => $numRow,
             'dataSelected' => $dataSelected,
+            'dataRegisted' => $dataRegisted,
             'currentIndex' => $currentIndex,
-            'lessonTiming' => $lessonTiming
+            'lessonTiming' => $lessonTiming,
+            'teacherZoomId' => $teacherZoomId
         ], StatusCode::OK);
     }
 
@@ -173,7 +197,8 @@ class LessonScheduleController extends BaseController
         foreach ($data['data_bulk_resistration'] as $value) {
             $lessonScheduleId =  !empty($value['lesson_schedule_id']) ? $value['lesson_schedule_id'] : -1;
             $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
-            $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."')");
+            $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
+            $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
         }
 
         return response()->json([
@@ -200,7 +225,6 @@ class LessonScheduleController extends BaseController
         ], StatusCode::OK);
     }
 
-
     public function registerLesson(Request $request) {
         $data = $request->all();
         $lessonScheduleId =  !empty($data['lesson_schedule_id']) ? $data['lesson_schedule_id'] : -1;
@@ -213,7 +237,8 @@ class LessonScheduleController extends BaseController
             ]);
         }
 
-        $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$data['start_time']."','".$data['end_time']."')");
+        $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
+        $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$data['start_time']."','".$data['end_time']."','".$data['teacher_zoom_url']."')");
         
         if ($string[0]->result != 1) {
             return response()->json([

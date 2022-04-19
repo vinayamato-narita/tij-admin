@@ -28,7 +28,7 @@ class StoreUpdateCourseRequest extends FormRequest
             'displayOrder' => 'required|digits_between:1,1000000000',
             'courseName' => 'required|max:255',
             'courseNameShort' => 'max:255',
-            'pointCount' => 'required|digits_between:1,1000000000',
+            'pointCount' => 'nullable|digits_between:1,1000000000',
             'amount' => 'required|digits_between:0,1000000000',
             'paypalItemNumber' => 'max:45',
             'isForLMS' => 'required',

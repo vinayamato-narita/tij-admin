@@ -132,7 +132,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        <div class="form-group row" v-if="this.courseType == 0">
                                             <label class="col-md-3 col-form-label text-md-right" for="pointCount">受講回数 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>
@@ -155,7 +155,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" v-validate="'required|min_value:0|max_value:1000000000'" />
+                                                <input class="form-control" id="amount" type="number" name="amount" @input="changeInput()" style="max-width: 100px" v-model="amount" value="1" v-validate="'required|min_value:1|max_value:1000000000'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("amount") }}
@@ -280,7 +280,7 @@
                                             <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" style="max-width: 100px" id="expireDay" type="number" name="expireDay" @input="changeInput()"  v-model="expireDay"  />
+                                                <input class="form-control" style="max-width: 100px" id="expireDay" type="number" name="expireDay" v-validate="'required|min_value:1|max_value:1000000000'" @input="changeInput()"  v-model="expireDay"  />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("expireDay") }}
@@ -512,8 +512,8 @@
                     },
                     amount : {
                         required: "価格（税抜）を入力してください",
-                        min_value: "価格（税抜）は0～1000000000 を入力してください",
-                        max_value: "価格（税抜）は0～1000000000 を入力してください"
+                        min_value: "価格（税抜）は1～1000000000 を入力してください",
+                        max_value: "価格（税抜）は1～1000000000 を入力してください"
                     },
                     paypalItemNumber : {
                         max: "コースコードは45文字以内で入力してください。"
@@ -523,6 +523,11 @@
                         min_value: "最小開催人数は1～1000000000 を入力してください",
                         max_value: "最小開催人数は1～1000000000 を入力してください",
                         custom_compare: "最小開催人数は最大申込人数より小さくなければなりません"
+                    },
+                    expireDay : {
+                        required: "有効日数を入力してください",
+                        min_value: "有効日数は1～1000000000 を入力してください",
+                        max_value: "有効日数は1～1000000000 を入力してください",
                     },
                     maxReserveCount : {
                         required: "最大申込人数を入力してください",

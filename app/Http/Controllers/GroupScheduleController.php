@@ -402,7 +402,7 @@ class GroupScheduleController extends BaseController
             $object = [
                 'topic' => $course->course_name . $lesson->lesson_name,
                 'type => 2',
-                'start_time' => $startDateTime,
+                'start_time' => Carbon::createFromFormat('Y/m/d H:i', $request['startDateTime'])->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z'),
                 'duration' => $diff / 60,
                 'timezone' => 'Asia/Tokyo',
                 'password' => Str::random(8),
@@ -432,10 +432,10 @@ class GroupScheduleController extends BaseController
             $zoomSchedule->join_before_host = $request->joinBeforeHost;
             $zoomSchedule->auto_recording = $request->autoRecording;
             $zoomSchedule->waiting_room = $request->waitingRoom;
-            $zoomSchedule->zoom_url = $dataZoomMeeting['start_url'];
+            $zoomSchedule->zoom_url = $dataZoomMeeting['join_url'];
             $zoomSchedule->password = $dataZoomMeeting['password'];
             $zoomSchedule->save();
-            $zoomUrl = $dataZoomMeeting['start_url'];
+            $zoomUrl = $dataZoomMeeting['join_url'];
         } else {
             $zoomUrl = $request->zoomUrl;
         }

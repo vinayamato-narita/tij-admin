@@ -61,7 +61,7 @@
                                                         <td class="text-left">{{ $history->teacher->teacher_name }}</td>
                                                         <td class="text-left">{{ $history->student_point_history_count }}</td>
                                                         <td class="text-left">{{ $history->lesson_histories_count }}</td>
-                                                        <td class="text-left ">{{\Carbon\Carbon::parse($history->lesson_starttime)->format('Y/m/d H:m')}}</td>
+                                                        <td class="text-left ">{{\Carbon\Carbon::parse($history->lesson_starttime)->format('Y/m/d H:i')}}</td>
                                                         <td>
                                                             <div class="btn-group" style="float:right;">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

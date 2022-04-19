@@ -554,7 +554,7 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="zoomPersonalMeetingId"
                                             >
-                                                個人ミーティングID:
+                                                固定Zoomミーティング:
                                                 <span
                                                     class="glyphicon glyphicon-star"
                                                 ></span>
@@ -571,7 +571,7 @@
                                                         zoomPersonalMeetingId
                                                     "
                                                     v-validate="
-                                                        'required|max:15'
+                                                        'required|max:255'
                                                     "
                                                 />
 
@@ -775,8 +775,8 @@ export default {
                     max: "英語対応は255文字以内で入力してください。"
                 },
                 zoomPersonalMeetingId: {
-                    required: "個人ミーティングIDを入力してください",
-                    max: "個人ミーティングIDは15文字以内で入力してください。"
+                    required: "固定Zoomミーティングを入力してください",
+                    max: "固定Zoomミーティングは255文字以内で入力してください。"
                 },
                 zoomPassword: {
                     max: "パスワードは50文字以内で入力してください。"

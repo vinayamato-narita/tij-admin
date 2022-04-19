@@ -166,7 +166,7 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">個人ミーティングID:
+                                        <label class="col-md-3 col-form-label text-md-right">固定Zoomミーティング:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             {{this.teacher.zoom_personal_meeting_id}}

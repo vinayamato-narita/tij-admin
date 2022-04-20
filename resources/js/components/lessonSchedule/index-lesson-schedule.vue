@@ -191,7 +191,6 @@ export default {
                         that.teacherZoomId = response.data.teacherZoomId
                         this.submitFlgConds = false
                         this.removeFlgConds = false
-                        console.log(that.teacherZoomId)
                     } else {
                         this.$swal({
                             text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
@@ -221,9 +220,7 @@ export default {
             this.studentId = ''
             this.studentNickname = ''
 
-            if (this.itemSelected['lesson_name'].includes('registered')) {
-                this.lessonNameSelected = this.itemSelected['lesson_name_selected']
-            }
+            this.lessonNameSelected = this.itemSelected['lesson_name_selected']
 
             if (this.itemSelected['course_type'] == 0) {
                 this.studentId = this.itemSelected['student_id']
@@ -236,7 +233,10 @@ export default {
                     this.submitFlgConds = true;
                 }
             } else {
-                this.checkConditionSubmit()
+                this.itemSelected = []
+                this.submitFlgConds = false
+                this.lessonNameSelected = ''
+                // this.checkConditionSubmit()
                 this.checkConditionRemove()
             }
         },
@@ -262,14 +262,7 @@ export default {
         },
         bulkResistration() {
             // if (!this.submitFlgConds) {
-            //     this.$swal({
-            //         text: "レッスンを登録しますか？",
-            //         icon: "error",
-            //         confirmButtonText: "OK",
-            //         showCancelButton : true,
-            //         cancelButtonText : "閉じる"
-            //     }).then(result => {
-            //     });
+            //     return false;
             // }
 
             let dataBulkResistration = new Array()
@@ -360,16 +353,9 @@ export default {
                 }); 
         },
         resistration() {
-            // if (!this.submitFlgConds) {
-            //     this.$swal({
-            //         text: "レッスンを登録しますか？",
-            //         icon: "error",
-            //         confirmButtonText: "OK",
-            //         showCancelButton : true,
-            //         cancelButtonText : "閉じる"
-            //     }).then(result => {
-            //     });
-            // }
+            if (!this.submitFlgConds) {
+                return false;
+            }
 
             let that = this
 

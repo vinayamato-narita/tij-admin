@@ -151,7 +151,9 @@ class LessonScheduleController extends BaseController
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
                     $lessonSchedule[$curCellTime]->time_format = $timeFormat;
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
-                    $dataRegisted[$i][$j] = true;
+                    if ($lessonSchedule[$curCellTime]->lesson_type_id == 1) {
+                        $dataRegisted[$i][$j] = true;
+                    }
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
                         'lesson_schedule_id' => 0,

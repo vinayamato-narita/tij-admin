@@ -33,8 +33,13 @@
 
                           <!-- Custom title -->
                           <template v-slot:title="{ title, view }">
-                            <span v-if="view.startDate.format('MMMM YYYY') != view.endDate.format('MMMM YYYY')">{{ view.startDate.format('MMMM - ') }}</span>
-                            <span>{{ view.endDate.format('MMMM YYYY') }}</span>
+                            <span>{{ view.startDate.format('YYYY年M月') }}</span>
+                            <span v-if="view.startDate.format('MMMM YYYY') != view.endDate.format('MMMM YYYY')">{{ view.endDate.format(' - M月') }}</span>
+                          </template>
+
+                          <!-- Custom weekday-heading -->
+                          <template v-slot:weekday-heading="{ heading, view }">
+                            <span>{{ heading.date.format('D（dddd）') }}</span>
                           </template>
 
                           <!-- Custom cells -->

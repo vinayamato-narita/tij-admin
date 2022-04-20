@@ -66,7 +66,7 @@
                                                     <th class="text-left min-width-150">@sortablelink('j_company_name', '法人名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('amount', '売上')</th>
                                                     <th class="text-left min-width-150">@sortablelink('tax', '消費税')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_campaign_code', 'キャンペーンコード')</th>
+                                                    {{-- <th class="text-left min-width-150">@sortablelink('j_campaign_code', 'キャンペーンコード')</th> --}}
                                                     <th class="text-left min-width-150">@sortablelink('point_count', '付与回数')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_paid_status', '支払状況')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_receive_payment_date', '入金日')</th>
@@ -88,7 +88,7 @@
                                                         <td class="text-left">{{ $payment->j_company_name }}</td>
                                                         <td class="text-left">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-left">{{ number_format($payment->tax) }}</td>
-                                                        <td class="text-left">{{ $payment->j_campaign_code }}</td>
+                                                        {{-- <td class="text-left">{{ $payment->j_campaign_code }}</td> --}}
                                                         <td class="text-left">{{ $payment->point_count }}</td>
                                                         <td class="text-left">{{ PaidStatus::getDescription($payment->j_paid_status) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>

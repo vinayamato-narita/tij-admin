@@ -11,6 +11,7 @@ use App\Models\Lesson;
 use App\Models\LessonText;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LessonTiming;
+use App\Models\LessonSchedule;
 
 class LessonScheduleController extends BaseController
 {
@@ -150,7 +151,9 @@ class LessonScheduleController extends BaseController
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
                     $lessonSchedule[$curCellTime]->time_format = $timeFormat;
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
-                    $dataRegisted[$i][$j] = true;
+                    if ($lessonSchedule[$curCellTime]->lesson_type_id == 1) {
+                        $dataRegisted[$i][$j] = true;
+                    }
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
                         'lesson_schedule_id' => 0,
@@ -196,9 +199,20 @@ class LessonScheduleController extends BaseController
         }
         foreach ($data['data_bulk_resistration'] as $value) {
             $lessonScheduleId =  !empty($value['lesson_schedule_id']) ? $value['lesson_schedule_id'] : -1;
-            $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
-            $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
-            $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
+            $groupCourseFlg = false;
+
+            if ($lessonScheduleId != -1) {
+                $lessonSchedule = LessonSchedule::where('lesson_schedule_id', $lessonScheduleId)->get();
+                if ($lessonSchedule && $lessonSchedule[0]['course_type'] == CourseTypeEnum::GROUP_COURSE) {
+                    $groupCourseFlg = true;
+                }
+            }
+
+            if (!$groupCourseFlg) {
+                $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
+                $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
+                $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
+            }
         }
 
         return response()->json([
@@ -225,6 +239,29 @@ class LessonScheduleController extends BaseController
         ], StatusCode::OK);
     }
 
+    public function removeLesson(Request $request) {
+        $data = $request->all();
+
+        if (empty($data) || !isset($data['lesson_schedule_id'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$data['lesson_schedule_id']."')");
+
+        if ($string[0]->result != 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
     public function registerLesson(Request $request) {
         $data = $request->all();
         $lessonScheduleId =  !empty($data['lesson_schedule_id']) ? $data['lesson_schedule_id'] : -1;
@@ -237,7 +274,7 @@ class LessonScheduleController extends BaseController
             ]);
         }
 
-        $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
+        $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
         $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$data['start_time']."','".$data['end_time']."','".$data['teacher_zoom_url']."')");
         
         if ($string[0]->result != 1) {

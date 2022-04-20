@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixSpTopLessonHistory extends Migration
+class FixSpTeacherLessonTopHtml extends Migration
 {
     /**
      * Run the migrations.
@@ -48,7 +48,10 @@ class FixSpTopLessonHistory extends Migration
                 , fst.file_path as student_file_path
                 ,c.course_name,
                 c.course_id,
-                c.course_type
+                c.course_type, 
+                ls.zoom_url,
+                ls.link_zoom_schedule_flag,
+                ls.zoom_schedule_id
             FROM
                 lesson_history lh
                 LEFT JOIN lesson_schedule ls ON ls.lesson_schedule_id = lh.lesson_schedule_id

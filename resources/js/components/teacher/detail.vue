@@ -166,7 +166,7 @@
                                     </div>
 
                                     <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">個人ミーティングID:
+                                        <label class="col-md-3 col-form-label text-md-right">固定Zoomミーティング:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
                                             {{this.teacher.zoom_personal_meeting_id}}
@@ -191,7 +191,7 @@
                                                 英語が話せる日本人講師
                                             </div>
                                             <div v-if="this.teacher.teacher_feature2">
-                                                キッズ向け
+                                                子供向け
                                             </div>
                                             <div v-if="this.teacher.teacher_feature3">
                                                 講師歴3年以上

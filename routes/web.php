@@ -195,6 +195,7 @@ Route::group([
     Route::post('lessonSchedule/getData', 'LessonScheduleController@getData')->name('getDataLessonSchedule');
     Route::post('lessonSchedule/registerMultiLesson', 'LessonScheduleController@registerMultiLesson')->name('registerMultiLesson');
     Route::post('lessonSchedule/removeMultiLesson', 'LessonScheduleController@removeMultiLesson')->name('removeMultiLesson');
+    Route::post('lessonSchedule/removeLesson', 'LessonScheduleController@removeLesson')->name('removeLesson');
     Route::post('lessonSchedule/registerLesson', 'LessonScheduleController@registerLesson')->name('registerLesson');
     Route::get('/student/point-history/{id}', 'StudentController@pointHistory')->name('student.pointHistoryList');
     Route::get('/student/show-point-history/{id}', 'StudentController@showPointHistory')->name('student.showPointHistory');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateSpLessonScheduleRegister extends Migration
+class UpdateSpGetLessonScheduleList extends Migration
 {
     /**
      * Run the migrations.
@@ -13,72 +13,7 @@ class UpdateSpLessonScheduleRegister extends Migration
      */
     public function up()
     {
-
-        $procedure1 = "
-        DROP PROCEDURE IF EXISTS `sp_admin_register_lesson_for_teacher`;
-        
-        CREATE PROCEDURE `sp_admin_register_lesson_for_teacher`(IN _schedule_id INT,
-            IN _teacher_id INT,
-            IN _start_time VARCHAR(255),
-            IN _end_time VARCHAR(255),
-			IN _teacher_zoom_url VARCHAR(255))
-        BEGIN
-        
-        SET @schedule_id = 
-        (SELECT COALESCE(lesson_schedule_id, 0) FROM lesson_schedule 
-        WHERE teacher_id = _teacher_id AND lesson_starttime = _start_time);
-        
-        IF @schedule_id IS NOT NULL THEN
-                
-            UPDATE lesson_schedule
-             SET
-             lesson_type_id = 1
-            ,lesson_subscription_type = 1
-            ,last_update_date =  NOW()
-             WHERE lesson_schedule_id = @schedule_id
-             ;
-             SELECT 1 as result;
-        
-        ELSE
-            INSERT INTO lesson_schedule
-              (
-                lesson_date,
-                lesson_starttime,
-                lesson_endtime,
-                lesson_id,
-                lesson_text_id,
-                teacher_id,
-                lesson_type_id,
-                is_lesson_end,
-                lesson_reserve_type,
-                lesson_subscription_type,
-                last_update_date,
-								zoom_url
-              ) VALUES (
-                 DATE_FORMAT(_start_time,'%Y/%m/%d')
-                 ,_start_time
-                 ,_end_time
-                 ,0
-                 ,0
-                 ,_teacher_id
-                 ,1
-                 ,0
-                 ,1
-                 ,1
-                 , NOW()
-								 ,_teacher_zoom_url
-               );
-               
-            
-            SELECT 1 as result;
-        END IF;
-        END
-        ";
-
-        \DB::unprepared($procedure1);
-
-
-        $procedure2 = "
+        $procedure = "
         DROP PROCEDURE IF EXISTS `sp_admin_get_lesson_schedule_list`;
         
         CREATE PROCEDURE `sp_admin_get_lesson_schedule_list`(IN _teacher_id int,
@@ -90,7 +25,7 @@ class UpdateSpLessonScheduleRegister extends Migration
                    ,COALESCE(ls.lesson_schedule_id,0) AS lesson_schedule_id
                    ,COALESCE(ls.lesson_id,0) AS lesson_id
                    ,CONCAT(IF (ls.lesson_type_id = 0,'-', 'registered' ), '(',COALESCE(lesson_name,'-'),')') AS lesson_name
-									 ,IF(ls.lesson_type_id != 0,COALESCE(lesson_name,''), '') as lesson_name_selected
+									 ,COALESCE(lesson_name,'') as lesson_name_selected
                    ,COALESCE(ls.lesson_type_id,0) AS lesson_type_id
                    ,COALESCE(ls.lesson_text_id,0) AS lesson_text_id
                    ,COALESCE(ls.lesson_subscription_type,0) AS lesson_subscription_type
@@ -112,7 +47,7 @@ class UpdateSpLessonScheduleRegister extends Migration
             END
         ";
 
-        \DB::unprepared($procedure2);
+        \DB::unprepared($procedure);
         
     }
 

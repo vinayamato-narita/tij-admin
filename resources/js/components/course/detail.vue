@@ -125,6 +125,26 @@
                                     </div>
 
                                     <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">コース対象者:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <nl2br v-if="this.course.course_target" tag="p" :text="this.course.course_target" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">到達目標:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <nl2br v-if="this.course.course_attainment_target" tag="p" :text="this.course.course_attainment_target" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">法人・個人 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">

@@ -130,6 +130,8 @@ class CourseController extends BaseController
                 $course->amount = $request->amount;
                 $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
                 $course->course_description = $request->courseDescription ?? ' ';
+                $course->course_target = $request->courseTarget ?? ' ';
+                $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
                 $course->is_for_lms = $request->isForLMS;
                 $course->course_type = $request->courseType;
                 if (in_array($request->courseType, [CourseTypeEnum::REGULAR_COURSE, CourseTypeEnum::ABILITY_TEST_COURSE])) {
@@ -800,6 +802,8 @@ class CourseController extends BaseController
                 $course->amount = $request->amount;
                 $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
                 $course->course_description = $request->courseDescription ?? ' ';
+                $course->course_target = $request->courseTarget ?? ' ';
+                $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
                 $course->is_for_lms = $request->isForLMS;
                 $course->course_type = $request->courseType;
                 if (in_array($request->courseType, [CourseTypeEnum::REGULAR_COURSE, CourseTypeEnum::ABILITY_TEST_COURSE])) {

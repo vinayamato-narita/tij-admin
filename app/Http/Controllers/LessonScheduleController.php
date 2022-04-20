@@ -197,7 +197,7 @@ class LessonScheduleController extends BaseController
         foreach ($data['data_bulk_resistration'] as $value) {
             $lessonScheduleId =  !empty($value['lesson_schedule_id']) ? $value['lesson_schedule_id'] : -1;
             $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
-            $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
+            $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
             $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
         }
 
@@ -237,7 +237,7 @@ class LessonScheduleController extends BaseController
             ]);
         }
 
-        $data['teacher_zoom_url'] = 'https://success.zoom.us/j/'.$data['teacher_zoom_id'];
+        $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
         $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$data['start_time']."','".$data['end_time']."','".$data['teacher_zoom_url']."')");
         
         if ($string[0]->result != 1) {

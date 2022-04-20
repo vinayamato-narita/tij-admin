@@ -11,6 +11,7 @@ use App\Models\Lesson;
 use App\Models\LessonText;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LessonTiming;
+use App\Models\LessonSchedule;
 
 class LessonScheduleController extends BaseController
 {
@@ -196,9 +197,20 @@ class LessonScheduleController extends BaseController
         }
         foreach ($data['data_bulk_resistration'] as $value) {
             $lessonScheduleId =  !empty($value['lesson_schedule_id']) ? $value['lesson_schedule_id'] : -1;
-            $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
-            $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
-            $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
+            $groupCourseFlg = false;
+
+            if ($lessonScheduleId != -1) {
+                $lessonSchedule = LessonSchedule::where('lesson_schedule_id', $lessonScheduleId)->get();
+                if ($lessonSchedule && $lessonSchedule[0]['course_type'] == CourseTypeEnum::GROUP_COURSE) {
+                    $groupCourseFlg = true;
+                }
+            }
+
+            if (!$groupCourseFlg) {
+                $value['end_time'] = date("Y-m-d H:i:s" , strtotime($value["start_time"]. "+". $data['lesson_timing'] ."minutes"));
+                $data['teacher_zoom_url'] = $data['teacher_zoom_id'];
+                $string = DB::select("CALL sp_admin_register_lesson_for_teacher('".$lessonScheduleId."','".$data['teacher_id']."','".$value['start_time']."','".$value['end_time']."','".$data['teacher_zoom_url']."')");
+            }
         }
 
         return response()->json([

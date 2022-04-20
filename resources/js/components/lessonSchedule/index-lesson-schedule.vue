@@ -106,7 +106,7 @@
                                                 </div>
                                                 <div class="wrapper-btn-single">
                                                         <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" @click="resistration()" type="button" value="登録">
-                                                        <input id="remove" class="btn" type="reset" value="レッスン削除">
+                                                        <input id="remove" :class="['btn', removeFlgConds ? 'active' : '']" type="reset" @click="remove()" value="レッスン削除">
                                                         <input id="cancel_lesson" class="btn" type="reset" value="レッスンキャンセル">
                                                 </div>
                                                 <!-- /.wrapper-lesson-detail -->
@@ -133,7 +133,7 @@ export default {
     components: {
         Loader,
     },
-    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming', 'urlRemoveMultiLesson', 'urlRegisterLesson'],
+    props: ['urlGetData', 'urlRegisterMultiLesson', 'lessonTiming', 'urlRemoveMultiLesson', 'urlRemoveLesson', 'urlRegisterLesson'],
     mounted() {
         this.getData()
     },
@@ -229,15 +229,22 @@ export default {
 
             if (this.dataSelected[i][j]) {
                 this.submitFlgConds = false;
+                this.removeFlgConds = false;
+
                 if (!this.dataRegisted[i][j]) {
                     this.submitFlgConds = true;
+                }
+
+                if (this.dataRegisted[i][j]) {
+                    this.removeFlgConds = true;
                 }
             } else {
                 this.itemSelected = []
                 this.submitFlgConds = false
+                this.removeFlgConds = false
                 this.lessonNameSelected = ''
                 // this.checkConditionSubmit()
-                this.checkConditionRemove()
+                // this.checkConditionRemove()
             }
         },
         checkConditionSubmit() {
@@ -264,7 +271,7 @@ export default {
             // if (!this.submitFlgConds) {
             //     return false;
             // }
-
+            this.flagShowLoader = true;
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
@@ -317,13 +324,14 @@ export default {
             //     }).then(result => {
             //     });
             // }
+            this.flagShowLoader = true;
 
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
 
             for (let i = 0; i < this.numRow; i++ ) {
-                for (let j = this.currentIndex; j < 7; j++) {
+                for (let j = 0; j < 7; j++) {
                     if (this.dataSelected[i][j] == true) {
                         dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
                         idx++
@@ -352,12 +360,48 @@ export default {
                     this.flagShowLoader = false;
                 }); 
         },
+        remove() {
+            // if (!this.removeFlgConds) {
+            //     this.$swal({
+            //         text: "レッスンを登録しますか？",
+            //         icon: "error",
+            //         confirmButtonText: "OK",
+            //         showCancelButton : true,
+            //         cancelButtonText : "閉じる"
+            //     }).then(result => {
+            //     });
+            // }
+            this.flagShowLoader = true;
+            let that = this
+
+            axios
+                .post(that.urlRemoveLesson, {
+                    lesson_schedule_id : this.itemSelected['lesson_schedule_id']
+                })
+                .then(response => {
+                    that.flagShowLoader = false;
+                    if (response.data.status == "OK") {
+                        this.getData()
+                    } else {
+                        this.$swal({
+                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            icon: "warning",
+                            confirmButtonText: "OK"
+                        }).then(result => {
+                        });
+                    }
+                })
+                .catch(e => {
+                    this.flagShowLoader = false;
+                }); 
+        },
         resistration() {
             if (!this.submitFlgConds) {
                 return false;
             }
 
             let that = this
+            this.flagShowLoader = true;
 
             axios
                 .post(that.urlRegisterLesson, {

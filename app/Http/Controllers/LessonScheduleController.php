@@ -237,6 +237,29 @@ class LessonScheduleController extends BaseController
         ], StatusCode::OK);
     }
 
+    public function removeLesson(Request $request) {
+        $data = $request->all();
+
+        if (empty($data) || !isset($data['lesson_schedule_id'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$data['lesson_schedule_id']."')");
+
+        if ($string[0]->result != 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
     public function registerLesson(Request $request) {
         $data = $request->all();
         $lessonScheduleId =  !empty($data['lesson_schedule_id']) ? $data['lesson_schedule_id'] : -1;

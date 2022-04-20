@@ -382,10 +382,24 @@ class CourseController extends BaseController
                 'status' => 'OK',
             ], StatusCode::NOT_FOUND);
         }
+/*        $courseLangInfo = CourseInfo::updateOrCreate(
+            [
+                'course_id' => $request->course_id,
+                'lang_type' => $request->lang,
+                'course_name' => $request->course_name,
+                'course_description' => $request->course_description,
+                'course_target' => $request->course_target,
+                'course_attainment_target' => $request->course_attainment_target
+            ]
+        );*/
+
         $courseLangInfo = CourseInfo::updateOrCreate(
             ['course_id' => $request->course_id, 'lang_type' => $request->lang],
-            ['course_name' => $request->course_name, 'course_description' => $request->course_description]
+            ['course_name' => $request->course_name, 'course_description' => $request->course_description,                 'course_target' => $request->course_target,
+                'course_attainment_target' => $request->course_attainment_target]
         );
+
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

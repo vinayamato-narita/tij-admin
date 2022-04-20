@@ -15,5 +15,5 @@ class CourseInfo extends Model
 
     protected $primaryKey = 'course_info_id';
 
-    protected $fillable = ['category_info_id', 'course_id', 'course_name', 'course_description', 'lang_type'];
+    protected $fillable = ['category_info_id', 'course_id', 'course_name', 'course_description', 'lang_type', 'course_target', 'course_attainment_target'];
 }

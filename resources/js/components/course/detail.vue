@@ -125,6 +125,26 @@
                                     </div>
 
                                     <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">コース対象者:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <nl2br v-if="this.course.course_target" tag="p" :text="this.course.course_target" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">到達目標:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            <nl2br v-if="this.course.course_attainment_target" tag="p" :text="this.course.course_attainment_target" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">法人・個人 :
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -252,6 +272,30 @@
                                             </nl2br>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース対象者:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br v-if="courseENTarget" tag="p" :text="courseENTarget" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >到達目標:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br v-if="courseENAttainmentTarget" tag="p" :text="courseENAttainmentTarget" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
@@ -280,6 +324,30 @@
                                         >
                                         <div class="col-md-3 pd-7" >
                                             <nl2br v-if="courseZHDes" tag="p" :text="courseZHDes" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >コース対象者:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br v-if="courseZhTarget" tag="p" :text="courseZhTarget" class-name="mb-0">
+
+                                            </nl2br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                        >到達目標:</label
+                                        >
+                                        <div class="col-md-3 pd-7" >
+                                            <nl2br v-if="courseZHAttainmentTarget" tag="p" :text="courseZHAttainmentTarget" class-name="mb-0">
 
                                             </nl2br>
                                         </div>
@@ -508,8 +576,13 @@
                 })[0];
                 this.courseENName = typeof (en) !== 'undefined' ? en.course_name : '';
                 this.courseENDes = typeof (en) !== 'undefined' ? en.course_description : '';
+                this.courseENTarget = typeof (en) !== 'undefined' ? en.course_target : '';
+                this.courseENAttainmentTarget = typeof (en) !== 'undefined' ? en.course_attainment_target : '';
+
                 this.courseZHName = typeof (zh) !== 'undefined' ? zh.course_name : '';
                 this.courseZHDes = typeof (zh) !== 'undefined' ? zh.course_description : '';
+                this.courseZhTarget = typeof (en) !== 'undefined' ? zh.course_target : '';
+                this.courseZHAttainmentTarget = typeof (en) !== 'undefined' ? zh.course_attainment_target : '';
             }
         },
         components: {
@@ -531,8 +604,12 @@
                 messageConfirmCampaign : 'このキャンペーンを削除しますか？',
                 courseENName : '',
                 courseENDes : '',
+                courseENTarget : '',
+                courseENAttainmentTarget : '',
                 courseZHName : '',
-                courseZHDes : ''
+                courseZHDes : '',
+                courseZhTarget : '',
+                courseZHAttainmentTarget : '',
             };
         },
         props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',

@@ -130,6 +130,8 @@ class CourseController extends BaseController
                 $course->amount = $request->amount;
                 $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
                 $course->course_description = $request->courseDescription ?? ' ';
+                $course->course_target = $request->courseTarget ?? ' ';
+                $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
                 $course->is_for_lms = $request->isForLMS;
                 $course->course_type = $request->courseType;
                 if (in_array($request->courseType, [CourseTypeEnum::REGULAR_COURSE, CourseTypeEnum::ABILITY_TEST_COURSE])) {
@@ -380,10 +382,24 @@ class CourseController extends BaseController
                 'status' => 'OK',
             ], StatusCode::NOT_FOUND);
         }
+/*        $courseLangInfo = CourseInfo::updateOrCreate(
+            [
+                'course_id' => $request->course_id,
+                'lang_type' => $request->lang,
+                'course_name' => $request->course_name,
+                'course_description' => $request->course_description,
+                'course_target' => $request->course_target,
+                'course_attainment_target' => $request->course_attainment_target
+            ]
+        );*/
+
         $courseLangInfo = CourseInfo::updateOrCreate(
             ['course_id' => $request->course_id, 'lang_type' => $request->lang],
-            ['course_name' => $request->course_name, 'course_description' => $request->course_description]
+            ['course_name' => $request->course_name, 'course_description' => $request->course_description,                 'course_target' => $request->course_target,
+                'course_attainment_target' => $request->course_attainment_target]
         );
+
+
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);
@@ -800,6 +816,8 @@ class CourseController extends BaseController
                 $course->amount = $request->amount;
                 $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
                 $course->course_description = $request->courseDescription ?? ' ';
+                $course->course_target = $request->courseTarget ?? ' ';
+                $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
                 $course->is_for_lms = $request->isForLMS;
                 $course->course_type = $request->courseType;
                 if (in_array($request->courseType, [CourseTypeEnum::REGULAR_COURSE, CourseTypeEnum::ABILITY_TEST_COURSE])) {

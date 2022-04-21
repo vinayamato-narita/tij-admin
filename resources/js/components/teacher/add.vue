@@ -60,6 +60,41 @@
                                             </div>
                                         </div>
 
+                                         <div class="form-group row ">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="teacherCode"
+                                                >講師コード:
+                                                <span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input
+                                                    class="form-control"
+                                                    id="teacherCode"
+                                                    type="text"
+                                                    name="teacherCode"
+                                                    @input="changeInput()"
+                                                    v-model="teacherCode"
+                                                    v-validate="
+                                                        'required|max:10'
+                                                    "
+                                                />
+
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                >
+                                                    {{
+                                                        errors.first(
+                                                            "teacherCode"
+                                                        )
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -753,6 +788,10 @@ export default {
                     min_value: "表示順は1～1000000000 を入力してください",
                     max_value: "表示順は1～1000000000 を入力してください"
                 },
+                teacherCode: {
+                    required: "インストラクターコードを入力してください。",
+                    max: "名前は10文字以内で入力してください。"
+                },
                 teacherName: {
                     required: "講師名を入力してください",
                     max: "名前は255文字以内で入力してください。"
@@ -793,6 +832,7 @@ export default {
         return {
             csrfToken: Laravel.csrfToken,
             teacherName: "",
+            teacherCode:'',
             displayOrder: 1,
             mail: "",
             nickName: "",
@@ -830,6 +870,7 @@ export default {
             let that = this;
             let formData = new FormData();
             formData.append("teacherName", this.teacherName);
+            formData.append("teacherCode", this.teacherCode);
             formData.append("mail", this.mail);
             formData.append("displayOrder", this.displayOrder);
             formData.append("nickName", this.nickName);

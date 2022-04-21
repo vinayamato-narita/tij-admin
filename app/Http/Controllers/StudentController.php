@@ -486,6 +486,7 @@ class StudentController extends BaseController
             'point_subscription_history.receive_payment_date as receive_payment_date',
             'point_subscription_history.set_course_id as set_course_id',
             'course.course_name as course_name',
+            'course.course_type',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
         )
         ->leftJoin('course', function($join) {

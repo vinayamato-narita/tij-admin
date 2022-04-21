@@ -142,21 +142,6 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >キャンペーンコード</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="j_campaign_code"
-                                                    v-model="paymentInfoEx.j_campaign_code"
-                                                    :disabled="true"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
                                                 >支払い状況</label
                                             >
                                             <div class="col-md-6">

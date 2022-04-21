@@ -60,6 +60,41 @@
                                             </div>
                                         </div>
 
+                                         <div class="form-group row ">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="teacherCode"
+                                                >講師コード:
+                                                <span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input
+                                                    class="form-control"
+                                                    id="teacherCode"
+                                                    type="text"
+                                                    name="teacherCode"
+                                                    @input="changeInput()"
+                                                    v-model="teacherCode"
+                                                    v-validate="
+                                                        'required|max:10'
+                                                    "
+                                                />
+
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                >
+                                                    {{
+                                                        errors.first(
+                                                            "teacherCode"
+                                                        )
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row ">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -680,6 +715,36 @@
                                                 </span>
                                             </div>
                                         </div>
+                                        <div class="form-group row ">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="videoNewFile"
+                                            >
+                                                動画ファイルの登録:
+                                            </label>
+
+                                            <div class="col-md-6">
+                                                <button
+                                                    type="button"
+                                                    v-on:click="newVideo"
+                                                    class="btn btn-primary  mr-2"
+                                                >
+                                                    新規ファイル追加
+                                                </button>
+                                                <input
+                                                    type="file"
+                                                    name="studentNewFile"
+                                                    id="videoNewFile"
+                                                    ref="videoNewFile"
+                                                    v-on:change="changeVideo"
+                                                    class="hidden"
+                                                    accept="video/mp4,video/x-m4v,video/*"
+                                                />
+                                                <span class="text-nowrap">
+                                                    {{ teacherVideoName }}
+                                                </span>
+                                            </div>
+                                        </div>
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -723,6 +788,10 @@ export default {
                     min_value: "表示順は1～1000000000 を入力してください",
                     max_value: "表示順は1～1000000000 を入力してください"
                 },
+                teacherCode: {
+                    required: "インストラクターコードを入力してください。",
+                    max: "名前は10文字以内で入力してください。"
+                },
                 teacherName: {
                     required: "講師名を入力してください",
                     max: "名前は255文字以内で入力してください。"
@@ -763,6 +832,7 @@ export default {
         return {
             csrfToken: Laravel.csrfToken,
             teacherName: "",
+            teacherCode:'',
             displayOrder: 1,
             mail: "",
             nickName: "",
@@ -786,6 +856,8 @@ export default {
             teacherFeature3: false,
             teacherFeature4: false,
             teacherFileSelected: null,
+            teacherVideoSelected:null,
+            teacherVideoName: "",
             teacherFileName: "",
             teacherFileNameAttached: ""
         };
@@ -798,6 +870,7 @@ export default {
             let that = this;
             let formData = new FormData();
             formData.append("teacherName", this.teacherName);
+            formData.append("teacherCode", this.teacherCode);
             formData.append("mail", this.mail);
             formData.append("displayOrder", this.displayOrder);
             formData.append("nickName", this.nickName);
@@ -829,6 +902,11 @@ export default {
                 formData.append(
                     "teacherFileSelected",
                     this.teacherFileSelected
+                );
+            if (this.teacherVideoSelected)
+                formData.append(
+                    "teacherVideoSelected",
+                    this.teacherVideoSelected
                 );
             this.$validator.validateAll().then(valid => {
                 if (valid) {
@@ -880,11 +958,20 @@ export default {
         newFile() {
             this.$refs.studentNewFile.click();
         },
+         newVideo() {
+            this.$refs.videoNewFile.click();
+        },
         changeFile(e) {
             this.studentFileId = null;
             this.teacherFileNameAttached = "";
             this.teacherFileSelected = e.target.files[0];
             this.teacherFileName = e.target.files[0].name;
+        },
+          changeVideo(e) {
+            this.studentFileId = null;
+            this.teacherFileNameAttached = "";
+            this.teacherVideoSelected = e.target.files[0];
+            this.teacherVideoName = e.target.files[0].name;
         },
         show(modalName) {
             this.$modal.show(modalName, {

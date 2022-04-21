@@ -439,7 +439,7 @@ export default {
             }
 
             this.startDate = dateTime.getFullYear().toString() + '/' + (dateTime.getMonth() + 1).toString().padStart(2, '0') + '/' + dateTime.getDate().toString().padStart(2, '0')
-            this.startTime = dateTime.getHours().toString().padStart(2, '0') + ':' + dateTime.getMinutes().toString().padStart(2, '0')
+            this.startTime = dateTime.getHours().toString().padStart(2, '0') + ':00'
         },
         notBeforeDateNow (date) {
           var hours = this.startTime != "" ? this.startTime.slice(0, 2) : 23

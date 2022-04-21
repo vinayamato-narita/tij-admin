@@ -108,6 +108,7 @@ class TeacherController extends BaseController
                 $teacher->display_order = $request->displayOrder;
                 $teacher->teacher_nickname = $request->nickName;
                 $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_code = $request->teacherCode;
                 $teacher->teacher_email = $request->mail;
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
@@ -131,6 +132,12 @@ class TeacherController extends BaseController
                     if (!empty($teacher->photo_savepath))
                         TIJAdminAzureComponent::remove($teacher->photo_savepath);
                     $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
+                if (isset($request->teacherVideoSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherVideoSelected);
+                    if (!empty($teacher->movie_savepath))
+                        TIJAdminAzureComponent::remove($teacher->movie_savepath);
+                    $teacher->movie_savepath = AzureFolderEnum::TEACHER . '/' . $name;
                 }
 
                 $teacher->save();
@@ -289,6 +296,7 @@ class TeacherController extends BaseController
                 $teacher->display_order = $request->displayOrder;
                 $teacher->teacher_nickname = $request->nickName;
                 $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_code = $request->teacherCode;
                 $teacher->teacher_email = $request->mail;
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
@@ -311,6 +319,12 @@ class TeacherController extends BaseController
                     if (!empty($teacher->photo_savepath))
                         TIJAdminAzureComponent::remove($teacher->photo_savepath);
                     $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
+                if (isset($request->teacherVideoSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherVideoSelected);
+                    if (!empty($teacher->movie_savepath))
+                        TIJAdminAzureComponent::remove($teacher->movie_savepath);
+                    $teacher->movie_savepath = AzureFolderEnum::TEACHER . '/' . $name;
                 }
 
                 $teacher->save();

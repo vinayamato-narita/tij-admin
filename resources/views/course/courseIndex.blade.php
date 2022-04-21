@@ -63,8 +63,12 @@
                                                         <td class="text-left">{{ $course->display_order }}</td>
                                                         <td class="text-left">{{ $course->course_name }}</td>
                                                         <td class="text-left">
-                                                            <nl2br tag="span" :text="{{json_encode($course->course_description)}}"
-                                                            /></td>
+                                                            @if(!empty($course->course_description))
+                                                                <nl2br tag="span"
+                                                                       :text="{{json_encode($course->course_description)}}"
+                                                                />
+                                                            @endif
+                                                        </td>
                                                         <td class="text-left">{{ $course->point_count }}</td>
                                                         <td class="text-left">  {{ number_format($course->sumamount, 0, ",", ",")  }}
  </td>

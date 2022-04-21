@@ -76,7 +76,7 @@ class CourseController extends BaseController
 
         $coureList = $queryBuilder->with(['childCourse'])->sortable(['course_name' => 'desc'])->paginate($pageLimit);
 
-        return view('course.index', [
+        return view('course.courseIndex', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,

@@ -108,6 +108,7 @@ class TeacherController extends BaseController
                 $teacher->display_order = $request->displayOrder;
                 $teacher->teacher_nickname = $request->nickName;
                 $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_code = $request->teacherCode;
                 $teacher->teacher_email = $request->mail;
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
@@ -295,6 +296,7 @@ class TeacherController extends BaseController
                 $teacher->display_order = $request->displayOrder;
                 $teacher->teacher_nickname = $request->nickName;
                 $teacher->teacher_name = $request->teacherName;
+                $teacher->teacher_code = $request->teacherCode;
                 $teacher->teacher_email = $request->mail;
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;

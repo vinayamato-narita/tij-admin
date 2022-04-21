@@ -14,7 +14,7 @@ class AddTeacherCodeToTeacherTable extends Migration
     public function up()
     {
         Schema::table('teacher', function (Blueprint $table) {
-            //
+            $table->string('teacher_code')->after('teacher_name')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddTeacherCodeToTeacherTable extends Migration
     public function down()
     {
         Schema::table('teacher', function (Blueprint $table) {
-            $table->string('teacher_code')->after('teacher_name')->nullable();
+          
         });
     }
 }

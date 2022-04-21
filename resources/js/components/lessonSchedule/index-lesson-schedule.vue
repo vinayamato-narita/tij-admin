@@ -193,7 +193,7 @@ export default {
                         this.removeFlgConds = false
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを取得できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -325,7 +325,7 @@ export default {
                             this.getData()
                         } else {
                             this.$swal({
-                                text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                                text: "レッスンスケジュールを登録できません。",
                                 icon: "warning",
                                 confirmButtonText: "OK"
                             }).then(result => {
@@ -373,7 +373,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを削除できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -408,7 +408,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを削除できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -441,7 +441,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを登録できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {

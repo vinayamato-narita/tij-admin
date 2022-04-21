@@ -132,6 +132,12 @@ class TeacherController extends BaseController
                         TIJAdminAzureComponent::remove($teacher->photo_savepath);
                     $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
                 }
+                if (isset($request->teacherVideoSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherVideoSelected);
+                    if (!empty($teacher->movie_savepath))
+                        TIJAdminAzureComponent::remove($teacher->movie_savepath);
+                    $teacher->movie_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
 
                 $teacher->save();
                 DB::commit();
@@ -311,6 +317,12 @@ class TeacherController extends BaseController
                     if (!empty($teacher->photo_savepath))
                         TIJAdminAzureComponent::remove($teacher->photo_savepath);
                     $teacher->photo_savepath = AzureFolderEnum::TEACHER . '/' . $name;
+                }
+                if (isset($request->teacherVideoSelected)) {
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherVideoSelected);
+                    if (!empty($teacher->movie_savepath))
+                        TIJAdminAzureComponent::remove($teacher->movie_savepath);
+                    $teacher->movie_savepath = AzureFolderEnum::TEACHER . '/' . $name;
                 }
 
                 $teacher->save();

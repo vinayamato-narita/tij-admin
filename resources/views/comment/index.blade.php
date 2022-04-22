@@ -44,15 +44,14 @@
                                                     <th class="text-left">@sortablelink('student_nickname', '学習者のニックネーム')</th>
                                                     <th class="text-left">講師のニックネーム</th>
                                                     <th class="text-left">@sortablelink('course_name', 'コース')</th>
-                                                    <th class="text-left">@sortablelink('teacher_rating', '教え方')</th>
-                                                    <th class="text-left">@sortablelink('teacher_attitude', '態度')</th>
-                                                    <th class="text-left">@sortablelink('teacher_punctual', 'わかりやすさ')</th>
-                                                    <th class="text-left">@sortablelink('skype_voice_rating_from_student', 'Skypeの音声')</th>
+                                                    <th class="text-left">@sortablelink('teacher_rating', '評価項目1')</th>
+                                                    <th class="text-left">@sortablelink('teacher_attitude', '評価項目2')</th>
+                                                    <th class="text-left">@sortablelink('teacher_punctual', '評価項目3')</th>
+                                                    <th class="text-left">@sortablelink('skype_voice_rating_from_student', '評価項目4')</th>
                                                     <th class="text-left">@sortablelink('comment_from_student_to_office', 'レッスンに対する感想')</th>
                                                     <th class="text-left">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
                                                     <th class="text-left">@sortablelink('comment_from_teacher_to_student', '学習者へのコメント')</th>
                                                     <th class="text-left">@sortablelink('comment_from_teacher_to_office', '事務局へのコメント')</th>
-                                                    <th class="text-left">@sortablelink('note_from_student_to_teacher', '講義メモ')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -79,7 +78,6 @@
                                                         <td class="text-left">{{ Str::limit($item['skype_voice_rating_from_teacher'], 20) }}</td>
                                                         <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_student'], 20) }}</td>
                                                         <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_office'], 20) }}</td>
-                                                        <td class="text-left">{{ Str::limit($item['note_from_student_to_teacher'], 20) }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -281,24 +279,6 @@
                                     </div>
                                 </div>
                             </div>                    
-                        </div>
-                    </div>
-                    <div class="col-md-12" style="color: black; background-color:lightblue; padding:5px;">        
-                        <b style="padding-left: 15px;">講義メモ</b>        
-                    </div>
-
-                    <div class="col-md-12" style="margin: 10px 0px;">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <b>講義メモ</b>
-                                    </div>
-                                    <div class="col-md-9 cm-content">
-                                        <p id="note_from_student_to_teacher" class="content"></p>
-                                    </div>
-                                </div>
-                            </div>        
                         </div>
                     </div>
                 </div>

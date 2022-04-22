@@ -823,7 +823,7 @@ export default {
                 },
                  teacherCode: {
                     required: "インストラクターコードを入力してください。",
-                    max: "名前は10文字以内で入力してください。"
+                    max: "講師コードは10文字以内で入力してください。"
                 },
                 nickName: {
                     required: "ニックネームを入力してください",

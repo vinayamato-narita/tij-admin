@@ -2,7 +2,7 @@
     <section>
     <modal name="edit-schedule-modal" :pivotY="0.1" :reset="true" :width="'70%'" height="auto" :adaptive="false" :scrollable="true" :clickToClose="false" shiftX="0.2" :shiftY="0.3" classes="" @opened="opened" @before-open="beforeOpen">
         <div class="card">
-            <div class="card-header"> スケジュール新規登録
+            <div class="card-header"> {{ selectedEvent != null ? "スケジュール編集" : "スケジュール新規登録" }}
                 <div class="float-right">
                     <button type="button" class="close"  v-on:click="hide" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>

@@ -81,7 +81,11 @@
                                                         <td class="text-left">{{ $payment->student_id }}</td>
                                                         <td class="text-left">{{ $payment->payment_date }}</td>
                                                         <td class="text-left">{{ $payment->begin_date }}</td>
-                                                        <td class="text-left">{{ $payment->point_expire_date }}</td>
+                                                        <td class="text-left">
+                                                            @if($payment->course_type !== \App\Enums\CourseTypeEnum::GROUP_COURSE)
+                                                                {{ $payment->point_expire_date }}
+                                                            @endif
+                                                        </td>
                                                         <td class="text-left">{{ $payment->item_name }}</td>
                                                         <td class="text-left">{{ $payment->j_student_name }}</td>
                                                         <td class="text-left">{{ $payment->j_company_name }}</td>

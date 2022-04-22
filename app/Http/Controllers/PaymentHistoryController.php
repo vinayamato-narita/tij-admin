@@ -16,8 +16,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Enums\StatusCode;
 use App\Components\DateTimeComponent;
 use App\Components\CommonComponent;
-use Log; 
-use Response; 
+use Log;
+use Response;
 use App\Enums\AdminRole;
 use Auth;
 
@@ -51,12 +51,16 @@ class PaymentHistoryController extends BaseController
         	'point_subscription_history.tax as tax',
         	'order.campaign_code as j_campaign_code',
         	'point_subscription_history.point_count as point_count',
+        	'course.course_type',
         	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
         	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
         	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
         )
         ->leftJoin('order', function($join) {
             $join->on('point_subscription_history.order_id', '=', 'order.order_id');
+        })
+        ->leftJoin('course', function ($join) {
+            $join->on('point_subscription_history.course_id', '=', 'course.course_id');
         })
         ->leftJoin('student', function($join) {
             $join->on('point_subscription_history.student_id', '=', 'student.student_id');
@@ -219,7 +223,7 @@ class PaymentHistoryController extends BaseController
         })
         ->where('point_subscription_history.del_flag', 0)
         ->orderByDesc('point_subscription_history.update_date');
-        	
+
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where(CommonComponent::escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
@@ -280,7 +284,7 @@ class PaymentHistoryController extends BaseController
         	return $item;
         });
         foreach ($paymentList as &$item) {
-            $input = []; 
+            $input = [];
             $input['オーダーID'] = $this->convertShijis($item['order_id']);
             $input['学習者番号'] = $this->convertShijis($item['student_id']);
             $input['受注日'] = $this->convertShijis($item['payment_date']);
@@ -300,7 +304,7 @@ class PaymentHistoryController extends BaseController
 
         return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
     }
-   
+
     public function edit($id)
     {
         $breadcrumbComponent = new BreadcrumbComponent();
@@ -336,7 +340,7 @@ class PaymentHistoryController extends BaseController
 
         $paymentInfo->_token = csrf_token();
         $paymentInfo->payment_types = PaidStatus::asSelectArray();
-        
+
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
             'paymentInfo' => $paymentInfo,
@@ -348,7 +352,7 @@ class PaymentHistoryController extends BaseController
         if(!$request->isMethod('PUT')) {
             return response()->json([
                 'status' => 'OK',
-            ], StatusCode::BAD_REQUEST);  
+            ], StatusCode::BAD_REQUEST);
         }
 
         $paymentInfo = PointSubscriptionHistory::where('point_subscription_history.del_flag', 0)
@@ -370,7 +374,7 @@ class PaymentHistoryController extends BaseController
         $paymentInfo->paid_status = $paid_status;
 
         $paymentInfo->save();
-        
+
         DB::table('student_point_history')
             ->where('point_subscription_id', $request->id)
             ->update(['paid_status' => $paid_status]);

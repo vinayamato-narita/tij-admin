@@ -149,7 +149,7 @@
                                             </div>
                                         </div> 
 
-                                        <div class="form-group row">
+                                        <div class="form-group row" v-if="this.paymentInfo.course_type !== 1">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"

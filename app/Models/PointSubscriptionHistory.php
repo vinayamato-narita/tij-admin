@@ -41,7 +41,8 @@ class PointSubscriptionHistory extends Authenticatable
             'student.is_lms_user as is_lms_user',
             'student_point_history.start_date as start_date',
             'lms_project_course_student.course_begin_month as course_begin_month',
-            'point_subscription_history.tax as tax'
+            'point_subscription_history.tax as tax',
+            'course.course_type'
         )
             ->leftJoin('course', function ($join) {
                 $join->on('point_subscription_history.course_id', '=', 'course.course_id');

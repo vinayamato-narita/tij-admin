@@ -126,7 +126,8 @@ class LessonScheduleController extends BaseController
             }
         }
 
-        $currentIndex = 0;
+        $currentIndex = -1;
+        $currentRowIndex = -1;
         
         for ($j = 0; $j < 7; $j++) {
             if (date("Y-m-d", strtotime($lessonStart. " + $j days")) == date("Y-m-d")) {
@@ -137,7 +138,7 @@ class LessonScheduleController extends BaseController
 
         for($i = 0; $i < $numRow; $i++) {
             $curRowTime = date("Y-m-d H:i:s", strtotime($lessonStart. " +" .$i * $nextLessonTime . " minutes"));
-
+            
             $dataLessonSchedule[$i]['time'] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
             
             for($j = 0; $j < 7; $j++) {
@@ -146,6 +147,10 @@ class LessonScheduleController extends BaseController
                 $dataRegisted[$i][$j] = false;
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
                 $timeFormat = date('M d (D) ', strtotime($curRowTime. " + $j days")).$dataLessonSchedule[$i]['time'];
+                
+                if ($currentIndex != -1 && $currentRowIndex == -1 && date('H:i', strtotime($curCellTime)) > date("H:i")) {
+                    $currentRowIndex = $i;
+                }
 
                 if (isset($lessonSchedule[$curCellTime])) {
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
@@ -184,7 +189,8 @@ class LessonScheduleController extends BaseController
             'dataRegisted' => $dataRegisted,
             'currentIndex' => $currentIndex,
             'lessonTiming' => $lessonTiming,
-            'teacherZoomId' => $teacherZoomId
+            'teacherZoomId' => $teacherZoomId,
+            'currentRowIndex' => $currentRowIndex
         ], StatusCode::OK);
     }
 

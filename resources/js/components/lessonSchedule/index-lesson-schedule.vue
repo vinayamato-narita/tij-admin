@@ -162,7 +162,8 @@ export default {
             lessonNameSelected : '',
             studentId : '',
             studentNickname : '',
-            teacherZoomId: null
+            teacherZoomId: null,
+            currentRowIndex : 0
         }
     },
     methods :{
@@ -188,9 +189,12 @@ export default {
                         that.dataSelected = response.data.dataSelected
                         that.dataRegisted = response.data.dataRegisted
                         that.currentIndex = response.data.currentIndex
+                        that.currentRowIndex = response.data.currentRowIndex
                         that.teacherZoomId = response.data.teacherZoomId
                         this.submitFlgConds = false
                         this.removeFlgConds = false
+                        console.log(this.currentIndex)
+                        console.log(this.currentRowIndex)
                     } else {
                         this.$swal({
                             text: "レッスンスケジュールを取得できません。",
@@ -231,7 +235,11 @@ export default {
                 this.submitFlgConds = false;
                 this.removeFlgConds = false;
 
-                if (!this.dataRegisted[i][j] && j > this.currentIndex) {
+                if (this.currentIndex != 0) {
+                    if (!this.dataRegisted[i][j] &&  (( j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex)) {
+                        this.submitFlgConds = true;
+                    }
+                } else if (!this.dataRegisted[i][j]) {
                     this.submitFlgConds = true;
                 }
                 

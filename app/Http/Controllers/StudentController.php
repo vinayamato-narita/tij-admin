@@ -1133,7 +1133,7 @@ class StudentController extends BaseController
         $studentInfo->student_entry_types = StudentEntryType::pluck('student_entry_type_name', 'student_entry_type_id')->toArray();
         $studentInfo->lang_types = LangTypeOption::asSelectArray();
         $studentInfo->lms_prefectures = LmsPrefecture::where('delete_flag', 0)->pluck('prefecture_name', 'prefecture_id')->toArray();
-        $studentInfo->time_zones = TimeZone::where('timezone_id', 1)->pluck('timezone_name_native', 'timezone_id')->toArray();
+        $studentInfo->time_zones = TimeZone::pluck('timezone_name_native', 'timezone_id')->toArray();
         if ($studentInfo->is_lms_user) {
             $studentInfo->lms_project_students = LmsProjectStudent::select('lms_company.company_name as company_name',
                 'lms_project.project_code as project_code',

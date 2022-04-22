@@ -178,7 +178,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>教え方</b>
+                                        <b>レッスンの内容はわかりやすかったですか。</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="teacher_rating" class="content"></p>
@@ -188,7 +188,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>態度</b>
+                                        <b>話しやすい雰囲気づくりをしていましたか。</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="teacher_attitude" class="content"></p>
@@ -202,7 +202,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>分かりやすさ</b>
+                                        <b>説明や練習の時間配分はよかったですか。</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="teacher_punctual" class="content"></p>
@@ -212,7 +212,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <b>Skypeの音声</b>
+                                        <b>画面などの操作はスムーズでしたか。</b>
                                     </div>
                                     <div class="col-md-6">
                                         <p id="skype_voice_rating_from_student" class="content"></p>

@@ -38,6 +38,15 @@
                                     </div>
 
                                     <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">講師コード:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.teacher.teacher_code}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">講師名:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
@@ -122,7 +131,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row ">
+                                    <div v-if="this.teacher.teacher_hobby" class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">英語対応:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">

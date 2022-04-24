@@ -162,7 +162,8 @@ export default {
             lessonNameSelected : '',
             studentId : '',
             studentNickname : '',
-            teacherZoomId: null
+            teacherZoomId: null,
+            currentRowIndex : 0
         }
     },
     methods :{
@@ -188,12 +189,15 @@ export default {
                         that.dataSelected = response.data.dataSelected
                         that.dataRegisted = response.data.dataRegisted
                         that.currentIndex = response.data.currentIndex
+                        that.currentRowIndex = response.data.currentRowIndex
                         that.teacherZoomId = response.data.teacherZoomId
                         this.submitFlgConds = false
                         this.removeFlgConds = false
+                        console.log(this.currentIndex)
+                        console.log(this.currentRowIndex)
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを取得できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -231,7 +235,11 @@ export default {
                 this.submitFlgConds = false;
                 this.removeFlgConds = false;
 
-                if (!this.dataRegisted[i][j] && j > this.currentIndex) {
+                if (this.currentIndex != 0) {
+                    if (!this.dataRegisted[i][j] &&  (( j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex)) {
+                        this.submitFlgConds = true;
+                    }
+                } else if (!this.dataRegisted[i][j]) {
                     this.submitFlgConds = true;
                 }
                 
@@ -325,7 +333,7 @@ export default {
                             this.getData()
                         } else {
                             this.$swal({
-                                text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                                text: "レッスンスケジュールを登録できません。",
                                 icon: "warning",
                                 confirmButtonText: "OK"
                             }).then(result => {
@@ -373,7 +381,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを削除できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -408,7 +416,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを削除できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {
@@ -441,7 +449,7 @@ export default {
                         this.getData()
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスンスケジュールを登録できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {

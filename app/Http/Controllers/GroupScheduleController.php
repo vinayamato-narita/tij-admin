@@ -379,7 +379,7 @@ class GroupScheduleController extends BaseController
                 if (!in_array($request->zoomAccountId, $zoomAccounts->pluck('zoom_account_id')->toArray())) {
                     echo json_encode(array(
                         'status' => 400,
-                        'error_message' => __('選択されたZoomアカウントにすでにスケジュールが登録されている。')
+                        'error_message' => __('選択されたZoomアカウントにすでにスケジュールが登録されています。')
                     ));
                     return;
                 }

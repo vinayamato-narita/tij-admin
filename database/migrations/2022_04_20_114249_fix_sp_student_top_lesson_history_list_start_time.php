@@ -67,9 +67,7 @@ class FixSpStudentTopLessonHistoryListStartTime extends Migration
                 AND DATE_FORMAT(ls.lesson_starttime,'%Y-%m-%d %H-%i') >= DATE_FORMAT(NOW(),'%Y-%m-%d %H-%i')
                 AND lh.student_lesson_reserve_type <> 2
 				AND ls.course_id IS NOT NULL
-            ORDER BY
-                lesson_date DESC
-                ,lesson_starttime ASC
+            ORDER BY lesson_starttime ASC
             LIMIT _limit
             ;
         END";

@@ -71,8 +71,8 @@
                                     <div class="form-group row ">
                                         <label class="col-md-4 col-form-label text-md-right">説明:
                                         </label>
-                                        <div class="col-md-6 text-md-left p-2">
-                                            {{this.lesson.lesson_description}}
+                                        <div class="col-md-6 text-md-left p-2 downline">
+                                           <p> {{this.lesson.lesson_description}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -99,8 +99,8 @@
                                             class="col-md-3 col-form-label text-md-right"
                                         >レッスン概要:</label
                                         >
-                                        <div class="col-md-3 pd-7" >
-                                            {{ lessonENDes }}
+                                        <div class="col-md-3 pd-7 downline" >
+                                           <p> {{ lessonENDes }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -127,8 +127,8 @@
                                             class="col-md-3 col-form-label text-md-right"
                                         >レッスン概要:</label
                                         >
-                                        <div class="col-md-3 pd-7" >
-                                            {{ lessonZHDes }}
+                                        <div class="col-md-3 pd-7 downline" >
+                                            <p>{{ lessonZHDes }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -336,3 +336,8 @@
         },
     }
 </script>
+<style scoped>
+.downline{
+white-space: pre-line;
+}
+</style>

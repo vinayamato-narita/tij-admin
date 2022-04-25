@@ -437,7 +437,10 @@
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
-                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-end-test-modal')">
+                                                <a v-if="this.course.test_course_ends.length === 0" href="javascript:void(0);" class="btn btn-primary " v-on:click="show('course-end-test-modal')">
+                                                    追加
+                                                </a>
+                                                <a v-else class="btn btn-primary disabled">
                                                     追加
                                                 </a>
                                             </div>

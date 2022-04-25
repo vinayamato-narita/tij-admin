@@ -28,6 +28,12 @@ class Teacher extends Model
         return $this->belongsToMany('App\Models\Lesson', 'teacher_lesson' ,
             'teacher_id', 'lesson_id', 'teacher_id', 'lesson_id');
     }
+    public function abilityTest()
+    {
+        return $this->belongsToMany('App\Models\Test', 'teacher_test' ,
+            'teacher_id', 'test_id', 'teacher_id', 'test_id');
+    }
+
 
     public function teacherLesson()
     {

@@ -349,9 +349,47 @@
                                 </div>
 
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page"> 担当テスト</h5>
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" v-on:click="showAbilityTest" class="btn btn-primary ">
+                                            追加
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ol style="margin-left: -30px;list-style-type: none;">
+                                        <li v-for="test in this.teacher.ability_test">
+                                            <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
+                                                <div class="col-md-10 wrap-long-text">{{test.test_name}}</div>
+                                                <div class="col-md-2">
+                                                    <DeleteItem
+                                                            :delete-action="getUriTestDelete(teacher.teacher_id , test.test_id)"
+                                                            :message-confirm="messageAbilityConfirm"
+                                                    >
+                                                    </DeleteItem>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <ability-test
+                        :detailUrl="detailTeacherUrl"
+                        :url="abilityTestListUrl"
+                        :pageSizeLimit="pageSizeLimit"
+                        :id="teacher.id"
+                        :register-url="registerAbilityTestUrl">
+
+                </ability-test>
                 <teacher-lesson
                     :detailUrl="detailTeacherUrl"
                     :url="lessonListUrl"
@@ -446,6 +484,7 @@
     import Loader from "./../../components/common/loader";
     import TeacherLesson from "../teacher/teacher-lesson";
     import DeleteItem from "./../../components/common/delete-item";
+    import AbilityTest from"../teacher/add-ability-test";
 
     export default {
         created: function () {
@@ -466,6 +505,7 @@
             this.$validator.localize("en", messError);
         },
         components: {
+            AbilityTest,
             TeacherLesson,
             Loader,
             PageSize,
@@ -478,9 +518,10 @@
                 showModal: false,
                 csrfToken: Laravel.csrfToken,
                 messageConfirm : 'このレッスンを解除しますか？',
+                messageAbilityConfirm : 'このテストを解除しますか？',
             };
         },
-        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword', 'avatarSrc'],
+        props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword', 'avatarSrc', 'abilityTestListUrl', 'registerAbilityTestUrl'],
         mounted() {
 
         },
@@ -489,11 +530,19 @@
 
                 this.$modal.show('select-teacher-lesson-modal');
             },
+            showAbilityTest() {
+                this.$modal.show('teacher-add-ability-test-modal');
+
+            },
             hide () {
                 this.$modal.hide('select-teacher-lesson-modal');
             },
             getUriDelete(id, lessonId) {
                  return  id + '/lesson/' + lessonId + '/delete';
+
+            },
+            getUriTestDelete(id, testId) {
+                return  id + '/ability-test/' + testId + '/delete';
 
             },
             getTeacherContent(teacher, field) {

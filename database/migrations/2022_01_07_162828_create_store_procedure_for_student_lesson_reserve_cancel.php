@@ -20,14 +20,6 @@ class CreateStoreProcedureForStudentLessonReserveCancel extends Migration
         IN _course_id int)
         BEGIN
          SET @count_student = (SELECT COUNT(*) FROM lesson_history WHERE lesson_schedule_id = _lesson_schedule_id AND student_lesson_reserve_type <> 2);
-         UPDATE lesson_history
-         SET
-           student_lesson_reserve_type = 2
-         WHERE
-           lesson_schedule_id = _lesson_schedule_id
-           AND student_id = _student_id
-          ;
-
           UPDATE lesson_schedule
           SET
             lesson_reserve_type = 1
@@ -38,6 +30,45 @@ class CreateStoreProcedureForStudentLessonReserveCancel extends Migration
             ,zoom_url = NULL
           WHERE
             lesson_schedule_id = _lesson_schedule_id
+          ;
+
+            INSERT INTO lesson_cancel_history (
+                `student_id`,
+                `teacher_id`,
+                `lesson_date`,
+                `lesson_starttime`,
+                `reserve_date`,
+                `cancel_date`,
+                `cancel_student_comment`,
+                `cancel_admin_comment`,
+                `cancel_teacher_comment`,
+                `lesson_schedule_id`
+            )
+                SELECT
+                    lesson_history.student_id,
+                    lesson_schedule.teacher_id,
+                    lesson_schedule.lesson_date,
+                    lesson_schedule.lesson_starttime,
+                    lesson_history.reserve_date,
+                    NOW(),
+                    '',
+                    '',
+                    '',
+                    lesson_history.lesson_schedule_id
+                FROM
+                    lesson_history
+                JOIN lesson_schedule
+                    ON lesson_schedule.lesson_schedule_id = lesson_history.lesson_schedule_id
+                WHERE
+                    lesson_history.lesson_schedule_id = _lesson_schedule_id
+                    AND
+                    lesson_history.student_id = _student_id
+            ;
+
+         DELETE FROM lesson_history
+         WHERE
+           lesson_schedule_id = _lesson_schedule_id
+           AND student_id = _student_id
           ;
 
            DELETE FROM student_point_history

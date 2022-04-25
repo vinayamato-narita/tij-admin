@@ -241,7 +241,7 @@ export default {
                     this.submitFlgConds = true;
                 }
                 
-                if (this.dataRegisted[i][j]) {
+                if (this.dataRegisted[i][j] && this.itemSelected['course_type'] != 1) {
                     this.removeFlgConds = true;
                 }
             } else {
@@ -267,7 +267,7 @@ export default {
             this.removeFlgConds = false;
             for (let i = 0; i < this.numRow; i++ ) {
                 for (let j = 0; j < 7; j++) {
-                    if (this.dataSelected[i][j] == true) {
+                    if (this.dataSelected[i][j] == true ) {
                         this.removeFlgConds = true;
                     }
                 }
@@ -359,41 +359,70 @@ export default {
             //     }).then(result => {
             //     });
             // }
-            this.flagShowLoader = true;
-
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
+            let submitBulkRegistionFlg = true;
+            let errorMessage = "";
 
             for (let i = 0; i < this.numRow; i++ ) {
                 for (let j = 0; j < 7; j++) {
-                    if (this.dataSelected[i][j] == true) {
+                    if(this.dataSelected[i][j] && this.dataLessonSchedule[i][j][0]['course_type'] == 1) {
+                        submitBulkRegistionFlg = false;
+                        errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
+                        break;
+                    } else if (!this.dataRegisted[i][j] && this.dataSelected[i][j]) {
+                        submitBulkRegistionFlg = false;
+                        errorMessage = "削除可能な日時を選択してください"
+                        break;
+                    } else if(this.dataRegisted[i][j] && this.dataSelected[i][j]){
                         dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
                         idx++
                     }
                 }
             }
+            // console.log(submitBulkRegistionFlg);
+            // console.log(dataBulkResistration);
             
-            axios
-                .post(that.urlRemoveMultiLesson, {
-                    lesson_schedule_ids : dataBulkResistration,
-                })
-                .then(response => {
-                    that.flagShowLoader = false;
-                    if (response.data.status == "OK") {
-                        this.getData()
-                    } else {
-                        this.$swal({
-                            text: "レッスンスケジュールを削除できません。",
-                            icon: "warning",
-                            confirmButtonText: "OK"
-                        }).then(result => {
-                        });
-                    }
-                })
-                .catch(e => {
-                    this.flagShowLoader = false;
-                }); 
+            // if (submitBulkRegistionFlg && dataBulkResistration.length == 0) {
+            //     console.log('xxx');
+            //     submitBulkRegistionFlg = false;
+            //     errorMessage = "削除可能な日時を選択してください"
+            // }
+
+            if (!submitBulkRegistionFlg) {
+                    this.$swal({
+                        text: errorMessage,
+                        icon: "error",
+                        cancelButtonText: "閉じる",
+                        showCancelButton : true,
+                        showConfirmButton : false,
+                    }).then(result => {
+                    });
+            } else {
+                this.flagShowLoader = true;
+
+                axios
+                    .post(that.urlRemoveMultiLesson, {
+                        lesson_schedule_ids : dataBulkResistration,
+                    })
+                    .then(response => {
+                        that.flagShowLoader = false;
+                        if (response.data.status == "OK") {
+                            this.getData()
+                        } else {
+                            this.$swal({
+                                text: "レッスンスケジュールを削除できません。",
+                                icon: "warning",
+                                confirmButtonText: "OK"
+                            }).then(result => {
+                            });
+                        }
+                    })
+                    .catch(e => {
+                        this.flagShowLoader = false;
+                    }); 
+            }
         },
         remove() {
             // if (!this.removeFlgConds) {

@@ -280,8 +280,9 @@ export default {
             let submitBulkRegistionFlg = true;
             let errorMessage = "";
 
-            if (this.currentRowIndex == this.lessonScheduleInPast) {
-                this.submitBulkRegistionFlg = false;
+            if (this.currentIndex == this.lessonScheduleInPast) {
+                submitBulkRegistionFlg = false;
+                errorMessage = "登録可能な日時を選択してください"
             } else {
                 for (let i = 0; i < this.numRow; i++ ) {
                     for (let j = 0; j < 7; j++) {

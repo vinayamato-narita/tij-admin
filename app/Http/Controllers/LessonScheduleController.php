@@ -12,6 +12,7 @@ use App\Models\LessonText;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LessonTiming;
 use App\Models\LessonSchedule;
+use App\Enums\LessonScheduleRole;
 
 class LessonScheduleController extends BaseController
 {
@@ -45,6 +46,8 @@ class LessonScheduleController extends BaseController
         
         $lessonList = Lesson::select('lesson_id', 'lesson_name')->get();
         $lessonTextList = LessonText::select('lesson_text_id', 'lesson_text_name')->get();
+        $lessonScheduleInPresent = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
+        $lessonScheduleInPast = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PAST;
 
         return view('lessonSchedule.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -54,7 +57,9 @@ class LessonScheduleController extends BaseController
             'lessonTextList' => $lessonTextList,
             'lessonTiming' => $lessonTiming,
             'nextLessonTime' => $nextLessonTime,
-            'numRow' => $numRow
+            'numRow' => $numRow,
+            'lessonScheduleInPresent' => $lessonScheduleInPresent,
+            'lessonScheduleInPast' => $lessonScheduleInPast
         ]);
     }
 
@@ -126,18 +131,21 @@ class LessonScheduleController extends BaseController
             }
         }
 
-        $currentIndex = 0;
+        $currentIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
+        $currentRowIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
         
         for ($j = 0; $j < 7; $j++) {
             if (date("Y-m-d", strtotime($lessonStart. " + $j days")) == date("Y-m-d")) {
                 $currentIndex = $j;
                 break;
+            } else if (date("Y-m-d", strtotime($lessonStart. " + $j days")) < date("Y-m-d")) {
+                $currentIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PAST;
             }
         }
 
         for($i = 0; $i < $numRow; $i++) {
             $curRowTime = date("Y-m-d H:i:s", strtotime($lessonStart. " +" .$i * $nextLessonTime . " minutes"));
-
+            
             $dataLessonSchedule[$i]['time'] = date("H:i",strtotime($curRowTime)) . "~". date("H:i", strtotime($curRowTime . "+ $lessonTiming minutes"));
             
             for($j = 0; $j < 7; $j++) {
@@ -146,12 +154,18 @@ class LessonScheduleController extends BaseController
                 $dataRegisted[$i][$j] = false;
                 $curCellTime = date("Y-m-d H:i:s", strtotime($curRowTime. " + $j days"));
                 $timeFormat = date('M d (D) ', strtotime($curRowTime. " + $j days")).$dataLessonSchedule[$i]['time'];
+                
+                if ($currentIndex != -1 && $currentRowIndex == -1 && date('H:i', strtotime($curCellTime)) > date("H:i")) {
+                    $currentRowIndex = $i;
+                }
 
                 if (isset($lessonSchedule[$curCellTime])) {
                     $lessonSchedule[$curCellTime]->start_time = $curCellTime; 
                     $lessonSchedule[$curCellTime]->time_format = $timeFormat;
                     $dataLessonSchedule[$i][$j][] = (array) $lessonSchedule[$curCellTime];
-                    $dataRegisted[$i][$j] = true;
+                    if ($lessonSchedule[$curCellTime]->lesson_type_id == 1 || $lessonSchedule[$curCellTime]->course_type == 1) {
+                        $dataRegisted[$i][$j] = true;
+                    }
                 } else {
                     $dataLessonSchedule[$i][$j][] = [
                         'lesson_schedule_id' => 0,
@@ -182,7 +196,8 @@ class LessonScheduleController extends BaseController
             'dataRegisted' => $dataRegisted,
             'currentIndex' => $currentIndex,
             'lessonTiming' => $lessonTiming,
-            'teacherZoomId' => $teacherZoomId
+            'teacherZoomId' => $teacherZoomId,
+            'currentRowIndex' => $currentRowIndex
         ], StatusCode::OK);
     }
 
@@ -232,6 +247,29 @@ class LessonScheduleController extends BaseController
             $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$lessonScheduleId."')");
         }
 
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function removeLesson(Request $request) {
+        $data = $request->all();
+
+        if (empty($data) || !isset($data['lesson_schedule_id'])) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
+
+        $string = DB::select("CALL sp_admin_remove_lesson_for_teacher('".$data['lesson_schedule_id']."')");
+
+        if ($string[0]->result != 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        }
         return response()->json([
             'status' => 'OK',
         ], StatusCode::OK);

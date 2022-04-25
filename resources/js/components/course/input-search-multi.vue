@@ -24,16 +24,11 @@
                             </div>
                         </div>
                     <div class="form-group">
-                        <label for="paypal_item_number">商品コード</label>
+                        <label for="paypal_item_number">コースコード</label>
                         <div class="input text"><input type="text" name="paypal_item_number" id="paypal_item_number"
-                                                       class="form-control input-sm" placeholder="商品コード" :value="dataQuery.paypal_item_number">
+                                                       class="form-control input-sm" placeholder="コースコード" :value="dataQuery.paypal_item_number">
                         </div>
                     </div>
-                        <div class="form-group">
-                            <label for="campaign_code">キャンペーンコード</label>
-                            <div class="input text"><input type="text" name="campaign_code" id="campaign_code" class="form-control input-sm" placeholder="キャンペーンコード" :value="dataQuery.campaign_code">
-                            </div>
-                        </div>
                         <div class="form-group">
 
                             <label>公開状況</label>

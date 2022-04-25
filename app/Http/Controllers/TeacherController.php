@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Components\BreadcrumbComponent;
 use App\Enums\StatusCode;
+use App\Enums\TestType;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
 use App\Models\Lesson;
 use App\Models\LessonTextLesson;
 use App\Models\Teacher;
 use App\Models\TeacherLesson;
+use App\Models\TeacherTest;
+use App\Models\Test;
 use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -172,7 +175,7 @@ class TeacherController extends BaseController
             ['name' => 'teacher_show', $id]
         ]);
 
-        $teacher = Teacher::where('teacher_id', $id)->with(['timeZone', 'lesson'])->first();
+        $teacher = Teacher::where('teacher_id', $id)->with(['timeZone', 'lesson', 'abilityTest'])->first();
         if (!$teacher) return redirect()->route('teacher.index');
 
         $teacherEnInfo = TeacherInfo::where(['teacher_id' => $id, 'lang_type' => LangType::EN])->first();
@@ -248,6 +251,72 @@ class TeacherController extends BaseController
             'data' => [],
         ], StatusCode::OK);
     }
+
+    public function abilityTest(Request $request, $id)
+    {
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new Test();
+
+        if (isset($request['inputSearch'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('test_name', $request['inputSearch']));
+            });
+        }
+        $testHasAdded = TeacherTest::where('teacher_id', $id)->pluck('test_id');
+
+        $dataList = $queryBuilder->where('test_type', TestType::ABILITY)->whereNotIn('test_id', $testHasAdded)->sortable(['display_order' => 'asc'])->paginate($pageLimit);
+        return response()->json([
+            'status' => 'OK',
+            'dataList' => $dataList
+        ], StatusCode::OK);
+    }
+
+
+    public function registerAbilityTest(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($request->all() as $rq) {
+                $tc = new TeacherTest();
+                $tc->teacher_id = $id;
+                $tc->test_id = $rq;
+                $tc->save();
+            }
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
+        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 'OK',
+        ], StatusCode::OK);
+    }
+
+    public function TeacherTestDelete($id, $testId)
+    {
+
+        try {
+            $teacherTest = TeacherTest::where([
+                'teacher_id' => $id,
+                'test_id' => $testId
+            ])->delete();
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => ' テストの解除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

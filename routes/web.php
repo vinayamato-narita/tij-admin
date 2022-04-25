@@ -34,6 +34,11 @@ Route::group([
     Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');
     Route::post('teacher/{id}/lesson', 'TeacherController@registerLesson')->name('teacher.registerLesson');
     Route::delete('teacher/{id}/lesson/{lessonId}/delete', 'TeacherController@teacherLessonDelete')->name('teacher.teacherLessonDelete');
+    Route::get('teacher/{id}/ability-test', 'TeacherController@abilityTest')->name('teacher.abilityTest');
+    Route::post('teacher/{id}/ability-test', 'TeacherController@registerAbilityTest')->name('teacher.registerAbilityTest');
+    Route::delete('teacher/{id}/ability-test/{testId}/delete', 'TeacherController@TeacherTestDelete')->name('teacher.teacheTeacherTestDeleterLessonDelete');
+
+
     Route::resource('faq', FaqController::class);
     Route::get('export-teacher', 'TeacherController@exportTeacher')->name('exportTeacher');
 

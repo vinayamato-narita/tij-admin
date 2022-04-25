@@ -769,7 +769,7 @@
                             .then((res) => {
                                 that.flagShowLoader = false;
                                 this.$swal({
-                                    title: "テスト問題新規作成が完了しました。",
+                                    title: "テスト問題編集が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {

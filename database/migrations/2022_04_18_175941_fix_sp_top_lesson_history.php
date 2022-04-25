@@ -24,7 +24,7 @@ class FixSpTopLessonHistory extends Migration
                 ls.lesson_schedule_id,
                 ls.lesson_endtime,
                 lsn.lesson_name,
-                COALESCE(ls.lesson_text_name, lst.lesson_text_name) as lesson_text_name,
+                lst.lesson_text_name,
                 DATE_FORMAT(ls.lesson_date,'%Y/%m/%d') as lesson_date,
                 ls.lesson_starttime,
                 CONCAT(DATE_FORMAT(ls.lesson_starttime,'%H:%i'),'~',DATE_FORMAT(ls.lesson_endtime,'%H:%i')) as lesson_time,
@@ -43,8 +43,10 @@ class FixSpTopLessonHistory extends Migration
                 CASE (SELECT min(lesson_history_id) FROM lesson_history WHERE student_id = s.student_id )
                     WHEN lh.lesson_history_id THEN 'Free' 
                     ELSE ''
-                END is_for_freestudent, 
-                c.course_name,
+                END is_for_freestudent
+                , ftc.file_path as teacher_file_path
+                , fst.file_path as student_file_path
+                ,c.course_name,
                 c.course_id,
                 c.course_type
             FROM
@@ -52,7 +54,10 @@ class FixSpTopLessonHistory extends Migration
                 LEFT JOIN lesson_schedule ls ON ls.lesson_schedule_id = lh.lesson_schedule_id
                 LEFT JOIN student s ON lh.student_id = s.student_id
                 LEFT JOIN lesson lsn ON ls.lesson_id = lsn.lesson_id
-                LEFT JOIN lesson_text lst ON ls.lesson_text_id = lst.lesson_text_id
+                LEFT JOIN lesson_text_lesson ltl ON lsn.lesson_id = ltl.lesson_id
+                LEFT JOIN lesson_text lst ON ltl.lesson_text_id = lst.lesson_text_id
+                LEFT JOIN file ftc ON lst.lesson_text_teacher_file_id = ftc.file_id
+                LEFT JOIN file fst ON lst.lesson_text_student_file_id = fst.file_id
                 LEFT JOIN course c ON c.course_id = lh.course_id
             WHERE           
                 lh.student_lesson_reserve_type in (1,3)

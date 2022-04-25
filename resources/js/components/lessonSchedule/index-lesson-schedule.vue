@@ -359,7 +359,6 @@ export default {
             //     }).then(result => {
             //     });
             // }
-
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
@@ -372,16 +371,24 @@ export default {
                         submitBulkRegistionFlg = false;
                         errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
                         break;
-                    } else if(this.dataSelected[i][j]){
+                    } else if (!this.dataRegisted[i][j] && this.dataSelected[i][j]) {
+                        submitBulkRegistionFlg = false;
+                        errorMessage = "削除可能な日時を選択してください"
+                        break;
+                    } else if(this.dataRegisted[i][j] && this.dataSelected[i][j]){
                         dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
                         idx++
                     }
                 }
             }
-            if (submitBulkRegistionFlg && dataBulkResistration.length == 0) {
-                submitBulkRegistionFlg = false;
-                errorMessage = "削除可能な日時を選択してください"
-            }
+            // console.log(submitBulkRegistionFlg);
+            // console.log(dataBulkResistration);
+            
+            // if (submitBulkRegistionFlg && dataBulkResistration.length == 0) {
+            //     console.log('xxx');
+            //     submitBulkRegistionFlg = false;
+            //     errorMessage = "削除可能な日時を選択してください"
+            // }
 
             if (!submitBulkRegistionFlg) {
                     this.$swal({

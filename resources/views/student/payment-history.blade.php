@@ -70,7 +70,11 @@
                                                         <td class="text-center">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->payment_date) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->begin_date) }}</td>
-                                                        <td class="text-center">{{ DateTimeComponent::getDate($payment->point_expire_date) }}</td>
+                                                        <td class="text-center">
+                                                            @if($payment->course_type !== \App\Enums\CourseTypeEnum::GROUP_COURSE)
+                                                                {{ DateTimeComponent::getDate($payment->point_expire_date) }}                                                                          @endif
+
+                                                        </td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->receive_payment_date) }}</td>
                                                         <td>
                                                             <div class="btn-group">

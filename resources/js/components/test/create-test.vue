@@ -292,17 +292,26 @@ export default {
             flagShowLoader: false,
             testInfo: {
                 test_type : 0,
-                _token: Laravel.csrfToken
+                _token: Laravel.csrfToken,
+                execution_time : 1,
+                expire_count : 1
             }
         };
     },
     props: ["urlAction", "urlTestList", "testTypes"],
     mounted() {},
     watch: {
-        testInfo () {
-            if (this.testInfo.test_type === 2)
+        'testInfo.test_type' () {
+            if (this.testInfo.test_type === 2) {
                 this.testInfo.passing_score = 70;
-        }
+                this.testInfo.execution_time = 30;
+                this.testInfo.expire_count = 2;
+            }
+            if (this.testInfo.test_type === 1) {
+                this.testInfo.execution_time = 60;
+            }
+        },
+        
     },
     methods: {
         save() {

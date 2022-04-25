@@ -64,15 +64,20 @@
                             </div>
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="alert alert-secondary font-weight-bold text-center" v-if="!disableComment">
+                                        3時間以内に評価登録を完了しないと、入力内容が失われます。ご注意ください。                                    </div>
                                     <form  class="form-horizontal " style="width: 100%" method="POST" ref="registerForm" @submit.prevent="register" autocomplete="off">
                                         <div class="form-group row" v-for="(comment, index) in commentsModels">
                                             <label class="col-md-3 col-form-label text-md-right" :for="index">{{comment.title}} :
 
                                             </label>
                                             <div class="col-md-6">
-                                                <textarea :disabled="disableComment" class="form-control"  rows="5" :id="index"  type="text" :name="comment.input_name"  v-model="comment.comment_desc"  >
+                                                <textarea :disabled="disableComment" class="form-control"  rows="5" :id="index"  type="text" :name="comment.input_name"  v-validate="'required'" v-model="comment.comment_desc"  >
 
                                                 </textarea>
+                                                <div class="input-group is-danger" style="color: red" role="alert">
+                                                    {{ errors.first(comment.input_name) }}
+                                                </div>
 
 
 
@@ -127,6 +132,18 @@
             };
         },
         created(){
+            let messError = {
+                custom: {
+                },
+            };
+            this.commentsModels.forEach(function (ele) {
+                messError.custom[ele.input_name] = {
+                    required :  ele.title + "の評価を入力してください",
+
+                }
+            });
+
+            this.$validator.localize("en", messError);
 
         },
         props: ['testResult', 'analyticList', 'testComment', 'disableComment', 'comments', 'updateUrl', 'detailUrl', 'answerDetailUrl', 'groupLessonGuideUrl'],
@@ -141,7 +158,72 @@
 
                 this.$validator.validateAll().then((valid) => {
                     if (valid) {
-                        that.flagShowLoader = true;
+                        this.$swal({
+                            title: "登録した内容が学習者に送信されます。<br>よろしいですか。",
+                            icon: "question",
+                            confirmButtonText: "OK",
+                            showCancelButton : true,
+                            cancelButtonText : "キャンセル"
+                        }).then(function (confirm) {
+
+                            if (confirm.isConfirmed) {
+                                that.flagShowLoader = true;
+                                axios
+                                    .post(that.updateUrl, formData, {
+                                        header: {
+                                            "Content-Type": "multipart/form-data",
+                                        },
+                                    })
+                                    .then((res) => {
+                                        that.$swal({
+                                            title: "実力テスト評価が完了しました。",
+                                            icon: "success",
+                                            confirmButtonText: "OK",
+                                        }).then(function (confirm) {
+                                            that.flagShowLoader = false;
+                                            window.location.href = that.detailUrl;
+
+                                        });
+                                        that.flagShowLoader = false;
+                                    })
+                                    .catch((err) => {
+
+                                        switch (err.response.status) {
+                                            case 400:
+                                                var message = err.response.data.message;
+                                                that.$swal({
+                                                    title: message,
+                                                    icon: "error",
+                                                    customClass: 'text-nowrap',
+                                                    confirmButtonText: "OK",
+                                                }).then(function (confirm) {
+                                                });
+
+                                                that.flagShowLoader = false;
+                                                break;
+                                            case 500:
+                                                that.$swal({
+                                                    title: "失敗したデータを評価しました",
+                                                    icon: "error",
+                                                    confirmButtonText: "OK",
+                                                }).then(function (confirm) {
+                                                });
+
+                                                that.flagShowLoader = false;
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    });
+
+                            }
+
+
+
+                        }).abort(function () {
+                            that.flagShowLoader = false;
+                        });
+/*                        that.flagShowLoader = true;
                         axios
                             .post(that.updateUrl , formData, {
                                 header: {
@@ -184,7 +266,7 @@
                                     default:
                                         break;
                                 }
-                            });
+                            });*/
                     }
                 });
 

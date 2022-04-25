@@ -199,6 +199,35 @@
                                         </div>
 
                                         <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="course_target"> コース対象者 : </label>
+
+                                            <div class="col-md-6">
+                                                            <textarea class="form-control" id="course_target"  name="course_target"
+                                                                      @input="changeInput()"  v-model="course_target">
+                                                            </textarea>
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("course_target") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="course_attainment_target"> 到達目標 : </label>
+
+                                            <div class="col-md-6">
+                                                            <textarea class="form-control" id="course_attainment_target"  name="course_target"
+                                                                      @input="changeInput()"  v-model="course_attainment_target">
+                                                            </textarea>
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("course_attainment_target") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right">
                                                 法人・個人 :
                                             </label>
@@ -589,6 +618,8 @@
                 expireDay : this.course.expire_day,
                 displayOrder: this.course.display_order,
                 courseDescription : this.course.course_description,
+                course_target : this.course.course_target,
+                course_attainment_target : this.course.course_attainment_target,
                 courseName : this.course.course_name,
                 courseNameShort: this.course.course_name_short,
                 pointCount: this.course.point_count,
@@ -643,6 +674,8 @@
                 formData.append("amount", this.amount);
                 formData.append("paypalItemNumber", this.paypalItemNumber);
                 formData.append("courseDescription", this.courseDescription);
+                formData.append("courseTarget", this.course_target);
+                formData.append("courseAttainmentTarget", this.course_attainment_target);
                 formData.append("isForLMS", this.isForLMS);
                 formData.append("courseType", this.courseType);
                 formData.append("expireDay", this.expireDay);

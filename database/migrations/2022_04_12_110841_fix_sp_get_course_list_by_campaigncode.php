@@ -40,6 +40,7 @@ class FixSpGetCourseListByCampaigncode extends Migration
             WHERE CASE WHEN _category_id <> 0 THEN ca.category_id = _category_id ELSE 1 = 1 END
                AND CASE WHEN _course_type <> 999 THEN course.course_type = _course_type ELSE 1 = 1 END
                AND NOW() BETWEEN (CASE WHEN course.publish_date_from IS NULL THEN '1900-01-01 00:00:00' ELSE course.publish_date_from END) AND (CASE WHEN course.publish_date_to IS NULL THEN '2900-12-12 23:59:59' ELSE course.publish_date_to END)
+               AND CASE WHEN course.course_type = 1 THEN course.group_lesson_status <> 2 AND NOW() BETWEEN (CASE WHEN course.publish_date_from IS NULL THEN '1900-01-01 00:00:00' ELSE course.publish_date_from END) AND (CASE WHEN course.reserve_end_date IS NULL THEN '2900-12-12 23:59:59' ELSE course.reserve_end_date END) ELSE 1 = 1  END
              ORDER BY course.course_type ASC, ca.order_num ASC, course.display_order ASC;
         END
         ";

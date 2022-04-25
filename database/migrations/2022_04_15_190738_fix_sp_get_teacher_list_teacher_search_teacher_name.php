@@ -27,7 +27,7 @@ class FixSpGetTeacherListTeacherSearchTeacherName extends Migration
             IN _teacher_feature4 VARCHAR(255),
             IN _teacher_age VARCHAR(255),
             IN _lang_type VARCHAR(19),
-            IN _search_input VARCHAR(255),
+            IN _search_input VARCHAR(255) CHARSET utf8,
             IN _favorite VARCHAR(255),
             IN _student_id VARCHAR(255))
 

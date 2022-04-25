@@ -84,7 +84,7 @@
                                             <label
                                                     class="col-md-3 col-form-label text-md-right"
                                                     for="text-input"
-                                            >コース概要</label
+                                            >コース概要:</label
                                             >
                                             <div class="col-md-6">
                                                 <textarea
@@ -100,6 +100,52 @@
                                                         v-if="errors.has('course_description')"
                                                 >
                                                     {{ errors.first("course_description") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                                    for="text-input"
+                                            >コース対象者:</label
+                                            >
+                                            <div class="col-md-6">
+                                                <textarea
+                                                        class="form-control"
+                                                        name="course_target"
+                                                        v-model="courseInfoEx.course_target"
+                                                        rows="5"
+                                                />
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('course_target')"
+                                                >
+                                                    {{ errors.first("course_target") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                                    for="text-input"
+                                            >到達目標:</label
+                                            >
+                                            <div class="col-md-6">
+                                                <textarea
+                                                        class="form-control"
+                                                        name="course_attainment_target"
+                                                        v-model="courseInfoEx.course_attainment_target"
+                                                        rows="5"
+                                                />
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                        v-if="errors.has('course_attainment_target')"
+                                                >
+                                                    {{ errors.first("course_attainment_target") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -147,6 +193,8 @@
                 courseInfoEx: {
                     course_name : this.courseInfo ? this.courseInfo.course_name : '',
                     course_description :  this.courseInfo ? this.courseInfo.course_description : '',
+                    course_target :  this.courseInfo ? this.courseInfo.course_target : '',
+                    course_attainment_target :  this.courseInfo ? this.courseInfo.course_attainment_target : '',
                     course_id : this.course.course_id,
                     lang : this.lang
                 }

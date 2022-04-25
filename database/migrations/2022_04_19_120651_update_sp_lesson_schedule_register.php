@@ -112,7 +112,7 @@ class UpdateSpLessonScheduleRegister extends Migration
             END
         ";
 
-        \DB::unprepared($procedure1);
+        \DB::unprepared($procedure2);
         
     }
 

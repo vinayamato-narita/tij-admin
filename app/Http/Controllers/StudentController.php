@@ -486,6 +486,7 @@ class StudentController extends BaseController
             'point_subscription_history.receive_payment_date as receive_payment_date',
             'point_subscription_history.set_course_id as set_course_id',
             'course.course_name as course_name',
+            'course.course_type',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
         )
         ->leftJoin('course', function($join) {
@@ -1132,7 +1133,7 @@ class StudentController extends BaseController
         $studentInfo->student_entry_types = StudentEntryType::pluck('student_entry_type_name', 'student_entry_type_id')->toArray();
         $studentInfo->lang_types = LangTypeOption::asSelectArray();
         $studentInfo->lms_prefectures = LmsPrefecture::where('delete_flag', 0)->pluck('prefecture_name', 'prefecture_id')->toArray();
-        $studentInfo->time_zones = TimeZone::where('timezone_id', 1)->pluck('timezone_name_native', 'timezone_id')->toArray();
+        $studentInfo->time_zones = TimeZone::pluck('timezone_name_native', 'timezone_id')->toArray();
         if ($studentInfo->is_lms_user) {
             $studentInfo->lms_project_students = LmsProjectStudent::select('lms_company.company_name as company_name',
                 'lms_project.project_code as project_code',

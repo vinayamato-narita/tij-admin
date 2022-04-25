@@ -15,6 +15,7 @@ use App\Models\CourseSetCourse;
 use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\PointSubscriptionHistory;
+use App\Models\LessonSchedule;
 use App\Imports\CourseUsersImport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -288,6 +289,8 @@ Log::info($emails);
                     );
 
                     $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)',$data);
+                    LessonSchedule::where('lesson_schedule_id', '=', $schedule["lesson_schedule_id"])
+                        ->update(['lesson_reserve_type' => $schedule["lesson_reserve_type"]]);
                 }
             }
 

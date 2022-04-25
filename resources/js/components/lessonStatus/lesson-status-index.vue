@@ -289,7 +289,7 @@ export default {
                         that.dataMaxFreeLesson = response.data.dataMaxFreeLesson
                     } else {
                         this.$swal({
-                            text: "問い合わせ件の作成が失敗しました。再度お願いいたします",
+                            text: "レッスン状況を登録できません。",
                             icon: "warning",
                             confirmButtonText: "OK"
                         }).then(result => {

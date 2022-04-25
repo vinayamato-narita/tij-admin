@@ -125,13 +125,6 @@
                             </div> 
 
                             <div class="form-group">
-                                <label>キャンペーンコード</label>
-                                <div class="input text">
-                                    <input type="text" name="campaign_code" class="form-control input-sm" placeholder="キャンペーンコードを入力してください" :value="dataQuery.campaign_code">
-                                </div>
-                            </div> 
-
-                            <div class="form-group">
                                 <label>支払方法</label>
                                 <div class="input text">
                                     <select

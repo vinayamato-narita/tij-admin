@@ -830,7 +830,7 @@ export default {
                     max: "名前は255文字以内で入力してください。"
                 },
                  teacherCode: {
-                    required: "インストラクターコードを入力してください。",
+                    required: "講師コードを入力してください。",
                     max: "名前は10文字以内で入力してください。"
                 },
                 nickName: {

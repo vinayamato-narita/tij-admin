@@ -797,7 +797,7 @@ export default {
                     max_value: "表示順は1～1000000000 を入力してください"
                 },
                 teacherCode: {
-                    required: "インストラクターコードを入力してください。",
+                    required: "講師コードを入力してください。",
                     max: "名前は10文字以内で入力してください。"
                 },
                 teacherName: {

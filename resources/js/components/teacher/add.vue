@@ -743,6 +743,14 @@
                                                 <span class="text-nowrap">
                                                     {{ teacherVideoName }}
                                                 </span>
+                                                   <div
+                                                    class="input-group is-danger"
+                                                    role="alert" v-if="errFile"
+                                                >
+                                                    {{
+                                                        errFile
+                                                    }}
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-actions text-center">
@@ -859,7 +867,8 @@ export default {
             teacherVideoSelected:null,
             teacherVideoName: "",
             teacherFileName: "",
-            teacherFileNameAttached: ""
+            teacherFileNameAttached: "",
+            errFile:""
         };
     },
     props: ["listTeacherUrl", "timeZones", "createUrl"],
@@ -968,10 +977,18 @@ export default {
             this.teacherFileName = e.target.files[0].name;
         },
           changeVideo(e) {
+            var maxFileSize = 50*1024*1024;
+            if(e.target.files[0].size<maxFileSize){
             this.studentFileId = null;
             this.teacherFileNameAttached = "";
             this.teacherVideoSelected = e.target.files[0];
             this.teacherVideoName = e.target.files[0].name;
+            this.errFile=""
+            } 
+            else{
+                this.errFile = "ファイルサイズを50MBを超えた為、アップロードできません。"
+            }
+           
         },
         show(modalName) {
             this.$modal.show(modalName, {

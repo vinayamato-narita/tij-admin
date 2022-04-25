@@ -977,7 +977,7 @@ export default {
             this.teacherFileName = e.target.files[0].name;
         },
           changeVideo(e) {
-             var maxFileSize = 50*1024*1024;
+            var maxFileSize = 50*1024*1024;
             if(e.target.files[0].size<maxFileSize){
             this.studentFileId = null;
             this.teacherFileNameAttached = "";

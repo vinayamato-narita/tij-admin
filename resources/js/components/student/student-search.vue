@@ -41,12 +41,6 @@
                                 </div>
                             </div> 
                             <div class="form-group">
-                                <label>スカイプ名</label>
-                                <div class="input text">
-                                    <input type="text" name="student_skypename" class="form-control input-sm" placeholder="スカイプ名を入力してください" :value="dataQuery.student_skypename">
-                                </div>
-                            </div> 
-                            <div class="form-group">
                                 <label>メールアドレス</label>
                                 <div class="input text">
                                     <input type="text" name="student_email" class="form-control input-sm" placeholder="メールアドレスを入力してください" :value="dataQuery.student_email">
@@ -57,25 +51,7 @@
                                 <div class="input text">
                                     <input type="text" name="custom_company_name" class="form-control input-sm" placeholder="法人名を入力してください" :value="dataQuery.custom_company_name">
                                 </div>
-                            </div> 
-                            <div class="form-group">
-                                <label>企業名</label>
-                                <div class="input text">
-                                    <input type="text" name="all_project_company_name" class="form-control input-sm" placeholder="企業名を入力してください" :value="dataQuery.all_project_company_name">
-                                </div>
-                            </div> 
-                            <div class="form-group">
-                                <label>企業ID</label>
-                                <div class="input text">
-                                    <input type="text" name="all_project_code" class="form-control input-sm" placeholder="企業IDを入力してください" :value="dataQuery.all_project_code">
-                                </div>
-                            </div> 
-                            <div class="form-group">
-                                <label style="margin-right: 20px">法人コード</label> <input type="checkbox" name="check_company_code" v-model="dataQuery.check_company_code" @change="dataQueryEx.check_company_code = !dataQueryEx.check_company_code" value=1> 法人コード空白のみ
-                                <div class="input text" v-if="!dataQueryEx.check_company_code">
-                                    <input type="text" name="company_code" class="form-control input-sm" placeholder="法人コードを入力してください" :value="dataQuery.company_code">
-                                </div>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label>初回登録日</label>
                                 <div class="input text">

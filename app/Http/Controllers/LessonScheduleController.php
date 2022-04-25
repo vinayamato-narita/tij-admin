@@ -12,6 +12,7 @@ use App\Models\LessonText;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LessonTiming;
 use App\Models\LessonSchedule;
+use App\Enums\LessonScheduleRole;
 
 class LessonScheduleController extends BaseController
 {
@@ -45,6 +46,8 @@ class LessonScheduleController extends BaseController
         
         $lessonList = Lesson::select('lesson_id', 'lesson_name')->get();
         $lessonTextList = LessonText::select('lesson_text_id', 'lesson_text_name')->get();
+        $lessonScheduleInPresent = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
+        $lessonScheduleInPast = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PAST;
 
         return view('lessonSchedule.index', [
             'breadcrumbs' => $breadcrumbs,
@@ -54,7 +57,9 @@ class LessonScheduleController extends BaseController
             'lessonTextList' => $lessonTextList,
             'lessonTiming' => $lessonTiming,
             'nextLessonTime' => $nextLessonTime,
-            'numRow' => $numRow
+            'numRow' => $numRow,
+            'lessonScheduleInPresent' => $lessonScheduleInPresent,
+            'lessonScheduleInPast' => $lessonScheduleInPast
         ]);
     }
 
@@ -126,13 +131,15 @@ class LessonScheduleController extends BaseController
             }
         }
 
-        $currentIndex = -1;
-        $currentRowIndex = -1;
+        $currentIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
+        $currentRowIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PRESENT;
         
         for ($j = 0; $j < 7; $j++) {
             if (date("Y-m-d", strtotime($lessonStart. " + $j days")) == date("Y-m-d")) {
                 $currentIndex = $j;
                 break;
+            } else if (date("Y-m-d", strtotime($lessonStart. " + $j days")) < date("Y-m-d")) {
+                $currentIndex = LessonScheduleRole::LESSON_SCHEDULE_STATUS_IN_PAST;
             }
         }
 

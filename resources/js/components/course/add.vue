@@ -132,23 +132,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row" v-if="this.courseType == 0">
-                                            <label class="col-md-3 col-form-label text-md-right" for="pointCount">受講回数 :
-                                                <span class="glyphicon glyphicon-star"
-                                                ></span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" v-validate="'required|min_value:1|max_value:1000000000'" />
-
-                                                <div class="input-group is-danger" role="alert">
-                                                    {{ errors.first("pointCount") }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label text-md-right" for="amount">価格（税抜）:
                                                 <span class="glyphicon glyphicon-star"
@@ -302,6 +285,22 @@
 
                                             </div>
                                         </div>
+                                            <div class="form-group row" v-if="this.courseType == 0">
+                                            <label class="col-md-3 col-form-label text-md-right" for="pointCount">受講回数 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="pointCount" type="number" name="pointCount" @input="changeInput()" style="max-width: 100px" v-model="pointCount" value="1" v-validate="'required|min_value:1|max_value:1000000000'" />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("pointCount") }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
 
 
                                         <div class="form-group row " v-if="courseType == 0 || courseType == 2">

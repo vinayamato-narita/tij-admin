@@ -61,7 +61,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">申込人数:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{ this.course.student_point_histories_count }}
+                                            {{ this.course.point_subscription_histories_count }}
                                         </div>
                                     </div>
 

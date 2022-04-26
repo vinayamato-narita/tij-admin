@@ -39,13 +39,13 @@
                                             <div class="col-main-table">
                                                 <ul class="nav-table schedule-nav-tbl">
                                                     <li class="nav-table-item nav-table-item-lesson-schedule">
-                                                        <span @click="changeDate(preWeek)">Last Week</span>
+                                                        <span @click="changeDate(preWeek)">前週</span>
                                                     </li>
                                                     <li class="nav-table-item nav-table-item-lesson-schedule">
-                                                        <span @click="changeDate(new Date())">Refresh</span>
+                                                        <span @click="changeDate(new Date())">更新</span>
                                                     </li>
                                                     <li class="nav-table-item nav-table-item-lesson-schedule">
-                                                        <span @click="changeDate(nextWeek)">Next Week</span>
+                                                        <span @click="changeDate(nextWeek)">次週</span>
                                                     </li>
                                                 </ul>
                                                 <table class="head-table table-schedule table-basic head-table-cell-select top-table">
@@ -80,7 +80,7 @@
                                             </div>
                                             <!-- /.col-main-table -->
                                             <div class="col-side-table">
-                                                <h3 class="title-side-table">Detail</h3>
+                                                <h3 class="title-side-table">詳細</h3>
                                                 <div class="subtitle-side-table"></div>
                                                 <div class="wrapper-btn-bulk">
                                                     <input id="bulk-resistration" @click="bulkResistration()" class="btn active" type="button" value="一括登録">

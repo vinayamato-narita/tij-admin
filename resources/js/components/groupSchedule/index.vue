@@ -25,10 +25,10 @@
                              :on-event-dblclick="onEventDblclick">
                           <!-- Custom arrow -->
                           <template v-slot:arrow-prev="{ arrow, view }">
-                            <i class="angle"></i>Last Week
+                            <i class="angle"></i>前週
                           </template>
                           <template v-slot:arrow-next="{ arrow, view }">
-                            Next Week<i class="angle"></i>
+                            次週<i class="angle"></i>
                           </template>
 
                           <!-- Custom title -->

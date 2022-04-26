@@ -45,7 +45,7 @@
                                             <div class="row">
                                                 <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
                                                 <div class="col-sm-8 text-center">
-                                                    <button class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
+                                                    <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                                     <button type="button" id="lesson_free_setting" class="btn btn-sm btn-primary" v-if="!editFlg" @click="changeEditFlg()">
                                                         自由枠数設定
                                                     </button>
@@ -191,7 +191,7 @@
                                         <div class="row">
                                             <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
                                             <div class="col-sm-8 text-center">
-                                                <button class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
+                                                <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                             </div>
                                             <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
                                         </div>
@@ -433,7 +433,7 @@ export default {
         },
         selectThisWeek() {
             this.startDate = new Date()
-            getData()
+            this.getData()
         }
     }
 };

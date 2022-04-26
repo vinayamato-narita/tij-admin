@@ -34,7 +34,7 @@
 
                                     <div class="col-md-10 schedule-content" style="width:89.333333%" >
                                         <div class="indexz-show" v-if="teacherId == null"></div>
-                                        <h2 class="title-table" style="margin-top: 0px;">LESSON SCHEDULE</h2>
+                                        <h2 class="title-table" style="margin-top: 0px;">レッスンスケジュール</h2>
                                         <div class="clearfix wrap-border">
                                             <div class="col-main-table">
                                                 <ul class="nav-table schedule-nav-tbl">

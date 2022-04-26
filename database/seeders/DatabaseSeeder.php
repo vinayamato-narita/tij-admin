@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FAQCategoryseeder::class);
         $this->call(NewsSubjectSeeder::class);
         $this->call(TimeZoneSeeder::class);
+        $this->call(ImportMailPatternSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

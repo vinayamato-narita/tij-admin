@@ -107,7 +107,6 @@
                                                 <div class="wrapper-btn-single">
                                                         <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" @click="resistration()" type="button" value="登録">
                                                         <input id="remove" :class="['btn', removeFlgConds ? 'active' : '']" type="reset" @click="remove()" value="レッスン削除">
-                                                        <input id="cancel_lesson" class="btn" type="reset" value="レッスンキャンセル">
                                                 </div>
                                                 <!-- /.wrapper-lesson-detail -->
                                             </div>

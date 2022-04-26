@@ -82,7 +82,10 @@
                                             >メール内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ this.mailEnInfo != null ? this.mailEnInfo.mail_body : "" }}
+                                            <pre>
+                                                 {{ this.mailEnInfo != null ? this.mailEnInfo.mail_body : "" }}
+
+                                            </pre>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +118,10 @@
                                             >メール内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ this.mailZhInfo != null ? this.mailZhInfo.mail_body : "" }}
+                                            <pre>
+                                                {{ this.mailZhInfo != null ? this.mailZhInfo.mail_body : "" }}
+
+                                            </pre>
                                         </div>
                                     </div>
                                 </div>

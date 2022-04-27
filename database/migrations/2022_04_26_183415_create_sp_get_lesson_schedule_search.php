@@ -70,20 +70,12 @@ class CreateSpGetLessonScheduleSearch extends Migration
                                 FIND_IN_SET(te.teacher_sex,_gender)
                         END
                     AND CASE
-                        WHEN _date_from = '' THEN
+                        WHEN _date_from = '' OR _date_to = '' THEN
                             1 = 1
                         ELSE
                             EXISTS (
                                 SELECT * FROM lesson_schedule ls WHERE ls.teacher_id = te.teacher_id
                                     AND ls.lesson_starttime >= _date_from
-                            )
-                    END
-                    AND CASE
-                        WHEN _date_to = '' THEN
-                            1 = 1
-                        ELSE
-                            EXISTS (
-                                SELECT * FROM lesson_schedule ls WHERE ls.teacher_id = te.teacher_id
                                     AND ls.lesson_endtime <= _date_to
                             )
                     END

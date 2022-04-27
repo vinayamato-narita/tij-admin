@@ -162,31 +162,6 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >スカイプ名</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_skypename"
-                                                            v-model="studentInfoEx.student_skypename"
-                                                            v-validate="
-                                                                'skype'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('student_skypename')"
-                                                        >
-                                                            {{ errors.first("student_skypename") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
                                                         >ニックネーム</label
                                                     >
                                                     <div class="col-md-9">
@@ -212,7 +187,7 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >ニックネーム<span class="glyphicon glyphicon-star"
+                                                        >メールアドレス<span class="glyphicon glyphicon-star"
                                                             ></span
                                                         ></label
                                                     >
@@ -235,7 +210,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row" v-if="studentInfoEx.is_lms_user == 0">
+                                                <div class="form-group row" v-if="studentInfoEx.is_lms_user != studentInfoExlms_user">
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
@@ -317,23 +292,42 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >郵便番号</label
+                                                        >国</label
+                                                    >
+                                                    <div class="col-md-9">
+                                                        <select
+                                                            class="form-control"
+                                                            name="lang_type"
+                                                            v-model="studentInfoEx.country_id"
+                                                        >   
+                                                            <option :value="key" v-for="(value, key) in studentInfoEx.countries">
+                                                                {{ value }}</option
+                                                            >
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label
+                                                        class="col-md-3 col-form-label text-md-right"
+                                                        for="text-input"
+                                                        >市</label
                                                     >
                                                     <div class="col-md-9">
                                                         <input
                                                             class="form-control"
-                                                            name="postcode"
-                                                            v-model="studentInfoEx.postcode"
+                                                            name="city"
+                                                            v-model="studentInfoEx.city"
                                                             v-validate="
-                                                                'postcode|max:10'
+                                                                'max:100'
                                                             "
                                                         />
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('postcode')"
+                                                            v-if="errors.has('city')"
                                                         >
-                                                            {{ errors.first("postcode") }}
+                                                            {{ errors.first("city") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -342,16 +336,15 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >都道府県</label
+                                                        >表示言語</label
                                                     >
                                                     <div class="col-md-9">
                                                         <select
                                                             class="form-control"
-                                                            name="prefecture_number"
-                                                            v-model="studentInfoEx.prefecture_number"
+                                                            name="lang_type"
+                                                            v-model="studentInfoEx.lang_type"
                                                         >   
-                                                            <option></option>
-                                                            <option :value="key" v-for="(value, key) in studentInfoEx.lms_prefectures">
+                                                            <option :value="key" v-for="(value, key) in studentInfoEx.lang_types">
                                                                 {{ value }}</option
                                                             >
                                                         </select>
@@ -359,9 +352,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('prefecture_number')"
+                                                            v-if="errors.has('lang_type')"
                                                         >
-                                                            {{ errors.first("prefecture_number") }}
+                                                            {{ errors.first("lang_type") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -370,100 +363,21 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >住所１</label
+                                                        >個人／法人</label
                                                     >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_address"
-                                                            v-model="studentInfoEx.student_address"
-                                                            v-validate="
-                                                                'max:50'
-                                                            "
-                                                        />
-                                                        <div>※日本語の学習者は居住地で日本を選択した場合には、必ず住所を入力してください。</div>
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('student_address')"
-                                                        >
-                                                            {{ errors.first("student_address") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >住所２</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_address1"
-                                                            v-model="studentInfoEx.student_address1"
-                                                            v-validate="
-                                                                'max:50'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('student_address1')"
-                                                        >
-                                                            {{ errors.first("student_address1") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >住所３</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_address2"
-                                                            v-model="studentInfoEx.student_address2"
-                                                            v-validate="
-                                                                'max:50'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('student_address2')"
-                                                        >
-                                                            {{ errors.first("student_address2") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >住所４</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_address3"
-                                                            v-model="studentInfoEx.student_address3"
-                                                            v-validate="
-                                                                'max:50'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('student_address3')"
-                                                        >
-                                                            {{ errors.first("student_address3") }}
-                                                        </div>
+                                                    <div class="col-md-9 pt-7">
+                                                        <label style="margin-right: 20px"><input
+                                                            type="radio"
+                                                            name="is_lms_user"
+                                                            v-model="studentInfoEx.is_lms_user"
+                                                            value="0"
+                                                        /> 個人</label>
+                                                        <label><input
+                                                            type="radio"
+                                                            name="is_lms_user"
+                                                            v-model="studentInfoEx.is_lms_user"
+                                                            value="1"
+                                                        /> 法人</label>
                                                     </div>
                                                 </div>
 
@@ -537,33 +451,6 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >都道府県</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <select
-                                                            class="form-control"
-                                                            name="lang_type"
-                                                            v-model="studentInfoEx.lang_type"
-                                                        >   
-                                                            <option :value="key" v-for="(value, key) in studentInfoEx.lang_types">
-                                                                {{ value }}</option
-                                                            >
-                                                        </select>
-
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('lang_type')"
-                                                        >
-                                                            {{ errors.first("lang_type") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
                                                         >タイムゾーン</label
                                                     >
                                                     <div class="col-md-9">
@@ -616,44 +503,14 @@
                                             </div>
                                         </div>
 
-                                        <div v-if="studentInfoEx.is_lms_user">
+                                        <div v-if="studentInfoEx.is_lms_user == studentInfoEx.lms_user">
                                             <div class="form-group row">
                                                 <div class="col-md-12" style="border-bottom: #d8dbe0 1px solid; border-top: #d8dbe0 1px solid;">
                                                     <label style="margin-left: 20px; margin-top: 10px">企業情報</label>
                                                 </div>
                                             </div>
                                             <div class="form-group row" v-for="lmsProject in studentInfoEx.lms_project_students">
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label
-                                                            class="col-md-3 col-form-label text-md-right"
-                                                            for="text-input"
-                                                            >企業名</label
-                                                        >
-                                                        <div class="col-md-9 pt-7">
-                                                            {{ lmsProject.company_name }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label
-                                                            class="col-md-3 col-form-label text-md-right"
-                                                            for="text-input"
-                                                            >企業ID</label
-                                                        >
-                                                        <div class="col-md-9 pt-7">
-                                                            {{ lmsProject.project_code }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label
-                                                            class="col-md-3 col-form-label text-md-right"
-                                                            for="text-input"
-                                                            >法人コード</label
-                                                        >
-                                                        <div class="col-md-9 pt-7">
-                                                            {{ lmsProject.legal_code }}
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-12">
                                                     <div class="form-group row">
                                                         <label
                                                             class="col-md-3 col-form-label text-md-right"
@@ -674,9 +531,7 @@
                                                             {{ lmsProject.buy_course_continue == 0 ? "なし" : "あり" }}
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div class="col-md-6">
+                                                
                                                     <div class="form-group row">
                                                         <label
                                                             class="col-md-3 col-form-label text-md-right"
@@ -705,7 +560,7 @@
                                                             for="text-input"
                                                             >部署名</label
                                                         >
-                                                        <div class="col-md-9 pt-7">
+                                                        <div class="col-md-6 pt-7">
                                                             <input
                                                                 class="form-control"
                                                                 name="department_name"
@@ -730,7 +585,7 @@
                                                             for="text-input"
                                                             >社員番号</label
                                                         >
-                                                        <div class="col-md-9 pt-7">
+                                                        <div class="col-md-6 pt-7">
                                                             <input
                                                                 class="form-control"
                                                                 name="employee_number"
@@ -755,7 +610,7 @@
                                                             for="text-input"
                                                             >所属番号</label
                                                         >
-                                                        <div class="col-md-9 pt-7">
+                                                        <div class="col-md-6 pt-7">
                                                             <input
                                                                 class="form-control"
                                                                 name="department_number"
@@ -905,9 +760,6 @@ export default {
                     isKana: "カタカナ又はローマ字で入力してください",
                     max: "メイは100文字以内で入力してください",
                 },
-                student_skypename: {
-                    skype: "スカイプ名は正しく入力してください",
-                },
                 student_nickname: {
                     login_id: "ニックネームは正しく入力してください",
                     max: "ニックネームは16文字以内で入力してください",
@@ -964,6 +816,9 @@ export default {
                 },
                 department_number: {
                     max: '所属番号は100文字以内で入力してください'
+                },
+                city: {
+                    max: '市は100文字以内で入力してください'
                 },
             }
         };

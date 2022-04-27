@@ -44,8 +44,10 @@ use App\Components\CommonComponent;
 use App\Components\DateTimeComponent;
 use Response;
 use App\Enums\AdminRole;
+use App\Enums\LmsUserEnum;
 use Auth;
-
+use App\Models\Country;
+ 
 class StudentController extends BaseController
 {
     /**
@@ -768,7 +770,6 @@ class StudentController extends BaseController
                 'student.student_name as student_name',
                 'student.student_nickname as student_nickname',
                 'student.student_email as student_email',
-                'student.student_skypename as student_skypename',
                 'student.last_login_date as last_login_date',
                 DB::raw("COUNT(DISTINCT lesson_history.lesson_history_id) AS lesson_count"),
                 'student.create_date as create_date',
@@ -776,15 +777,8 @@ class StudentController extends BaseController
                 'student.is_tmp_entry as is_tmp_entry',
                 DB::raw("IF(student.course_id > 1,'有料','無料') AS course_name"),
                 DB::raw("MIN(CASE WHEN lesson_history.student_lesson_reserve_type = 3 THEN lesson_schedule.lesson_starttime END) AS first_lesson_date"),
-                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT NULLIF(IF(is_lms_user = 1, lms_company.legal_code, point_subscription_history.corporation_code),'') SEPARATOR '/'),'/') as company_code"),
-                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_company.company_name SEPARATOR '/'),'/') as all_project_company_name"),
-                DB::raw("CONCAT('/',GROUP_CONCAT(DISTINCT lms_project.project_code SEPARATOR '/'),'/') as all_project_code"),
-                DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
+                'student.company_name as custom_company_name'
             )
-            ->leftJoin('point_subscription_history', function($join) {
-                $join->on('student.student_id', '=', 'point_subscription_history.student_id')
-                    ->where('point_subscription_history.del_flag', 0);
-            })
             ->leftJoin('lesson_history', function($join) {
                 $join->on('student.student_id', '=', 'lesson_history.student_id')
                     ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
@@ -793,32 +787,9 @@ class StudentController extends BaseController
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
                     ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
             })
-            ->leftJoin('lms_project_student', function($join) {
-                $join->on('student.student_id', '=', 'lms_project_student.student_id');
-            })
-            ->leftJoin('lms_project', function($join) {
-                $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
-            })
-            ->leftJoin('lms_company', function($join) {
-                $join->on('lms_project.company_id', '=', 'lms_company.company_id');
-            })
             ->groupBy('student.student_id');
 
-        $queryBuilderCount = Student::leftJoin('point_subscription_history', function($join) {
-            $join->on('student.student_id', '=', 'point_subscription_history.student_id')
-                ->where('point_subscription_history.del_flag', '=', 0);
-        })
-        ->leftJoin('lms_project_student', function($join) {
-            $join->on('student.student_id', '=', 'lms_project_student.student_id');
-        })
-        ->leftJoin('lms_project', function($join) {
-            $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
-        })
-        ->leftJoin('lms_company', function($join) {
-            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
-        })
-        ->where('student.course_id', '>', 1)
-        ->distinct('student.student_id');
+        $queryBuilderCount = Student::where('student.course_id', '>', 1);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -839,32 +810,9 @@ class StudentController extends BaseController
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
                     ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
                     ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
                     ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
 
-                    if ($request['all_project_code'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
-                    }
-                    if ($request['all_project_company_name'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
-                    }
-                    if(!isset($request['check_company_code'])) {
-                        $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
-                        });
-                    }
-                    if(isset($request['check_company_code'])) {
-                        $query->where(function($query) {
-                            $query->orWhere('point_subscription_history.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_history.corporation_code');
-                        });
-                        $query->where(function($query) {
-                            $query->orWhere('lms_company.legal_code', '=', '')
-                                ->orWhereNull('lms_company.legal_code');
-                        });
-                    }
                     if ($request['student_id'] != "") {
                         $query->where('student.student_id', '=', $request['student_id']);
                     }
@@ -876,33 +824,8 @@ class StudentController extends BaseController
             $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
                     ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
-                    ->where($this->escapeLikeSentence('student.student_skypename', $request['student_skypename']))
                     ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
                     ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
-
-                    if ($request['all_project_code'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
-                    }
-                    if ($request['all_project_company_name'] != "") {
-                        $query->where($this->escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
-                    }
-
-                    if(!isset($request['check_company_code'])) {
-                        $query->where(function($query) use ($request) {
-                            $query->orWhere($this->escapeLikeSentence('lms_company.legal_code', $request['company_code']))
-                                ->orWhere($this->escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
-                        });
-                    }
-                    if(isset($request['check_company_code'])) {
-                        $query->where(function($query) {
-                            $query->orWhere('point_subscription_history.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_history.corporation_code');
-                        });
-                        $query->where(function($query) {
-                            $query->orWhere('lms_company.legal_code', '=', '')
-                                ->orWhereNull('lms_company.legal_code');
-                        });
-                    }
 
                     if ($request['student_id'] != "") {
                         $query->where('student.student_id', '=', $request['student_id']);
@@ -916,15 +839,6 @@ class StudentController extends BaseController
         if (isset($request['sort'])) {
             if ($request['sort'] == "custom_company_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('custom_company_name','ASC') : $queryBuilder->orderBy('custom_company_name','DESC');
-            }
-            if ($request['sort'] == "all_project_code") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('all_project_code','ASC') : $queryBuilder->orderBy('all_project_code','DESC');
-            }
-            if ($request['sort'] == "all_project_company_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('all_project_company_name','ASC') : $queryBuilder->orderBy('all_project_company_name','DESC');
-            }
-            if ($request['sort'] == "company_code") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('company_code','ASC') : $queryBuilder->orderBy('company_code','DESC');
             }
             if ($request['sort'] == "last_reserve_date") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('last_reserve_date','ASC') : $queryBuilder->orderBy('last_reserve_date','DESC');
@@ -982,7 +896,6 @@ class StudentController extends BaseController
             $this->convertShijis("学習者メール"), 
             $this->convertShijis("法人名"), 
             $this->convertShijis("初回登録日"), 
-            $this->convertShijis("初回支払日"), 
             $this->convertShijis("最終ログイン日"), 
             $this->convertShijis("初回受講日"), 
             $this->convertShijis("通算受講回数"), 
@@ -1004,7 +917,6 @@ class StudentController extends BaseController
             'student.student_email as student_email',
             DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
             'student.create_date as create_date',
-            DB::raw("COALESCE(MIN(IF(point_subscription_history.course_id = 1 AND student.is_lms_user = 0, NULL, point_subscription_history.payment_date)),'---') AS first_payment_date"), 
             'student.last_login_date as last_login_date',  
             DB::raw("MIN(CASE WHEN lesson_history.student_lesson_reserve_type = 3 THEN lesson_schedule.lesson_starttime END) AS first_lesson_date"),  
             DB::raw("COUNT(DISTINCT lesson_history.lesson_history_id) AS lesson_count"),  
@@ -1013,10 +925,6 @@ class StudentController extends BaseController
             'student.direct_mail_flag as direct_mail_flag',  
             'student.student_comment_text as student_comment_text',  
         )
-        ->leftJoin('point_subscription_history', function($join) {
-            $join->on('student.student_id', '=', 'point_subscription_history.student_id')
-                ->where('point_subscription_history.del_flag', '=', 0);
-        })
         ->leftJoin('lesson_history', function($join) {
             $join->on('student.student_id', '=', 'lesson_history.student_id')
                 ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
@@ -1024,15 +932,6 @@ class StudentController extends BaseController
         ->leftJoin('lesson_schedule', function($join) {
             $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
                 ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
-        })
-        ->leftJoin('lms_project_student', function($join) {
-            $join->on('student.student_id', '=', 'lms_project_student.student_id');
-        })
-        ->leftJoin('lms_project', function($join) {
-            $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
-        })
-        ->leftJoin('lms_company', function($join) {
-            $join->on('lms_project.company_id', '=', 'lms_company.company_id');
         })
         ->groupBy('student.student_id');
         	
@@ -1048,32 +947,9 @@ class StudentController extends BaseController
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where(CommonComponent::escapeLikeSentence('student.student_name', $request['student_name']))
                     ->where(CommonComponent::escapeLikeSentence('student.student_nickname', $request['student_nickname']))
-                    ->where(CommonComponent::escapeLikeSentence('student.student_skypename', $request['student_skypename']))
                     ->where(CommonComponent::escapeLikeSentence('student.student_email', $request['student_email']))
                     ->where(CommonComponent::escapeLikeSentence('student.company_name', $request['custom_company_name']));
 
-                    if ($request['all_project_code'] != "") {
-                        $query->where(CommonComponent::escapeLikeSentence('lms_project.project_code', $request['all_project_code']));
-                    }
-                    if ($request['all_project_company_name'] != "") {
-                        $query->where(CommonComponent::escapeLikeSentence('lms_company.company_name', $request['all_project_company_name']));
-                    }
-                    if(!isset($request['check_company_code'])) {
-                        $query->where(function($query) use ($request) {
-                            $query->orWhere(CommonComponent::escapeLikeSentence('lms_company.legal_code', $request['company_code']))
-                                ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.corporation_code', $request['company_code']));
-                        });
-                    }
-                    if(isset($request['check_company_code'])) {
-                        $query->where(function($query) {
-                            $query->orWhere('point_subscription_history.corporation_code', '=', '')
-                                ->orWhereNull('point_subscription_history.corporation_code');
-                        });
-                        $query->where(function($query) {
-                            $query->orWhere('lms_company.legal_code', '=', '')
-                                ->orWhereNull('lms_company.legal_code');
-                        });
-                    }
                     if ($request['student_id'] != "") {
                         $query->where('student.student_id', '=', $request['student_id']);
                     }
@@ -1085,7 +961,6 @@ class StudentController extends BaseController
 
         $studentList = $queryBuilder->get()->map(function($item, $key) {
             $item['create_date'] = DateTimeComponent::getDate($item['create_date']);
-            $item['first_payment_date'] = DateTimeComponent::getDate($item['first_payment_date']);
             $item['first_lesson_date'] = DateTimeComponent::getDate($item['first_lesson_date']);
             $item['is_tmp_entry'] = StudentEntryTypeEnum::getDescription($item['is_tmp_entry']);
 
@@ -1106,7 +981,6 @@ class StudentController extends BaseController
             $input["学習者メール"] = $this->convertShijis($item['student_email']);
             $input["法人名"] = $this->convertShijis($item['custom_company_name']);
             $input["初回登録日"] = $this->convertShijis($item['create_date']);
-            $input["初回支払日"] = $this->convertShijis($item['first_payment_date']);
             $input["最終ログイン日"] = $this->convertShijis($item['last_login_date']);
             $input["初回受講日"] = $this->convertShijis($item['first_lesson_date']);
             $input["通算受講回数"] = $this->convertShijis($item['lesson_count']);
@@ -1134,34 +1008,35 @@ class StudentController extends BaseController
         $studentInfo->lang_types = LangTypeOption::asSelectArray();
         $studentInfo->lms_prefectures = LmsPrefecture::where('delete_flag', 0)->pluck('prefecture_name', 'prefecture_id')->toArray();
         $studentInfo->time_zones = TimeZone::pluck('timezone_name_native', 'timezone_id')->toArray();
-        if ($studentInfo->is_lms_user) {
-            $studentInfo->lms_project_students = LmsProjectStudent::select('lms_company.company_name as company_name',
-                'lms_project.project_code as project_code',
-                'lms_company.legal_code as legal_code',
-                'lms_project.corporation_flag as corporation_flag',
-                'lms_project.buy_course_continue as buy_course_continue',
-                'lms_project_student.project_student_id as project_student_id',
-                'lms_project_student.buy_course_flag as buy_course_flag',
-                'lms_project_student.department_name as department_name',
-                'lms_project_student.employee_number as employee_number',
-                'lms_project_student.department_number as department_number',
-            )
-                ->Join('student', function($join) {
-                    $join->on('lms_project_student.student_id', '=', 'student.student_id');
-                })
-                ->Join('lms_project', function($join) {
-                    $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
-                })
-                ->leftJoin('lms_company', function($join) {
-                    $join->on('lms_project_student.company_id', '=', 'lms_company.company_id');
-                })
-                ->where('lms_project_student.student_id', $id)
-                ->where('lms_project_student.delete_flag', 0)
-                ->get()
-                ->toArray();
-        }
+        $studentInfo->lms_project_students = LmsProjectStudent::select('lms_company.company_name as company_name',
+            'lms_project.project_code as project_code',
+            'lms_company.legal_code as legal_code',
+            'lms_project.corporation_flag as corporation_flag',
+            'lms_project.buy_course_continue as buy_course_continue',
+            'lms_project_student.project_student_id as project_student_id',
+            'lms_project_student.buy_course_flag as buy_course_flag',
+            'lms_project_student.department_name as department_name',
+            'lms_project_student.employee_number as employee_number',
+            'lms_project_student.department_number as department_number',
+        )
+            ->Join('student', function($join) {
+                $join->on('lms_project_student.student_id', '=', 'student.student_id');
+            })
+            ->Join('lms_project', function($join) {
+                $join->on('lms_project_student.project_id', '=', 'lms_project.project_id');
+            })
+            ->leftJoin('lms_company', function($join) {
+                $join->on('lms_project_student.company_id', '=', 'lms_company.company_id');
+            })
+            ->where('lms_project_student.student_id', $id)
+            ->where('lms_project_student.delete_flag', 0)
+            ->get()
+            ->toArray();
         
         $studentInfo->_token = csrf_token();
+        $studentInfo->lms_user = LmsUserEnum::CORPORATION;
+
+        $studentInfo->countries = Country::pluck('country_name', 'country_id');
 
         return view('student.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -1191,7 +1066,6 @@ class StudentController extends BaseController
         $studentInfo->student_first_name_kata = $request->student_first_name_kata;
         $studentInfo->student_last_name_kata = $request->student_last_name_kata;
         $studentInfo->student_name_kana = ($request->student_first_name_kata ?? "") ." ".  ($request->student_last_name_kata ?? "");
-        $studentInfo->student_skypename = $request->student_skypename;
         $studentInfo->student_nickname = $request->student_nickname;
         $studentInfo->student_email = $request->student_email;
         if (isset($request->company_name)) {
@@ -1199,18 +1073,15 @@ class StudentController extends BaseController
         }
         $studentInfo->student_introduction = $request->student_introduction;
         $studentInfo->student_home_tel = $request->student_home_tel;
-        $studentInfo->postcode = $request->postcode;
-        $studentInfo->prefecture_number = $request->prefecture_number;
-        $studentInfo->student_address = $request->student_address;
-        $studentInfo->student_address1 = $request->student_address1;
-        $studentInfo->student_address2 = $request->student_address2;
-        $studentInfo->student_address3 = $request->student_address3;
         $studentInfo->is_sending_dm = $request->is_sending_dm;
         $studentInfo->direct_mail_flag = $request->direct_mail_flag;
         $studentInfo->lang_type = $request->lang_type;
         $studentInfo->timezone_id = $request->timezone_id;
         $studentInfo->student_comment_text = $request->student_comment_text;
         $studentInfo->in_japan_flag = $request->in_japan_flag;
+        $studentInfo->country_id = $request->country_id;
+        $studentInfo->city = $request->city;
+        $studentInfo->is_lms_user = $request->is_lms_user;
 
         $studentInfo->save();  
 

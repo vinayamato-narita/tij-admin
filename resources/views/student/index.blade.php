@@ -58,11 +58,7 @@
                                                     <th class="text-left width-130">@sortablelink('student_id', '学習者番号')</th>
                                                     <th class="text-left min-width-150">@sortablelink('student_name', '学習者名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('student_nickname', 'ニックネーム')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student_skypename', 'スカイプ名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('custom_company_name', '法人名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('all_project_code', '企業ID')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('all_project_company_name', '企業名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('company_code', '法人コード')</th>
                                                     <th class="text-left min-width-120">@sortablelink('create_date', '初回登録日時')</th>
                                                     <th class="text-left min-width-120">@sortablelink('last_login_date', '最終ログイン日時')</th>
                                                     <th class="text-left min-width-120">@sortablelink('last_reserve_date', '最新予約日時')</th>
@@ -79,11 +75,7 @@
                                                         <td class="text-left">{{ $student->student_id }}</td>
                                                         <td class="text-left">{{ $student->student_name }}</td>
                                                         <td class="text-left">{{ $student->student_nickname }}</td>
-                                                        <td class="text-left">{{ $student->student_skypename }}</td>
                                                         <td class="text-left">{{ $student->custom_company_name }}</td>
-                                                        <td class="text-left">{{ trim($student->all_project_code, '/') }}</td>
-                                                        <td class="text-left">{{ trim($student->all_project_company_name, '/') }}</td>
-                                                        <td class="text-left">{{ trim($student->company_code, '/') }}</td>
                                                         <td class="text-left">{{ $student->create_date }}</td>
                                                         <td class="text-left">{{ $student->last_login_date }}</td>
                                                         <td class="text-left">{{ $student->last_reserve_date }}</td>

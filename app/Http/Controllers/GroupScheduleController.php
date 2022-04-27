@@ -8,6 +8,7 @@ use App\Enums\AutoRecording;
 use App\Enums\Boolean;
 use App\Enums\StatusCode;
 use App\Enums\LangType;
+use App\Enums\SubsPaidStatus;
 use App\Models\Teacher;
 use App\Models\Lesson;
 use App\Models\LessonText;
@@ -241,11 +242,23 @@ class GroupScheduleController extends BaseController
             ->where('lesson_schedule.lesson_starttime', '<=', $endDate)
             ->get()->toArray();
 
+            $boughtCourse = DB::table('point_subscription_history')
+                            ->leftJoin('course', 'course.course_id', '=', 'point_subscription_history.course_id')
+                            ->where('course.course_type', '=', CourseTypeEnum::GROUP_COURSE)
+                            ->where('point_subscription_history.del_flag', '<>', 1)
+                            ->where('point_subscription_history.paid_status', '=', SubsPaidStatus::SUCCESS)
+                            ->groupBy('course_id')
+                            ->havingRaw("count(point_subscription_history_id) > 0")
+                            ->selectRaw('point_subscription_history.course_id')
+                            ->pluck('course_id', 'course_id')
+                            ->toArray();
+
         // Log::info($scheduleList);
         echo json_encode(array(
             'status' => 200,
             'error_message' => '',
             'data' => $scheduleList,
+            'boughtCourse' => $boughtCourse,
         ));
         return;
     }
@@ -343,17 +356,33 @@ class GroupScheduleController extends BaseController
             return;
         }
 
-        $scheduleCheck = DB::table('lesson_schedule')
-            ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
-            ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson']);
+        // check bought course
+        $boughtCourse = DB::table('point_subscription_history')
+                        ->where('point_subscription_history.course_id', '=', $request['selectedCourse'])
+                        ->where('point_subscription_history.del_flag', '<>', 1)
+                        ->where('point_subscription_history.paid_status', '=', SubsPaidStatus::SUCCESS)
+                        ->get()
+                        ->toArray();
+        // case update schedule
         if ($editFlag) {
-            $scheduleCheck->where('lesson_schedule.lesson_schedule_id', '!=', $request['selectedEvent']['lesson_schedule_id']);
-        }
-        $scheduleCheck = $scheduleCheck->get()->toArray();
-        if (!empty($scheduleCheck)) {
+            if (!empty($boughtCourse)) {
+                DB::table('lesson_schedule')
+                    ->where('lesson_schedule_id', $request['selectedEvent']['lesson_schedule_id'])
+                    ->update([
+                        'teacher_id' => $request['selectedTeacher']
+                    ]);
+
+                echo json_encode(array(
+                    'status' => 200,
+                    'error_message' => ''
+                ));
+                return;
+            }
+        } else if (!empty($boughtCourse)) {
+            // case create schedule
             echo json_encode(array(
                 'status' => 400,
-                'error_message' => __('こちらレッスンのスケジュールが既に登録されているため、登録できません。')
+                'error_message' => __('申込済の学習者がいるためレッスンスケジュールを登録できません')
             ));
             return;
         }
@@ -460,8 +489,8 @@ class GroupScheduleController extends BaseController
             DB::table('lesson_schedule')
                 ->where('lesson_schedule_id', $request['selectedEvent']['lesson_schedule_id'])
                 ->update([
-                    'course_id' => $request['selectedCourse'],
-                    'lesson_id' => $request['selectedLesson'],
+                    // 'course_id' => $request['selectedCourse'],
+                    // 'lesson_id' => $request['selectedLesson'],
                     'teacher_id' => $request['selectedTeacher'],
                     'lesson_starttime' => $startDateTime,
                     'lesson_endtime' => $endDateTime,

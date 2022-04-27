@@ -601,8 +601,8 @@
         data() {
             return {
                 csrfToken: Laravel.csrfToken,
-                messageConfirm : 'このレッスンをコースに解除しますか？',
-                messageConfirmTest : 'このテストをコースに解除しますか？',
+                messageConfirm : 'このレッスンを削除しますか？',
+                messageConfirmTest : 'このテストを削除しますか？',
                 messageConfirmVideo: 'この動画を削除しますか？',
                 messageConfirmCampaign : 'このキャンペーンを削除しますか？',
                 courseENName : '',

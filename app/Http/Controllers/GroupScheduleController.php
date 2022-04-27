@@ -248,9 +248,8 @@ class GroupScheduleController extends BaseController
                             ->where('point_subscription_history.del_flag', '<>', 1)
                             ->where('point_subscription_history.paid_status', '=', SubsPaidStatus::SUCCESS)
                             ->groupBy('course_id')
-                            ->havingRaw("count(point_subscription_history_id) > 0")
                             ->selectRaw('point_subscription_history.course_id')
-                            ->pluck('course_id', 'course_id')
+                            ->pluck('course_id')
                             ->toArray();
 
         // Log::info($scheduleList);

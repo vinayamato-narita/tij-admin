@@ -239,8 +239,12 @@ export default {
                 } else if (!this.dataRegisted[i][j] && this.currentIndex != this.lessonScheduleInPast) {
                     this.submitFlgConds = true;
                 }
-                
-                if (this.dataRegisted[i][j] && this.itemSelected['course_type'] != 1) {
+
+                if (this.currentIndex > this.lessonScheduleInPresent) {
+                    if (this.dataRegisted[i][j] && this.itemSelected['course_type'] != 1 && (( j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex)) {
+                        this.removeFlgConds = true;
+                    }
+                } else if (this.dataRegisted[i][j] && this.currentIndex != this.lessonScheduleInPast) {
                     this.removeFlgConds = true;
                 }
             } else {
@@ -248,8 +252,6 @@ export default {
                 this.submitFlgConds = false
                 this.removeFlgConds = false
                 this.lessonNameSelected = ''
-                // this.checkConditionSubmit()
-                // this.checkConditionRemove()
             }
         },
         checkConditionSubmit() {
@@ -277,7 +279,8 @@ export default {
             let idx = 0
             let that = this
             let submitBulkRegistionFlg = true;
-            let errorMessage = "";
+            let errorMessage = ""
+            let selectedFlg = false
 
             if (this.currentIndex == this.lessonScheduleInPast) {
                 submitBulkRegistionFlg = false;
@@ -286,6 +289,7 @@ export default {
                 for (let i = 0; i < this.numRow; i++ ) {
                     for (let j = 0; j < 7; j++) {
                         if (this.dataSelected[i][j] == true) {
+                            selectedFlg = true
                             if (!((j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex)) {
                                 submitBulkRegistionFlg = false;
                                 errorMessage = "登録可能な日時を選択してください"
@@ -308,6 +312,11 @@ export default {
                         break;
                     }
                 }
+            }
+
+            if (!selectedFlg) {
+                submitBulkRegistionFlg = false;
+                errorMessage = "登録可能な日時を選択してください"
             }
 
             if (!submitBulkRegistionFlg) {
@@ -348,48 +357,44 @@ export default {
             }
         },
         bulkRemove() {
-            // if (!this.removeFlgConds) {
-            //     this.$swal({
-            //         text: "レッスンを登録しますか？",
-            //         icon: "error",
-            //         confirmButtonText: "OK",
-            //         showCancelButton : true,
-            //         cancelButtonText : "閉じる"
-            //     }).then(result => {
-            //     });
-            // }
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
-            let submitBulkRegistionFlg = true;
+            let submitBulkRemoveFlg = true;
             let errorMessage = "";
+            let selectedFlg = false
 
-            for (let i = 0; i < this.numRow; i++ ) {
-                for (let j = 0; j < 7; j++) {
-                    if(this.dataSelected[i][j] && this.dataLessonSchedule[i][j][0]['course_type'] == 1) {
-                        submitBulkRegistionFlg = false;
-                        errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
-                        break;
-                    } else if (!this.dataRegisted[i][j] && this.dataSelected[i][j]) {
-                        submitBulkRegistionFlg = false;
-                        errorMessage = "削除可能な日時を選択してください"
-                        break;
-                    } else if(this.dataRegisted[i][j] && this.dataSelected[i][j]){
-                        dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
-                        idx++
+            if (this.currentIndex == this.lessonScheduleInPast) {
+                submitBulkRemoveFlg = false;
+                errorMessage = "登録可能な日時を選択してください"
+            } else {
+                for (let i = 0; i < this.numRow; i++ ) {
+                    for (let j = 0; j < 7; j++) {
+                        if (this.dataSelected[i][j] == true) {
+                            selectedFlg = true;
+                            if(this.dataSelected[i][j] && this.dataLessonSchedule[i][j][0]['course_type'] == 1) {
+                                submitBulkRemoveFlg = false;
+                                errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
+                                break;
+                            } else if ((!this.dataRegisted[i][j] && this.dataSelected[i][j]) || (!((j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex) && this.dataSelected[i][j])) {
+                                submitBulkRemoveFlg = false;
+                                errorMessage = "削除可能な日時を選択してください"
+                                break;
+                            } else if(this.dataRegisted[i][j] && this.dataSelected[i][j]){
+                                dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']
+                                idx++
+                            }
+                        }
                     }
                 }
             }
-            // console.log(submitBulkRegistionFlg);
-            // console.log(dataBulkResistration);
-            
-            // if (submitBulkRegistionFlg && dataBulkResistration.length == 0) {
-            //     console.log('xxx');
-            //     submitBulkRegistionFlg = false;
-            //     errorMessage = "削除可能な日時を選択してください"
-            // }
 
-            if (!submitBulkRegistionFlg) {
+             if (!selectedFlg) {
+                submitBulkRemoveFlg = false;
+                errorMessage = "削除可能な日時を選択してください"
+            }
+
+            if (!submitBulkRemoveFlg) {
                     this.$swal({
                         text: errorMessage,
                         icon: "error",
@@ -424,19 +429,13 @@ export default {
             }
         },
         remove() {
-            // if (!this.removeFlgConds) {
-            //     this.$swal({
-            //         text: "レッスンを登録しますか？",
-            //         icon: "error",
-            //         confirmButtonText: "OK",
-            //         showCancelButton : true,
-            //         cancelButtonText : "閉じる"
-            //     }).then(result => {
-            //     });
-            // }
+            if (!this.removeFlgConds) {
+                return false;
+            }
+
             this.flagShowLoader = true;
             let that = this
-
+            
             axios
                 .post(that.urlRemoveLesson, {
                     lesson_schedule_id : this.itemSelected['lesson_schedule_id']

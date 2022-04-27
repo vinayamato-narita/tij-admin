@@ -304,7 +304,8 @@
 
 
                                         <div class="form-group row " v-if="courseType == 0 || courseType == 2">
-                                            <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :
+                                            <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :                                                <span class="glyphicon glyphicon-star"
+                                            ></span>
                                             </label>
                                             <div class="col-md-6">
                                                 <input class="form-control" style="max-width: 100px" id="expireDay" type="number" name="expireDay" v-validate="'required|min_value:1|max_value:1000000000'" @input="changeInput()"  v-model="expireDay"  />
@@ -743,7 +744,7 @@
                 this.messageText = "";
             },
             validateDepend(depend) {
-                this.$validator.validate(depend)
+              parseInt(this.minReserveCount)  > parseInt(this.maxReserveCount)?this.$validator.validate(depend): this.$validator.reset();
             }
         },
      }

@@ -337,7 +337,7 @@
                                                     &nbsp;
                                                     <label
                                                         class="radio"
-                                                        for="teacher-sex-0"
+                                                        for="teacher-sex-1"
                                                     >
                                                         <input
                                                             name="teacherSex"

@@ -312,6 +312,8 @@
 
                                         <div class="form-group row " v-if="courseType == 0 || courseType == 2">
                                             <label class="col-md-3 col-form-label text-md-right" for="expireDay">有効日数 :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
                                             </label>
                                             <div class="col-md-6">
                                                 <input class="form-control" style="max-width: 100px" id="expireDay" type="number" name="expireDay" @input="changeInput()"  v-model="expireDay" v-validate="'required|min_value:1|max_value:1000000000'" />

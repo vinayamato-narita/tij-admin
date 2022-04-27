@@ -100,7 +100,9 @@ class GroupLessonReserveController extends BaseController
         ]);
         $course = Course::where('course_id', $id)
             ->with(['childCourse', 'lessonSchedules'])
-            ->withCount(['studentPointHistories'])
+            ->withCount(['pointSubscriptionHistories' => function ($query) {
+                $query->select(DB::raw('count(distinct(student_id))'));
+            }])
             ->first();
         $course['group_lesson'] = $course->group_lesson;
         

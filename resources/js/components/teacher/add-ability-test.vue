@@ -130,7 +130,8 @@
                     <div class="line"></div>
                     <div class="form-group">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-100 mr-2" v-on:click="submit">登録</button>
+                            <button v-if="!disabled" type="submit" :class="['btn', 'btn-primary', 'w-100', 'mr-2']" v-on:click="submit">登録</button>
+                            <button v-else type="submit" :class="['btn', 'btn-primary', 'w-100', 'mr-2', 'disabled']" v-on:click="submit" disabled>登録</button>
                             <a v-on:click="hide" class="btn btn-default w-100">閉じる</a></div>
                     </div>
                 </div>
@@ -165,6 +166,7 @@
                 lastPage : 0,
                 auto : 'auto',
                 checkedIds : [],
+                disabled : false
 
             };
         },
@@ -215,6 +217,7 @@
 
             },
             submit() {
+                this.disabled = true;
                 let that = this;
                 axios
                     .post(that.registerUrl, that.checkedIds)
@@ -233,7 +236,7 @@
                 set: function (value) {
                     this.checkedIds = [];
                     if (value) {
-                        this.checkedIds = this.dataList.map((lesson) => lesson.lesson_id);
+                        this.checkedIds = this.dataList.map((test) => test.test_id);
                     }
                 }
             }

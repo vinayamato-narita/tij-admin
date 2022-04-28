@@ -475,7 +475,6 @@ class GroupScheduleController extends BaseController
                 ->where('lesson_schedule.lesson_schedule_id', '=', $request['selectedEvent']['lesson_schedule_id'])
                 ->where('lesson_schedule.course_id', '=', $request['selectedCourse'])
                 ->where('lesson_schedule.lesson_id', '=', $request['selectedLesson'])
-                ->where('lesson_schedule.teacher_id', '=', $request['selectedTeacher'])
                 ->get()->toArray();
             if (empty($schedule)) {
                 echo json_encode(array(

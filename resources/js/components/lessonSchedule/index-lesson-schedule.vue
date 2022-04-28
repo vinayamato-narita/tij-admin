@@ -296,7 +296,10 @@ export default {
                                 break;
                             } else if(this.dataRegisted[i][j] || (this.dataLessonSchedule[i][j]['0']['course_type'] != 'undefined' && this.dataLessonSchedule[i][j]['0']['course_type'] == 1)) {
                                 submitBulkRegistionFlg = false;
-                                errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
+                                errorMessage = "プライベートレッスンのスケジュールを登録・削除できません。"
+                                if (this.dataLessonSchedule[i][j]['0']['course_type'] == 1) {
+                                    errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
+                                }
                                 break;
                             } else {
                                 dataBulkResistration[idx] = new Object()
@@ -372,13 +375,13 @@ export default {
                     for (let j = 0; j < 7; j++) {
                         if (this.dataSelected[i][j] == true) {
                             selectedFlg = true;
-                            if(this.dataSelected[i][j] && this.dataLessonSchedule[i][j][0]['course_type'] == 1) {
-                                submitBulkRemoveFlg = false;
-                                errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
-                                break;
-                            } else if ((!this.dataRegisted[i][j] && this.dataSelected[i][j]) || (!((j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex) && this.dataSelected[i][j])) {
+                            if ((!this.dataRegisted[i][j] && this.dataSelected[i][j]) || (!((j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex) && this.dataSelected[i][j])) {
                                 submitBulkRemoveFlg = false;
                                 errorMessage = "削除可能な日時を選択してください"
+                                break;
+                            } else if(this.dataSelected[i][j] && this.dataLessonSchedule[i][j][0]['course_type'] == 1) {
+                                submitBulkRemoveFlg = false;
+                                errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
                                 break;
                             } else if(this.dataRegisted[i][j] && this.dataSelected[i][j]){
                                 dataBulkResistration[idx] = this.dataLessonSchedule[i][j][0]['lesson_schedule_id']

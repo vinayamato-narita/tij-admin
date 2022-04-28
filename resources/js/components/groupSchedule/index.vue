@@ -53,7 +53,7 @@
             </div>
         </main>
         <loader :flag-show="flagShowLoader"></loader>
-        <edit-schedule-modal :selected-event="selectedEvent" :selected-time="selectedTime" :course-data="courseData"></edit-schedule-modal>
+        <edit-schedule-modal :selected-event="selectedEvent" :bought-course="boughtCourse" :selected-time="selectedTime" :course-data="courseData"></edit-schedule-modal>
     </div>
 </template>
 
@@ -84,7 +84,8 @@ export default {
             courseData : null,
             events: [
               // events.
-            ]
+            ],
+            boughtCourse: []
         }
     },
     methods :{
@@ -121,6 +122,7 @@ export default {
             .then(function (response) {
                 console.log(response)
                 that.events = response.data.data
+                that.boughtCourse = response.data.boughtCourse
             })
             .catch(function (error) {
             });

@@ -18,6 +18,8 @@ return [
     ],
     LangTypeOption::class => [
         LangTypeOption::JAPANESE => '日本語',
+        LangTypeOption::ENGLISH => '英語',
+        LangTypeOption::CHINESE => '中国語',
     ],
     TestType::class => [
         TestType::CONFIRMED => '確認テスト',

@@ -16,20 +16,14 @@
               <div class="row justify-content-center">
                 <div class="col-sm-8">
                   <div class="form-group">
-                    <input class="form-control" placeholder="メールアドレス" type="text" name="email" v-validate="" v-model="model.email" />
-                    <div class="input-group error" role="alert" v-if="errors.has('email')">
-                      {{ errors.first("email") }}
-                    </div>
+                    <input class="form-control" placeholder="メールアドレス" type="text" name="email" v-model="model.email" />
                   </div>
                 </div>
               </div>
               <div class="row justify-content-center">
                 <div class="col-sm-8">
                   <div class="form-group">
-                    <input class="form-control" type="password" placeholder="パスワード" name="password" v-validate="" v-model="model.password" />
-                    <div class="input-group error" role="alert" v-if="errors.has('password')">
-                      {{ errors.first("password") }}
-                    </div>
+                    <input class="form-control" type="password" placeholder="パスワード" name="password" v-model="model.password" />
                   </div>
                 </div>
               </div>
@@ -44,6 +38,9 @@
               <div class="row justify-content-center">
                 <div class="col-sm-8 p-l-20">
                   <a class="btn-link px-0" :href="urlForgotPassword">パスワードを忘れた方へ</a><br>
+                  <div class="error text-center" role="alert" v-if="data.message">
+                    {{ data.message }}
+                  </div>
                   <button class="btn btn-primary px-4 btn-login" type="submit">ログイン</button>
                 </div>
               </div>
@@ -90,26 +87,8 @@ export default {
   },
   methods: {
     submit() {
-      let that = this;
-      this.$validator.validateAll().then(valid => {
-        if (valid) {
-          this.flagShowLoader = true;
-          that.$refs.formLogin.submit();
-        } else {
-          this.$el
-            .querySelector(
-              "input[name=" + Object.keys(this.errors.collect())[0] + "]"
-            )
-            .focus();
-          $("html, body").animate({
-              scrollTop: $(
-                "input[name=" + Object.keys(this.errors.collect())[0] + "]"
-              ).offset().top - 104
-            },
-            500
-          );
-        }
-      });
+      this.flagShowLoader = true;
+      this.$refs.formLogin.submit();
     },
 
   }

@@ -368,7 +368,7 @@
                                                                                                                             :format="'YYYY/MM/DD'"
                                                                                                                             type="date"
                                                                                                                     ></date-picker>-->
-                                                            <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateDate">
+                                                            <input type="hidden" name="decideDateDate" v-validate="" v-model="decideDateDate">
 
 
                                                             <div class="input-group is-danger" role="alert">
@@ -381,7 +381,7 @@
                                                                                                                             :format="'HH:mm'"
                                                                                                                             type="time"
                                                                                                                     ></date-picker>-->
-                                                            <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateTime">
+                                                            <input type="hidden" name="decideDateDate" v-validate="" v-model="decideDateTime">
 
                                                         </div>
 
@@ -409,7 +409,7 @@
                                                                                                                             class="hidden"
                                                                                                                             type="date"
                                                                                                                     ></date-picker>-->
-                                                            <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateDate">
+                                                            <input type="hidden" name="reverseEndDateDate" v-validate="" v-model="reverseEndDateDate">
 
 
                                                             <div class="input-group is-danger" role="alert">
@@ -424,7 +424,7 @@
 
                                                                                                                             type="time"
                                                                                                                     ></date-picker>-->
-                                                            <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateTime">
+                                                            <input type="hidden" name="reverseEndDateDate" v-validate="" v-model="reverseEndDateTime">
 
                                                         </div>
 

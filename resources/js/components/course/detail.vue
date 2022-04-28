@@ -178,6 +178,16 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">受講回数 :
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+
+                                            {{this.course.point_count}}
+
+                                        </div>
+                                    </div>
+
                                     <div class="form-group row " v-if="this.course.course_type === 0 || this.course.course_type === 2">
                                         <label class="col-md-3 col-form-label text-md-right">有効日数 :
                                         </label>

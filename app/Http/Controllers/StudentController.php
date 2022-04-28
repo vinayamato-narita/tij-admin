@@ -1160,6 +1160,9 @@ class StudentController extends BaseController
                 ->get()
                 ->toArray();
         }
+        $newArr=explode(' ',$studentInfo->student_name);
+        $studentInfo['student_first_name']=$newArr[0];
+        $studentInfo['student_last_name']=$newArr[1];
         
         $studentInfo->_token = csrf_token();
 

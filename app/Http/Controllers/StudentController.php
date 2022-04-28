@@ -1036,6 +1036,9 @@ class StudentController extends BaseController
         $studentInfo->_token = csrf_token();
         $studentInfo->lms_user = LmsUserEnum::CORPORATION;
 
+        $studentInfo->student_first_name=explode(' ', $studentInfo->student_name,2)[0];
+        $studentInfo->student_last_name=explode(' ', $studentInfo->student_name,2)[1];
+
         $studentInfo->countries = Country::pluck('country_name', 'country_id');
 
         return view('student.edit', [

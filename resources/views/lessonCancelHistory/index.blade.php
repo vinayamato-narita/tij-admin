@@ -50,8 +50,8 @@
                                                 @foreach ($historyList as $index => $history)
                                                     <tr>
                                                         <td class="text-left">{{ $history->cancel_date }}</td>
-                                                        <td class="text-left">{{ $history->lesson_date }}</td>
-                                                        <td class="text-left">{{ $history->lesson_starttime }}</td>
+                                                        <td class="text-left">{{ date('Y-m-d', strtotime($history->lesson_date)) }}</td>
+                                                        <td class="text-left">{{ date('H:i:s', strtotime($history->lesson_starttime)) }}</td>
                                                         <td class="text-left">{{ $history->teacher->teacher_name }}</td>
                                                         <td class="text-left">{{ $history->student_id }}</td>
                                                         <td class="text-left">{{ $history->student->student_name }}</td>

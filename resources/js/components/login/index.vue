@@ -16,7 +16,7 @@
               <div class="row justify-content-center">
                 <div class="col-sm-8">
                   <div class="form-group">
-                    <input class="form-control" placeholder="メールアドレス" type="text" name="email" v-validate="'required|email'" v-model="model.email" />
+                    <input class="form-control" placeholder="メールアドレス" type="text" name="email" v-validate="" v-model="model.email" />
                     <div class="input-group error" role="alert" v-if="errors.has('email')">
                       {{ errors.first("email") }}
                     </div>
@@ -26,7 +26,7 @@
               <div class="row justify-content-center">
                 <div class="col-sm-8">
                   <div class="form-group">
-                    <input class="form-control" type="password" placeholder="パスワード" name="password" v-validate="'required|min:8'" v-model="model.password" />
+                    <input class="form-control" type="password" placeholder="パスワード" name="password" v-validate="" v-model="model.password" />
                     <div class="input-group error" role="alert" v-if="errors.has('password')">
                       {{ errors.first("password") }}
                     </div>

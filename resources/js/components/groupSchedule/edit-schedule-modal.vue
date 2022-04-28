@@ -23,6 +23,7 @@
                                     value-type="format"
                                     format="YYYY/MM/DD"
                                     :disabled-date="notBeforeDateNow"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 ></date-picker>
                             </div>
                             <div class="col-md-3">
@@ -34,6 +35,7 @@
                                   type="time"
                                   placeholder="HH:mm"
                                   :disabled-time="notBeforeTimeNow"
+                                  :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 ></date-picker>
                             </div>
                         </div>
@@ -60,6 +62,7 @@
                                     v-validate="{ is_not: 0 }"
                                     v-model="selectedCourse"
                                     @change="onChangeCourse($event)"
+                                    :disabled="selectedEvent != null"
                                 >
                                     <option value="0">選択されていません</option>
                                     <option v-for="option in courseData" v-bind:value="option.course_id">
@@ -84,6 +87,7 @@
                                     v-validate="{ is_not: 0 }"
                                     v-model="selectedLesson"
                                     @change="onChangeLesson($event)"
+                                    :disabled="selectedEvent != null"
                                 >
                                     <option value="0">選択されていません</option>
                                     <option v-for="option in lessonData" v-bind:value="option.lesson_id">
@@ -126,7 +130,7 @@
                             </label>
                             <div class="col-md-6 d-flex justify-content-between align-items-center flex-wrap">
                                 <label class="switch mb-0">
-                                    <input type="checkbox" v-model="linkZoomScheduleFlag">
+                                    <input type="checkbox" v-model="linkZoomScheduleFlag" :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)">
                                     <span class="slider round"></span>
                                 </label>
                                 <a v-if="linkZoomScheduleFlag" @click="showZoomSetting = !showZoomSetting" href="javascript:;" class="btn-link-zoom">Zoom設定詳細表示</a>
@@ -145,6 +149,7 @@
                                     name="zoomUrl"
                                     v-model="zoomUrl"
                                     v-validate="{ required: !linkZoomScheduleFlag }"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 >
                                 <div v-if="initFlag" class="input-group is-danger error" role="alert">
                                     {{ errors.first("zoomUrl") }}
@@ -162,6 +167,7 @@
                                     class="form-control"
                                     name="selectedZoomAccount"
                                     v-model="zoomAccountId"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 >
                                     <option value=""></option>
                                     <option v-for="item in zoomAccounts" :key="item.zoom_account_id" :value="item.zoom_account_id">{{item.zoom_account_name}}</option>
@@ -184,6 +190,7 @@
                                     id="inline-radio1"
                                     v-validate="'required'"
                                     v-model="joinBeforeHost"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 />
                                 <label class="form-check-label" for="inline-radio1"
                                     >無効</label
@@ -198,6 +205,7 @@
                                     id="inline-radio2"
                                     v-validate="'required'"
                                     v-model="joinBeforeHost"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 />
                                 <label class="form-check-label" for="inline-radio2"
                                     >有効</label
@@ -224,6 +232,7 @@
                                     name="waitingRoom"
                                     v-validate="'required'"
                                     v-model="waitingRoom"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 />
                                 <label class="form-check-label" for="inline-radio3"
                                     >無効</label
@@ -238,6 +247,7 @@
                                     name="waitingRoom"
                                     v-validate="'required'"
                                     v-model="waitingRoom"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 />
                                 <label class="form-check-label" for="inline-radio4"
                                     >有効</label
@@ -256,11 +266,12 @@
                             ></label>
                             <div class="col-md-6 col-form-label">
                                 <select
-                                class="form-control"
-                                id="autoRecording"
-                                name="autoRecording"
-                                v-validate="'required'"
-                                v-model="autoRecording"
+                                    class="form-control"
+                                    id="autoRecording"
+                                    name="autoRecording"
+                                    v-validate="'required'"
+                                    v-model="autoRecording"
+                                    :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)"
                                 >
                                 <option value="0">ローカル</option>
                                 <option value="1">クラウド</option>
@@ -322,7 +333,7 @@ export default {
             zoomSetting: {}
         };
     },
-    props: [ 'event', 'selectedTime', 'selectedEvent' ],
+    props: [ 'event', 'selectedTime', 'selectedEvent', 'boughtCourse' ],
     mounted() {
 
     },

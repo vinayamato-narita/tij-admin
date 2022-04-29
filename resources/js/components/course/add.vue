@@ -319,157 +319,160 @@
                                         </div>
 
                                         <template v-if="courseType == 1">
-                                            <div class="form-group row " >
-                                                <label class="col-md-3 col-form-label text-md-right" for="minReserveCount">最小開催人数 :
-                                                    <span class="glyphicon glyphicon-star"
-                                                    ></span>
-                                                </label>
-                                                <div class="col-md-6">
+                                            <div>
+                                                <div class="form-group row " >
+                                                    <label class="col-md-3 col-form-label text-md-right" for="minReserveCount">最小開催人数 :
+                                                        <span class="glyphicon glyphicon-star"
+                                                        ></span>
+                                                    </label>
+                                                    <div class="col-md-6">
 
-                                                    <input class="form-control" id="minReserveCount" type="number" name="minReserveCount" style="max-width: 100px"  v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" @input="changeInput()" @change="validateDepend('maxReserveCount')"  v-model="minReserveCount"  />
+                                                        <input class="form-control" id="minReserveCount" type="number" name="minReserveCount" style="max-width: 100px"  v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" @input="changeInput()" @change="validateDepend('maxReserveCount')"  v-model="minReserveCount"  />
 
-                                                    <div class="input-group is-danger" role="alert">
-                                                        {{ errors.first("minReserveCount") }}
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("minReserveCount") }}
+                                                        </div>
+
+
                                                     </div>
-
-
                                                 </div>
-                                            </div>
 
-                                            <div class="form-group row " >
-                                                <label class="col-md-3 col-form-label text-md-right" for="maxReserveCount">最大申込人数 :
-                                                    <span class="glyphicon glyphicon-star"
-                                                    ></span>
-                                                </label>
-                                                <div class="col-md-6">
-                                                    <input class="form-control" id="maxReserveCount" style="max-width: 100px" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" type="number" name="maxReserveCount" @input="changeInput()" @change="validateDepend('minReserveCount')"  v-model="maxReserveCount"  />
+                                                <div class="form-group row " >
+                                                    <label class="col-md-3 col-form-label text-md-right" for="maxReserveCount">最大申込人数 :
+                                                        <span class="glyphicon glyphicon-star"
+                                                        ></span>
+                                                    </label>
+                                                    <div class="col-md-6">
+                                                        <input class="form-control" id="maxReserveCount" style="max-width: 100px" v-validate="'required|min_value:1|max_value:1000000000|custom_compare'" type="number" name="maxReserveCount" @input="changeInput()" @change="validateDepend('minReserveCount')"  v-model="maxReserveCount"  />
 
-                                                    <div class="input-group is-danger" role="alert">
-                                                        {{ errors.first("maxReserveCount") }}
+                                                        <div class="input-group is-danger" role="alert">
+                                                            {{ errors.first("maxReserveCount") }}
+                                                        </div>
+
+
                                                     </div>
-
-
                                                 </div>
-                                            </div>
 
-                                            <div class="form-group row " >
-                                                <label class="col-md-3 col-form-label text-md-right" > 開催決定日時 :
+                                                <div class="form-group row " >
+                                                    <label class="col-md-3 col-form-label text-md-right" > 開催決定日時 :
 
-                                                </label>
+                                                    </label>
 
-                                                <div class="col-md-9 col-form-label row">
-                                                    <div class="row ml-0">
-                                                        <div class="col-md-12 pr-0">
+                                                    <div class="col-md-9 col-form-label row">
+                                                        <div class="row ml-0">
+                                                            <div class="col-md-12 pr-0">
                                                        <span v-if="this.decideDateDate">
                                                             {{ getFormattedDate(this.decideDateDate)}}
                                                         </span>
-                                                            <!--                                                        <date-picker
-                                                                                                                            v-model="decideDateDate"
-                                                                                                                            :format="'YYYY/MM/DD'"
-                                                                                                                            type="date"
-                                                                                                                    ></date-picker>-->
-                                                            <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateDate">
+                                                                <!--                                                        <date-picker
+                                                                                                                                v-model="decideDateDate"
+                                                                                                                                :format="'YYYY/MM/DD'"
+                                                                                                                                type="date"
+                                                                                                                        ></date-picker>-->
+                                                                <input type="hidden" name="decideDateDate" v-validate="" v-model="decideDateDate">
 
 
-                                                            <div class="input-group is-danger" role="alert">
-                                                                {{ errors.first("decideDateDate") }}
+                                                                <div class="input-group is-danger" role="alert">
+                                                                    {{ errors.first("decideDateDate") }}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-4 pr-0">
-                                                            <!--                                                        <date-picker
-                                                                                                                            v-model="decideDateTime"
-                                                                                                                            :format="'HH:mm'"
-                                                                                                                            type="time"
-                                                                                                                    ></date-picker>-->
-                                                            <input type="hidden" name="decideDateDate" v-validate="'required'" v-model="decideDateTime">
+                                                            <div class="col-md-4 pr-0">
+                                                                <!--                                                        <date-picker
+                                                                                                                                v-model="decideDateTime"
+                                                                                                                                :format="'HH:mm'"
+                                                                                                                                type="time"
+                                                                                                                        ></date-picker>-->
+                                                                <input type="hidden" name="decideDateDate" v-validate="" v-model="decideDateTime">
+
+                                                            </div>
+
 
                                                         </div>
 
 
                                                     </div>
-
-
                                                 </div>
-                                            </div>
-                                            <div class="form-group row " >
-                                                <label class="col-md-3 col-form-label text-md-right" > 申込期限 :
+                                                <div class="form-group row " >
+                                                    <label class="col-md-3 col-form-label text-md-right" > 申込期限 :
 
-                                                </label>
+                                                    </label>
 
-                                                <div class="col-md-9 col-form-label row">
-                                                    <div class="row ml-0">
-                                                        <div class="col-md-12 pr-0">
+                                                    <div class="col-md-9 col-form-label row">
+                                                        <div class="row ml-0">
+                                                            <div class="col-md-12 pr-0">
                                                         <span v-if="this.reverseEndDateDate">
                                                             {{ getFormattedDate(this.reverseEndDateDate)}}
                                                         </span>
 
-                                                            <!--                                                        <date-picker
-                                                                                                                            v-model="reverseEndDateDate"
-                                                                                                                            :format="'YYYY/MM/DD'"
-                                                                                                                            class="hidden"
-                                                                                                                            type="date"
-                                                                                                                    ></date-picker>-->
-                                                            <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateDate">
+                                                                <!--                                                        <date-picker
+                                                                                                                                v-model="reverseEndDateDate"
+                                                                                                                                :format="'YYYY/MM/DD'"
+                                                                                                                                class="hidden"
+                                                                                                                                type="date"
+                                                                                                                        ></date-picker>-->
+                                                                <input type="hidden" name="reverseEndDateDate" v-validate="" v-model="reverseEndDateDate">
 
 
-                                                            <div class="input-group is-danger" role="alert">
-                                                                {{ errors.first("reverseEndDateDate") }}
+                                                                <div class="input-group is-danger" role="alert">
+                                                                    {{ errors.first("reverseEndDateDate") }}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-4 pr-0">
-                                                            <!--                                                        <date-picker
-                                                                                                                            v-model="reverseEndDateTime"
-                                                                                                                            :format="'HH:mm'"
-                                                                                                                            class="hidden"
+                                                            <div class="col-md-4 pr-0">
+                                                                <!--                                                        <date-picker
+                                                                                                                                v-model="reverseEndDateTime"
+                                                                                                                                :format="'HH:mm'"
+                                                                                                                                class="hidden"
 
-                                                                                                                            type="time"
-                                                                                                                    ></date-picker>-->
-                                                            <input type="hidden" name="reverseEndDateDate" v-validate="'required'" v-model="reverseEndDateTime">
+                                                                                                                                type="time"
+                                                                                                                        ></date-picker>-->
+                                                                <input type="hidden" name="reverseEndDateDate" v-validate="" v-model="reverseEndDateTime">
+
+                                                            </div>
+
 
                                                         </div>
 
 
                                                     </div>
-
-
                                                 </div>
-                                            </div>
-                                            <div class="form-group row " >
-                                                <label class="col-md-3 col-form-label text-md-right" > 開講日時 :
-                                                    <span class="glyphicon glyphicon-star"
-                                                    ></span>
-                                                </label>
+                                                <div class="form-group row " >
+                                                    <label class="col-md-3 col-form-label text-md-right" > 開講日時 :
+                                                        <span class="glyphicon glyphicon-star"
+                                                        ></span>
+                                                    </label>
 
-                                                <div class="col-md-9 col-form-label row">
-                                                    <div class="row ml-0">
-                                                        <div class="col-md-4 pr-0">
-                                                            <date-picker
-                                                                    v-model="courseStartDateDate"
-                                                                    :format="'YYYY/MM/DD'"
-                                                                    type="date"
-                                                            ></date-picker>
-                                                            <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateDate">
+                                                    <div class="col-md-9 col-form-label row">
+                                                        <div class="row ml-0">
+                                                            <div class="col-md-4 pr-0">
+                                                                <date-picker
+                                                                        v-model="courseStartDateDate"
+                                                                        :format="'YYYY/MM/DD'"
+                                                                        type="date"
+                                                                ></date-picker>
+                                                                <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateDate">
 
 
-                                                            <div class="input-group is-danger" role="alert">
-                                                                {{ errors.first("courseStartDateDate") }}
+                                                                <div class="input-group is-danger" role="alert">
+                                                                    {{ errors.first("courseStartDateDate") }}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-4 pr-0">
-                                                            <date-picker
-                                                                    v-model="courseStartDateTime"
-                                                                    :format="'HH:mm'"
-                                                                    type="time"
-                                                            ></date-picker>
-                                                            <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateTime">
+                                                            <div class="col-md-4 pr-0">
+                                                                <date-picker
+                                                                        v-model="courseStartDateTime"
+                                                                        :format="'HH:mm'"
+                                                                        type="time"
+                                                                ></date-picker>
+                                                                <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateTime">
+
+                                                            </div>
+
 
                                                         </div>
 
 
                                                     </div>
-
-
                                                 </div>
+
                                             </div>
 
 
@@ -684,14 +687,7 @@
                 formData.append("isForLMS", this.isForLMS);
                 formData.append("courseType", this.courseType);
                 formData.append("expireDay", this.expireDay);
-
-                this.$validator.validateAll().then((valid) => {
-                    if (valid) {
-                        that.publish_date_from_date.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
-                        formData.append("fromDate", moment(that.publish_date_from_date).format('YYYY-MM-DD HH:mm:ss'));
-                        that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
-                        formData.append("toDate", moment(that.publish_date_to_date).format('YYYY-MM-DD HH:mm:ss'));
-                        if (that.courseType == 1) {
+                if (that.courseType == 1) {
                             formData.append("minReserveCount", this.minReserveCount);
                             formData.append("maxReserveCount", this.maxReserveCount);
                             that.decideDateDate.setHours(that.decideDateTime.getHours(), that.decideDateTime.getMinutes())
@@ -700,7 +696,14 @@
                             formData.append("reverseEndDate", moment(that.reverseEndDateDate).format('YYYY-MM-DD HH:mm:ss'));
                             that.courseStartDateDate.setHours(that.courseStartDateTime.getHours(), that.courseStartDateTime.getMinutes())
                             formData.append("courseStartDate", moment(that.courseStartDateDate).format('YYYY-MM-DD HH:mm:ss'));
-                        }
+                }
+                this.$validator.validateAll().then((valid) => {
+                    if (valid) {
+                        that.publish_date_from_date.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
+                        formData.append("fromDate", moment(that.publish_date_from_date).format('YYYY-MM-DD HH:mm:ss'));
+                        that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
+                        formData.append("toDate", moment(that.publish_date_to_date).format('YYYY-MM-DD HH:mm:ss'));
+                      
                         that.flagShowLoader = true;
                         axios
                             .post(that.createUrl , formData, {

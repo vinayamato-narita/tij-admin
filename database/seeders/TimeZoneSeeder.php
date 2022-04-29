@@ -208,7 +208,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Cape Verde Is. ",
-                "timezone_name_native" => "(GMT-01:00) カーボベルデです。",
+                "timezone_name_native" => "(GMT-01:00) カーボベルデ",
                 "display_no" => "27",
                 "diff_time" => "-1"
             ],

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoreProcedureForGetLessonReserveMail extends Migration
+class FixSpGetLessonReserveMailSelectZoomPersonalMeetingId extends Migration
 {
     /**
      * Run the migrations.
@@ -43,6 +43,7 @@ class CreateStoreProcedureForGetLessonReserveMail extends Migration
                 ,te.teacher_id
                 ,te.teacher_name
                 ,te.teacher_nickname
+                ,te.zoom_personal_meeting_id
                 ,COALESCE(ti.teacher_name, te.teacher_name) AS   teacher_name_for_student
                 ,COALESCE(ti.teacher_nickname, te.teacher_nickname) AS   teacher_nickname_for_student
                 ,teacher_email
@@ -53,6 +54,7 @@ class CreateStoreProcedureForGetLessonReserveMail extends Migration
                 ,(SELECT student_skypename FROM student WHERE student_id = _student_id) AS student_skypename
                 ,COALESCE(ci.course_name, c.course_name) AS course_name
                 ,COALESCE(ls.zoom_url, zs.zoom_url) AS zoom_url
+                ,c.course_type
             FROM
                 lesson_schedule ls
             LEFT JOIN lesson le ON le.lesson_id = ls.lesson_id

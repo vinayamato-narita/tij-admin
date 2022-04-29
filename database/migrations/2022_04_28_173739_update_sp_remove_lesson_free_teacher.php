@@ -32,7 +32,6 @@ class UpdateSpRemoveLessonFreeTeacher extends Migration
                   @canRemove
                   ; 
             ELSE
-						select 123;
               UPDATE lesson_schedule
                SET
                     lesson_type_id = 0

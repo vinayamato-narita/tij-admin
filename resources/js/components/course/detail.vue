@@ -77,17 +77,6 @@
                                     </div>
 
 
-
-                                    <div class="form-group row ">
-                                        <label class="col-md-3 col-form-label text-md-right">受講回数 :
-                                        </label>
-                                        <div class="col-md-6 text-md-left p-2">
-
-                                            {{this.course.point_count}}
-
-                                        </div>
-                                    </div>
-
                                     <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">価格（税抜）:
                                         </label>

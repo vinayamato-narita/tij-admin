@@ -522,6 +522,53 @@ class GroupScheduleController extends BaseController
         return;
     }
 
+    public function deleteSchedule(Request $request)
+    {
+        if (empty($request['selectedEvent']) || empty($request['selectedEvent']['lesson_schedule_id'])) {
+            echo json_encode(array(
+                'status' => 400,
+                'error_message' => __('エラーが発生しました。再度お願いします。')
+            ));
+            return;
+        }
+        $scheduleId = $request['selectedEvent']['lesson_schedule_id'];
+
+        $schedule = DB::table('lesson_schedule')
+                    ->where('lesson_schedule_id', $scheduleId)
+                    ->get()->toArray();
+        if (empty($schedule)) {
+            echo json_encode(array(
+                'status' => 400,
+                'error_message' => __('エラーが発生しました。再度お願いします。')
+            ));
+            return;
+        }
+
+        // check bought course
+        $boughtCourse = DB::table('point_subscription_history')
+                        ->where('point_subscription_history.course_id', '=', $schedule[0]->course_id)
+                        ->where('point_subscription_history.del_flag', '<>', 1)
+                        ->where('point_subscription_history.paid_status', '=', SubsPaidStatus::SUCCESS)
+                        ->get()
+                        ->toArray();
+        if (!empty($boughtCourse)) {
+            echo json_encode(array(
+                'status' => 400,
+                'error_message' => __('申込済の学習者がいるためレッスンスケジュールを削除できません。')
+            ));
+            return;
+        }
+
+        // delete
+        LessonSchedule::where('lesson_schedule_id', $scheduleId)->delete();
+
+        echo json_encode(array(
+            'status' => 200,
+            'error_message' => ''
+        ));
+        return;
+    }
+
     public function getZoom()
     {
         $zoomAccountList = ZoomAccount::get()->toArray();

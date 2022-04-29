@@ -42,7 +42,7 @@ class GmoService{
         $response = curl_exec( $curl );
         $curlinfo = curl_getinfo( $curl );
         curl_close( $curl );
-Log::info($response);
+
         // レスポンスチェック
         if( $curlinfo[ 'http_code' ] != 200 ){
             // エラー

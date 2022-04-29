@@ -225,6 +225,7 @@ Route::group([
     Route::get('/groupSchedule/getData', 'GroupScheduleController@getData')->name('groupSchedule.getData');
     Route::get('/groupSchedule/getSchedule', 'GroupScheduleController@getSchedule')->name('groupSchedule.getSchedule');
     Route::post('/groupSchedule/registerSchedule', 'GroupScheduleController@registerSchedule')->name('groupSchedule.registerSchedule');
+    Route::post('/groupSchedule/deleteSchedule', 'GroupScheduleController@deleteSchedule')->name('groupSchedule.deleteSchedule');
     Route::get('/groupSchedule/getZoom', 'GroupScheduleController@getZoom')->name('groupSchedule.getZoom');
 
     //zoom account

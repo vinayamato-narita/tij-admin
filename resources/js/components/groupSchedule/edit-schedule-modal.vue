@@ -285,6 +285,7 @@
                     <div class="line"></div>
                     <div class="form-group">
                         <div class="text-center">
+                            <button type="submit" class="btn btn-default mr-2" v-if="selectedEvent != null" v-on:click="deleteSchedule">削除</button>
                             <button type="submit" class="btn btn-primary mr-2" v-on:click="registerSchedule">登録</button>
                             <a v-on:click="hide" class="btn btn-default">閉じる</a></div>
                     </div>
@@ -363,6 +364,42 @@ export default {
         },
         beforeOpen () {
 
+        },
+        deleteSchedule () {
+            let that = this;
+            that.flagShowLoader = true;
+            axios.post(that.baseUrl + '/groupSchedule/deleteSchedule', {
+                selectedEvent : that.selectedEvent
+            })
+            .then(function (response) {
+                console.log(response)
+                that.flagShowLoader = false;
+                that.hide()
+                if (response.data.status == 200) {
+                    that.$swal({
+                        text: "スケジュール削除が完了しました。",
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(result => {
+                        window.location.reload()
+                    });
+                } else {
+                    that.$swal({
+                        title: response.data.error_message,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    }).then(function (confirm) {});
+                }
+            })
+            .catch(function (error) {
+                that.flagShowLoader = false;
+                that.hide()
+                that.$swal({
+                    title: "スケジュール削除が失敗しました。",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                }).then(function (confirm) {});
+            });
         },
         registerSchedule () {
             let that = this;

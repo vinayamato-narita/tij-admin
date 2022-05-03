@@ -5,12 +5,14 @@ namespace App\Console\Commands;
 use App\Enums\CourseTypeEnum;
 use App\Enums\GroupLessonStatus;
 use App\Enums\MailType;
+use App\Enums\JobCdType;
 use App\Models\Course;
 use App\Models\LessonHistory;
 use App\Models\LessonSchedule;
 use App\Models\PointSubscriptionHistory;
 use App\Models\SendRemindMailPattern;
 use App\Models\StudentPointHistory;
+use App\Services\GmoService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -50,6 +52,7 @@ class GroupCourseDecision extends Command
     public function handle()
     {
         Log::info('group course decision batch start');
+        $gmoService = new GmoService();
 
         $yesterday = Carbon::yesterday()->format('Y-m-d');
         $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->where('group_lesson_status', GroupLessonStatus::BEFORE_DECIDE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
@@ -63,9 +66,24 @@ class GroupCourseDecision extends Command
                 if ($reserveNum < $course->min_reserve_count) {
                     $cancelCourseIds[] = $course->course_id;
 
-                    //send mail student
                     foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
+                        // cancel order
+                        try {
+                            Log::info("cancel order id:".$pointSubscriptionHistory->order_id);
+                            $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            if (!empty($order)) {
+                                $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
 
+                                if (!empty($result)) {
+                                    Log::info("cancel order success");
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            Log::info("cancel order id error:".$pointSubscriptionHistory->order_id);
+                            Log::info($e->getMessage());
+                        }
+
+                        //send mail student
                         $studentName = $pointSubscriptionHistory->student->student_name;
                         $lessonDate = '';
                         $lessonTime = '';
@@ -128,6 +146,24 @@ class GroupCourseDecision extends Command
                     }
                 } else {
                     $decideCourseIds[] = $course->course_id;
+
+                    foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
+                        // update sales order
+                        try {
+                            Log::info("update sales order id:".$pointSubscriptionHistory->order_id);
+                            $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            if (!empty($order)) {
+                                $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+
+                                if (!empty($result)) {
+                                    Log::info("update sales order success");
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            Log::info("update sales order id error:".$pointSubscriptionHistory->order_id);
+                            Log::info($e->getMessage());
+                        }
+                    }
                 }
             } catch (\Exception $e) {
                 Log::info($e->getMessage());

@@ -20,13 +20,18 @@ class FixSpStudentGetPaymentList extends Migration
           IN _lang_type varchar(10)
         )
         BEGIN
+            SET @timezone_id = COALESCE((SELECT timezone_id FROM student WHERE student_id = _student_id),1);
+            SET @time_diff_from = COALESCE((SELECT diff_time * 60 FROM timezone tz WHERE tz.timezone_id = 1 LIMIT 1),9 * 60);
+            SET @time_diff_to = COALESCE((SELECT diff_time * 60 FROM timezone WHERE timezone_id = @timezone_id),9 * 60);
+
         SELECT
             c.course_id
             ,psh.amount
             ,psh.tax
-                    ,DATE_FORMAT(psh.payment_date,'%Y/%m/%d') AS payment_date
+            ,DATE_FORMAT(DATE_ADD(DATE_ADD(psh.payment_date,INTERVAL -@time_diff_from MINUTE),INTERVAL @time_diff_to MINUTE),'%Y/%m/%d') AS payment_date
             ,psh.point_expire_date AS  point_expire_date
-            ,DATE_FORMAT(psh.begin_date,'%Y/%m/%d')   AS begin_date
+            ,DATE_FORMAT(DATE_ADD(DATE_ADD(psh.begin_date,INTERVAL -@time_diff_from MINUTE),INTERVAL @time_diff_to MINUTE),'%Y/%m/%d')   AS begin_date
+            ,DATE_FORMAT(DATE_ADD(DATE_ADD(psh.point_expire_date,INTERVAL -@time_diff_from MINUTE),INTERVAL @time_diff_to MINUTE),'%Y/%m/%d')   AS point_expire_date
             ,COALESCE(ci.course_name, c.course_name) AS course_name
             ,c.course_type
             ,psh.point_subscription_history_id

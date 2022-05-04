@@ -85,6 +85,7 @@ class FixSpStudentLessonHistoryListSelect extends Migration
                 AND ls.lesson_endtime < NOW()
                 AND CASE _course_id  WHEN 0 THEN 1=1 ELSE p.course_id = _course_id END
                 AND CASE _lesson_id WHEN 0 THEN 1=1 ELSE lsn.lesson_id = _lesson_id END
+            GROUP BY course_id, lesson_id
             ORDER BY
                  ls.lesson_date DESC,
                 ls.lesson_starttime DESC

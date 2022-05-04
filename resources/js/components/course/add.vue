@@ -687,7 +687,10 @@
                 formData.append("isForLMS", this.isForLMS);
                 formData.append("courseType", this.courseType);
                 formData.append("expireDay", this.expireDay);
-                if (that.courseType == 1) {
+             
+                this.$validator.validateAll().then((valid) => {
+                    if (valid) {
+                           if (that.courseType == 1) {
                             formData.append("minReserveCount", this.minReserveCount);
                             formData.append("maxReserveCount", this.maxReserveCount);
                             that.decideDateDate.setHours(that.decideDateTime.getHours(), that.decideDateTime.getMinutes())
@@ -696,9 +699,7 @@
                             formData.append("reverseEndDate", moment(that.reverseEndDateDate).format('YYYY-MM-DD HH:mm:ss'));
                             that.courseStartDateDate.setHours(that.courseStartDateTime.getHours(), that.courseStartDateTime.getMinutes())
                             formData.append("courseStartDate", moment(that.courseStartDateDate).format('YYYY-MM-DD HH:mm:ss'));
-                }
-                this.$validator.validateAll().then((valid) => {
-                    if (valid) {
+                            }
                         that.publish_date_from_date.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
                         formData.append("fromDate", moment(that.publish_date_from_date).format('YYYY-MM-DD HH:mm:ss'));
                         that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());

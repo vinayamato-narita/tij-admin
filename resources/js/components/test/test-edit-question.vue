@@ -296,7 +296,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="form-group row " v-if="test.test_type === 2 || test.test_type === 1">
+                                            <div class="form-group row " v-if="test.test_type === 2">
                                                 <label class="col-md-2 col-form-label text-md-left"><b>参考URLリンク :</b>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">

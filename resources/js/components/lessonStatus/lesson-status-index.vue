@@ -303,7 +303,7 @@ export default {
         submit(e) {
             let that = this;
             this.$swal({
-                text: "自由可能枠数の設定を一括設定しますか？",
+                text: "自由枠を一括設定しますか？",
                 icon: false,
                 confirmButtonText: "設定する",
                 cancelButtonText: "キャンセル",
@@ -320,7 +320,7 @@ export default {
                             that.flagShowLoader = false;
                             if (response.data.status == "OK") {
                                 that.$swal({
-                                    text: "自由可能枠数の設定が完了しました。",
+                                    text: "自由枠の設定が完了しました。",
                                     icon: "success",
                                     confirmButtonText: "OK"
                                 }).then(result => {

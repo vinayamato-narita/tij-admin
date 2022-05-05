@@ -588,7 +588,7 @@
             let that = this;
             this.$validator.extend("custom_compare", {
                 validate(value, args) {
-                    if (that.maxReserveCount < that.minReserveCount) return {valid: false }
+                    if (parseInt(that.maxReserveCount) < parseInt(that.minReserveCount) ) return {valid: false }
                     return {valid: true}
                 }
             });
@@ -754,6 +754,7 @@
             validateDepend(depend) {
                 let min = parseInt(this.minReserveCount);
                 let max = parseInt(this.maxReserveCount);
+                console.log(typeof(min));
                 min > max ? this.$validator.validate(depend): this.$validator.reset();   
             }
         },

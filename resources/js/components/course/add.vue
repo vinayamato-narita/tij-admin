@@ -752,7 +752,11 @@
                 this.messageText = "";
             },
             validateDepend(depend) {
-              parseInt(this.minReserveCount)  > parseInt(this.maxReserveCount)?this.$validator.validate(depend): this.$validator.reset();
+                let min = parseInt(this.minReserveCount);
+                let max = parseInt(this.maxReserveCount);
+                min > max ? this.$validator.validate(depend): this.$validator.reset();
+            
+               
             }
         },
      }

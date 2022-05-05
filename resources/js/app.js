@@ -167,6 +167,8 @@ import EditLangRemindMail from "./components/remindMailPatern/edit-lang-remind-m
 import LessonHistorySearch from "./components/teacher/lesson-history-search.vue"
 import EditTeacherLang from "./components/teacher/edit-teacher-lang.vue"
 import TeacherLesson from "./components/teacher/teacher-lesson.vue"
+import CreateFile from "./components/file/create-file.vue"
+import EditFile from "./components/file/edit-file.vue"
 
 new Vue({
     created() {
@@ -357,7 +359,9 @@ new Vue({
         GroupCourseUserImport,
         Preview,
         PreviewHeader,
-        PreviewNav
+        PreviewNav,
+        CreateFile,
+        EditFile
     },
     methods: {},
     mounted() {}

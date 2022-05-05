@@ -9,6 +9,13 @@ use App\Models\Review;
 use App\Models\TestQuestion;
 use App\Models\TestSubQuestion;
 use Illuminate\Http\Request;
+use App\Components\BreadcrumbComponent;
+use App\Http\Requests\CreateFileRequest;
+use App\Http\Requests\EditFileRequest;
+use App\Components\TIJAdminAzureComponent;
+use App\Enums\AzureFolderEnum;
+use Carbon\Carbon;
+use Log;
 
 class FileController extends BaseController
 {
@@ -60,6 +67,110 @@ class FileController extends BaseController
         return response()->json([
             'status' => 'OK',
             'dataList' => $fileList
+        ], StatusCode::OK);
+    }
+
+    public function index(Request $request)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'file_list']
+        ]);
+        $pageLimit = $this->newListLimit($request);
+        $queryBuilder = new File;
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('file_code', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('file_display_name', $request['search_input']));
+            });
+        }
+        
+        $files = $queryBuilder->sortable(['news_update_date' => 'desc'])->paginate($pageLimit);
+
+        return view('file.index', [
+            'breadcrumbs' => $breadcrumbs,
+            'request' => $request,
+            'pageLimit' => $pageLimit,
+            'files' => $files,
+        ]);
+    }
+
+    public function create()
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'file_list'],
+            ['name' => 'create_file'],
+        ]);
+
+        return view('file.create', [
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
+
+    public function store(CreateFileRequest $request)
+    {
+        if(!$request->isMethod('POST')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);        
+        }
+
+        $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);
+        if (!$name) {
+            return response()->json([
+                'status' => 'NG'
+            ], StatusCode::BAD_REQUEST);
+        }
+        $file = new File();
+        $file->file_name = $name;
+        $file->file_path = AzureFolderEnum::MEDIA . '/' . $name;
+        $file->file_name_original = $request->file_attach->getClientOriginalName();
+        $file->file_code = $request->file_code;
+        $file->file_display_name = $request->file_display_name;
+        $file->file_description = $request->file_description;
+
+        $file->save();
+
+        return response()->json([
+            'status' => 'OK'
+        ], StatusCode::OK);
+    }
+
+    public function edit($id)
+    {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'file_list'],
+            ['name' => 'edit_file', $id],
+        ]);
+        $fileInfo = File::where('file_id', $id)->firstOrFail();
+        $fileInfo->_token = csrf_token();
+
+        return view('file.edit', [
+            'breadcrumbs' => $breadcrumbs,
+            'fileInfo' => $fileInfo
+        ]);
+    }
+
+    public function update(EditFileRequest $request, $id)
+    {
+        if(!$request->isMethod('PUT')){
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::BAD_REQUEST);         
+        }
+
+        $fileInfo = File::where('file_id', $id)->firstOrFail();
+        $fileInfo->file_code = $request->file_code;
+        $fileInfo->file_display_name = $request->file_display_name;
+        $fileInfo->file_description = $request->file_description;
+        
+        $fileInfo->save();  
+
+        return response()->json([
+            'status' => 'OK',
         ], StatusCode::OK);
     }
 }

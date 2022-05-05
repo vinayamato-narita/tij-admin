@@ -427,6 +427,18 @@ class BreadcrumbComponent
                 'text' => 'インポート結果',
                 'route_str' => 'courseGroupUser.saveImport'
             ],
+            'file_list' => [
+                'text' => 'メディア管理',
+                'route_str' => 'file.index'
+            ],
+            'create_file' => [
+                'text' => 'メディア新規作成',
+                'route_str' => 'file.index'
+            ],
+            'edit_file' => [
+                'text' => 'メディア編集',
+                'route_str' => 'file.index'
+            ],
         ];
     }
 

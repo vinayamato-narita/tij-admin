@@ -118,6 +118,7 @@ const CATEGORY = 'CATEGORY';
 const COURSE = 'COURSE';
 
 const COURSE_TAX = 0.1;
+const FILE = 37;
 
 const MENU = [
 	PAYMENTHISTORY => [
@@ -265,7 +266,13 @@ const MENU = [
     GROUP_LESSON_HISTORY => [
     	'groupLessonHistory.index',
     	'groupLessonHistory.studentAttendance'
-    ]
+    ],
+    FILE => [
+		'file.index',
+		'file.create',
+		'file.show',
+		'file.edit',
+	]
 ];
 
 

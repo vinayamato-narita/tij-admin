@@ -158,6 +158,7 @@
             <ul class="nav-dropdown-items {{ (AdminUserRightComponent::getActiveMenu(CATEGORY) == 'c-active' || AdminUserRightComponent::getActiveMenu(COURSE) == 'c-active' || AdminUserRightComponent::getActiveMenu(LESSON) == 'c-active' || AdminUserRightComponent::getActiveMenu(TEXT) == 'c-active' ||
             AdminUserRightComponent::getActiveMenu(PREPARATION) == 'c-active' ||
             AdminUserRightComponent::getActiveMenu(REVIEW) == 'c-active' ||
+            AdminUserRightComponent::getActiveMenu(FILE) == 'c-active' ||
             AdminUserRightComponent::getActiveMenu(TEST) == 'c-active') ? '' : 'hidden' }}" id="learning-sub">
 
                 <li class=" c-sidebar-nav-item">
@@ -223,6 +224,15 @@
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
                         テスト管理
+                    </a>
+                </li>
+
+                <li class=" c-sidebar-nav-item">
+                    <a class=" c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(FILE) }}" href="{{route('file.index')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        メディア管理
                     </a>
                 </li>
             </ul>

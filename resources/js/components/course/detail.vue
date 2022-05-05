@@ -401,7 +401,7 @@
                                     <div class="float-right">
                                         <div style="min-height: 38px">
                                             <div class="float-right">
-                                                <a href="javascript:void(0);" class="btn btn-primary " v-on:click="show('ability-test-modal')">
+                                                <a href="javascript:void(0);" :class="clickDisabled" v-on:click="show('ability-test-modal')">
                                                     追加
                                                 </a>
                                             </div>
@@ -612,13 +612,21 @@
                 courseZHDes : '',
                 courseZhTarget : '',
                 courseZHAttainmentTarget : '',
+                clickDisabled:'btn btn-primary'
             };
         },
         props: ["listCourseUrl", "createUrl", 'course', 'editCourseUrl', 'detailCourseUrl', 'pageSizeLimit', 'registerUrl', 'listLessonUrl',
             'registerVideoUrl', 'courseVideo', 'editLangEnUrl', 'editLangZhUrl', 'listLessonAttachUrl', 'listLessonAttachUpdateUrl', 'listTestAbilityUrl', 'registerAbilityTestUrl', 'listTestCourseEndUrl', 'registerCourseEndTestUrl',
             'addCampaignUrl', 'courseGroupMemo', 'urlUpdateGroupMemo'
         ],
-        mounted() {},
+        mounted() {
+            if(this.course.test_abilities.length >0 && this.course.course_type==2){
+                return this.clickDisabled="btn btn-primary disabled "
+            }
+            else{
+                return this.clickDisabled="btn btn-primary"
+            }
+        },
         methods: {
             getUriDelete(id, lessonId) {
                 return '/course/'+ id + '/lesson/' + lessonId + '/delete';
@@ -645,3 +653,6 @@
         },
     }
 </script>
+<style scoped>
+.disabled a { pointer-events: none }
+</style>

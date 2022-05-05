@@ -327,8 +327,16 @@ class CourseController extends BaseController
         $course = Course::where([
             'course_id' => $id,
         ])->with(['lesson', 'course_infos', 'lesson.courseLesson', 'testAbilities', 'testCourseEnds', 'campaigns'])->first();
-
-
+       
+        if($course['course_type']==2 && !empty($course['testAbilities'])){
+          
+          foreach ($course['testAbilities'] as $key => $value){
+              if($key != 0){
+                  unset($course['testAbilities'][$key]);
+              }
+          }
+        }
+        
         $courseVideo = CourseVideo::where('course_id', $id)->get();
         if (!$course) return redirect()->route('course.index');
         $course->lesson = $course->lesson()->with('courseLesson')->orderBy('course_lesson.display_order', 'asc')->get();

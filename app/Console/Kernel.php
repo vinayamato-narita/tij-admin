@@ -28,7 +28,10 @@ class Kernel extends ConsoleKernel
                  ->everyFiveMinutes();
 
         $schedule->command('group_course_decision:run')
-                 ->dailyAt('1:00');
+                 ->dailyAt('1:15');
+
+        $schedule->command('ability_test_report:run')
+                 ->dailyAt('1:15');
     }
 
     /**

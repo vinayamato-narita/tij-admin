@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Components\BreadcrumbComponent;
 use App\Models\LessonHistory;
+use App\Models\StudentPointHistory;
 use Log;
 
 class CommentController extends BaseController
@@ -22,20 +23,24 @@ class CommentController extends BaseController
             ['name' => 'comment_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = LessonHistory::select('lesson_history.student_id as student_id', 'teacher_rating', 'teacher_attitude',
+            
+        $queryBuilder = StudentPointHistory::select('student.student_id as student_id', 'teacher_rating', 'teacher_attitude',
             'teacher_punctual', 'skype_voice_rating_from_student', 'comment_from_student_to_office', 'skype_voice_rating_from_teacher', 'comment_from_teacher_to_student', 'comment_from_teacher_to_office', 'note_from_student_to_teacher', 'course.course_name as course_name',
-            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime', 'student.student_nickname as student_nickname', 'teacher.teacher_nickname as teacher_nickname')
-            ->leftJoin('student', function($join) {
-                $join->on('lesson_history.student_id', '=', 'student.student_id');
+            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime', 'student.student_nickname as student_nickname', 'teacher.teacher_nickname as teacher_nickname', 'student_point_history.student_point_history_id')
+            ->join('student', function($join) {
+                $join->on('student_point_history.student_id', '=', 'student.student_id');
             })
-            ->leftJoin('course', function($join) {
-                $join->on('lesson_history.course_id', '=', 'course.course_id');
+            ->join('course', function($join) {
+                $join->on('student_point_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('lesson_schedule', function($join) {
-                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+            ->join('lesson_schedule', function($join) {
+                $join->on('student_point_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('teacher', function($join) {
+            ->join('teacher', function($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
+            })
+            ->leftJoin('lesson_history', function($join) {
+                $join->on('lesson_schedule.lesson_schedule_id', '=', 'lesson_history.lesson_schedule_id');;
             })
             ->where(function($query) {
                 $query->orWhere('lesson_history.teacher_rating', '<>', 0)
@@ -46,13 +51,14 @@ class CommentController extends BaseController
                     ->orWhere('lesson_history.comment_from_teacher_to_student', '<>', "")
                     ->orWhere('lesson_history.comment_from_teacher_to_office', '<>', "")
                     ->orWhere('lesson_history.note_from_student_to_teacher', '<>', "");
-            });
-            
+            })
+            ->groupBy('student_point_history.student_point_history_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('teacher_nickname', $request['search_input']));
+                    ->orWhere($this->escapeLikeSentence('teacher_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('course_name', $request['search_input']));
             });
         }
         if (isset($request['sort'])) {

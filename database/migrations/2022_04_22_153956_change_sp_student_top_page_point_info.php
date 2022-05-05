@@ -82,6 +82,7 @@ class ChangeSpStudentTopPagePointInfo extends Migration
                       THEN p.course_id >1
                       ELSE 1=1
                    END
+               GROUP BY point_subscription_history_id
                ;
             END
         ";

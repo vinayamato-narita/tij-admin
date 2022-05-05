@@ -82,7 +82,6 @@ class ChangeSpStudentTopPagePointInfo extends Migration
                       THEN p.course_id >1
                       ELSE 1=1
                    END
-               GROUP BY DATE_FORMAT(point_expire_date,'%Y/%m/%d')
                ;
             END
         ";

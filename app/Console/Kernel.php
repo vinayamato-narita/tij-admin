@@ -26,6 +26,12 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('send_mail_before_lesson_start')
                  ->everyFiveMinutes();
+
+        $schedule->command('group_course_decision:run')
+                 ->dailyAt('1:00');
+
+        $schedule->command('ability_test_report:run')
+                 ->dailyAt('1:15');
     }
 
     /**

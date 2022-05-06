@@ -170,7 +170,7 @@
                                                             name="student_nickname"
                                                             v-model="studentInfoEx.student_nickname"
                                                             v-validate="
-                                                                'login_id|max:16'
+                                                                'max:16'
                                                             "
                                                         />
                                                         <div

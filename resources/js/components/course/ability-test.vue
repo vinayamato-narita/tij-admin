@@ -80,10 +80,9 @@
                         </div>
                         <table v-if="dataList.length !=  0" class="table table-responsive-sm table-striped border">
                             <thead >
-                            <tr>
+                               <tr>
                                 <th class="text-center bg-gray-100 " style="width: 50px">
-                                    <input v-model="selectAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
-                                </th>
+                                
                                 <th class="text-center text-md-left bg-gray-100">テスト名</th>
                             </tr>
                             </thead>
@@ -91,8 +90,8 @@
                             <tr v-for="test in dataList">
                                 <td class="text-center">
                                     <input  
-                                        type="checkbox" 
-                                        class=" checkbox" 
+                                        type="radio" 
+                                        class="radio" 
                                         style="width: auto; height: auto; display: inline-block;"
                                         v-model="checkedIds" 
                                         :value="test.test_id"
@@ -227,8 +226,9 @@
             },
             submit() {
                 let that = this;
+                let arr=[that.checkedIds];
                 axios
-                    .post(that.registerUrl, that.checkedIds)
+                    .post(that.registerUrl, arr)
                     .then(response => {
                         window.location = this.detailUrl;
                     })

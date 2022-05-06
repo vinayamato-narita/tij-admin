@@ -256,4 +256,5 @@ Route::group([
     Route::post('/course/update-group-memo', 'CourseController@updateGroupMemo')->name('course.updateGroupMemo');
 
     Route::resource('file', FileController::class);
+    Route::post('/file/update-file', 'FileController@updateFile')->name('file.updateFile');
 });

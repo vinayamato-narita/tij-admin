@@ -91,6 +91,7 @@ class PreparationController extends BaseController
                        $file->file_name_original = $request->fileSelected->getClientOriginalName();
                        $file->file_path = AzureFolderEnum::PREPARATION . '/' . $name;
                        $file->file_type = FileTypeEnum::PREPARATION_VIDEO;
+                       $file->file_code = $request->file_code;
                        $file->save();
                        $preparation->file_id = $file->file_id;
                    }
@@ -195,6 +196,7 @@ class PreparationController extends BaseController
                         $file->file_name_original = $request->fileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::PREPARATION . '/' . $name;
                         $file->file_type = FileTypeEnum::PREPARATION_VIDEO;
+                        $file->file_code = $request->file_code;
                         $file->save();
                         $preparation->file_id = $file->file_id;
                     }

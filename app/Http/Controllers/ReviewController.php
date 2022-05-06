@@ -90,6 +90,7 @@ class ReviewController extends BaseController
                         $file->file_name_original = $request->fileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::REVIEW . '/' . $name;
                         $file->file_type = FileTypeEnum::REVIEW_VIDEO;
+                        $file->file_code = $request->file_code;
                         $file->save();
                         $review->file_id = $file->file_id;
                     }
@@ -172,7 +173,7 @@ class ReviewController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUpdateReviewRequest $request, $id)
     {
         if($request->isMethod('PUT')){
             $review = Review::where('review_id', $id)->first();
@@ -194,6 +195,7 @@ class ReviewController extends BaseController
                         $file->file_name_original = $request->fileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::REVIEW . '/' . $name;
                         $file->file_type = FileTypeEnum::REVIEW_VIDEO;
+                        $file->file_code = $request->file_code;
                         $file->save();
                         $review->file_id = $file->file_id;
                     }

@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SendMailBeforeLessonStart::class,
+        'App\Console\Commands\SendMailBeforeLessonStart',
     ];
 
     /**

@@ -31,15 +31,22 @@
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3">
-                                                <input
-                                                    class="form-control"
-                                                    name="file_code"
-                                                    v-model="file_code"
-                                                    v-validate="
-                                                        'required|max:255'
-                                                    "
-                                                />
+                                            <div class="col-md-3" >
+                                                <div class="flex">
+                                                    <input type="hidden" 
+                                                        name="moment"
+                                                        v-model="moment"
+                                                    >
+                                                    <span style="margin-right: 10px" class="pt-7">{{ moment }}</span>
+                                                    <input
+                                                        class="form-control"
+                                                        name="file_code"
+                                                        v-model="file_code"
+                                                        v-validate="
+                                                            'required|max:255'
+                                                        "
+                                                    />
+                                                </div>
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_code')"
                                                 >
                                                     {{ errors.first("file_code") }}
@@ -50,20 +57,24 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >復習動画<span
+                                                >メディアファイル<span
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3">
-                                                <button type="button" v-on:click="newFile"
-                                                        class="btn btn-primary  mr-2">新規ファイル追加
-                                                </button>
-                                                <input type="file" name="file_attach" ref="newFile"
-                                                    v-on:change="changeFile" class="hidden"
-                                                    v-validate="
-                                                        'required'
-                                                    "
-                                                />
+                                            <div class="col-md-9">
+                                                <div class="flex">
+                                                    <button type="button" v-on:click="newFile"
+                                                        class="btn btn-primary  mr-2">新規ファイル選択
+                                                    </button>
+                                                    <span class="pt-7">{{ file_name_original }}</span>
+                                                    <input type="file" name="file_attach" ref="newFile"
+                                                        v-on:change="changeFile" class="hidden"
+                                                        v-validate="
+                                                            'required'
+                                                        "
+                                                    />
+                                                </div>
+                                                
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_attach')"
                                                 >
                                                     {{ errors.first("file_attach") }}
@@ -149,6 +160,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
+import moment from 'moment'
 
 export default {
     created: function() {
@@ -156,8 +168,7 @@ export default {
             custom: {
                 file_code: {
                     required: "メディアコードを選択してください",
-                    max: "メディアコードは255文字以内で入力してください",
-                    unique_custom: "メディアコードが存在されています。"
+                    max: "メディアコードは255文字以内で入力してください"
                 },
                 file_attach: {
                     required: "復習動画を入力してください"
@@ -182,7 +193,9 @@ export default {
             file_code: '',
             file_display_name: '',
             file_description: '',
-            _token: Laravel.csrfToken
+            _token: Laravel.csrfToken,
+            moment: 'ME' + moment().format("YMMDD"),
+            file_name_original: ''
         };
     },
     props: ["urlAction", "urlFileList"],
@@ -193,6 +206,7 @@ export default {
         },
         changeFile(e) {
             let fileName = e.target.files[0].name;
+            this.file_name_original = e.target.files[0].name;
             this.file_display_name = fileName.split('.').slice(0, -1).join('.');
             this.file_attach = e.target.files[0];
         },
@@ -213,7 +227,7 @@ export default {
 
             let formData = new FormData();
             formData.append("_token", Laravel.csrfToken);
-            formData.append("file_code", this.file_code);
+            formData.append("file_code", this.moment + this.file_code);
             formData.append("file_display_name", this.file_display_name);
             formData.append("file_description", this.file_description);
             if (this.file_attach) {

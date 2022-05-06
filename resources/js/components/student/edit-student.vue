@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <form class="basic-form" @submit.prevent="save">
+                                <form class="basic-form" @submit.prevent="save('form1')"  data-vv-scope="form1">
                                     <div class="card-header">
                                         <h5 class="title-page">学習者詳細</h5>
                                     </div>
@@ -61,9 +61,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('is_tmp_entry')"
+                                                            v-if="errors.has('form1.is_tmp_entry')"
                                                         >
-                                                            {{ errors.first("is_tmp_entry") }}
+                                                            {{ errors.first("form1.is_tmp_entry") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -89,9 +89,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_first_name')"
+                                                            v-if="errors.has('form1.student_first_name')"
                                                         >
-                                                            {{ errors.first("student_first_name") }}
+                                                            {{ errors.first("form1.student_first_name") }}
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4" style="width: 38%; flex: auto; max-width: unset;">
@@ -107,9 +107,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_last_name')"
+                                                            v-if="errors.has('form1.student_last_name')"
                                                         >
-                                                            {{ errors.first("student_last_name") }}
+                                                            {{ errors.first("form1.student_last_name") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -133,9 +133,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_first_name_kata')"
+                                                            v-if="errors.has('form1.student_first_name_kata')"
                                                         >
-                                                            {{ errors.first("student_first_name_kata") }}
+                                                            {{ errors.first("form1.student_first_name_kata") }}
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4" style="width: 38%; flex: auto; max-width: unset;">
@@ -151,9 +151,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_last_name_kata')"
+                                                            v-if="errors.has('form1.student_last_name_kata')"
                                                         >
-                                                            {{ errors.first("student_last_name_kata") }}
+                                                            {{ errors.first("form1.student_last_name_kata") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,9 +176,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_nickname')"
+                                                            v-if="errors.has('form1.student_nickname')"
                                                         >
-                                                            {{ errors.first("student_nickname") }}
+                                                            {{ errors.first("form1.student_nickname") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,9 +203,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_email')"
+                                                            v-if="errors.has('form1.student_email')"
                                                         >
-                                                            {{ errors.first("student_email") }}
+                                                            {{ errors.first("form1.student_email") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -228,9 +228,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('company_name')"
+                                                            v-if="errors.has('form1.company_name')"
                                                         >
-                                                            {{ errors.first("company_name") }}
+                                                            {{ errors.first("form1.company_name") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -254,9 +254,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_introduction')"
+                                                            v-if="errors.has('form1.student_introduction')"
                                                         >
-                                                            {{ errors.first("student_introduction") }}
+                                                            {{ errors.first("form1.student_introduction") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -281,9 +281,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_home_tel')"
+                                                            v-if="errors.has('form1.student_home_tel')"
                                                         >
-                                                            {{ errors.first("student_home_tel") }}
+                                                            {{ errors.first("form1.student_home_tel") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,9 +325,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('city')"
+                                                            v-if="errors.has('form1.city')"
                                                         >
-                                                            {{ errors.first("city") }}
+                                                            {{ errors.first("form1.city") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -352,9 +352,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('lang_type')"
+                                                            v-if="errors.has('form1.lang_type')"
                                                         >
-                                                            {{ errors.first("lang_type") }}
+                                                            {{ errors.first("form1.lang_type") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -467,9 +467,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('timezone_id')"
+                                                            v-if="errors.has('form1.timezone_id')"
                                                         >
-                                                            {{ errors.first("timezone_id") }}
+                                                            {{ errors.first("form1.timezone_id") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -493,9 +493,9 @@
                                                         <div
                                                             class="input-group is-danger"
                                                             role="alert"
-                                                            v-if="errors.has('student_comment_text')"
+                                                            v-if="errors.has('form1.student_comment_text')"
                                                         >
-                                                            {{ errors.first("student_comment_text") }}
+                                                            {{ errors.first("form1.student_comment_text") }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -572,9 +572,9 @@
                                                             <div
                                                                 class="input-group is-danger"
                                                                 role="alert"
-                                                                v-if="errors.has('department_name')"
+                                                                v-if="errors.has('form1.department_name')"
                                                             >
-                                                                {{ errors.first("department_name") }}
+                                                                {{ errors.first("form1.department_name") }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -597,9 +597,9 @@
                                                             <div
                                                                 class="input-group is-danger"
                                                                 role="alert"
-                                                                v-if="errors.has('employee_number')"
+                                                                v-if="errors.has('form1.employee_number')"
                                                             >
-                                                                {{ errors.first("employee_number") }}
+                                                                {{ errors.first("form1.employee_number") }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -622,9 +622,9 @@
                                                             <div
                                                                 class="input-group is-danger"
                                                                 role="alert"
-                                                                v-if="errors.has('department_number')"
+                                                                v-if="errors.has('form1.department_number')"
                                                             >
-                                                                {{ errors.first("department_number") }}
+                                                                {{ errors.first("form1.department_number") }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -665,7 +665,7 @@
                             パスワード変更
                         </h4>
                     </div>
-                    <form class="basic-form" @submit.prevent="saveChange">
+                    <form class="basic-form" @submit.prevent="saveChange('form2')"  data-vv-scope="form2">
                         <div class="modal-body" id="lesson_list_modal">
                             <div class="tableContainer">
                                 <div class="form-group row">
@@ -685,9 +685,9 @@
                                         <div
                                             class="input-group is-danger"
                                             role="alert"
-                                            v-if="errors.has('password')"
+                                            v-if="errors.has('form2.password')"
                                         >
-                                            {{ errors.first("password") }}
+                                            {{ errors.first("form2.password") }}
                                         </div>                                  
                                     </div>
                                 </div>
@@ -708,9 +708,9 @@
                                         <div
                                             class="input-group is-danger"
                                             role="alert"
-                                            v-if="errors.has('password_confirm')"
+                                            v-if="errors.has('form2.password_confirm')"
                                         >
-                                            {{ errors.first("password_confirm") }}
+                                            {{ errors.first("form2.password_confirm") }}
                                         </div>  
                                     </div>
                                 </div>
@@ -839,10 +839,10 @@ export default {
     props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword'],
     mounted() {},
     methods: {
-        save() {
+        save(a) {
             let that = this;
             this.$validator
-                .validateAll()
+                .validateAll(a)
                 .then(valid => {
                     if (valid || (this.errors.items.length == 2 && this.errors.has('password') && this.errors.has('password_confirm'))) {
                         that.flagShowLoader = true;
@@ -871,10 +871,10 @@ export default {
                     this.flagShowLoader = false;
                 });
         },
-        saveChange() {
+        saveChange(a) {
             let that = this;
             this.$validator
-                .validateAll()
+                .validateAll(a)
                 .then(valid => {
                     if (valid) {
                         that.flagShowLoader = true;

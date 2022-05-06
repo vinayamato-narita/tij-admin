@@ -145,4 +145,7 @@ class BaseController extends Controller
         return $ip;
     }
 
+    public function getUrlFileBase(){
+        return env('AZURE_STORAGE_ENDPOINT') . '/' . env('AZURE_STORAGE_CONTAINER'). '/';
+    }
 }

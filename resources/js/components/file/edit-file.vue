@@ -30,7 +30,7 @@
                                                 >ID</span
                                             ></label>
                                             <div class="col-md-3 pt-7">
-                                                {{ fileInfoEx.file_id }}
+                                                {{ file_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -42,18 +42,46 @@
                                                 ></span
                                             ></label>
                                             <div class="col-md-3">
-                                                <input
-                                                    class="form-control"
-                                                    name="file_code"
-                                                    v-model="fileInfoEx.file_code"
-                                                    v-validate="
-                                                        'required|max:255'
-                                                    "
-                                                />
+                                                <div class="flex">
+                                                    <span style="margin-right: 10px" class="pt-7">{{ moment }}</span>
+                                                    <input
+                                                        class="form-control"
+                                                        name="file_code"
+                                                        v-model="file_code"
+                                                        v-validate="
+                                                            'required|max:255'
+                                                        "
+                                                    />
+                                                </div>
+                                                
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_code')"
                                                 >
                                                     {{ errors.first("file_code") }}
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >ダウンロードURL</label>
+                                            <div class="col-md-9 pt-7">
+                                                <a :href="file_path" target="_blank">{{ file_name_original }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >メディアファイル</label>
+                                            <div class="col-md-9 flex">
+                                                <button type="button" v-on:click="newFile"
+                                                        class="btn btn-primary  mr-2">新規ファイル選択
+                                                </button>
+                                                <span class="pt-7">{{ file_original_name }}</span>
+                                                <input type="file" name="file_attach" ref="newFile"
+                                                    v-on:change="changeFile" class="hidden"
+                                                />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -68,7 +96,7 @@
                                                 <input
                                                     class="form-control"
                                                     name="file_display_name"
-                                                    v-model="fileInfoEx.file_display_name"
+                                                    v-model="file_display_name"
                                                     v-validate="
                                                         'required|max:255'
                                                     "
@@ -89,7 +117,7 @@
                                                     class="form-control"
                                                     rows="5"
                                                     name="file_description"
-                                                    v-model="fileInfoEx.file_description"
+                                                    v-model="file_description"
                                                     v-validate="
                                                         'max:20000'
                                                     "
@@ -135,6 +163,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
+import moment from 'moment'
 
 export default {
     created: function() {
@@ -162,12 +191,28 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            fileInfoEx: this.fileInfo,
+            file_id: this.fileInfo.file_id,
+            file_path: this.fileInfo.file_path,
+            file_code: this.fileInfo.file_code,
+            file_display_name: this.fileInfo.file_display_name,
+            file_description: this.fileInfo.file_description,
+            file_name_original: this.fileInfo.file_name_original,
+            file_original_name: '',
+            moment: 'ME' + moment().format("YMMDD"),
         };
     },
     props: ["urlAction", "urlFileList", "fileInfo"],
     mounted() {},
     methods: {
+        newFile() {
+            this.$refs.newFile.click();
+        },
+        changeFile(e) {
+            let fileName = e.target.files[0].name;
+            this.file_display_name = fileName.split('.').slice(0, -1).join('.');
+            this.file_original_name = e.target.files[0].name;
+            this.file_attach = e.target.files[0];
+        },
         save() {
             let that = this;
             this.$validator
@@ -182,9 +227,18 @@ export default {
         },
         submit(e) {
             let that = this;
-
+            let formData = new FormData();
+            formData.append("_token", Laravel.csrfToken);
+            formData.append("file_id", this.file_id);
+            formData.append("file_code", this.file_code);
+            formData.append("file_display_name", this.file_display_name);
+            formData.append("file_description", this.file_description);
+            if (this.file_attach) {
+                formData.append('file_attach', this.file_attach);
+            }
+            
             axios
-                .put(that.urlAction, that.fileInfoEx)
+                .post(that.urlAction, formData)
                 .then(response => {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {

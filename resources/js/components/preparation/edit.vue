@@ -52,6 +52,35 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label text-md-right" for="preparationName">メディアコード:
+                                                <span v-if="!disabled_file_code" class="glyphicon glyphicon-star position-absolute"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-3" >
+                                                <div class="flex">
+                                                    <input type="hidden" 
+                                                        name="moment"
+                                                        v-model="moment"
+                                                    >
+                                                    <span style="margin-right: 10px" class="pt-7">{{ moment }}</span>
+                                                    <input
+                                                        class="form-control"
+                                                        name="file_code"
+                                                        v-model="file_code"
+                                                        :disabled="disabled_file_code"
+                                                        v-validate="
+                                                            'max:255'
+                                                        "
+                                                    />
+                                                </div>
+                                                <div class="input-group is-danger" role="alert" v-if="errors.has('file_code')"
+                                                >
+                                                    {{ errors.first("file_code") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row ">
                                             <label class="col-md-3 col-form-label text-md-right" for="preparationName">予習名:
                                                 <span class="glyphicon glyphicon-star position-absolute"
@@ -125,7 +154,7 @@
     import axios from 'axios';
     import Loader from "./../../components/common/loader";
     import AddFiles from "./add-files.vue"
-
+    import moment from 'moment'
 
     export default {
         created: function () {
@@ -140,7 +169,9 @@
                         required: "予習名を入力してください",
                         max: "予習名は255文字以内で入力してください。",
                     },
-
+                    file_code: {
+                        max: "メディアコードは255文字以内で入力してください"
+                    },
                 },
             };
             this.$validator.localize("en", messError);
@@ -161,7 +192,10 @@
                 preparationDescription: this.preparation.preparation_description,
                 errorsData: {},
                 fileNameAttached : this.preparation.file === null ? '' : this.preparation.file.file_name_original,
-                fileId :  this.preparation.file === null ? '' : this.preparation.file.file_id
+                fileId :  this.preparation.file === null ? '' : this.preparation.file.file_id,
+                moment: 'PR' + moment().format("YMMDD"),
+                file_code: this.preparation.file === null ? '' : this.preparation.file.file_code,
+                disabled_file_code: true
             };
         },
         props: ["detailPreparationUrl", "updateUrl", 'preparation', 'deleteAction', 'listPreparationUrl', 'pageSizeLimit', 'getFilesUrl', 'fileType'],
@@ -179,6 +213,10 @@
                             this.fileNameAttached = args[0].selectedFileName;
                             this.fileSelected = null;
                             this.fileName = null;
+                            this.file_code = args[0].file_code;
+                            this.preparationName = args[0].file_display_name;
+                            this.preparationDescription = args[0].file_description;
+                            this.disabled_file_code = true;
                         }
                     }});
             },
@@ -223,7 +261,13 @@
                 this.fileId = null;
                 this.fileNameAttached = '';
                 this.fileSelected =  e.target.files[0];
-                this.fileName = e.target.files[0].name;
+                this.disabled_file_code = true;
+                this.fileName = null;
+                this.file_code = null;
+                if(e.target.files.length != 0) {
+                    this.fileName = e.target.files[0].name;
+                    this.disabled_file_code = false;
+                }
             },
             register() {
                 let that = this;
@@ -232,15 +276,23 @@
                 formData.append("preparationName", this.preparationName);
                 if (this.preparationDescription)
                     formData.append("preparationDescription", this.preparationDescription);
-                if (this.fileSelected)
+                if (this.fileSelected){
+                    formData.append("file_code", this.moment + (this.file_code ?? ''));
                     formData.append('fileSelected', this.fileSelected);
+                }
                 if (this.fileId)
                     formData.append('fileId', this.fileId);
                 formData.append('_method', 'PUT');
                 formData.append('id', this.preparation.preparation_id);
 
-
                 this.$validator.validateAll().then((valid) => {
+                    if (that.fileSelected && (that.file_code == null || that.file_code == '')) {
+                        that.errors.add({
+                            field: 'file_code',
+                            msg: 'メディアコードを選択してください'
+                        });
+                        return false;
+                    }
                     if (valid) {
                         that.flagShowLoader = true;
                         axios
@@ -280,6 +332,10 @@
                                     default:
                                         break;
                                 }
+                                that.errors.add({
+                                    field: 'file_code',
+                                    msg: err.response.data.errors.file_code[0]
+                                });
                             });
                     }
                 });

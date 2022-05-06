@@ -15,6 +15,7 @@ use App\Http\Requests\EditFileRequest;
 use App\Components\TIJAdminAzureComponent;
 use App\Enums\AzureFolderEnum;
 use Carbon\Carbon;
+use App\Enums\FileTypeEnum;
 use Log;
 
 class FileController extends BaseController
@@ -130,6 +131,7 @@ class FileController extends BaseController
         $file->file_code = $request->file_code;
         $file->file_display_name = $request->file_display_name;
         $file->file_description = $request->file_description;
+        $file->file_type = FileTypeEnum::MEDIA;
 
         $file->save();
 
@@ -147,6 +149,7 @@ class FileController extends BaseController
         ]);
         $fileInfo = File::where('file_id', $id)->firstOrFail();
         $fileInfo->_token = csrf_token();
+        $fileInfo->file_path = $this->getUrlFileBase() . $fileInfo->file_path;
 
         return view('file.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -154,19 +157,31 @@ class FileController extends BaseController
         ]);
     }
 
-    public function update(EditFileRequest $request, $id)
+    public function updateFile(EditFileRequest $request)
     {
-        if(!$request->isMethod('PUT')){
+        if(!$request->isMethod('POST')){
             return response()->json([
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);         
         }
 
-        $fileInfo = File::where('file_id', $id)->firstOrFail();
+        $fileInfo = File::where('file_id', $request->file_id)->firstOrFail();
         $fileInfo->file_code = $request->file_code;
         $fileInfo->file_display_name = $request->file_display_name;
         $fileInfo->file_description = $request->file_description;
-        
+       
+        if($request->file_attach) {
+            $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);
+            if (!$name) {
+                return response()->json([
+                    'status' => 'NG'
+                ], StatusCode::BAD_REQUEST);
+            }
+            $fileInfo->file_name = $name;
+            $fileInfo->file_path = AzureFolderEnum::MEDIA . '/' . $name;
+            $fileInfo->file_name_original = $request->file_attach->getClientOriginalName();
+        }
+
         $fileInfo->save();  
 
         return response()->json([

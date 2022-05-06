@@ -98,6 +98,8 @@
                                 <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.PREPARATION_VIDEO">予習動画</td>
                                 <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.REVIEW_VIDEO">復習動画</td>
                                 <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.TEST_RELATED">テスト関連</td>
+                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.TEACHER">講師</td>
+                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.MEDIA">メディア</td>
 
                             </tr>
 
@@ -253,7 +255,10 @@
             },
             submit() {
                 this.selectedFileName = this.dataList.filter(x => x.file_id == this.fileId)[0].file_name_original;
-                this.event.params.handlers.sendFileId({fileId: this.fileId, selectedFileName : this.selectedFileName});
+                this.file_code = this.dataList.filter(x => x.file_id == this.fileId)[0].file_code;
+                this.file_display_name = this.dataList.filter(x => x.file_id == this.fileId)[0].file_display_name;
+                this.file_description = this.dataList.filter(x => x.file_id == this.fileId)[0].file_description;
+                this.event.params.handlers.sendFileId({fileId: this.fileId, selectedFileName : this.selectedFileName, file_code: this.file_code, file_display_name: this.file_display_name, file_description: this.file_description});
                 this.hide();
 
             }

@@ -424,9 +424,12 @@
                                             name="password"
                                             v-model="password"
                                             ref="password"
-                                            v-validate="
-                                                'required|password_rule|min:8|max:16'
-                                            "
+                                            v-validate="{
+                                             regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+                                    required: true,
+                                    max: 16,
+                                        min : 8
+                                                }"
                                         />
                                         <div
                                             class="input-group is-danger"
@@ -491,10 +494,10 @@
             let messError = {
                 custom: {
                     password: {
-                        required: "パスワードを入力してください",
-                        min: "パスワードは8文字以上で入力してください",
-                        max: "パスワードは16文字以内で入力してください",
-                        password_rule: "パスワードに使用できるのは、a～z、A～Z、0～9 の英数字と、記号です",
+                        required: 'パスワードを入力してください。',
+                        max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                        min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                        regex: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。'
                     },
                     password_confirm: {
                         required: "パスワード（確認）を入力してください",

@@ -150,6 +150,8 @@ class FileController extends BaseController
         $fileInfo = File::where('file_id', $id)->firstOrFail();
         $fileInfo->_token = csrf_token();
         $fileInfo->file_path = $this->getUrlFileBase() . $fileInfo->file_path;
+        $fileInfo->pre_code = substr($fileInfo->file_code,0, 10);
+        $fileInfo->file_code = substr($fileInfo->file_code,10);
 
         return view('file.edit', [
             'breadcrumbs' => $breadcrumbs,

@@ -20,7 +20,7 @@
                                     enctype="multipart/form-data"
                                 >
                                     <div class="card-header">
-                                        <h5 class="title-page">お知らせ情報</h5>
+                                        <h5 class="title-page">メディア情報</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
@@ -33,11 +33,7 @@
                                             ></label>
                                             <div class="col-md-3" >
                                                 <div class="flex">
-                                                    <input type="hidden" 
-                                                        name="moment"
-                                                        v-model="moment"
-                                                    >
-                                                    <span style="margin-right: 10px" class="pt-7">{{ moment }}</span>
+                                                    <span style="margin-right: 10px" class="pt-7">{{ pre_code }}</span>
                                                     <input
                                                         class="form-control"
                                                         name="file_code"
@@ -66,7 +62,7 @@
                                                     <button type="button" v-on:click="newFile"
                                                         class="btn btn-primary  mr-2">新規ファイル選択
                                                     </button>
-                                                    <span class="pt-7">{{ file_name_original }}</span>
+                                                    <span class="pt-7">{{ file_original_name }}</span>
                                                     <input type="file" name="file_attach" ref="newFile"
                                                         v-on:change="changeFile" class="hidden"
                                                         v-validate="
@@ -194,8 +190,8 @@ export default {
             file_display_name: '',
             file_description: '',
             _token: Laravel.csrfToken,
-            moment: 'ME' + moment().format("YMMDD"),
-            file_name_original: ''
+            pre_code: 'ME' + moment().format("YMMDD"),
+            file_original_name: ''
         };
     },
     props: ["urlAction", "urlFileList"],
@@ -205,10 +201,17 @@ export default {
             this.$refs.newFile.click();
         },
         changeFile(e) {
-            let fileName = e.target.files[0].name;
-            this.file_name_original = e.target.files[0].name;
-            this.file_display_name = fileName.split('.').slice(0, -1).join('.');
-            this.file_attach = e.target.files[0];
+            if(e.target.files.length != 0) {
+                let fileName = e.target.files[0].name;
+                this.file_original_name = e.target.files[0].name;
+                this.file_attach = e.target.files[0];
+
+                if(!(this.file_display_name != "")) {
+                    this.file_display_name = fileName.split('.').slice(0, -1).join('.');
+                }
+            }else {
+                this.file_original_name = '';
+            }
         },
         save() {
             let that = this;
@@ -227,7 +230,7 @@ export default {
 
             let formData = new FormData();
             formData.append("_token", Laravel.csrfToken);
-            formData.append("file_code", this.moment + this.file_code);
+            formData.append("file_code", this.pre_code + (this.file_code != null && this.file_code != '' ? this.file_code.trim() : ''));
             formData.append("file_display_name", this.file_display_name);
             formData.append("file_description", this.file_description);
             if (this.file_attach) {
@@ -239,7 +242,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "ファイルアップロードが完了しました。",
+                            text: "メディア新規作成が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

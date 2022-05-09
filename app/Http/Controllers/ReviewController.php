@@ -206,7 +206,10 @@ class ReviewController extends BaseController
                         $review->file_id = $storedFile->file_id;
 
                 }
+                if (!isset($request->fileId) && !isset($request->fileSelected)) {
+                    $review->file_id = '';
 
+                }
                 $review->save();
                 DB::commit();
                 return response()->json([

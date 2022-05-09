@@ -62,7 +62,6 @@
                                                     <th class="text-left min-width-120">@sortablelink('create_date', '初回登録日時')</th>
                                                     <th class="text-left min-width-120">@sortablelink('last_login_date', '最終ログイン日時')</th>
                                                     <th class="text-left min-width-120">@sortablelink('last_reserve_date', '最新予約日時')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('first_lesson_date', '初回受講日時')</th>
                                                     <th class="text-left min-width-120">@sortablelink('lesson_count', '通算受講数')</th>
                                                     <th class="text-left min-width-120">@sortablelink('is_tmp_entry', '登録状態')</th>
                                                     <th class="text-left min-width-120">@sortablelink('course_name', '有料/無料')</th>
@@ -79,7 +78,6 @@
                                                         <td class="text-left">{{ $student->create_date }}</td>
                                                         <td class="text-left">{{ $student->last_login_date }}</td>
                                                         <td class="text-left">{{ $student->last_reserve_date }}</td>
-                                                        <td class="text-left">{{ $student->first_lesson_date }}</td>
                                                         <td class="text-left">{{ $student->lesson_count }}</td>
                                                         <td class="text-left">{{ StudentEntryType::getDescription($student->is_tmp_entry) }}</td>
                                                         <td class="text-left">{{ $student->course_name }}</td>

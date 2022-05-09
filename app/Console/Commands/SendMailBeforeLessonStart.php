@@ -53,7 +53,7 @@ class SendMailBeforeLessonStart extends Command
         $getMailStudentCn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::MAIL_STUDENT_BEFORE_LESSON_START, LangType::ZH);
 
         $timingMinutes = $getMailTeacher->timing_minutes;
-        $timeStart = Carbon::now();
+        $timeStart = Carbon::now()->addMinutes($timingMinutes - 5);;
         $timeEnd = Carbon::now()->addMinutes($timingMinutes);
 
         $lessonSchedules = LessonSchedule::join('student_point_history', function($join) {
@@ -68,7 +68,7 @@ class SendMailBeforeLessonStart extends Command
         ->join('lesson', function($join) {
             $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
         })
-        ->where('lesson_schedule.lesson_reserve_type', 2)
+        ->where('lesson_schedule.course_id', '>', 1)
         ->where('lesson_schedule.lesson_starttime', '>=', $timeStart)
         ->where('lesson_schedule.lesson_starttime', '<=', $timeEnd)
         ->get();

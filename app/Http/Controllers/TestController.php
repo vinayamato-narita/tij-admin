@@ -18,6 +18,7 @@ use App\Models\TestResult;
 use App\Models\TestSubQuestion;
 use App\Models\TestSubQuestionCategory;
 use App\Models\TestSubQuestionTag;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -199,7 +200,7 @@ class TestController extends BaseController
         ]);
     }
 
-    public  function preview($id)
+    public function preview($id)
     {
 
         $test = Test::with('testQuestions.testSubQuestions.file')->find($id);
@@ -332,6 +333,8 @@ class TestController extends BaseController
                     $file->file_name_original = $request->fileSelected->getClientOriginalName();
                     $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                     $file->file_type = FileTypeEnum::TEST_RELATED;
+                    $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                    $file->file_display_name = $test->test_name . str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
                     $file->save();
                     $testQuestion->file_id = $file->file_id;
                 }
@@ -350,7 +353,7 @@ class TestController extends BaseController
             $files = $request->allFiles();
             $convertFiles = [];
             foreach ($files as $indexFile => $f) {
-                if (strpos($indexFile,'pushedQuestionFile') !== false)
+                if (strpos($indexFile, 'pushedQuestionFile') !== false)
                     $convertFiles[str_replace('pushedQuestionFile_', '', $indexFile)] = $f;
             }
 
@@ -448,7 +451,7 @@ class TestController extends BaseController
         $testCategories = TestCategory::all()->sortBy('display_order')->toArray();
         $isHasTestResult = TestResult::where('test_id', $id)->exists();
         $test->show_category = $test->test_type == TestType::ABILITY;
-        
+
         return view('test.editQuestion', [
             'breadcrumbs' => $breadcrumbs,
             'test' => $test,
@@ -492,6 +495,8 @@ class TestController extends BaseController
                     $file->file_name_original = $request->fileSelected->getClientOriginalName();
                     $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                     $file->file_type = FileTypeEnum::TEST_RELATED;
+                    $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                    $file->file_display_name = $test->test_name . str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
                     $file->save();
                     $testQuestion->file_id = $file->file_id;
                 }
@@ -510,7 +515,7 @@ class TestController extends BaseController
             $files = $request->allFiles();
             $convertFiles = [];
             foreach ($files as $indexFile => $f) {
-                if (strpos($indexFile,'pushedQuestionFile') !== false)
+                if (strpos($indexFile, 'pushedQuestionFile') !== false)
                     $convertFiles[str_replace('pushedQuestionFile_', '', $indexFile)] = $f;
             }
 
@@ -526,12 +531,10 @@ class TestController extends BaseController
             }
 
             foreach ($subQuestions as $index => $subQuestion) {
-                if (!empty($subQuestion->testSubQuestionId))
-                {
+                if (!empty($subQuestion->testSubQuestionId)) {
                     $testSubQuestion = TestSubQuestion::with('tags')->find($subQuestion->testSubQuestionId);
 
-                }
-                else {
+                } else {
                     $testSubQuestion = new TestSubQuestion();
 
                 }
@@ -551,7 +554,7 @@ class TestController extends BaseController
                         $testSubQuestion->explanation_file_id = $storedFile->file_id;
                 }
                 if (!empty($convertFiles[$index])) {
-                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST , $convertFiles[$index]);
+                    $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $convertFiles[$index]);
                     if ($name) {
                         $file = new File();
                         $file->file_name = $name;
@@ -651,7 +654,7 @@ class TestController extends BaseController
         ], StatusCode::OK);
     }
 
-    public function listQuestionAttach ($id)
+    public function listQuestionAttach($id)
     {
         $test = Test::with('testQuestions.testSubQuestions')->where('test_id', $id)->first();
         if (!$test)
@@ -668,7 +671,7 @@ class TestController extends BaseController
 
     }
 
-    public function listQuestionAttachUpdate (Request $request, $id)
+    public function listQuestionAttachUpdate(Request $request, $id)
     {
         $test = Test::where('test_id', $id)->first();
 
@@ -681,8 +684,8 @@ class TestController extends BaseController
         DB::beginTransaction();
         try {
             $testQuestions = json_decode($request->testQuestions);
-            $totalScore =0 ;
-            foreach ($testQuestions as  $index => $testQuestion) {
+            $totalScore = 0;
+            foreach ($testQuestions as $index => $testQuestion) {
                 $testQuestionDb = TestQuestion::find($testQuestion->test_question_id);
                 $orderValue = ++$index;
                 $testQuestionDb->display_order = $orderValue;

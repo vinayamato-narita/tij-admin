@@ -852,6 +852,24 @@ class StudentController extends BaseController
             if ($request['sort'] == "course_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course_name','ASC') : $queryBuilder->orderBy('course_name','DESC');
             }
+            if ($request['sort'] == "student_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id','ASC') : $queryBuilder->orderBy('student_id','DESC');
+            }
+            if ($request['sort'] == "student_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_name','ASC') : $queryBuilder->orderBy('student_name','DESC');
+            }
+            if ($request['sort'] == "student_nickname") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_nickname','ASC') : $queryBuilder->orderBy('student_nickname','DESC');
+            }
+            if ($request['sort'] == "create_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('create_date','ASC') : $queryBuilder->orderBy('create_date','DESC');
+            }
+            if ($request['sort'] == "last_login_date") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('last_login_date','ASC') : $queryBuilder->orderBy('last_login_date','DESC');
+            }
+            if ($request['sort'] == "is_tmp_entry") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('is_tmp_entry','ASC') : $queryBuilder->orderBy('is_tmp_entry','DESC');
+            }
         }
 
         Session::put('sessionStudent', collect($request));

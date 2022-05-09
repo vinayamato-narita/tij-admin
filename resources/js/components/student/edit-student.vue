@@ -45,8 +45,12 @@
                                                         >登録状態<span class="glyphicon glyphicon-star"
                                                             ></span
                                                         ></label
+                                                        
                                                     >
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-9 pt-7" >
+                                                        {{is_tmp_entry}}
+                                                    </div>
+                                                    <!-- <div class="col-md-9">
                                                         <select
                                                             class="form-control"
                                                             name="is_tmp_entry"
@@ -65,7 +69,7 @@
                                                         >
                                                             {{ errors.first("form1.is_tmp_entry") }}
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <div class="form-group row">
@@ -836,7 +840,7 @@ export default {
             password_confirm: "",
         };
     },
-    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword'],
+    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
     mounted() {},
     methods: {
         save(a) {

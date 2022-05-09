@@ -523,7 +523,7 @@
                 custom: {
                     publish_date_from_date : {
                         required :  "公開開始日時を選択してください",
-                        compare_publish_date : "公開開始日時は公開終了日時より小さくなければなりません"
+                        compare_publish_date : "公開開始日時は公開終了日時よりも前に設定してください"
                     },
                     publish_date_to_date : {
                         required :  "公開終了日時を選択してください"
@@ -572,14 +572,14 @@
                     },
                     decideDateDate : {
                         required :  "開催決定日時 を選択してください",
-                        custom_than:"開催決定日時は公開開始日時より大きくなければなりません"
+                        custom_than:"開催決定日時は公開開始日時よりも後に設定してください"
                     },
                     reverseEndDateDate : {
                         required :  "申込期限を選択してください"
                     },
                     courseStartDateDate : {
                         required :  "開講日時を選択してください",
-                        custom_date:"開講日時は公開終了日時より小さくなければなりません"
+                        custom_date:"開講日時は公開終了日時よりも前に設定してください"
                     },
 
 

@@ -167,12 +167,12 @@
                     },
                     start_date: {
                         required : '開始時間を入力してください',
-                        compare_date : '開始時間は終了時間:より小さくなければなりません',
+                        compare_date : '開始時間は終了時間よりも前に設定してください',
                         exists_campaign_datetime: "この間にキャンペーンを行いました"
                     },
                     end_date: {
                         required : '終了時間を入力してください',
-                        compare_date : '開始時間は終了時間:より小さくなければなりません',
+                        compare_date : '開始時間は終了時間よりも前に設定してください',
                         exists_campaign_datetime: "この間にキャンペーンを行いました"
                     }
                 }

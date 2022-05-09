@@ -52,7 +52,8 @@ class CommentController extends BaseController
                     ->orWhere('lesson_history.comment_from_teacher_to_office', '<>', "")
                     ->orWhere('lesson_history.note_from_student_to_teacher', '<>', "");
             })
-            ->groupBy('student_point_history.student_point_history_id');
+            ->groupBy('student_point_history.lesson_schedule_id')
+            ->groupBy('student_point_history.student_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

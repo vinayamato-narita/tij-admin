@@ -20,6 +20,7 @@ BEGIN
     IF _cancel_history_save_flag = 1 THEN
         INSERT INTO lesson_cancel_history (
             `student_id`,
+            `lesson_schedule_id`,
             `teacher_id`,
             `lesson_date`,
             `lesson_starttime`,
@@ -31,6 +32,7 @@ BEGIN
         ) 
         SELECT 
                     lh.student_id,
+                    lh.lesson_schedule_id,
                     ls.teacher_id,
                     ls.lesson_date,
                     ls.lesson_starttime,
@@ -42,7 +44,7 @@ BEGIN
                 FROM 
                     lesson_history lh
                     join lesson_schedule ls on lh.lesson_schedule_id = ls.lesson_schedule_id
-                    JOIN student_point_history sph ON sph.lesson_schedule_id = ls.lesson_schedule_id
+                    JOIN student_point_history sph ON sph.lesson_schedule_id = ls.lesson_schedule_id and lh.student_id = sph.student_id
                     
                 WHERE
                     sph.point_subscription_id = _point_subscription_history_id;

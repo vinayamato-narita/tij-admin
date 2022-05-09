@@ -207,7 +207,10 @@ class PreparationController extends BaseController
                         $preparation->file_id = $storedFile->file_id;
 
                 }
+                if (!isset($request->fileId) && !isset($request->fileSelected)) {
+                    $preparation->file_id = '';
 
+                }
                 $preparation->save();
                 DB::commit();
                 return response()->json([

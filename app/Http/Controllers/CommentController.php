@@ -68,6 +68,33 @@ class CommentController extends BaseController
             if ($request['sort'] == "course_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('course.course_name','ASC') : $queryBuilder->orderBy('course.course_name','DESC');
             }
+            if ($request['sort'] == "student_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student.student_id','ASC') : $queryBuilder->orderBy('student.student_id','DESC');
+            }
+            if ($request['sort'] == "teacher_rating") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.teacher_rating','ASC') : $queryBuilder->orderBy('lesson_history.teacher_rating','DESC');
+            }
+            if ($request['sort'] == "teacher_attitude") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.teacher_attitude','ASC') : $queryBuilder->orderBy('lesson_history.teacher_attitude','DESC');
+            }
+            if ($request['sort'] == "teacher_punctual") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.teacher_punctual','ASC') : $queryBuilder->orderBy('lesson_history.teacher_punctual','DESC');
+            }
+            if ($request['sort'] == "skype_voice_rating_from_student") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_student','ASC') : $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_student','DESC');
+            }
+            if ($request['sort'] == "comment_from_student_to_office") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_student_to_office','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_student_to_office','DESC');
+            }
+            if ($request['sort'] == "skype_voice_rating_from_teacher") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_teacher','ASC') : $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_teacher','DESC');
+            }
+            if ($request['sort'] == "comment_from_teacher_to_student") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_student','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_student','DESC');
+            }
+            if ($request['sort'] == "comment_from_teacher_to_office") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_office','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_office','DESC');
+            }
         }
         $commentList = $queryBuilder->sortable(['id' => 'desc'])->paginate($pageLimit);
 

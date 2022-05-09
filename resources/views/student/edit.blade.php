@@ -1,3 +1,6 @@
+@php
+    use App\Enums\StudentEntryType;
+@endphp
 @extends('layouts.default')
 @section('title', '学習者情報編集')
 @section('content')
@@ -8,5 +11,6 @@
     	:delete-action="{{ json_encode(route('student.destroy', $studentInfo->student_id)) }}" 
     	:message-confirm="{{ json_encode('この学習者を削除しますか？') }}"
     	:url-update-password="{{json_encode(route('student.updatePassword'))}}" 
+		:is_tmp_entry="{{json_encode(StudentEntryType::getDescription($studentInfo->is_tmp_entry))}}"
     ></edit-student>
 @endsection

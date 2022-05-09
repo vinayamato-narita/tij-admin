@@ -360,7 +360,8 @@ class TestController extends BaseController
             foreach ($subQuestions as $index => $subQuestion) {
                 $testSubQuestion = new TestSubQuestion();
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = ++$index;
+                $indexDisplayOrder =  $index + 1;
+                $testSubQuestion->display_order = $indexDisplayOrder;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;
@@ -381,6 +382,8 @@ class TestController extends BaseController
                         $file->file_name_original = $f->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                         $file->file_type = FileTypeEnum::TEST_RELATED;
+                        $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_display_name = $test->test_name . str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
                         $file->save();
                         $testSubQuestion->explanation_file_id = $file->file_id;
                     }
@@ -539,7 +542,8 @@ class TestController extends BaseController
 
                 }
                 $testSubQuestion->test_question_id = $testQuestion->test_question_id;
-                $testSubQuestion->display_order = ++$index;
+                $indexDisplayOrder =  $index + 1;
+                $testSubQuestion->display_order = $indexDisplayOrder;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
                 $testSubQuestion->answer1 = $subQuestion->answer1;
                 $testSubQuestion->answer2 = $subQuestion->answer2;
@@ -561,6 +565,8 @@ class TestController extends BaseController
                         $file->file_name_original = $f->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                         $file->file_type = FileTypeEnum::TEST_RELATED;
+                        $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_display_name = $test->test_name . str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
                         $file->save();
                         $testSubQuestion->explanation_file_id = $file->file_id;
                     }

@@ -60,7 +60,7 @@
                                             <div class="col-md-9">
                                                 <div class="flex">
                                                     <button type="button" v-on:click="newFile"
-                                                        class="btn btn-primary  mr-2">新規ファイル選択
+                                                        class="btn btn-primary  mr-2">新規ファイル追加
                                                     </button>
                                                     <span class="pt-7">{{ file_original_name }}</span>
                                                     <input type="file" name="file_attach" ref="newFile"
@@ -163,11 +163,11 @@ export default {
         let messError = {
             custom: {
                 file_code: {
-                    required: "メディアコードを選択してください",
+                    required: "メディアコードを入力してください",
                     max: "メディアコードは255文字以内で入力してください"
                 },
                 file_attach: {
-                    required: "復習動画を入力してください"
+                    required: "メディアファイルを選択してください"
                 },
                 file_display_name: {
                     required: "メディア名を入力してください",

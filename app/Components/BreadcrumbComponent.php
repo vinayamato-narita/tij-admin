@@ -428,7 +428,7 @@ class BreadcrumbComponent
                 'route_str' => 'courseGroupUser.saveImport'
             ],
             'file_list' => [
-                'text' => 'メディア管理',
+                'text' => 'メディア一覧',
                 'route_str' => 'file.index'
             ],
             'create_file' => [

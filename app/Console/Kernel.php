@@ -32,6 +32,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('ability_test_report:run')
                  ->dailyAt('1:15');
+
+        $schedule->command('command:update_test_comment_expired')
+            ->everyFiveMinutes();
     }
 
     /**

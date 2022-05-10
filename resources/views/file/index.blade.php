@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', 'メディア管理')
+@section('title', 'メディア一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -11,7 +11,7 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                        メディア管理
+                        メディア一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">

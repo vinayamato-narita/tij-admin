@@ -264,6 +264,35 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                    <div class="form-group row">
+                                                    <label
+                                                        class="col-md-3 col-form-label text-md-right"
+                                                        for="text-input"
+                                                        >性別</label
+                                                    >
+                                                    <div class="col-md-9">
+                                                       <div class="col-md-9 pt-7">
+                                                        <label style="margin-right: 20px"><input
+                                                            type="radio"
+                                                            name="student_sex"
+                                                            v-model="studentInfoEx.student_sex"
+                                                            value="0"
+                                                        /> 男性</label>
+                                                        <label><input
+                                                            type="radio"
+                                                            name="student_sex"
+                                                            v-model="studentInfoEx.student_sex"
+                                                            value="1"
+                                                        /> 女性</label>
+                                                          <label style="margin-left: 20px"><input
+                                                            type="radio"
+                                                            name="student_sex"
+                                                            v-model="studentInfoEx.student_sex"
+                                                            value="2"
+                                                        /> 回答しない</label>
+                                                    </div>
+                                                    </div>
+                                                </div>
 
                                             </div>
                                             <div class="col-md-6">
@@ -682,16 +711,19 @@
                                             name="password"
                                             v-model="password"
                                             ref="password"
-                                            v-validate="
-                                                'required|password_rule|min:8|max:16'
-                                            "
+                                           v-validate="{
+                            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+                            required: true,
+                            max: 16,
+                            min : 8
+                                                }"
                                         />
                                         <div
-                                            class="input-group is-danger"
+                                            class="input-group is-danger "
                                             role="alert"
                                             v-if="errors.has('form2.password')"
                                         >
-                                            {{ errors.first("form2.password") }}
+                                           <p class="inlinetext"> {{ errors.first("form2.password") }}</p>
                                         </div>                                  
                                     </div>
                                 </div>
@@ -710,7 +742,7 @@
                                             "
                                         />
                                         <div
-                                            class="input-group is-danger"
+                                            class="input-group is-danger "
                                             role="alert"
                                             v-if="errors.has('form2.password_confirm')"
                                         >
@@ -803,10 +835,10 @@ export default {
                     max: "連絡事項は20000文字以内で入力してください",
                 },
                 password: {
-                    required: "パスワードを入力してください",
-                    min: "パスワードは8文字以上で入力してください",
-                    max: "パスワードは16文字以内で入力してください",
-                    password_rule: "パスワードに使用できるのは、a～z、A～Z、0～9 の英数字と、記号です",
+                      required: 'パスワードを入力してください。',
+                        max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                        min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                        regex: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。'
                 },
                 password_confirm: {
                     required: "パスワード（確認）を入力してください",
@@ -841,7 +873,9 @@ export default {
         };
     },
     props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
-    mounted() {},
+    mounted() {
+        console.log(this.studentInfoEx)
+    },
     methods: {
         save(a) {
             let that = this;
@@ -916,3 +950,9 @@ export default {
     }
 };
 </script>
+<style scoped>
+.inlinetext {
+  white-space:pre-wrap;
+
+}
+</style>

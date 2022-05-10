@@ -369,7 +369,7 @@
                                                                                                                                 :format="'YYYY/MM/DD'"
                                                                                                                                 type="date"
                                                                                                                         ></date-picker>-->
-                                                                <input type="hidden" name="decideDateDate" v-validate="" v-model="decideDateDate">
+                                                                <input type="hidden" name="decideDateDate" v-validate="'custom_than'" v-model="decideDateDate">
 
 
                                                                 <div class="input-group is-danger" role="alert">
@@ -449,7 +449,7 @@
                                                                         :format="'YYYY/MM/DD'"
                                                                         type="date"
                                                                 ></date-picker>
-                                                                <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateDate">
+                                                                <input type="hidden" name="courseStartDateDate" v-validate="'required|custom_date'" v-model="courseStartDateDate">
 
 
                                                                 <div class="input-group is-danger" role="alert">
@@ -523,7 +523,7 @@
                 custom: {
                     publish_date_from_date : {
                         required :  "公開開始日時を選択してください",
-                        compare_publish_date : "公開開始日時は公開終了日時より小さくなければなりません"
+                        compare_publish_date : "公開開始日時は公開終了日時よりも前に設定してください"
                     },
                     publish_date_to_date : {
                         required :  "公開終了日時を選択してください"
@@ -572,12 +572,14 @@
                     },
                     decideDateDate : {
                         required :  "開催決定日時 を選択してください",
+                        custom_than:"開催決定日時は公開開始日時よりも後に設定してください"
                     },
                     reverseEndDateDate : {
                         required :  "申込期限を選択してください"
                     },
                     courseStartDateDate : {
-                        required :  "開講日時を選択してください"
+                        required :  "開講日時を選択してください",
+                        custom_date:"開講日時は公開終了日時よりも前に設定してください"
                     },
 
 
@@ -590,6 +592,20 @@
                 validate(value, args) {
                     if (parseInt(that.maxReserveCount) < parseInt(that.minReserveCount) ) return {valid: false }
                     return {valid: true}
+                }
+            });
+              this.$validator.extend("custom_date", {
+                validate(value, args) {
+                     var fromDate = that.courseStartDateDate.setHours(that.courseStartDateDate.getHours(), that.courseStartDateDate.getMinutes());
+                     var toDate = that.publish_date_to_date.setHours(that.publish_date_to_time.getHours(), that.publish_date_to_time.getMinutes());
+                    return {valid: (fromDate - toDate) < 0 ? true : false}
+                }
+            });
+              this.$validator.extend("custom_than", {
+                validate(value, args) {
+                    var fromDate = that.decideDateDate.setHours(that.decideDateDate.getHours(), that.decideDateDate.getMinutes());
+                     var toDate = that.publish_date_from_date.setHours(that.publish_date_from_date.getHours(), that.publish_date_from_date.getMinutes());
+                    return {valid: (fromDate - toDate) > 0 ? true : false}
                 }
             });
             this.$validator.extend("compare_publish_date", {

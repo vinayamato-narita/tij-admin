@@ -260,7 +260,7 @@
                                                                 isFreeTeacher
                                                             "
                                                             type="radio"
-                                                            checked
+                                                            
                                                         />
                                                         固定
                                                     </label>
@@ -277,6 +277,7 @@
                                                                 isFreeTeacher
                                                             "
                                                             type="radio"
+                                                            checked
                                                         />
                                                         自由
                                                     </label>
@@ -844,7 +845,7 @@ export default {
             displayOrder: 1,
             mail: "",
             nickName: "",
-            isFreeTeacher: 0,
+            isFreeTeacher: 1,
             flagShowLoader: false,
             messageText: this.message,
             errorsData: {},

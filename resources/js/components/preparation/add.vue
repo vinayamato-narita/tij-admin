@@ -25,7 +25,7 @@
                                             <label class="col-md-3 col-form-label text-md-right">予習動画:
 
                                             </label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-9">
                                                 <button type="button" class="btn btn-primary w-100 mr-2"
                                                         v-on:click="show('add-files-modal')">ファイル選択
                                                 </button>
@@ -53,11 +53,7 @@
                                             </label>
                                             <div class="col-md-3" >
                                                 <div class="flex">
-                                                    <input type="hidden" 
-                                                        name="moment"
-                                                        v-model="moment"
-                                                    >
-                                                    <span style="margin-right: 10px" class="pt-7">{{ moment }}</span>
+                                                    <span style="margin-right: 10px" class="pt-7" v-if="!disabled_file_code">{{ pre_code }}</span>
                                                     <input
                                                         class="form-control"
                                                         name="file_code"
@@ -101,6 +97,7 @@
                                             <div class="col-md-6">
                                                             <textarea class="form-control" id="preparationDescription"
                                                                       name="preparationDescription"
+                                                                      rows="5"
                                                                       @input="changeInput()"
                                                                       v-model="preparationDescription">
                                                             </textarea>
@@ -185,7 +182,7 @@
                 preparationDescription: '',
                 errorsData: {},
                 fileId: null,
-                moment: 'PR' + moment().format("YMMDD"),
+                pre_code: 'PR' + moment().format("YMMDD"),
                 file_code: '',
                 disabled_file_code: true
             };
@@ -205,9 +202,14 @@
                             this.fileSelected = null;
                             this.fileName = null;
                             this.file_code = args[0].file_code;
-                            this.preparationName = args[0].file_display_name;
-                            this.preparationDescription = args[0].file_description;
                             this.disabled_file_code = true;
+
+                            if(!(this.preparationName != "")) {
+                                this.preparationName = args[0].file_display_name;
+                            }
+                            if(!(this.preparationDescription != "")) {
+                                this.preparationDescription = args[0].file_description;
+                            }
                         }
                     }
                 });
@@ -222,6 +224,7 @@
                 this.disabled_file_code = true;
                 this.fileName = null;
                 this.file_code = null;
+                this.errors.remove('file_code');
                 if(e.target.files.length != 0) {
                     this.fileName = e.target.files[0].name;
                     this.disabled_file_code = false;
@@ -235,7 +238,7 @@
                 if (this.preparationDescription)
                     formData.append("preparationDescription", this.preparationDescription);
                 if (this.fileSelected) {
-                    formData.append("file_code", this.moment + (this.file_code ?? ''));
+                    formData.append("file_code", this.pre_code + (this.file_code != null && this.file_code != '' ? this.file_code.trim() : ''));
                     formData.append('fileSelected', this.fileSelected);
                 }
                 if (this.fileId)

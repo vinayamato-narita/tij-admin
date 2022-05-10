@@ -84,8 +84,9 @@
                                 <th class="text-center bg-gray-100 " style="width: 50px">
                                     <input   v-on:click="checkAll" type="checkbox" class=" checkbox" style="width: auto; height: auto; display: none;">
                                 </th>
+                                <th class="text-center text-md-left bg-gray-100">メディアコード</th>
                                 <th class="text-center text-md-left bg-gray-100">ファイル名</th>
-                                <th class="text-center text-md-left bg-gray-100">種別</th>
+                                <!-- <th class="text-center text-md-left bg-gray-100">種別</th> -->
                             </tr>
                             </thead>
                             <tbody>
@@ -93,11 +94,8 @@
                                 <td class="text-center">
                                     <input :value="file.file_id" :id="file.fileId" name="fileId" v-model="fileId" type="radio" class=" checkbox" style="width: auto; height: auto; display: inline-block;">
                                 </td>
-                                <td class="text-md-left" >{{  file.file_name_original }}</td>
-                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.TEXT">テキスト</td>
-                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.PREPARATION_VIDEO">予習動画</td>
-                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.REVIEW_VIDEO">復習動画</td>
-                                <td class="text-md-left"  v-if="fileType !== null && file.file_type === fileType.TEST_RELATED">テスト関連</td>
+                                <td class="text-md-left" >{{  file.file_code }}</td>
+                                <td class="text-md-left" >{{  file.file_display_name }}</td>
 
                             </tr>
 

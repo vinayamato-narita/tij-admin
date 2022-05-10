@@ -298,10 +298,10 @@
         },
         data() {
             return {
-                messageConfirm : 'このテキストをレッスンに解除しますか？',
-                messageConfirmPreparation : 'この予習をレッスンに解除しますか？',
-                messageConfirmReview : 'この復習をレッスンに解除しますか？',
-                messageConfirmTest : 'このテストをレッスンに解除しますか？',
+                messageConfirm : 'このテキストを削除しますか？',
+                messageConfirmPreparation : 'この予習を削除しますか？',
+                messageConfirmReview : 'この復習を削除しますか？',
+                messageConfirmTest : 'このテストを削除しますか？',
                 type : 'lesson',
                 csrfToken: Laravel.csrfToken,
                 lessonENName : '',

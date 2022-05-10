@@ -480,9 +480,9 @@ export default {
             this.zoomUrl = this.selectedEvent != null ? this.selectedEvent.zoom_url : ''
             this.showZoomSetting = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : false
 
-            var dateTime = new Date(new Date().setHours(new Date().getHours() + 1))
+            var dateTime = new Date(new Date().setHours(new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' })).getHours() + 1))
 
-            if (this.selectedTime > new Date()) {
+            if (this.selectedTime > new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }))) {
                 dateTime = this.selectedTime
             }
 
@@ -492,10 +492,10 @@ export default {
         notBeforeDateNow (date) {
           var hours = this.startTime != "" ? this.startTime.slice(0, 2) : 23
           var minute = this.startTime != "" ? this.startTime.slice(2, 2) : 59
-            return date.setHours(hours, minute, 0, 0) < new Date();
+            return date.setHours(hours, minute, 0, 0) < new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }));
         },
         notBeforeTimeNow (date) {
-            return new Date(this.startDate).setHours(date.getHours(), date.getMinutes(), 0, 0) <= Date.now();
+            return new Date(this.startDate).setHours(date.getHours(), date.getMinutes(), 0, 0) <= new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }));
         },
         changeDateTime (date) {
             this.startDateTime = this.startDate + " " + this.startTime

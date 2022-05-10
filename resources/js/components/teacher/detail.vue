@@ -436,7 +436,7 @@
                                             role="alert"
                                             v-if="errors.has('password')"
                                         >
-                                            {{ errors.first("password") }}
+                                            <p class="inlinetext"> {{ errors.first("password") }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -595,3 +595,9 @@
         },
     }
 </script>
+<style scoped>
+.inlinetext {
+  white-space:pre-wrap;
+
+}
+</style>

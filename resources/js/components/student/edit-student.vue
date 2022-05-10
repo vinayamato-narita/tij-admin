@@ -377,7 +377,7 @@
                                                             name="lang_type"
                                                             v-model="studentInfoEx.lang_type"
                                                         >   
-                                                            <option :value="key" v-for="(value, key) in studentInfoEx.lang_types">
+                                                            <option :selected="studentInfoEx.lang_type==key" :value="key" v-for="(value, key) in studentInfoEx.lang_types" >
                                                                 {{ value }}</option
                                                             >
                                                         </select>
@@ -874,7 +874,7 @@ export default {
     },
     props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
     mounted() {
-        console.log(this.studentInfoEx)
+        console.log(this.studentInfoEx.lang_type)
     },
     methods: {
         save(a) {

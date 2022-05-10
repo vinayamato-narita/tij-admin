@@ -1089,6 +1089,7 @@ class StudentController extends BaseController
         $studentInfo->student_name_kana = ($request->student_first_name_kata ?? "") ." ".  ($request->student_last_name_kata ?? "");
         $studentInfo->student_nickname = $request->student_nickname;
         $studentInfo->student_email = $request->student_email;
+        $studentInfo->student_sex = $request->student_sex;
         if (isset($request->company_name)) {
             $studentInfo->company_name = $request->company_name;
         }

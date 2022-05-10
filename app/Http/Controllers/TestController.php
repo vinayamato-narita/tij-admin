@@ -377,6 +377,7 @@ class TestController extends BaseController
                 if (!empty($convertFiles[$index])) {
                     $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $convertFiles[$index]);
                     if ($name) {
+                        $f = $convertFiles[$index];
                         $file = new File();
                         $file->file_name = $name;
                         $file->file_name_original = $f->getClientOriginalName();
@@ -561,6 +562,7 @@ class TestController extends BaseController
                     $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $convertFiles[$index]);
                     if ($name) {
                         $file = new File();
+                        $f = $convertFiles[$index];
                         $file->file_name = $name;
                         $file->file_name_original = $f->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;

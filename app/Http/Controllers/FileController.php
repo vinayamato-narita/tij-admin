@@ -130,7 +130,7 @@ class FileController extends BaseController
         $file->file_name_original = $request->file_attach->getClientOriginalName();
         $file->file_code = $request->file_code;
         $file->file_display_name = $request->file_display_name;
-        $file->file_description = $request->file_description;
+        $file->file_description = $request->file_description ?? '';
         $file->file_type = FileTypeEnum::MEDIA;
 
         $file->save();
@@ -170,7 +170,7 @@ class FileController extends BaseController
         $fileInfo = File::where('file_id', $request->file_id)->firstOrFail();
         $fileInfo->file_code = $request->file_code;
         $fileInfo->file_display_name = $request->file_display_name;
-        $fileInfo->file_description = $request->file_description;
+        $fileInfo->file_description = $request->file_description ?? '';
        
         if($request->file_attach) {
             $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);

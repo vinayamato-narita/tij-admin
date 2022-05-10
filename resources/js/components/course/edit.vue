@@ -604,7 +604,7 @@
               this.$validator.extend("custom_than", {
                 validate(value, args) {
                     var fromDate = that.decideDateDate.setHours(that.decideDateDate.getHours(), that.decideDateDate.getMinutes());
-                     var toDate = that.publish_date_from_time.setHours(that.publish_date_from_time.getHours(), that.publish_date_from_time.getMinutes());
+                     var toDate = that.publish_date_from_date.setHours(that.publish_date_from_date.getHours(), that.publish_date_from_date.getMinutes());
                     return {valid: (fromDate - toDate) > 0 ? true : false}
                 }
             });

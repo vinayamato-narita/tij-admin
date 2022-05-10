@@ -95,6 +95,7 @@ class SendMailBeforeLessonStart extends Command
         ->where('lesson_schedule.course_id', '>', 1)
         ->where('lesson_schedule.lesson_starttime', '>=', $timeStart)
         ->where('lesson_schedule.lesson_starttime', '<=', $timeEnd)
+        ->orderBy('lesson_schedule.lesson_schedule_id')
         ->get();
      
         $scheduleId = 0;

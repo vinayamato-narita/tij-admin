@@ -107,7 +107,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">誕生日:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            {{this.teacher.teacher_birthday}}
+                                            {{ this.teacher.teacher_birthday.split('-').join('/').slice(0,11)}}
 
                                         </div>
                                     </div>
@@ -526,7 +526,7 @@
         },
         props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword', 'avatarSrc', 'abilityTestListUrl', 'registerAbilityTestUrl'],
         mounted() {
-
+            
         },
         methods: {
             show () {

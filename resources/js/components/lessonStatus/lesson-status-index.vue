@@ -114,22 +114,21 @@
                                                             <p v-if="dataTime[item-1] !== undefined">{{ dataTime[item-1]['time'] }}</p>
                                                         </td>
                                                         <template v-for="column in 7">
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['reverse_count_normal'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['lesson_count_normal'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['reverse_count_free'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status free-lesson-registerd">
-                                                            {{ dataTime[item-1][column - 1]['0']['lesson_count_free'] }}
-                                                        </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['reverse_count_normal'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['lesson_count_normal'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['reverse_count_free'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status free-lesson-registerd" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['lesson_count_free'] }}
+                                                            </td>
                                                         <td v-bind:key="column.key" :class="['free-lesson-remain', dataTime[item-1][column - 1]['free_schedule'] >= 0 ? '' : 'td-error']">
                                                             {{ dataTime[item-1][column - 1]['free_schedule'] }}
                                                         </td>
-
                                                         <td v-bind:key="column.key" class="max-free-lesson end-date-td">
                                                             <span class="max-free-lesson-text" v-if="!editFlg">
                                                                 {{ dataTime[item-1][column - 1]['max_free_lesson'] }}
@@ -202,6 +201,7 @@
                     </div>
                 </div>
             </div>
+        <lesson-status-detail :urlLessonStatusDetail="urlLessonStatusDetail" :lessonTime="lessonTime"></lesson-status-detail>
         <loader :flag-show="flagShowLoader"></loader>
         </main>
     </div>
@@ -210,6 +210,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "../common/loader.vue";
+import LessonStatusDetail from "./lesson-status-detail.vue"
 
 export default {
     created: function() {
@@ -217,6 +218,7 @@ export default {
     },
     components: {
         Loader,
+        LessonStatusDetail
     },
     data() {
         return {
@@ -239,10 +241,12 @@ export default {
                 _token: Laravel.csrfToken,
             },
             dataMaxFreeLesson : [],
-            flgShowTable : false
+            flgShowTable : false,
+            lessonTime : '',
+            showDetailFlg : false
         };
     },
-    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree', 'adminSystem'],
+    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree', 'adminSystem', 'urlLessonStatusDetail'],
     mounted() {
         this.getData()
     },
@@ -434,7 +438,14 @@ export default {
         selectThisWeek() {
             this.startDate = new Date()
             this.getData()
-        }
+        },
+        show () {
+            this.lessonTime = event.target.getAttribute('data-lesson-starttime');
+            this.$modal.show('select-teacher-lesson-modal');
+        },
+        hide () {
+            this.$modal.hide('select-teacher-lesson-modal');
+        },
     }
 };
 </script>

@@ -257,4 +257,6 @@ Route::group([
 
     Route::resource('file', FileController::class);
     Route::post('/file/update-file', 'FileController@updateFile')->name('file.updateFile');
+    
+    Route::post('lessonStatus/lesson_status_detail', 'LessonStatusController@lesson_status_detail')->name('lesson_status_detail');
 });

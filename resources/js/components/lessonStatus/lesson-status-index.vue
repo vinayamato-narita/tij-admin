@@ -43,7 +43,9 @@
                                         />
                                         <div id="table-container">
                                             <div class="row">
-                                                <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                                <div class="col-sm-2">
+                                                    <button class="btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                                </div>
                                                 <div class="col-sm-8 text-center">
                                                     <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                                     <button type="button" id="lesson_free_setting" class="btn btn-sm btn-primary" v-if="!editFlg" @click="changeEditFlg()">
@@ -59,7 +61,9 @@
                                                         キャンセル
                                                     </button>
                                                 </div>
-                                                <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
+                                                <div class="col-sm-2 text-right">
+                                                    <button class="btn-link" type="button" @click="handleSelectWeek(1)">次週</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -114,22 +118,21 @@
                                                             <p v-if="dataTime[item-1] !== undefined">{{ dataTime[item-1]['time'] }}</p>
                                                         </td>
                                                         <template v-for="column in 7">
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['reverse_count_normal'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['lesson_count_normal'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status">
-                                                            {{ dataTime[item-1][column - 1]['0']['reverse_count_free'] }}
-                                                        </td>
-                                                        <td v-bind:key="column.key" class="lesson-status free-lesson-registerd">
-                                                            {{ dataTime[item-1][column - 1]['0']['lesson_count_free'] }}
-                                                        </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['reverse_count_normal'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['lesson_count_normal'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['reverse_count_free'] }}
+                                                            </td>
+                                                            <td v-bind:key="column.key" class="lesson-status free-lesson-registerd" @click="show" :data-lesson-starttime="dataTime[item-1][column - 1]['0']['lesson_starttime']">
+                                                                {{ dataTime[item-1][column - 1]['0']['lesson_count_free'] }}
+                                                            </td>
                                                         <td v-bind:key="column.key" :class="['free-lesson-remain', dataTime[item-1][column - 1]['free_schedule'] >= 0 ? '' : 'td-error']">
                                                             {{ dataTime[item-1][column - 1]['free_schedule'] }}
                                                         </td>
-
                                                         <td v-bind:key="column.key" class="max-free-lesson end-date-td">
                                                             <span class="max-free-lesson-text" v-if="!editFlg">
                                                                 {{ dataTime[item-1][column - 1]['max_free_lesson'] }}
@@ -189,11 +192,15 @@
                                             <table id="header-fixed" class="table table-bordered table-striped resize text-center"></table>
                                         </div>
                                         <div class="row">
-                                            <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                            <div class="col-sm-2">
+                                                <button class="btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                            </div>
                                             <div class="col-sm-8 text-center">
                                                 <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                             </div>
-                                            <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
+                                            <div class="col-sm-2 text-right">
+                                                <button class="btn-link" type="button" @click="handleSelectWeek(1)">次週</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -202,6 +209,7 @@
                     </div>
                 </div>
             </div>
+        <lesson-status-detail :urlLessonStatusDetail="urlLessonStatusDetail" :lessonTime="lessonTime"></lesson-status-detail>
         <loader :flag-show="flagShowLoader"></loader>
         </main>
     </div>
@@ -210,6 +218,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "../common/loader.vue";
+import LessonStatusDetail from "./lesson-status-detail.vue"
 
 export default {
     created: function() {
@@ -217,6 +226,7 @@ export default {
     },
     components: {
         Loader,
+        LessonStatusDetail
     },
     data() {
         return {
@@ -239,10 +249,12 @@ export default {
                 _token: Laravel.csrfToken,
             },
             dataMaxFreeLesson : [],
-            flgShowTable : false
+            flgShowTable : false,
+            lessonTime : '',
+            showDetailFlg : false
         };
     },
-    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree', 'adminSystem'],
+    props: ["urlGetData", "numRow", 'urlLessonInfomationDetailExportCsv', 'urlLessonInfomationStatusExportCsv', 'urlAction', 'urlCopySettingLessonFree', 'adminSystem', 'urlLessonStatusDetail'],
     mounted() {
         this.getData()
     },
@@ -434,7 +446,14 @@ export default {
         selectThisWeek() {
             this.startDate = new Date()
             this.getData()
-        }
+        },
+        show () {
+            this.lessonTime = event.target.getAttribute('data-lesson-starttime');
+            this.$modal.show('select-teacher-lesson-modal');
+        },
+        hide () {
+            this.$modal.hide('select-teacher-lesson-modal');
+        },
     }
 };
 </script>

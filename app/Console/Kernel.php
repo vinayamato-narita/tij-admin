@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\SendMailBeforeLessonStart',
+        'App\Console\Commands\GroupCourseDecision',
+        'App\Console\Commands\AbilityTestReportCommand',
+        'App\Console\Commands\UpdateTestCommentExpired',
     ];
 
     /**

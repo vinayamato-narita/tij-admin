@@ -43,7 +43,9 @@
                                         />
                                         <div id="table-container">
                                             <div class="row">
-                                                <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                                <div class="col-sm-2">
+                                                    <button class="btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                                </div>
                                                 <div class="col-sm-8 text-center">
                                                     <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                                     <button type="button" id="lesson_free_setting" class="btn btn-sm btn-primary" v-if="!editFlg" @click="changeEditFlg()">
@@ -59,7 +61,9 @@
                                                         キャンセル
                                                     </button>
                                                 </div>
-                                                <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
+                                                <div class="col-sm-2 text-right">
+                                                    <button class="btn-link" type="button" @click="handleSelectWeek(1)">次週</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -188,11 +192,15 @@
                                             <table id="header-fixed" class="table table-bordered table-striped resize text-center"></table>
                                         </div>
                                         <div class="row">
-                                            <button class="col-sm-2 btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                            <div class="col-sm-2">
+                                                <button class="btn-link text-left" type="button" @click="handleSelectWeek(0)">先週</button>
+                                            </div>
                                             <div class="col-sm-8 text-center">
                                                 <button type="button" class="btn btn-sm btn-default" @click="selectThisWeek()">今週に戻る</button>
                                             </div>
-                                            <button class="col-sm-2 btn-link text-right" type="button" @click="handleSelectWeek(1)">次週</button>
+                                            <div class="col-sm-2 text-right">
+                                                <button class="btn-link" type="button" @click="handleSelectWeek(1)">次週</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

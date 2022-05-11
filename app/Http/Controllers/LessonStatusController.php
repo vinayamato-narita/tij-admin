@@ -431,6 +431,28 @@ class LessonStatusController extends BaseController
         ]);
     }
 
+    public function lesson_status_detail(Request $request) {
+        $data = $request->all();
+
+        if (empty($data['lesson_time'])) {
+            return response()->json([
+                'status' => 'NG',
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ], StatusCode::BAD_REQUEST);
+        }
+
+        $lessonStatusDetail = DB::select('CALL sp_get_lesson_schedule_info_detail_for_cakephp(?)',
+            array(
+                date('Y-m-d H:i:s', strtotime($data['lesson_time']))
+            ));
+
+        return response()->json([
+            'lessonStatusDetail' => $lessonStatusDetail,
+            'status' => StatusCode::OK
+        ]);
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

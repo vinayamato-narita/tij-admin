@@ -13,10 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\SendMailBeforeLessonStart',
-        'App\Console\Commands\GroupCourseDecision',
-        'App\Console\Commands\AbilityTestReportCommand',
-        'App\Console\Commands\UpdateTestCommentExpired',
+        Commands\SendMailBeforeLessonStart::class,
+        Commands\GroupCourseDecision::class,
+        Commands\AbilityTestReportCommand::class,
+        Commands\UpdateTestCommentExpired::class
     ];
 
     /**

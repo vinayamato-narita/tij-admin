@@ -10,7 +10,9 @@ use App\Enums\LangType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Models\TimeZone;
+use App\Models\Lesson;
 use App\Enums\CourseTypeEnum;
+use DB;
 use Log;
 
 class SendMailBeforeLessonStart extends Command
@@ -66,14 +68,20 @@ class SendMailBeforeLessonStart extends Command
             'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson.lesson_name',
+            'lesson.lesson_id',
             'lesson_text.lesson_text_name',
             'teacher.teacher_nickname',
             'student.student_email',
             'lesson_schedule.lesson_schedule_id',
             'lesson_schedule.course_type',
+            'lesson_schedule.zoom_url',
             'teacher.timezone_id',
             'teacher.teacher_email',
-            'student.student_nickname'
+            'student.student_nickname',
+            DB::raw("COALESCE(len.lesson_name, lesson.lesson_name) AS lesson_name_en"),
+            DB::raw("COALESCE(lcn.lesson_name, lesson.lesson_name) AS lesson_name_cn"),
+            DB::raw("COALESCE(lten.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_en"),
+            DB::raw("COALESCE(ltcn.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_cn")
         )->join('student_point_history', function($join) {
             $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
         })
@@ -86,18 +94,34 @@ class SendMailBeforeLessonStart extends Command
         ->join('lesson', function($join) {
             $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
         })
+        ->leftJoin('lesson_info as len', function($join) {
+            $join->on('lesson.lesson_id', '=', 'len.lesson_id')
+            ->where('len.lang_type', LangType::EN);
+        })
+        ->leftJoin('lesson_info as lcn', function($join) {
+            $join->on('lesson.lesson_id', '=', 'lcn.lesson_id')
+            ->where('lcn.lang_type', LangType::ZH);
+        })
         ->leftJoin('lesson_text_lesson', function($join) {
             $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
         })
         ->leftJoin('lesson_text', function($join) {
             $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
         })
+        ->leftJoin('lesson_text_info as lten', function($join) {
+            $join->on('lesson_text.lesson_text_id', '=', 'lten.lesson_text_id')
+            ->where('lten.lang_type', LangType::EN);
+        })
+        ->leftJoin('lesson_text_info as ltcn', function($join) {
+            $join->on('lesson_text.lesson_text_id', '=', 'ltcn.lesson_text_id')
+            ->where('ltcn.lang_type', LangType::ZH);
+        })
         ->where('lesson_schedule.course_id', '>', 1)
         ->where('lesson_schedule.lesson_starttime', '>=', $timeStart)
         ->where('lesson_schedule.lesson_starttime', '<=', $timeEnd)
         ->orderBy('lesson_schedule.lesson_schedule_id')
         ->get();
-     
+
         $scheduleId = 0;
         foreach($lessonSchedules as $lessonSchedule) 
         {
@@ -110,6 +134,8 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -123,9 +149,11 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
                 $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
                 $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
-                $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
-                $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
+                $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_en, $mailBody);
+                $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_en, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -139,9 +167,11 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
                 $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
                 $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
-                $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
-                $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
+                $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_cn, $mailBody);
+                $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_cn, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -165,6 +195,8 @@ class SendMailBeforeLessonStart extends Command
             $mailBody = str_replace("#LESSON_DATE_JP#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
             $mailBody = str_replace("#LESSON_TIME_JP#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
+            $mailBody = str_replace("#ZOOM_URL#", $lessonSchedule->zoom_url, $mailBody);
+            $mailBody = str_replace("#TEACHER_MY_PAGE_URL#", env('APP_URL_TEACHER'), $mailBody);
 
             if ($lessonSchedule->course_type == CourseTypeEnum::REGULAR_COURSE) {
                 $mailBody = str_replace("#STUDENT_NICKNAME#", $lessonSchedule->student_nickname, $mailBody);

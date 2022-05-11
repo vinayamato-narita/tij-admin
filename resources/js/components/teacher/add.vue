@@ -209,6 +209,9 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="timeZone"
                                                 >タイムゾーン:
+                                                 <span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span>
                                             </label>
                                             <div class="col-md-6">
                                                 <select
@@ -217,6 +220,7 @@
                                                     id="timeZone"
                                                     v-model="timeZone"
                                                     aria-invalid="false"
+                                                    v-validate="'required'"
                                                 >
                                                     <option
                                                         value="0"
@@ -829,6 +833,9 @@ export default {
                 },
                 zoomPassword: {
                     max: "パスワードは50文字以内で入力してください。"
+                },
+                timeZone:{
+                    required: "タイムゾーンを選択してください",
                 }
             }
         };
@@ -849,7 +856,7 @@ export default {
             flagShowLoader: false,
             messageText: this.message,
             errorsData: {},
-            timeZone: 0,
+            timeZone: null,
             teacherSex: 0,
             teacherBirthday: null,
             teacherUniversity: "",
@@ -873,10 +880,13 @@ export default {
         };
     },
     props: ["listTeacherUrl", "timeZones", "createUrl"],
-    mounted() {},
+    mounted() {
+     
+    },
     methods: {
         register() {
             console.log(this.teacherFeature);
+              console.log(this.timeZone)
             let that = this;
             let formData = new FormData();
             formData.append("teacherName", this.teacherName);

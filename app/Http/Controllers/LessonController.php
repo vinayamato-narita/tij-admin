@@ -154,7 +154,7 @@ class LessonController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => ' テキストの解除が完了しました。',
+            'message' => 'テキストの削除が完了しました。',
             'data' => [],
         ], StatusCode::OK);
     }
@@ -236,7 +236,7 @@ class LessonController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => ' 予習の解除が完了しました。',
+            'message' => '予習の削除が完了しました。',
             'data' => [],
         ], StatusCode::OK);
     }
@@ -299,7 +299,7 @@ class LessonController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => ' 復習の解除が完了しました。',
+            'message' => '復習の削除が完了しました',
             'data' => [],
         ], StatusCode::OK);
     }
@@ -522,7 +522,7 @@ class LessonController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => 'テストの解除が完了しました。',
+            'message' => 'テストの削除が完了しました。',
             'data' => [],
         ], StatusCode::OK);
     }

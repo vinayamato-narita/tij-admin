@@ -208,6 +208,9 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="timeZone"
                                                 >タイムゾーン:
+                                                    <span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span>
                                             </label>
                                             <div class="col-md-6">
                                                 <select
@@ -216,6 +219,7 @@
                                                     id="timeZone"
                                                     v-model="timeZone"
                                                     aria-invalid="false"
+                                                     v-validate="'required'"
                                                 >
                                                     <option value="0"></option>
                                                     <option
@@ -857,6 +861,9 @@ export default {
                 },
                 zoomPassword: {
                     max: "パスワードは50文字以内で入力してください。"
+                },
+                timeZone:{
+                    required: "タイムゾーンを選択してください",
                 }
             }
         };

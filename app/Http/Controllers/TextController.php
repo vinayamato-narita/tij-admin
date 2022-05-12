@@ -117,7 +117,7 @@ class TextController extends BaseController
                         $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
                         $file->file_type = FileTypeEnum::TEXT;
                         $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
-                        $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->studentFileSelected->extension(), '', $request->teacherFileSelected->getClientOriginalName());
+                        $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->teacherFileSelected->extension(), '', $request->teacherFileSelected->getClientOriginalName());
                         $file->save();
                         $lessonText->lesson_text_teacher_file_id = $file->file_id;
                     }

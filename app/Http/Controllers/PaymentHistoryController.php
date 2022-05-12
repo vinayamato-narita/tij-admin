@@ -36,7 +36,10 @@ class PaymentHistoryController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $paymentType = PaidStatus::asSelectArray();
+        $paymentType = [
+            PaidStatus::G => PaidStatus::getKey(PaidStatus::G),
+            PaidStatus::CSV => PaidStatus::getKey(PaidStatus::CSV),
+        ];
 
         $queryBuilder = PointSubscriptionHistory::select('point_subscription_history.point_subscription_history_id as id',
         	'point_subscription_history.order_id as order_id',

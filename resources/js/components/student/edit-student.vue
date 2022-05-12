@@ -42,9 +42,8 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >登録状態<span class="glyphicon glyphicon-star"
-                                                            ></span
-                                                        ></label
+                                                        >登録状態
+                                                        </label
                                                         
                                                     >
                                                     <div class="col-md-9 pt-7" >
@@ -377,7 +376,7 @@
                                                             name="lang_type"
                                                             v-model="studentInfoEx.lang_type"
                                                         >   
-                                                            <option :value="key" v-for="(value, key) in studentInfoEx.lang_types">
+                                                            <option :selected="studentInfoEx.lang_type==key" :value="key" v-for="(value, key) in studentInfoEx.lang_types" >
                                                                 {{ value }}</option
                                                             >
                                                         </select>
@@ -537,11 +536,6 @@
                                         </div>
 
                                         <div v-if="studentInfoEx.is_lms_user == studentInfoEx.lms_user">
-                                            <div class="form-group row">
-                                                <div class="col-md-12" style="border-bottom: #d8dbe0 1px solid; border-top: #d8dbe0 1px solid;">
-                                                    <label style="margin-left: 20px; margin-top: 10px">企業情報</label>
-                                                </div>
-                                            </div>
                                             <div class="form-group row" v-for="lmsProject in studentInfoEx.lms_project_students">
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
@@ -874,7 +868,7 @@ export default {
     },
     props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
     mounted() {
-        console.log(this.studentInfoEx)
+        console.log(this.studentInfoEx.lang_type)
     },
     methods: {
         save(a) {

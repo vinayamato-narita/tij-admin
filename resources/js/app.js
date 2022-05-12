@@ -169,6 +169,7 @@ import EditTeacherLang from "./components/teacher/edit-teacher-lang.vue"
 import TeacherLesson from "./components/teacher/teacher-lesson.vue"
 import CreateFile from "./components/file/create-file.vue"
 import EditFile from "./components/file/edit-file.vue"
+import LessonStatusDetail from "./components/lessonStatus/lesson-status-detail.vue"
 
 new Vue({
     created() {
@@ -361,7 +362,8 @@ new Vue({
         PreviewHeader,
         PreviewNav,
         CreateFile,
-        EditFile
+        EditFile,
+        LessonStatusDetail
     },
     methods: {},
     mounted() {}

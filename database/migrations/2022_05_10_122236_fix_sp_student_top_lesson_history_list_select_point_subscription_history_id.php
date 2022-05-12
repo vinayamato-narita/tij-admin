@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixSpStudentTopLessonHistoryListSelectCourseName extends Migration
+class FixSpStudentTopLessonHistoryListSelectPointSubscriptionHistoryId extends Migration
 {
     /**
      * Run the migrations.
@@ -79,7 +79,7 @@ class FixSpStudentTopLessonHistoryListSelectCourseName extends Migration
 
             WHERE
                 lh.student_id = _student_id
-                AND DATE_FORMAT(ls.lesson_starttime,'%Y-%m-%d %H-%i') >= DATE_FORMAT(NOW(),'%Y-%m-%d %H-%i')
+                AND DATE_FORMAT(ls.lesson_endtime,'%Y-%m-%d %H-%i') >= DATE_FORMAT(NOW(),'%Y-%m-%d %H-%i')
                 AND lh.student_lesson_reserve_type <> 2
 				AND ls.course_id IS NOT NULL
             ORDER BY

@@ -1089,6 +1089,7 @@ class StudentController extends BaseController
         $studentInfo->student_name_kana = ($request->student_first_name_kata ?? "") ." ".  ($request->student_last_name_kata ?? "");
         $studentInfo->student_nickname = $request->student_nickname;
         $studentInfo->student_email = $request->student_email;
+        $studentInfo->student_sex = $request->student_sex;
         if (isset($request->company_name)) {
             $studentInfo->company_name = $request->company_name;
         }
@@ -1166,6 +1167,7 @@ class StudentController extends BaseController
             $mailSubject = $mailPattern[0]->mail_subject;
             $mailBody = $mailPattern[0]->mail_body;
             $mailBody = str_replace("#STUDENT_NAME#", $studentInfo->student_name, $mailBody);
+            $mailBody = str_replace("#STUDENT_MAIL#", $studentInfo->student_email, $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($studentInfo, $mailSubject) {
                 $message->to($studentInfo->student_email)

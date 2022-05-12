@@ -18,7 +18,7 @@ use App\Models\CourseSetCourse;
 use App\Models\CourseTag;
 use App\Models\CourseTest;
 use App\Models\CourseVideo;
-use App\Models\Lesson; 
+use App\Models\Lesson;
 use App\Models\Tag;
 use App\Models\Test;
 use Carbon\Carbon;
@@ -71,6 +71,11 @@ class CourseController extends BaseController
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where('paypal_item_number', $request['paypal_item_number']);
             });
+        }
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "point_count") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(point_count AS INT) ASC') : $queryBuilder->orderByRaw('CAST(point_count AS INT) DESC');
+            }
         }
 
 
@@ -327,16 +332,16 @@ class CourseController extends BaseController
         $course = Course::where([
             'course_id' => $id,
         ])->with(['lesson', 'course_infos', 'lesson.courseLesson', 'testAbilities', 'testCourseEnds', 'campaigns'])->first();
-       
+
         if($course['course_type']==2 && !empty($course['testAbilities'])){
-          
+
           foreach ($course['testAbilities'] as $key => $value){
               if($key != 0){
                   unset($course['testAbilities'][$key]);
               }
           }
         }
-        
+
         $courseVideo = CourseVideo::where('course_id', $id)->get();
         if (!$course) return redirect()->route('course.index');
         $course->lesson = $course->lesson()->with('courseLesson')->orderBy('course_lesson.display_order', 'asc')->get();

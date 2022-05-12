@@ -134,6 +134,15 @@ class PaymentHistoryController extends BaseController
             if ($request['sort'] == "j_payment_term") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) DESC');
             }
+            if ($request['sort'] == "amount") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(point_subscription_history.amount AS INT) ASC') : $queryBuilder->orderByRaw('CAST(point_subscription_history.amount AS INT) DESC');
+            }
+            if ($request['sort'] == "tax") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(point_subscription_history.tax AS INT) ASC') : $queryBuilder->orderByRaw('CAST(point_subscription_history.tax AS INT) DESC');
+            }
+            if ($request['sort'] == "point_count") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(point_subscription_history.point_count AS INT) ASC') : $queryBuilder->orderByRaw('CAST(point_subscription_history.point_count AS INT) DESC');
+            }
         }
 
         Session::put('sessionPaymentHistory', collect($request));

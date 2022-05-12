@@ -1186,3 +1186,10 @@ div > .draggable-test-sub-question:first-child {
     background-color: #7baae2 !important;
     cursor: pointer;
 }
+
+.fa-sort-amount-asc:before {
+    content: "\f0de" !important;
+}
+.fa-sort-amount-desc:before {
+    content: "\f0dd" !important;
+}

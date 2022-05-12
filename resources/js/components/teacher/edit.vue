@@ -884,7 +884,7 @@ export default {
             flagShowLoader: false,
             messageText: this.message,
             errorsData: {},
-            timeZone: this.teacher.timezone_id,
+            timeZone: null,
             teacherSex: this.teacher.teacher_sex,
             teacherBirthday:
                 this.teacher.teacher_birthday == null
@@ -921,7 +921,9 @@ export default {
         "deleteAction",
         "detailTeacherUrl"
     ],
-    mounted() {},
+    mounted() {
+      this.timeZoness()
+    },
     methods: {
         showAlert() {
             let that = this;
@@ -954,6 +956,14 @@ export default {
                         });
                 }
             });
+        },
+          timeZoness(){
+            if(this.teacher.timezone_id==0){
+                return this.timeZone==null
+            }
+            else{
+                return this.timeZone=this.teacher.timezone_id
+            } 
         },
         register() {
             let that = this;

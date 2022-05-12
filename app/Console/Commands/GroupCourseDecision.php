@@ -156,6 +156,8 @@ class GroupCourseDecision extends Command
                                 $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
 
                                 if (!empty($result)) {
+                                    PointSubscriptionHistory::where('order_id', '=', $pointSubscriptionHistory->order_id)
+                                        ->update(['receive_payment_date' => Carbon::now()]);
                                     Log::info("update sales order success");
                                 }
                             }

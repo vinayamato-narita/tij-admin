@@ -15,8 +15,8 @@ class GmoService{
 
     public function __construct(){
         $this->gmoURL = config('gmo.url');
-        $this->shopID = config('gmo.shopID');
-        $this->shopPass = config('gmo.shopPass');
+        $this->shopID = config('gmo.shopId');
+        $this->shopPass = config('gmo.shopPassword');
     }
 
     public function alterTran($jobCd, $accessID, $accessPass, $amount) {

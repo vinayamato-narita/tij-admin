@@ -223,10 +223,6 @@
                                                     v-validate="'required'"
                                                 >
                                                     <option
-                                                        value="0"
-                                                        selected="selected"
-                                                    ></option>
-                                                    <option
                                                         v-for="tz in timeZones"
                                                         :value="tz.timezone_id"
                                                         >{{

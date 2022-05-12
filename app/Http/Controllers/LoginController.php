@@ -20,6 +20,11 @@ class LoginController extends BaseController
      */
     public function index(Request $request)
     {
+
+        if (Auth::check()) {
+            return redirect()->route('dashboard.index');
+        }
+        
         return view('login.index', [
             'title' => TITLE_LOGIN,
             'request' => $request->all()

@@ -529,6 +529,7 @@
                 imageExtensions : ['jpg' , 'jpeg' , 'jfif' , 'pjpeg' , 'pjp', "png", 'svg', 'webp'],
                 videoExtensions : ['WEBM', 'MPG', 'MP2', 'MPEG', 'MPE', 'MPV', 'OGG', 'MP4', 'M4P', 'M4V', 'AVI', 'WMV', 'MOV', 'QT', 'FLV', 'SWF', 'AVCHD'],
                 mp3Extensions: ['MP3'],
+                pdfExtensions: ['pdf'],
                 flagShowLoader: false,
                 csrfToken: Laravel.csrfToken,
                 fileSelected: null,
@@ -736,7 +737,8 @@
                 var returnType = '';
                 if (this.imageExtensions.includes(ext.toLowerCase()) || this.imageExtensions.includes(ext.toUpperCase()) ||
                     this.videoExtensions.includes(ext.toLowerCase()) || this.videoExtensions.includes(ext.toUpperCase()) ||
-                    this.mp3Extensions.includes(ext.toLowerCase()) || this.mp3Extensions.includes(ext.toUpperCase()))
+                    this.mp3Extensions.includes(ext.toLowerCase()) || this.mp3Extensions.includes(ext.toUpperCase()) ||
+                    this.pdfExtensions.includes(ext.toLowerCase()) || this.pdfExtensions.includes(ext.toUpperCase()))
                     return true
                 return false;
 

@@ -370,7 +370,7 @@ class TestController extends BaseController
                 $testSubQuestion->explanation = $subQuestion->explanation;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
-                    $storedFile = File::query()->find($request->fileId);
+                    $storedFile = File::query()->find($subQuestion->fileId);
                     if ($storedFile)
                         $testSubQuestion->explanation_file_id = $storedFile->file_id;
                 }
@@ -554,7 +554,7 @@ class TestController extends BaseController
                 $testSubQuestion->score = $subQuestion->score;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
-                    $storedFile = File::query()->find($request->fileId);
+                    $storedFile = File::query()->find($subQuestion->fileId);
                     if ($storedFile)
                         $testSubQuestion->explanation_file_id = $storedFile->file_id;
                 }

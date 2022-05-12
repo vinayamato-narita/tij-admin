@@ -106,7 +106,7 @@
                                     <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">誕生日:
                                         </label>
-                                        <div class="col-md-6 text-md-left p-2">
+                                        <div class="col-md-6 text-md-left p-2" v-if="this.teacher.teacher_birthday">
                                             {{ this.teacher.teacher_birthday.split('-').join('/').slice(0,11)}}
 
                                         </div>

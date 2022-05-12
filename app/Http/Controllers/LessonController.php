@@ -299,7 +299,7 @@ class LessonController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => '復習の削除が完了しました',
+            'message' => '復習の削除が完了しました。',
             'data' => [],
         ], StatusCode::OK);
     }

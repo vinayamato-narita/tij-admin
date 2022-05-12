@@ -92,13 +92,13 @@
                         <div class="row">
                             <div class="col-sm-3 text-right">コメント（生徒⇒先生）</div>
                             <div class="col-sm-9 condition-group" id="comment_from_student">
-                                <textarea readonly class="d-readonly" :value="commentFromStudent"></textarea>
+                                <textarea readonly class="d-readonly textarea-comment" rows="4" :value="commentFromStudent"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right">コメント（先生⇒生徒）</div>
                             <div class="col-sm-9 condition-group" id="comment_from_teacher">
-                                <textarea readonly class="d-readonly" :value="commentFromTeacher"></textarea>
+                                <textarea readonly class="d-readonly textarea-comment" rows="4" :value="commentFromTeacher"></textarea>
                             </div>
                         </div>
                     </div>
@@ -185,8 +185,8 @@
                 this.studentBookTime = this.lessonList[key].student_book_time;
                 this.teacherRating = this.lessonList[key].teacher_rating;
                 this.studentRating = this.lessonList[key].student_rating;
-                this.commentFromStudent = this.lessonList[key].comment_from_student;
-                this.commentFromTeacher = this.lessonList[key].comment_from_teacher;
+                this.commentFromStudent = this.lessonList[key].comment_from_student_to_teacher;
+                this.commentFromTeacher = this.lessonList[key].comment_from_teacher_to_student;
             }
         },
         computed: {

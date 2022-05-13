@@ -156,14 +156,14 @@
                                                     <span class="glyphicon glyphicon-star"></span>
                                                 </label>
                                                 <div class="col-md-10 text-md-left p-2">
-                                                    <input
+                                                    <textarea
                                                             class="form-control"
                                                             :name="'subQuestion[' + index + '][question]'"
                                                             v-model="item.question"
                                                             v-validate="
                                                         'required|max:255'
                                                     "
-                                                    />
+                                                      ></textarea>
                                                     <div
                                                             class="input-group is-danger"
                                                             role="alert"

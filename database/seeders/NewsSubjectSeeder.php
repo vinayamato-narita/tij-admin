@@ -26,6 +26,6 @@ class NewsSubjectSeeder extends Seeder
 
         DB::table('news_subject')->insert([
             'news_subject_id' => 3,
-            'news_subject_ja' => '生徒']);
+            'news_subject_ja' => '学習者']);
     }
 }

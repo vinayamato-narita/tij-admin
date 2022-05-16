@@ -185,7 +185,7 @@
                 this.studentBookTime = this.lessonList[key].student_book_time;
                 this.teacherRating = this.lessonList[key].teacher_rating;
                 this.studentRating = this.lessonList[key].student_rating;
-                this.commentFromStudent = this.lessonList[key].comment_from_student_to_teacher;
+                this.commentFromStudent = this.lessonList[key].comment_from_student_to_office;
                 this.commentFromTeacher = this.lessonList[key].comment_from_teacher_to_student;
             }
         },

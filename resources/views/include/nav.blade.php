@@ -259,7 +259,7 @@
             </a>
             <ul class="nav-dropdown-items {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) == 'c-active' ? '' : 'hidden' }}" id="bulk-registration-sub">
                 <li class="c-sidebar-nav-item">
-                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) }}">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) }}" href="{{route('courseGroupUser.import')}}">
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>

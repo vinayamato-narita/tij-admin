@@ -522,6 +522,8 @@
                 csrfToken: Laravel.csrfToken,
                 messageConfirm : 'このレッスンを解除しますか？',
                 messageAbilityConfirm : 'このテストを解除しますか？',
+                password: '',
+                password_confirm: '',
             };
         },
         props: ["listTeacherUrl", "createUrl", 'teacher', 'editTeacherUrl', 'pageSizeLimit', 'lessonListUrl', 'dataQuery', 'registerUrl','detailTeacherUrl', 'teacherEnInfo', 'teacherZhInfo','urlTeacherEn', 'urlTeacherZh', 'urlUpdatePassword', 'avatarSrc', 'abilityTestListUrl', 'registerAbilityTestUrl'],

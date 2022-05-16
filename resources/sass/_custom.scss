@@ -254,15 +254,25 @@ table tbody tr td {
 .container {
     max-width: 100% !important;
 }
-html:not([dir="rtl"]) .c-sidebar.c-sidebar-lg-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper, html:not([dir="rtl"]) .c-sidebar.c-sidebar-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper {
-    margin-left: 200px;
+@media (min-width: 992px) and (min-width: 992px) {
+    html:not([dir="rtl"]) .c-sidebar.c-sidebar-lg-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper, html:not([dir="rtl"]) .c-sidebar.c-sidebar-show:not(.c-sidebar-right).c-sidebar-fixed ~ .c-wrapper {
+        margin-left: 260px;
+    }
+}
+html:not([dir="rtl"]) .c-sidebar:not(.c-sidebar-right) {
+    margin-left: -260px;
 }
 .c-sidebar {
-    width: 200px;
-    flex: 0 0 200px;
+    width: 260px;
+    flex: 0 0 260px;
+    .nav-dropdown-items {
+        padding-right: 30px;
+    }
 }
 .c-sidebar-nav-icon {
     height: 13px;
+    flex: 0 0 40px;
+    margin-right: 0px;
 }
 .c-sidebar-nav-link, .c-sidebar-nav-dropdown-toggle {
     padding: 10px;
@@ -1191,6 +1201,12 @@ div > .draggable-test-sub-question:first-child {
     content: "\f0de" !important;
 }
 .fa-sort-amount-desc:before {
+    content: "\f0dd" !important;
+}
+.fa-sort-numeric-asc:before {
+    content: "\f0de" !important;
+}
+.fa-sort-numberic-desc:before {
     content: "\f0dd" !important;
 }
 .textarea-comment {

@@ -54,6 +54,12 @@ class InquiryController extends BaseController
         if (isset($request['sort']) && $request['sort'] == "j_student_email") {
             $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_student_email','ASC') : $queryBuilder->orderBy('j_student_email','DESC');
         }
+        if (isset($request['sort']) && $request['sort'] == "student_id") {
+            $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id','ASC') : $queryBuilder->orderBy('student_id','DESC');
+        }
+        if (isset($request['sort']) && $request['sort'] == "id") {
+            $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('inquiry_id','ASC') : $queryBuilder->orderBy('inquiry_id','DESC');
+        }
         $inquiryList = $queryBuilder->sortable(['inquiry_date' => 'desc'])->paginate($pageLimit);
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 

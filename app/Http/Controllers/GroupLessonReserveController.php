@@ -105,7 +105,7 @@ class GroupLessonReserveController extends BaseController
             }])
             ->first();
         $course['group_lesson'] = $course->group_lesson;
-        
+
         return view('groupLessonReserve.show', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,
@@ -176,7 +176,18 @@ class GroupLessonReserveController extends BaseController
             });
         }
 
-        $studentList = $queryBuilder->with('pointSubscriptionHistories')->sortable(['student_id' => 'desc'])->paginate($pageLimit);
+        $studentList = $queryBuilder->with('pointSubscriptionHistories', function ($query) use ($request, $id) {
+            if (!empty($request['reserve_end_date_start'])) {
+                $query->whereDate('payment_date', '>=', Carbon::createFromTimestamp($request['reserve_end_date_start']));
+            }
+            if (!empty($request['reserve_end_date_end'])) {
+                $query->whereDate('receive_payment_date', '<=', Carbon::createFromTimestamp($request['reserve_end_date_end']));
+            }
+            $query->whereHas('course', function ($query) use ($id) {
+                $query->where('course_id', $id);
+                $query->where('course_type', CourseTypeEnum::GROUP_COURSE);
+            });
+        })->sortable(['student_id' => 'desc'])->paginate($pageLimit);
 
         return view('groupLessonReserve.studentList', [
             'breadcrumbs' => $breadcrumbs,

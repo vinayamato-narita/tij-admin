@@ -17,6 +17,7 @@ use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class AbilityTestResultController extends BaseController
 {
@@ -32,78 +33,79 @@ class AbilityTestResultController extends BaseController
             ['name' => 'ability_test_result_list']
         ]);
         $pageLimit = $this->newListLimit($request);
-        $queryBuilder = (new TestResult())::with('student', 'test', 'test_comment');
 
-        if (!empty($request['search_input'])) {
-            $queryBuilder = $queryBuilder->whereHas('student', function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student_name', $request['search_input']));
-            })->orWhereHas('test', function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('test_name', $request['search_input']));
+        $queryBuilder = TestResult::select('student.student_id',
+            'student.student_name',
+            'test.test_name',
+            'test_result.test_start_time',
+            'test_result.test_result_id',
+            'test_comment.comment_start_time',
+            'test_comment.comment_end_time',
+            DB::raw('(CASE
+                WHEN test_comment.comment_start_time IS Null THEN "評価待ち"
+                WHEN test_comment.comment_end_time IS Null AND test_comment.comment_start_time IS NOT NULL THEN "評価中"
+                ELSE "済" 
+                END
+            )AS status')
+        )
+        ->join('student', function($join) {
+            $join->on('test_result.student_id', '=', 'student.student_id');
+        })
+        ->join('test', function($join) {
+            $join->on('test_result.test_id', '=', 'test.test_id')
+                ->where('test.test_type', TestType::ABILITY);
+        })
+        ->leftJoin('test_comment', function($join) {
+            $join->on('test_result.test_result_id', '=', 'test_comment.test_result_id');
+        });
+
+        if (isset($request['search_input'])) {
+            $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
+                $query->where($this->escapeLikeSentence('student.student_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('test.test_name', $request['search_input']));
             });
         }
 
-        if (!empty($request['student_id'])) {
-            $queryBuilder = $queryBuilder->whereHas('student', function ($query) use ($request) {
-                $query->where('student_id', $request['student_id']);
-            });
-        }
-
-        if (!empty($request['student_name'])) {
-            $queryBuilder = $queryBuilder->whereHas('student', function ($query) use ($request) {
-                $query->where('student_name', $request['student_name']);
-            });
-        }
-
-        if (!empty($request['test_name'])) {
-            $queryBuilder = $queryBuilder->whereHas('test', function ($query) use ($request) {
-                $query->where('test_name', $request['test_name']);
-            });
-        }
-
-        if (!empty($request['test_name'])) {
-            $queryBuilder = $queryBuilder->whereHas('test', function ($query) use ($request) {
-                $query->where('test_name', $request['test_name']);
-            });
-        }
-
-        if (!empty($request['test_start_time_form']) || !empty($request['test_start_time_to'])) {
-            $from = Carbon::createFromTimestamp($request['test_start_time_form']);
-            $to = Carbon::createFromTimestamp($request['test_start_time_to']);
-            if (!empty($request['test_start_time_form']) && !empty($request['test_start_time_to'])) {
-                $queryBuilder = $queryBuilder->whereBetween('test_start_time', [$from, $to]);
+        if (isset($request['student_id'])) {
+            if ($request['student_id'] != "") {
+                $queryBuilder = $queryBuilder->where('student.student_id', $request['student_id']);
             }
-            else {
-                if (!empty($request['test_start_time_form']))
-                    $queryBuilder = $queryBuilder->whereDate('test_start_time', '>=', $from);
-                if (!empty($request['test_start_time_to']))
-                    $queryBuilder = $queryBuilder->whereDate('test_start_time', '<=', $to);
-            }
+            $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
+            ->where($this->escapeLikeSentence('test_name', $request['test_name']));
         }
 
         if (!empty($request['status'])) {
             switch ($request['status']) {
                 case 'WAITING_EVALUATION':
-                    $queryBuilder = $queryBuilder->doesntHave('test_comment');
+                    $queryBuilder = $queryBuilder->whereNull('test_comment.comment_start_time');
                     break;
 
                 case 'UNDER_EVALUATION' :
-                    $queryBuilder = $queryBuilder->whereHas('test_comment', function ($query) use ($request) {
-                        $query->whereNull('comment_end_time');
-                    });
+                    $queryBuilder = $queryBuilder->whereNull('test_comment.comment_end_time')->whereNotNull('test_comment.comment_start_time');
                     break;
                 case 'ALREADY':
-                    $queryBuilder = $queryBuilder->whereHas('test_comment', function ($query) use ($request) {
-                        $query->whereNotNull('comment_end_time');
-                    });
+                    $queryBuilder = $queryBuilder->whereNotNull('test_comment.comment_end_time');
                     break;
 
             }
         }
 
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "custom_status") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('status','ASC') : $queryBuilder->orderBy('status','DESC');
+            }
+            if ($request['sort'] == "comment_start_time") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('comment_start_time','ASC') : $queryBuilder->orderBy('comment_start_time','DESC');
+            }
+            if ($request['sort'] == "test_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('test_name','ASC') : $queryBuilder->orderBy('test_name','DESC');
+            }
+            if ($request['sort'] == "student_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_name','ASC') : $queryBuilder->orderBy('student_name','DESC');
+            }
+        }
 
-        $testResultList = $queryBuilder->whereHas('test', function ($q) {
-            return $q->where('test_type', TestType::ABILITY);
-        })->sortable(['last_update_date' => 'desc'])->paginate($pageLimit);
+        $testResultList = $queryBuilder->sortable(['last_update_date' => 'desc'])->paginate($pageLimit);
 
         return view('abilityTestResult.index', [
             'breadcrumbs' => $breadcrumbs,

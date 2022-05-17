@@ -444,9 +444,8 @@ public function importStudent(Request $request){
             if ($mailPattern) {
                 $mailSubject = $mailPattern[0]->mail_subject;
                 $mailBody = $mailPattern[0]->mail_body;
-                $mailBody = str_replace("#STUDENT_NAME#", $value[0], $mailBody);
-                $mailBody = str_replace("#STUDENT_MAIL#", $value[2], $mailBody);
-                $mailBody = str_replace("#LOGIN#", env('APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#STUDENT_NAME#", $value[2], $mailBody);
+                $mailBody = str_replace("#STUDENT_PASSWORD#", $value[6], $mailBody);
                 
                 Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
                     $message->to($value[2])

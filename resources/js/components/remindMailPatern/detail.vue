@@ -47,9 +47,7 @@
                                         <label class="col-md-3 col-form-label text-md-right">メール内容:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">
-                                            <pre>
-                                                {{ this.remindMail.mail_body }}
-                                            </pre>
+                                            <pre>{{ this.remindMail.mail_body }}</pre>
                                         </div>
                                     </div>
                                 </div>
@@ -82,10 +80,7 @@
                                             >メール内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            <pre>
-                                                 {{ this.mailEnInfo != null ? this.mailEnInfo.mail_body : "" }}
-
-                                            </pre>
+                                            <pre>{{ this.mailEnInfo != null ? this.mailEnInfo.mail_body : "" }}</pre>
                                         </div>
                                     </div>
                                 </div>
@@ -118,10 +113,7 @@
                                             >メール内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            <pre>
-                                                {{ this.mailZhInfo != null ? this.mailZhInfo.mail_body : "" }}
-
-                                            </pre>
+                                            <pre>{{ this.mailZhInfo != null ? this.mailZhInfo.mail_body : "" }}</pre>
                                         </div>
                                     </div>
                                 </div>

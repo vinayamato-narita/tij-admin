@@ -27,6 +27,8 @@ use Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use Illuminate\Support\Facades\Hash;
+use App\Models\SendRemindMailPattern;
+use Illuminate\Support\Facades\Mail; 
 
 class CourseGroupUserController extends BaseController
 {
@@ -437,6 +439,20 @@ public function importStudent(Request $request){
             $student->company_name = $value[5];
             $student->password = Hash::make($value[6]);
             $student->save();
+            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype=32, $lang="ja");
+
+            if ($mailPattern) {
+                $mailSubject = $mailPattern[0]->mail_subject;
+                $mailBody = $mailPattern[0]->mail_body;
+                $mailBody = str_replace("#STUDENT_NAME#", $value[0], $mailBody);
+                $mailBody = str_replace("#STUDENT_MAIL#", $value[2], $mailBody);
+                $mailBody = str_replace("#LOGIN#", env('APP_URL_STUDENT'), $mailBody);
+                
+                Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
+                    $message->to($value[2])
+                        ->subject($mailSubject);
+                });
+            }
         }
      
 

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DailyUpdateTestResultNotSubmitted;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
         Commands\SendMailBeforeLessonStart::class,
         Commands\GroupCourseDecision::class,
         Commands\AbilityTestReportCommand::class,
-        Commands\UpdateTestCommentExpired::class
+        Commands\UpdateTestCommentExpired::class,
+        Commands\DailyUpdateTestResultNotSubmitted::class
     ];
 
     /**
@@ -37,6 +39,8 @@ class Kernel extends ConsoleKernel
                  ->dailyAt('1:15');
 
         $schedule->command('command:update_test_comment_expired')
+            ->everyFiveMinutes();
+        $schedule->command('daily_update_test_result_not_submitted:run')
             ->everyFiveMinutes();
     }
 

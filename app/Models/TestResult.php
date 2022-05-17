@@ -46,6 +46,11 @@ class TestResult extends Model
         return $this->belongsTo('App\Models\TestComment', 'test_result_id', 'test_result_id');
     }
 
+    public function course()
+    {
+        return $this->hasOne('App\Models\Course', 'course_id', 'course_id');
+    }
+
 
 
 }

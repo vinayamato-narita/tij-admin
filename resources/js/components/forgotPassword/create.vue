@@ -102,7 +102,7 @@ export default {
                     that.flagShowLoader = false;
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "メール送信が完了しました。登録されたメールをチェックしてください。",
+                            text: "メール送信が完了しました。送信されたメールをチェックしてください。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

@@ -70,7 +70,7 @@
                                                             @endif
                                                         </td>
                                                         <td class="text-left">{{ $course->point_count }}</td>
-                                                        <td class="text-left">  {{ number_format($course->sumamount, 0, ",", ",")  }}
+                                                        <td class="text-left">  {{ number_format($course->amount, 0, ",", ",")  }}
  </td>
 
                                                         <td class="text-left "></td>

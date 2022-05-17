@@ -50,7 +50,7 @@
                                                     <th class="text-left min-width-120">@sortablelink('course_name', ' コース名')</th>
                                                     <th class="text-left min-width-120">@sortablelink('course_description', ' コース概要')</th>
                                                     <th class="text-left min-width-120">@sortablelink('point_count', ' 受講回数')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('sum_amount', ' 価格（税抜）')</th>
+                                                    <th class="text-left min-width-120">@sortablelink('amount', ' 価格（税抜）')</th>
                                                     <th class="text-left min-width-120"></th>
                                                     <th class="text-left min-width-120"></th>
                                                 </tr>

@@ -42,9 +42,9 @@ class AbilityTestResultController extends BaseController
             'test_comment.comment_start_time',
             'test_comment.comment_end_time',
             DB::raw('(CASE
-                WHEN test_comment.comment_start_time IS Null THEN "評価待ち"
+                WHEN test_comment.comment_end_time IS NOT Null THEN "済"
                 WHEN test_comment.comment_end_time IS Null AND test_comment.comment_start_time IS NOT NULL THEN "評価中"
-                ELSE "済" 
+                ELSE "評価待ち"  
                 END
             )AS status')
         )

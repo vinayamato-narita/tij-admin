@@ -254,6 +254,8 @@ Route::group([
     Route::post('/courseGroup/import_user', 'CourseGroupUserController@import')->name('courseGroupUser.importPost');
     Route::get('/courseGroup/saveImport', 'CourseGroupUserController@saveImport')->name('courseGroupUser.saveImport');
     Route::post('/course/update-group-memo', 'CourseController@updateGroupMemo')->name('course.updateGroupMemo');
+    Route::get('/courseGroup/import_student', 'CourseGroupUserController@importView')->name('courseGroupUser.importView');
+    Route::post('/courseGroup/import_student', 'CourseGroupUserController@importStudent')->name('courseGroupUser.importStudent');
 
     Route::resource('file', FileController::class);
     Route::post('/file/update-file', 'FileController@updateFile')->name('file.updateFile');

@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', '欠席一覧')
+@section('title', '出欠一覧')
 
 @section('content')
     <div class="c-body">
@@ -12,7 +12,7 @@
                 <div class="page-heading">
                     <div class="pull-left">
                         <h5>
-                            欠席一覧
+                            出欠一覧
                         </h5>
                     </div>
                 </div>

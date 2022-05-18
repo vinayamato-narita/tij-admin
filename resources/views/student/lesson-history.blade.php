@@ -44,14 +44,14 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center width-130">@sortablelink('lesson_date', '日付')</th>
-                                                    <th class="text-center min-width-150">@sortablelink('lesson_starttime', '時間')</th>
+                                                    <th class="text-center w-100">@sortablelink('lesson_date', '日付')</th>
+                                                    <th class="text-center w-100">@sortablelink('lesson_starttime', '時間')</th>
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('course_name', 'コース名')</th>
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('lesson_name', 'レッスン名')</th>
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('lesson_text_name', 'テキスト名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('teacher_name', '講師名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('set_course_id', 'セットコード')</th>
+                                                    <th class="text-center w-100">@sortablelink('teacher_name', '講師名')</th>
+                                                    <th class="text-center w-100">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
+                                                    <th class="text-center w-100">@sortablelink('set_course_id', 'セットコード')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

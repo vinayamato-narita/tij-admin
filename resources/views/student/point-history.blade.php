@@ -48,17 +48,17 @@ use App\Components\DateTimeComponent;
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center width-130">
+                                                        <th class="text-center w-100">
                                                             @sortablelink('point_subscription_id', '受注番号')</th>
-                                                        <th class="text-center min-width-150">@sortablelink('pay_date',
+                                                        <th class="text-center w-100">@sortablelink('pay_date',
                                                             '処理日')</th>
                                                         <th class="text-center min-width-120" style="width: 15%">
                                                             @sortablelink('course_name', 'コース名')</th>
                                                         <th class="text-center min-width-120" style="width: 15%">
                                                             @sortablelink('pay_description', '内容')</th>
-                                                        <th class="text-center min-width-120" style="width: 15%">
+                                                        <th class="text-center w-100" style="width: 15%">
                                                             @sortablelink('point_count', '付与/消費')</th>
-                                                        <th class="text-center min-width-120" style="width: 15%">
+                                                        <th class="text-center w-100" style="width: 15%">
                                                             @sortablelink('expire_date', '有効期限')</th>
                                                         <th class="w-100"></th>
                                                     </tr>

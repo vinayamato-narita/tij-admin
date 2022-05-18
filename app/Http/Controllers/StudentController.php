@@ -255,17 +255,20 @@ class StudentController extends BaseController
             'lesson_text.lesson_text_name as lesson_text_name', 'teacher.teacher_name as teacher_name',
             'point_subscription_history.set_course_id as set_course_id',
             'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher')
-            ->leftJoin('course', function($join) {
+            ->join('course', function($join) {
                 $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('lesson_schedule', function($join) {
+            ->join('lesson_schedule', function($join) {
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('lesson', function($join) {
+            ->join('lesson', function($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
+            ->leftJoin('lesson_text_lesson', function($join) {
+                $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
+            })
             ->leftJoin('lesson_text', function($join) {
-                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+                $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
             ->leftJoin('teacher', function($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
@@ -334,22 +337,25 @@ class StudentController extends BaseController
             'lesson_history.skype_voice_rating_from_student as skype_voice_rating_from_student', 'lesson_history.comment_from_student_to_office as comment_from_student_to_office',
             'lesson_history.comment_from_teacher_to_student as comment_from_teacher_to_student', 'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher',
             'lesson_history.comment_from_admin_to_student as comment_from_admin_to_student')
-            ->leftJoin('course', function($join) {
+            ->join('course', function($join) {
                 $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
-            ->leftJoin('lesson_schedule', function($join) {
+            ->join('lesson_schedule', function($join) {
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('lesson', function($join) {
+            ->join('lesson', function($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
+            ->leftJoin('lesson_text_lesson', function($join) {
+                $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
+            })
             ->leftJoin('lesson_text', function($join) {
-                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+                $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
             ->leftJoin('teacher', function($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
-            ->leftJoin('student', function($join) {
+            ->join('student', function($join) {
                 $join->on('lesson_history.student_id', '=', 'student.student_id');
             })
             ->where('lesson_history.lesson_history_id', $id)->firstOrFail();

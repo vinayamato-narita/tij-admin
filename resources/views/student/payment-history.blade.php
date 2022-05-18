@@ -54,10 +54,10 @@
                                                     <th class="text-center min-width-120">@sortablelink('course_name', 'コース名')</th>
                                                     <th class="text-center min-width-120">@sortablelink('j_paid_status', '支払い方法')</th>
                                                     <th class="text-center min-width-120">@sortablelink('amount', '支払い金額')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('payment_date', '受注日')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('begin_date', '受講開始日')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('point_expire_date', '有効期限日')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('receive_payment_date', '入金日')</th>
+                                                    <th class="text-center w-100">@sortablelink('payment_date', '受注日')</th>
+                                                    <th class="text-center w-100">@sortablelink('begin_date', '受講開始日')</th>
+                                                    <th class="text-center w-100">@sortablelink('point_expire_date', '有効期限日')</th>
+                                                    <th class="text-center w-100">@sortablelink('receive_payment_date', '入金日')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

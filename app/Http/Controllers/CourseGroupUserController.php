@@ -414,6 +414,12 @@ public function importStudent(Request $request){
             'message' => 'ファイルのフォーマットが異なります。正しいファイルフォーマットダウンロードしてファイルを指定してください。'
             ]);
         }
+        if(empty($dataImport)==true){
+            return response()->json([
+                'status' => false,
+                'message' => 'データを入力してください',
+                ]);
+        }
       
        $emails=[];
        foreach ($dataImport as $key => $value){
@@ -457,7 +463,7 @@ public function importStudent(Request $request){
 
         return response()->json([
             'status'=>true,
-            'message'=>'Success',
+            'message'=>'法人ユーザーを登録しました。',
         ]);         
     }
 }

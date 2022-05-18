@@ -423,6 +423,13 @@ public function importStudent(Request $request){
       
        $emails=[];
        foreach ($dataImport as $key => $value){
+            if($value[0]==null || $value[1]==null ||$value[2]==null||$value[3]==null||$value[4]==null
+            || $value[5]==null || $value[6]==null){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'を入力してください。',
+                    ]);
+            }
             array_push($emails,$value[2]);
        }
         $emailsCheck = Student::whereIn('student_email', $emails)

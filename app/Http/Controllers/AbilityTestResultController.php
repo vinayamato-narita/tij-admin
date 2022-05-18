@@ -57,7 +57,8 @@ class AbilityTestResultController extends BaseController
         })
         ->leftJoin('test_comment', function($join) {
             $join->on('test_result.test_result_id', '=', 'test_comment.test_result_id');
-        });
+        })
+        ->whereNotNull('test_result.test_end_time');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

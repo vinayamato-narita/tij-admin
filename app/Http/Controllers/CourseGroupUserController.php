@@ -133,14 +133,14 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (in_array($value, $dataImport)) {
+                                if (!empty($dataImport[$tmpCourseId]) && in_array($value, $dataImport[$tmpCourseId])) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = "メールアドレスとコースIDが重複しています";
                                     break;
                                 }
 
                                 if (!empty($tmpCourseId)) {
-                                    $dataImport[$tmpCourseId] = $value;
+                                    $dataImport[$tmpCourseId][] = $value;
                                 }
                                 break;
 
@@ -157,8 +157,7 @@ class CourseGroupUserController extends BaseController
             session()->forget('usersImportData');
             session()->put('usersImportData', $dataImport);
         }
-Log::info($data);
-Log::info($dataImport);
+
         return view('groupCourse.user_import', [
             'dataImport' => $data,
             'showList' => $showList,
@@ -182,7 +181,11 @@ Log::info($dataImport);
         }
 
         $courseIds = array_keys($data);
-        $emails = Student::whereIn('student_email', $data)
+        $emails = [];
+        foreach ($data as $key => $item) {
+            $emails = array_merge($emails,$item);
+        }
+        $emails = Student::whereIn('student_email', $emails)
                     ->get()
                     ->keyBy('student_email')
                     ->toArray();
@@ -206,95 +209,96 @@ Log::info($dataImport);
                 ->get()
                 ->keyBy('course_id')
                 ->toArray();
-Log::info($courseInfo);
-Log::info($emails);
+
             foreach ($data as $key => $item) {
-                $studentId = $emails[$item]['student_id'];
                 $courseId = $key;
+                foreach ($item as $k => $i) {
+                    $studentId = $emails[$i]['student_id'];
 
-                // create order
-                $orderId = $studentId.'tij'.time();
-                $orderId = sprintf("%027s", $orderId);
-                $order = array(
-                    'order_id' => $orderId,
-                    'student_id' => $studentId,
-                    'student_card_id' => 0,
-                    'course_id' => $courseId,
-                    'product_code' => '0000990',
-                    'campaign_code' => '',
-                    'order_status' => OrderStatus::PAID,
-                    'order_ip' => $this->getClientIp(),
-                    'order_date' => Carbon::now(),
-                    'gmo_error_code' => 0,
-                    'error_step' => 0,
-                    'corporation_code' => ""
-                );
-                DB::table('order')->insert($order);
-
-                $paymentDate= date('Y-m-d H:i:s');
-
-                $data = array(
-                    $studentId,
-                    $courseId,
-                    0,
-                    (string) $courseInfo[$courseId]->amount,
-                    (string) round(COURSE_TAX * ((empty($courseInfo[$courseId]->amount) || !is_numeric($courseInfo[$courseId]->amount)) ? 0 : $courseInfo[$courseId]->amount)),
-                    'JPY',
-                    '0',
-                    $paymentDate,
-                    '1',
-                    '',
-                    '',
-                    $orderId,
-                    '',
-                    '',
-                    '',
-                    ''
-                );
-
-                // sp_insert_point_subscription
-                $ret = DB::select('call sp_insert_point_subscription(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',$data);
-
-                // update paid status
-                PointSubscriptionHistory::where('order_id', '=', $orderId)
-                  ->update(['paid_status' => SubsPaidStatus::SUCCESS]);
-
-                $psid = DB::table('point_subscription_history')
-                            ->where('student_id', '=', $studentId)
-                            ->max('point_subscription_history_id');
-
-                $lessonSchedule = DB::table('lesson_schedule')
-                    ->where('course_id', '=', $courseId)
-                    ->get()->toArray();
-                foreach($lessonSchedule as $schedule) {
-                    $schedule = (array) $schedule;
-                    // insert student_point_history
-                    $data = array(
+                    // create order
+                    $orderId = $studentId.'tij'.time();
+                    $orderId = sprintf("%027s", $orderId);
+                    $order = array(
+                        'order_id' => $orderId,
                         'student_id' => $studentId,
-                        'pay_date' => $paymentDate,
-                        'pay_description' => 'レッスン付与 ('.$courseInfo[$courseId]->course_name.')',
-                        'pay_type' => 0,
-                        'point_count' => -1,
-                        'expire_date' => Carbon::parse($paymentDate)->addDays($courseInfo[$courseId]->expire_day)->format('Y-m-d 23:59:59'),
-                        'lesson_schedule_id' => $schedule['lesson_schedule_id'],
+                        'student_card_id' => 0,
                         'course_id' => $courseId,
-                        'start_date' => $paymentDate,
-                        'point_subscription_id' => empty($psid) ? 0 : $psid
+                        'product_code' => '0000990',
+                        'campaign_code' => '',
+                        'order_status' => OrderStatus::PAID,
+                        'order_ip' => $this->getClientIp(),
+                        'order_date' => Carbon::now(),
+                        'gmo_error_code' => 0,
+                        'error_step' => 0,
+                        'corporation_code' => ""
                     );
-                    DB::table('student_point_history')->insert($data);
+                    DB::table('order')->insert($order);
 
-                    // insert lesson_history
+                    $paymentDate= date('Y-m-d H:i:s');
+
                     $data = array(
-                        $schedule["lesson_schedule_id"],
                         $studentId,
-                        $schedule["lesson_id"],
-                        $schedule["lesson_text_id"],
                         $courseId,
+                        0,
+                        (string) $courseInfo[$courseId]->amount,
+                        (string) round(COURSE_TAX * ((empty($courseInfo[$courseId]->amount) || !is_numeric($courseInfo[$courseId]->amount)) ? 0 : $courseInfo[$courseId]->amount)),
+                        'JPY',
+                        '0',
+                        $paymentDate,
+                        '1',
+                        '',
+                        '',
+                        $orderId,
+                        '',
+                        '',
+                        '',
+                        ''
                     );
 
-                    $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)',$data);
-                    LessonSchedule::where('lesson_schedule_id', '=', $schedule["lesson_schedule_id"])
-                        ->update(['lesson_reserve_type' => $schedule["lesson_reserve_type"]]);
+                    // sp_insert_point_subscription
+                    $ret = DB::select('call sp_insert_point_subscription(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',$data);
+
+                    // update paid status
+                    PointSubscriptionHistory::where('order_id', '=', $orderId)
+                      ->update(['paid_status' => SubsPaidStatus::SUCCESS]);
+
+                    $psid = DB::table('point_subscription_history')
+                                ->where('student_id', '=', $studentId)
+                                ->max('point_subscription_history_id');
+
+                    $lessonSchedule = DB::table('lesson_schedule')
+                        ->where('course_id', '=', $courseId)
+                        ->get()->toArray();
+                    foreach($lessonSchedule as $schedule) {
+                        $schedule = (array) $schedule;
+                        // insert student_point_history
+                        $data = array(
+                            'student_id' => $studentId,
+                            'pay_date' => $paymentDate,
+                            'pay_description' => 'レッスン付与 ('.$courseInfo[$courseId]->course_name.')',
+                            'pay_type' => 0,
+                            'point_count' => -1,
+                            'expire_date' => Carbon::parse($paymentDate)->addDays($courseInfo[$courseId]->expire_day)->format('Y-m-d 23:59:59'),
+                            'lesson_schedule_id' => $schedule['lesson_schedule_id'],
+                            'course_id' => $courseId,
+                            'start_date' => $paymentDate,
+                            'point_subscription_id' => empty($psid) ? 0 : $psid
+                        );
+                        DB::table('student_point_history')->insert($data);
+
+                        // insert lesson_history
+                        $data = array(
+                            $schedule["lesson_schedule_id"],
+                            $studentId,
+                            $schedule["lesson_id"],
+                            $schedule["lesson_text_id"],
+                            $courseId,
+                        );
+
+                        $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)',$data);
+                        LessonSchedule::where('lesson_schedule_id', '=', $schedule["lesson_schedule_id"])
+                            ->update(['lesson_reserve_type' => $schedule["lesson_reserve_type"]]);
+                    }
                 }
             }
 
@@ -414,9 +418,22 @@ public function importStudent(Request $request){
             'message' => 'ファイルのフォーマットが異なります。正しいファイルフォーマットダウンロードしてファイルを指定してください。'
             ]);
         }
+        if(empty($dataImport)==true){
+            return response()->json([
+                'status' => false,
+                'message' => 'データを入力してください',
+                ]);
+        }
       
        $emails=[];
        foreach ($dataImport as $key => $value){
+            if($value[0]==null || $value[1]==null ||$value[2]==null||$value[3]==null||$value[4]==null
+            || $value[5]==null || $value[6]==null){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'を入力してください。',
+                    ]);
+            }
             array_push($emails,$value[2]);
        }
         $emailsCheck = Student::whereIn('student_email', $emails)
@@ -457,7 +474,7 @@ public function importStudent(Request $request){
 
         return response()->json([
             'status'=>true,
-            'message'=>'Success',
+            'message'=>'法人ユーザーを登録しました。',
         ]);         
     }
 }

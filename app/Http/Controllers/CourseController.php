@@ -78,6 +78,12 @@ class CourseController extends BaseController
             }
         }
 
+        if (isset($request['sort'])) {
+            if ($request['sort'] == "amount") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(amount AS INT) ASC') : $queryBuilder->orderByRaw('CAST(amount AS INT) DESC');
+            }
+        }
+
 
         $coureList = $queryBuilder->with(['childCourse'])->sortable(['course_name' => 'desc'])->paginate($pageLimit);
 

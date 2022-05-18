@@ -1201,9 +1201,16 @@ div > .draggable-test-sub-question:first-child {
     content: "\f0dd" !important;
 }
 .fa-sort-numeric-asc {
+    position: relative;
+}
+
+.fa-sort-numeric-asc:before {
     content: "\f0de" !important;
 }
-.fa-sort-numberic-desc {
+.fa-sort-numeric-desc {
+    position: relative;
+}
+.fa-sort-numeric-desc:before {
     content: "\f0dd" !important;
 }
 .textarea-comment {

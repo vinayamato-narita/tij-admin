@@ -79,23 +79,41 @@
                                             </div>
                                             <div class="col-md-5 text-md-left p-2">
                                                 <textarea rows="20" class="form-control" value=""  disabled>
-                                                    【無料会員登録】
+【無料会員登録時】
+【法人会員登録時】
+【パスワード変更時】
 本登録用URL:　#CONFIRM_URL#
-送信先学習者名:　#STUDENT_NAME
+送信先学習者名:　#STUDENT_NAME#
+LPお問い合わせぺージURL：#LP_URL#
+学習者パスワード：#STUDENT_PASSWORD#
+管理者パスワード再発行ページURL：#ADMIN_CHANGEPASS_URL#
+学習者パスワード再発行ページURL：#STUDENT_CHANGEPASS_URL#
+講師パスワード再発行ページURL：#TEACHER_CHANGEPASS_URL#
+
 【レッスン予約時】
 【レッスン予約後】
 【レッスンキャンセル時】
 【レッスン開始前】
-先生名:　#TEACHER_NAME#
-先生ニックネーム:　#TEACHER_NICKNAME#
+講師名:　#TEACHER_NAME#
+講師ニックネーム:　#TEACHER_NICKNAME#
 学習者名:　#STUDENT_NAME#
 学習者ニックネーム:　#STUDENT_NICKNAME#
-レッスン日:　#LESSON_DATE#
-レッスン時間:　#LESSON_TIME#
+レッスン開始日：#LESSON_DATE#
+レッスン開始時間：#LESSON_TIME#
+レッスン開始日（JST）：#LESSON_DATE_JST#
+レッスン開始時間（JST）：#LESSON_TIME_JST#
 レッスン名:　#LESSON_NAME#
 テキスト名:　#LESSON_TEXT_NAME#
-学習者スカイプ名: #STUDENT_SKYPENAME#
-講師スカイプ名: #TEACHER_SKYPENAME#
+ZoomミーティングURL：#ZOOM_URL#
+学習者マイページログインリンク：#STUDENT_MY_PAGE_URL#
+学習者登録情報ページURL：#STUDENT_SETTING_URL#
+Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
+
+【実力テスト提出時】
+実力テスト評価期限日（JST）：#TEST_LIMIT_DATE#
+実力テスト評価期限時（JST）：#TEST_LIMIT_TIME#
+講師マイページログインリンク：#TEACHER_MY_PAGE_URL#
+
 
 【GMO決済時】
 オーダーID:　#ORDER_ID#
@@ -103,59 +121,28 @@
 コース名:　#COURSE_NAME#
 コース料金:　#COURSE_PRICE#　円
 消費税:　#COURSE_TAX#　円
+支払方法：#COURSE_PAYMENT#
 お支払い金額:　#COURSE_TOTAL#　円
 決済日時:　#ORDER_DATE#
 有効期限:#EXPIRE_DATE#
-
-【コンビニ決済】
-受注番号:#POINT_SUBSCRIPTION_HISTORY_ID#
-申込日時:#ORDER_DATE#
-申込氏名:#STUDENT_NAME#
-申込電話番号:#STUDENT_TELNUMBER#
-商品お届け先:#STUDENT_ADDRESS#
-コンビニ種類:#CVS_TYPE#
-決済番号:#CVS_NUMBER#
-確認番号:#CVS_CONFIRM_NUMBER#
-入金日:#PAY_DATE#
-支払期限日:#PAY_LIMIT_DATE#
-受講開始日:#START_DATE#
-受講有効期限:#EXPIRE_DATE#
+受講回数：#COURSE_COUNT#
 
 【講師コメント登録メール】
-先生ニックネーム:　#TEACHER_NICKNAME#
+講師ニックネーム:　#TEACHER_NICKNAME#
 レッスン日:　#LESSON_DATE#
 レッスン時間:　#LESSON_TIME#
 レッスン名:　#LESSON_NAME#
 テキスト名:　#LESSON_TEXT_NAME#
 コメント内容:#TEACHER_COMMENT#
 
-【人事担当者宛のメール送付】
-送付先名:　#ADMIN_NAME#様
-企業ID:　#PROJECT_CODE#
-企業名:　#COMPANY_NAME#
-送付先メール:　#ADMIN_EMAIL#
-送付先パースワード:　#ADMIN_PASSWORD#
+【お問い合わせ時】
+お問い合わせID：#INQUIRY_ID#
+お問い合わせ日時：#INQUIRY_DATE#
+お問い合わせ件名：#INQUIRY_TITLE#
+お問い合わせお名前：#USER_TITLE#
+お問い合わせメールアドレス：#USER_EMAIL#
+お問い合わせ内容：#INQUIRY_BODY#
 
-【セットコース購入完了メール】
-オーダーID:　#ORDER_ID#
-セットコースコード:　#SET_COURSE_ID#
-セットコース名:　#SET_COURSE_NAME#
-セットコース料金:　#SET_COURSE_PRICE#　円
-消費税:　#SET_COURSE_TAX#　円
-お支払い金額:　#SET_COURSE_TOTAL#　円
-申込日時:　#ORDER_DATE#
-コースリスト初め:　#COURSE_LIST_START#
-コース名:　#COURSE_NAME#
-コースID:　#COURSE_ID#
-
-受注番号:　#POINT_SUBSCRIPTION_HISTORY_ID#
-受講開始日:　#START_DATE#
-有効期限日:　#EXPIRE_DATE#
-コースリスト終わり:　#COURSE_LIST_END#
-
-【一括登録　法人会員　継続メール】
-先学習者名:　#STUDENT_NAME#
-メールアドレス:　#STUDENT_EMAIL#
                                                 </textarea>
 
 

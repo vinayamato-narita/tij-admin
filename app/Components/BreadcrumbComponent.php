@@ -396,7 +396,7 @@ class BreadcrumbComponent
                 'route_str' => 'groupLessonReserves.show'
             ],
             'student_attendance' => [
-                'text' => '欠席一覧',
+                'text' => '出欠一覧',
                 'route_str' => 'groupLessonHistory.studentAttendance'
             ],
             'edit_lang_remind_mail' => [

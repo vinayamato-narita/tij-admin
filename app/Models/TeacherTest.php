@@ -23,4 +23,9 @@ class TeacherTest extends Model
         return $this->hasOne('App\Models\Test', 'test_id', 'test_id');
     }
 
+    public function teacher()
+    {
+        return $this->hasOne('App\Models\Teacher', 'teacher_id', 'teacher_id');
+    }
+
 }

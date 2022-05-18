@@ -561,13 +561,16 @@ class TeacherController extends BaseController
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
                     ->where('lesson_schedule.teacher_id', $id);
             })
-            ->leftJoin('lesson', function ($join) {
+            ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_text', function ($join) {
-                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            ->leftJoin('lesson_text_lesson', function($join) {
+                $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
             })
-            ->leftJoin('student', function ($join) {
+            ->leftJoin('lesson_text', function($join) {
+                $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            })
+            ->join('student', function ($join) {
                 $join->on('lesson_history.student_id', '=', 'student.student_id');
             })
             ->leftJoin('course', function ($join) {
@@ -684,13 +687,16 @@ class TeacherController extends BaseController
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
                     ->where('lesson_schedule.teacher_id', $id);
             })
-            ->leftJoin('lesson', function ($join) {
+            ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_text', function ($join) {
-                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            ->leftJoin('lesson_text_lesson', function($join) {
+                $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
             })
-            ->leftJoin('student', function ($join) {
+            ->leftJoin('lesson_text', function($join) {
+                $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            })
+            ->join('student', function ($join) {
                 $join->on('lesson_history.student_id', '=', 'student.student_id');
             })
             ->leftJoin('course', function ($join) {
@@ -766,16 +772,19 @@ class TeacherController extends BaseController
             ->join('lesson_schedule', function ($join) {
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
-            ->leftJoin('lesson', function ($join) {
+            ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_text', function ($join) {
-                $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
+            ->leftJoin('lesson_text_lesson', function($join) {
+                $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
+            })
+            ->leftJoin('lesson_text', function($join) {
+                $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
             ->leftJoin('teacher', function ($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
-            ->leftJoin('student', function ($join) {
+            ->join('student', function ($join) {
                 $join->on('lesson_history.student_id', '=', 'student.student_id');
             })
             ->leftJoin('course', function ($join) {

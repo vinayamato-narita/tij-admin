@@ -266,6 +266,14 @@
                         法人・グループコース登録
                     </a>
                 </li>
+                <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(COURSE_REGISTRATION) }}" href="{{route('courseGroupUser.importView')}}">
+                        <svg class="c-sidebar-nav-icon">
+                            <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
+                        </svg>
+                        法人ユーザ
+                    </a>
+                </li>
             </ul>
         </li>
 

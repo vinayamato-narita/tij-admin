@@ -67,8 +67,7 @@ class ForgotPasswordController extends BaseController
             $mailBody = $mailPattern->mail_body;
 
             $mailBody = str_replace("#ADMIN_NAME#", $account->admin_name, $mailBody);
-            $mailBody = str_replace("#CHANGEPASS_URL#", $AccessURL, $mailBody);
-            $mailBody = str_replace("#EntryURL#", $AccessURL, $mailBody);
+            $mailBody = str_replace("#ADMIN_CHANGEPASS_URL#", $AccessURL, $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($account, $mailSubject) {
                 $message->to($account->admin_user_email)

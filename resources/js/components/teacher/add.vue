@@ -984,7 +984,7 @@ export default {
             this.teacherFileName = e.target.files[0].name;
         },
           changeVideo(e) {
-            var maxFileSize = 50*1024*1024;
+            var maxFileSize = 500*1024*1024;
             if(e.target.files[0].size<maxFileSize){
             this.studentFileId = null;
             this.teacherFileNameAttached = "";
@@ -993,7 +993,7 @@ export default {
             this.errFile=""
             } 
             else{
-                this.errFile = "ファイルサイズを50MBを超えた為、アップロードできません。"
+                this.errFile = "ファイルサイズを500MBを超えた為、アップロードできません。"
             }
            
         },

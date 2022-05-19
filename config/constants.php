@@ -119,6 +119,7 @@ const COURSE = 'COURSE';
 
 const COURSE_TAX = 0.1;
 const FILE = 37;
+const IMPORT_STUDENT = 38;
 
 const MENU = [
 	PAYMENTHISTORY => [
@@ -169,6 +170,8 @@ const MENU = [
 		'course.lesson',
 		'course.setShow',
 		'course.setEdit',
+		'course.editLang',
+		'course.campaignCreate',
 	],
 	LESSON => [
 		'lesson.index',
@@ -176,6 +179,7 @@ const MENU = [
 		'lesson.show',
 		'lesson.edit',
 		'lesson.textLesson',
+		'lesson.editLang',
 	],
 	TEXT => [
 		'text.index',
@@ -200,12 +204,14 @@ const MENU = [
 		'test.create',
 		'test.show',
 		'test.edit',
+		'test.addQuestion',
 	],
 	REMINDMAIL => [
 		'remindmail.index',
 		'remindmail.create',
 		'remindmail.show',
 		'remindmail.edit',
+		'editLangRemindMail',
 	],
 	INQUIRY => [
 		'inquiry.index',
@@ -272,7 +278,16 @@ const MENU = [
 		'file.create',
 		'file.show',
 		'file.edit',
-	]
+	],
+	STUDENT_COMMENT => [
+		'publicComment.index',
+    ],
+    COURSE_REGISTRATION => [
+		'courseGroupUser.import',
+    ],
+    IMPORT_STUDENT => [
+		'courseGroupUser.importView',
+    ],
 ];
 
 

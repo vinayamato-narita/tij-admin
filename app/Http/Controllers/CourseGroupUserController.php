@@ -157,8 +157,7 @@ class CourseGroupUserController extends BaseController
             session()->forget('usersImportData');
             session()->put('usersImportData', $dataImport);
         }
-Log::info($data);
-Log::info($dataImport);
+
         return view('groupCourse.user_import', [
             'dataImport' => $data,
             'showList' => $showList,
@@ -206,8 +205,7 @@ Log::info($dataImport);
                 ->get()
                 ->keyBy('course_id')
                 ->toArray();
-Log::info($courseInfo);
-Log::info($emails);
+
             foreach ($data as $key => $item) {
                 $studentId = $emails[$item]['student_id'];
                 $courseId = $key;

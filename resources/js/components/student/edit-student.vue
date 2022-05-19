@@ -299,32 +299,7 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >電話番号</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="student_home_tel"
-                                                            v-model="studentInfoEx.student_home_tel"
-                                                            v-validate="
-                                                                'isTelephone|max:20'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('form1.student_home_tel')"
-                                                        >
-                                                            {{ errors.first("form1.student_home_tel") }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >国</label
+                                                        >出身国または地域</label
                                                     >
                                                     <div class="col-md-9">
                                                         <select
@@ -332,35 +307,10 @@
                                                             name="lang_type"
                                                             v-model="studentInfoEx.country_id"
                                                         >   
-                                                            <option :value="key" v-for="(value, key) in studentInfoEx.countries">
+                                                            <option :value="key" v-for="(value, key) in studentInfoEx.countries" :key="key">
                                                                 {{ value }}</option
                                                             >
                                                         </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >市</label
-                                                    >
-                                                    <div class="col-md-9">
-                                                        <input
-                                                            class="form-control"
-                                                            name="city"
-                                                            v-model="studentInfoEx.city"
-                                                            v-validate="
-                                                                'max:100'
-                                                            "
-                                                        />
-                                                        <div
-                                                            class="input-group is-danger"
-                                                            role="alert"
-                                                            v-if="errors.has('form1.city')"
-                                                        >
-                                                            {{ errors.first("form1.city") }}
-                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -417,28 +367,6 @@
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
-                                                        >督促メール</label
-                                                    >
-                                                    <div class="col-md-9 pt-7">
-                                                        <label style="margin-right: 20px"><input
-                                                            type="radio"
-                                                            name="is_sending_dm"
-                                                            v-model="studentInfoEx.is_sending_dm"
-                                                            value="1"
-                                                        /> 送付</label>
-                                                        <label><input
-                                                            type="radio"
-                                                            name="is_sending_dm"
-                                                            v-model="studentInfoEx.is_sending_dm"
-                                                            value="0"
-                                                        /> 送付しない</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
                                                         >DM</label
                                                     >
                                                     <div class="col-md-9 pt-7">
@@ -454,28 +382,6 @@
                                                             v-model="studentInfoEx.direct_mail_flag"
                                                             value="0"
                                                         /> 不可</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-3 col-form-label text-md-right"
-                                                        for="text-input"
-                                                        >居住地</label
-                                                    >
-                                                    <div class="col-md-9 pt-7">
-                                                        <label style="margin-right: 20px"><input
-                                                            type="radio"
-                                                            name="in_japan_flag"
-                                                            v-model="studentInfoEx.in_japan_flag"
-                                                            value="1"
-                                                        /> 日本</label>
-                                                        <label><input
-                                                            type="radio"
-                                                            name="in_japan_flag"
-                                                            v-model="studentInfoEx.in_japan_flag"
-                                                            value="0"
-                                                        /> 海外</label>
                                                     </div>
                                                 </div>
 
@@ -869,6 +775,9 @@ export default {
     props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
     mounted() {
         console.log(this.studentInfoEx.lang_type)
+        if (this.studentInfoEx.country_id == null) {
+            this.studentInfoEx.country_id = 0;
+        }
     },
     methods: {
         save(a) {

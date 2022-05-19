@@ -121,10 +121,8 @@
                         <div class="col-md-3">
                             <div class="col-md-12"><b>コメント</b></div>
                         </div>
-                        <div class="col-md-9" style="margin-left: -10px">
-                            <div class="col-md-12">
-                                <pre id="comment"></pre>
-                            </div>
+                        <div class="col-md-9">
+                            <pre id="comment"></pre>
                         </div>
                     </div>
                 </div>

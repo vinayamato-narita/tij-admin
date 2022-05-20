@@ -95,7 +95,7 @@
                                                 >問い合わせ内容</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                <pre style="font-size: 11px;">{{ inquiryInfoEx.inquiry_body }}</pre>
+                                                <pre class="inlinetext" style="font-size: 11px;">{{ inquiryInfoEx.inquiry_body }}</pre>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -221,3 +221,9 @@ export default {
     }
 };
 </script>
+<style scoped>
+.inlinetext {
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+</style>

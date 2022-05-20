@@ -57,9 +57,9 @@ use App\Components\SearchQueryComponent;
                                                                 {{ $student->student_name }}</td>
                                                             <td class="text-left">{{ !empty($student->pointSubscriptionHistories[0]->payment_date) ? Carbon\Carbon::parse($student->pointSubscriptionHistories[0]->payment_date)->format('Y/m/d H:i') : '---' }}
                                                             </td>
-                                                            <td class="text-left">{{ !empty($student->pointSubscriptionHistories[0]->receive_payment_date) ? Carbon\Carbon::parse($student->pointSubscriptionHistories[0]->receive_payment_date)->format('Y/m/d H:i') : '---' }}
+                                                            <td class="text-left">{{ !empty($student->pointSubscriptionHistories[0]->receive_payment_date) ? Carbon\Carbon::parse($student->pointSubscriptionHistories[0]->receive_payment_date)->format('Y/m/d H:i') : '-' }}
                                                             </td>
-                                                            <td class="text-left">null</td>
+                                                            <td class="text-left">{{ !empty($student->pointSubscriptionHistories[0]->receive_payment_date) ? '申込済' : '仮申込'}}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

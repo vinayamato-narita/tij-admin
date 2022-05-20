@@ -8,6 +8,7 @@ use App\Enums\StatusCode;
 use App\Enums\UserType;
 use App\Enums\OrderStatus;
 use App\Enums\SubsPaidStatus;
+use App\Enums\PaymentWay;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseLesson;
@@ -260,7 +261,10 @@ class CourseGroupUserController extends BaseController
 
                     // update paid status
                     PointSubscriptionHistory::where('order_id', '=', $orderId)
-                      ->update(['paid_status' => SubsPaidStatus::SUCCESS]);
+                      ->update([
+                        'paid_status' => SubsPaidStatus::SUCCESS,
+                        'payment_way' => PaymentWay::IMPORT
+                    ]);
 
                     $psid = DB::table('point_subscription_history')
                                 ->where('student_id', '=', $studentId)

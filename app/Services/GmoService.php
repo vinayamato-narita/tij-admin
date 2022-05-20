@@ -14,7 +14,7 @@ class GmoService{
     private $shopPass;
 
     public function __construct(){
-        $this->gmoURL = config('gmo.url');
+        $this->gmoURL = config('gmo.url').'/payment/';
         $this->shopID = config('gmo.shopId');
         $this->shopPass = config('gmo.shopPassword');
     }

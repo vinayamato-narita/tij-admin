@@ -18,7 +18,7 @@
                         <span class="caret"></span>
                     </button>
 
-                    <div class="dropdown-menu dropdown-menu-right search-popup"  style="width: 400px;padding: 10px 10px" role="menu">
+                    <div class="dropdown-menu dropdown-menu-right search-popup"  style="width: 333px;padding: 10px 10px" role="menu">
                         <form method="GET" :action="url">
                             <input type="hidden" name="limit" :value="pageLimit" />
                             <input type="hidden" name="search_detail" value="1" />

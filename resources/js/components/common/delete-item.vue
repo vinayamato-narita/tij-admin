@@ -39,16 +39,29 @@ export default {
               _token: Laravel.csrfToken
             })
             .then(function (response) {
+              console.log(response)
               that.flagShowLoader = false;
-              that
-                .$swal({
-                  title: response.data.message,
-                  icon: "success",
-                  confirmButtonText: "閉じる"
-                })
-                .then(function () {
-                  location.reload();
-                });
+              if (response.data.status == "NG") {
+                that
+                  .$swal({
+                    title: response.data.message,
+                    icon: "error",
+                    confirmButtonText: "閉じる"
+                  })
+                  .then(function () {
+                    location.reload();
+                  });
+              } else {
+                that
+                  .$swal({
+                    title: response.data.message,
+                    icon: "success",
+                    confirmButtonText: "閉じる"
+                  })
+                  .then(function () {
+                    location.reload();
+                  });
+              }
             })
             .catch(error => {
               that.flagShowLoader = false;

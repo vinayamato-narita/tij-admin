@@ -39,7 +39,7 @@ use Auth;
 use App\Enums\FileTypeEnum;
 use App\Models\File;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\LessonSchedule;
 class TeacherController extends BaseController
 {
     /**
@@ -421,6 +421,19 @@ class TeacherController extends BaseController
      */
     public function destroy($id)
     {
+        $lessonSchedules = LessonSchedule::where('lesson_schedule.course_id', '>', 0)
+        ->where('lesson_schedule.teacher_id', '=', $id)
+        ->groupBy('lesson_schedule.lesson_schedule_id')
+        ->count();
+
+        if ($lessonSchedules > 0) {
+            return response()->json([
+                'status' => 'NG',
+                'message' => ' 講師を削除できません',
+                'data' => [],
+            ], StatusCode::OK);
+        }
+
         try {
             $teacher = Teacher::where('teacher_id', $id)->delete();
         } catch (ModelNotFoundException $ex) {

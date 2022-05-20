@@ -491,6 +491,15 @@ class TestController extends BaseController
             $testQuestion->navigation = $request->navigation ?? '';
             $testQuestion->question_content = $request->questionContent ?? '';
 
+            if (isset($request->fileId)) {
+                $storedFile = File::query()->find($request->fileId);
+                if ($storedFile)
+                    $testQuestion->file_id = $storedFile->file_id;
+
+            }
+            else {
+                $testQuestion->file_id = null;
+            }
             if (isset($request->fileSelected)) {
                 $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $request->fileSelected);
                 if ($name) {
@@ -505,12 +514,7 @@ class TestController extends BaseController
                     $testQuestion->file_id = $file->file_id;
                 }
             }
-            if (isset($request->fileId)) {
-                $storedFile = File::query()->find($request->fileId);
-                if ($storedFile)
-                    $testQuestion->file_id = $storedFile->file_id;
 
-            }
             $testQuestion->test_id = $test->test_id;
             $testQuestion->save();
 
@@ -557,6 +561,9 @@ class TestController extends BaseController
                     $storedFile = File::query()->find($subQuestion->fileId);
                     if ($storedFile)
                         $testSubQuestion->explanation_file_id = $storedFile->file_id;
+                }
+                else {
+                    $testSubQuestion->explanation_file_id = null;
                 }
                 if (!empty($convertFiles[$index])) {
                     $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEST, $convertFiles[$index]);

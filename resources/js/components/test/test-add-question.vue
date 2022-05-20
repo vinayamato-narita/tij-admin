@@ -112,6 +112,7 @@
                                                 </button>
                                                 <span class="text-nowrap">
                                                     {{fileNameAttached}}
+                                                    <button v-if="fileNameAttached" type="button" v-on:click="clearTestQuestionFileAttached" class="btn btn-danger">削除</button>
                                                 </span>
                                                 <button type="button" v-on:click="newFile"
                                                         class="btn btn-primary  mr-2">新規ファイル追加
@@ -119,7 +120,7 @@
                                                 <input type="file" name="newFile" id="newFile" ref="newFile"
                                                        v-on:change="changeFile" v-validate="'max_sz_50'" class="hidden" />
                                                 <span class="text-nowrap">
-                                                    {{fileName}}
+                                                    {{fileName}}<button v-if="fileName" type="button" v-on:click="clearTestQuestionFileSelected" class="btn btn-danger">削除</button>
 
                                                 </span>
 
@@ -274,6 +275,10 @@
                                                     </button>
                                                     <span class="text-nowrap">
                                                     {{ subQuestion[index].fileNameAttached}}
+                                                    <button v-if="subQuestion[index].fileNameAttached" type="button" v-on:click="clearTestSubQuestionFileAttached(index)" class="btn btn-danger">
+                                                        削除
+                                                    </button>
+
                                                 </span>
                                                     <button type="button"
                                                             v-on:click="newFileQuestion('subQuestion[' + index +']newFile')"
@@ -285,6 +290,7 @@
                                                            class="hidden">
                                                     <span class="text-nowrap">
                                                     {{ subQuestion[index].fileName}}
+                                                        <button v-if="subQuestion[index].fileName" type="button" v-on:click="clearTestSubQuestionFileSelected(index)" class="btn btn-danger">削除</button>
 
                                                 </span>
 
@@ -572,6 +578,22 @@
             }
         },
         methods: {
+            clearTestQuestionFileSelected(){
+                this.fileSelected = null;
+                this.fileName = null;
+            },
+            clearTestQuestionFileAttached(){
+                this.fileId = null;
+                this.fileNameAttached = null;
+            },
+            clearTestSubQuestionFileSelected(index){
+                this.subQuestion[index].fileSelected = null;
+                this.subQuestion[index].fileName = null;
+            },
+            clearTestSubQuestionFileAttached(index){
+                this.subQuestion[index].fileId = null;
+                this.subQuestion[index].fileNameAttached = null;
+            },
             getIndex(index){ return ++index; },
             addSubQuestion () {
                 var index = this.subQuestion.length;

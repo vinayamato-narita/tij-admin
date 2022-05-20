@@ -17,10 +17,9 @@
                             <td class="column-title">レッスン名</td>
                             <td class="column-title">テキスト名</td>
                             <td class="column-title">講師名</td>
-                            <td class="column-title">生徒番号</td>
-                            <td class="column-title">生徒名</td>
-                            <td class="column-title">生徒ニックネーム</td>
-                            <td class="column-title">生徒スカイプ名</td>
+                            <td class="column-title">学習者番号</td>
+                            <td class="column-title">学習者名</td>
+                            <td class="column-title">学習者ニックネーム</td>
                             <td class="column-title" style="width:12%">予約時間</td>
                             <td class="column-title">自由/固定</td>
                         </thead>
@@ -51,13 +50,10 @@
                                     {{ item.student_nickname }}
                                 </td>
                                 <td>
-                                    {{ item.student_skype_name }}
-                                </td>
-                                <td>
                                     {{ item.student_book_time }}
                                 </td>
                                 <td>
-                                    {{ item.is_free_teacher }}
+                                    {{ item.is_free_teacher == 1 ? '自由' : '固定' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -82,21 +78,17 @@
                             <div class="col-sm-9 condition-group" id="student_book_time">{{ studentBookTime }}</div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3 text-right">評価（生徒⇒先生）</div>
+                            <div class="col-sm-3 text-right">評価（学習者⇒講師）</div>
                             <div class="col-sm-9 condition-group" id="teacher_rating">{{ teacherRating }}</div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3 text-right">評価（先生⇒生徒）</div>
-                            <div class="col-sm-9 condition-group" id="student_rating">{{ studentRating }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3 text-right">コメント（生徒⇒先生）</div>
+                            <div class="col-sm-3 text-right">コメント（学習者⇒講師）</div>
                             <div class="col-sm-9 condition-group" id="comment_from_student">
                                 <textarea readonly class="d-readonly textarea-comment" rows="4" :value="commentFromStudent"></textarea>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3 text-right">コメント（先生⇒生徒）</div>
+                            <div class="col-sm-3 text-right">コメント（講師⇒学習者）</div>
                             <div class="col-sm-9 condition-group" id="comment_from_teacher">
                                 <textarea readonly class="d-readonly textarea-comment" rows="4" :value="commentFromTeacher"></textarea>
                             </div>
@@ -126,7 +118,6 @@
                 lessonTextName : '',
                 studentBookTime : '',
                 teacherRating : '',
-                studentRating : '',
                 commentFromStudent : '',
                 commentFromTeacher : '',
                 flagShowLoaderModal : false
@@ -184,7 +175,6 @@
                 this.lessonTextName = this.lessonList[key].lesson_text_name;
                 this.studentBookTime = this.lessonList[key].student_book_time;
                 this.teacherRating = this.lessonList[key].teacher_rating;
-                this.studentRating = this.lessonList[key].student_rating;
                 this.commentFromStudent = this.lessonList[key].comment_from_student_to_office;
                 this.commentFromTeacher = this.lessonList[key].comment_from_teacher_to_student;
             }

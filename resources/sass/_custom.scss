@@ -1210,7 +1210,7 @@ div > .draggable-test-sub-question:first-child {
 .fa-sort-numeric-desc {
     position: relative;
 }
-.fa-sort-numberic-desc:before {
+.fa-sort-numeric-desc:before {
     content: "\f0dd" !important;
 }
 .textarea-comment {
@@ -1224,4 +1224,8 @@ pre {
     font-size: 100%;
     color: #3c4b64;
     font-family: inherit;
+    white-space: pre-wrap;
+}
+.w-30p {
+    width: 30%;
 }

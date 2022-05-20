@@ -508,7 +508,7 @@
             this.$validator.extend("max_sz_50", {
                 validate(value, args) {
                     console.log(Math.round(((value[0].size / 1024))));
-                    if (Math.round(((value[0].size / 1024))) > (50 * 1000))
+                    if (Math.round(((value[0].size / 1024))) > (500 * 1000))
                         return {valid : false};
                     return { valid : true};
                 },
@@ -547,7 +547,7 @@
                         unique_custom: "このナビゲーションは既に登録されています。"
                     },
                     newFile : {
-                        max_sz_50 : "ファイルサイズを50MBを超えた為、アップロードできません。"
+                        max_sz_50 : "ファイルサイズを500MBを超えた為、アップロードできません。"
                     },
                     'subQuestion[0][question]': {
                         required: "問題文を入力してください。",

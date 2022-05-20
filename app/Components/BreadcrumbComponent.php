@@ -439,6 +439,10 @@ class BreadcrumbComponent
                 'text' => 'メディア編集',
                 'route_str' => 'file.index'
             ],
+            'public_comment_list' => [
+                'text' => '学習者単位',
+                'route_str' => 'publicComment.index'
+            ],
         ];
     }
 

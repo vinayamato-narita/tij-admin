@@ -238,7 +238,7 @@ export default {
         getLessonStartEndTime(start, end) {
             let result = "";
             if (start != "" && end != "") {
-                result = moment(String(start)).tz("Asia/Tokyo").format("YYYY-MM-DD HH:mm") + " ~ " + moment(String(end)).tz("Asia/Tokyo").format("YYYY-MM-DD HH:mm");
+                result = moment(String(start)).format("YYYY-MM-DD HH:mm") + " ~ " + moment(String(end)).format("YYYY-MM-DD HH:mm");
             }
             return result
         },

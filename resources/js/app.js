@@ -31,11 +31,6 @@ Vue.use(VeeValidate, {
 Vue.use(VModal);
 Vue.use(VueSweetalert2);
 import moment from 'moment-timezone'
-Vue.filter("formatDateTime", function(value) {
-    if (value) {
-      return moment(String(value)).tz("Asia/Tokyo").format("YYYY-MM-DD HH:mm:ss");
-    }
-  });
   Vue.filter("formatDate", function(value) {
     if (value) {
       return moment(String(value)).tz("Asia/Tokyo").format("YYYY-MM-DD");
@@ -48,7 +43,7 @@ Vue.filter("formatDateTime", function(value) {
   });
   Vue.filter("formatDateTime", function(value) {
     if (value) {
-      return moment(String(value)).format("YYYY/MM/DD HH:mm");
+      return moment(String(value)).format("YYYY-MM-DD HH:mm");
     }
   });
 

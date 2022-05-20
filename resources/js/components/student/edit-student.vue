@@ -612,7 +612,7 @@
                                             v-model="password"
                                             ref="password"
                                            v-validate="{
-                            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+                            regex: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/,
                             required: true,
                             max: 16,
                             min : 8
@@ -838,7 +838,7 @@ export default {
                     that.$refs.closeModel.click();
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "パスワード変更が完了しました。",
+                            text: "パスワード設定・変更が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

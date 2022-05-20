@@ -838,7 +838,7 @@ export default {
                     that.$refs.closeModel.click();
                     if (response.data.status == "OK") {
                         this.$swal({
-                            text: "パスワード設定・変更が完了しました。",
+                            text: "パスワード変更が完了しました。",
                             icon: "success",
                             confirmButtonText: "OK"
                         }).then(result => {

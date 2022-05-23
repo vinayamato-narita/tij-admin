@@ -1,5 +1,6 @@
 @php
     use App\Components\AdminUserRightComponent;
+    use App\Enums\AdminRole;
 @endphp
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand">
@@ -314,12 +315,15 @@
         </li>
 
         <li class="c-sidebar-nav-item">
+            @if (Auth::user()->role==AdminRole::SYSTEM) 
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ADMINUSER) }}" href="{{route('admin.index')}}">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 管理ユーザ管理
             </a>
+            @else 
+            @endif
         </li>
 
         <li class="c-sidebar-nav-item">

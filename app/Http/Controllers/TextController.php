@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TextController extends BaseController
 {
@@ -95,7 +96,7 @@ class TextController extends BaseController
                         $file->file_name_original = $request->studentFileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
                         $file->file_type = FileTypeEnum::TEXT;
-                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
                         $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->studentFileSelected->extension(), '', $request->studentFileSelected->getClientOriginalName());
                         $file->save();
                         $lessonText->lesson_text_student_file_id = $file->file_id;
@@ -116,7 +117,7 @@ class TextController extends BaseController
                         $file->file_name_original = $request->teacherFileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
                         $file->file_type = FileTypeEnum::TEXT;
-                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
                         $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->teacherFileSelected->extension(), '', $request->teacherFileSelected->getClientOriginalName());
                         $file->save();
                         $lessonText->lesson_text_teacher_file_id = $file->file_id;
@@ -208,7 +209,7 @@ class TextController extends BaseController
                         $file->file_name_original = $request->studentFileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
                         $file->file_type = FileTypeEnum::TEXT;
-                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
                         $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->studentFileSelected->extension(), '', $request->studentFileSelected->getClientOriginalName());
                         $file->save();
                         $lessonText->lesson_text_student_file_id = $file->file_id;
@@ -229,7 +230,7 @@ class TextController extends BaseController
                         $file->file_name_original = $request->teacherFileSelected->getClientOriginalName();
                         $file->file_path = AzureFolderEnum::TEXT . '/' . $name;
                         $file->file_type = FileTypeEnum::TEXT;
-                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp;
+                        $file->file_code = 'TX' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
                         $file->file_display_name = $lessonText->lesson_text_name . str_replace('.' . $request->teacherFileSelected->extension(), '', $request->teacherFileSelected->getClientOriginalName());
                         $file->save();
                         $lessonText->lesson_text_teacher_file_id = $file->file_id;

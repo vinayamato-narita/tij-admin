@@ -6,6 +6,7 @@ use App\Enums\CourseTypeEnum;
 use App\Enums\GroupLessonStatus;
 use App\Enums\MailType;
 use App\Enums\JobCdType;
+use App\Enums\PaymentWay;
 use App\Models\Course;
 use App\Models\LessonHistory;
 use App\Models\LessonSchedule;
@@ -70,9 +71,20 @@ class GroupCourseDecision extends Command
                         // cancel order
                         try {
                             Log::info("cancel order id:".$pointSubscriptionHistory->order_id);
-                            $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            $order = null;
+                            if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
+                                $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
+                                $order = $gmoService->searchTradeMulti($pointSubscriptionHistory->order_id);
+                            }
+
                             if (!empty($order)) {
-                                $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                $result = false;
+                                if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
+                                    $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
+                                    $result = $gmoService->cancelTranPaypal($orderID, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                }
 
                                 if (!empty($result)) {
                                     Log::info("cancel order success");
@@ -133,9 +145,20 @@ class GroupCourseDecision extends Command
                         // update sales order
                         try {
                             Log::info("update sales order id:".$pointSubscriptionHistory->order_id);
-                            $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            $order = null;
+                            if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
+                                $order = $gmoService->searchTrade($pointSubscriptionHistory->order_id);
+                            } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
+                                $order = $gmoService->searchTradeMulti($pointSubscriptionHistory->order_id);
+                            }
+
                             if (!empty($order)) {
-                                $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                $result = false;
+                                if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
+                                    $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
+                                    $result = $gmoService->paypalSales($orderID, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                }
 
                                 if (!empty($result)) {
                                     PointSubscriptionHistory::where('order_id', '=', $pointSubscriptionHistory->order_id)

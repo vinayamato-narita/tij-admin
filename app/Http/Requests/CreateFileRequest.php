@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\OptionUploadFile;
+use Illuminate\Support\Facades\Storage;
 use Log;
 
 class CreateFileRequest extends FormRequest
@@ -30,7 +32,18 @@ class CreateFileRequest extends FormRequest
                 'max:255',
                 'unique:file,file_code'
             ],
-            'file_attach' => 'required',
+            'option_upload_file' => 'required|enum_value:' . OptionUploadFile::class . ',false',
+            'file_attach' => 'required_if:option_upload_file,' . OptionUploadFile::PC,
+            'url_file_path' => ['required_if:option_upload_file,' . OptionUploadFile::CLOUD,
+                function ($attribute, $value, $fail) {
+                    $fileBaseMedia = env('AZURE_STORAGE_URL');
+                    $arrUrl = explode($fileBaseMedia, $value);
+                    $orgirinalName = $arrUrl[1]; 
+                    
+                    if (!Storage::disk('azure')->exists($orgirinalName)) {
+                        return $fail('指定のURLにファイルが存在しません。');
+                    }
+                }],
             'file_display_name' => 'required|max:255',
             'file_description' => 'max:20000',
         ];

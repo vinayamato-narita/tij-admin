@@ -4,6 +4,7 @@ use App\Enums\StudentEntryType;
 use App\Enums\LangTypeOption;
 use App\Enums\TestType;
 use App\Enums\AdminRole;
+use App\Enums\OptionUploadFile;
 return [
     InquiryFlag::class => [
         InquiryFlag::SUPPORTED => '対応済',
@@ -29,5 +30,9 @@ return [
     AdminRole::class => [
         AdminRole::SYSTEM => 'システム管理者',
         AdminRole::BUSINESS => '業務管理者',
+    ],
+    OptionUploadFile::class => [
+        OptionUploadFile::PC => 'ローカルPC',
+        OptionUploadFile::CLOUD => 'クラウド',
     ],
 ];

@@ -73,15 +73,71 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
+                                                >アップロード方法<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
+                                            <div class="col-md-3" >
+                                                 <select
+                                                    class="form-control"
+                                                    name="option_upload_file"
+                                                    v-model="
+                                                        option_upload_file
+                                                    "
+                                                    v-validate="'required'"
+                                                >
+                                                    <option :value="key" v-for="(value, key) in optionUploadFile">
+                                                        {{ value }}</option
+                                                    >
+                                                </select>                                               
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" v-if="option_upload_file == 0">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
                                                 >メディアファイル</label>
-                                            <div class="col-md-9 flex">
-                                                <button type="button" v-on:click="newFile"
+                                            <div class="col-md-9 ">
+                                                <div class="flex">
+                                                    <button type="button" v-on:click="newFile"
                                                         class="btn btn-primary  mr-2">新規ファイル追加
-                                                </button>
-                                                <span class="pt-7">{{ file_original_name }}</span>
-                                                <input type="file" name="file_attach" ref="newFile"
-                                                    v-on:change="changeFile" class="hidden"
+                                                    </button>
+                                                    <span class="pt-7">{{ file_original_name }}</span>
+                                                    <input type="file" name="file_attach" ref="newFile"
+                                                        v-on:change="changeFile" class="hidden"
+                                                        v-validate="
+                                                            'max_sz_50'
+                                                        "
+                                                    />
+                                                </div>
+                                                
+                                                <div class="input-group is-danger" role="alert" v-if="errors.has('file_attach')"
+                                                >
+                                                    {{ errors.first("file_attach") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" v-if="option_upload_file == 1">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >ファイルパス<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
+                                            <div class="col-md-6">
+                                                <input
+                                                    class="form-control"
+                                                    name="url_file_path"
+                                                    v-model="url_file_path"
+                                                    v-validate="
+                                                        'required|max:255|format_url'
+                                                    "
                                                 />
+                                                <div class="input-group is-danger" role="alert" v-if="errors.has('url_file_path')"
+                                                >
+                                                    {{ errors.first("url_file_path") }}
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -180,10 +236,38 @@ export default {
                 },
                 file_description: {
                     max: "説明は20000文字以内で入力してください"
-                }
+                },
+                url_file_path: {
+                    required: "ファイルパス入力してください",
+                    format_url: "内に保存されるファイルのURLを指定してください。"
+                },
+                file_attach: {
+                    max_sz_50 : "メディアファイルを50MBを超えた為、アップロードできません。"
+                },
             }
         };
         this.$validator.localize("en", messError);
+
+        this.$validator.extend("max_sz_50", {
+            validate(value, args) {
+                if (value[0] && value[0].size > (50 * 1024 * 1024))
+                    return {valid : false};
+                return { valid : true};
+            }
+        })
+        let that = this;
+        this.$validator.extend("format_url", {
+            validate(value, args) {
+                if (!value.includes(that.fileBaseMedia)) {
+                    return {valid : false};
+                }
+                let arrUrl = value.split(that.fileBaseMedia);
+                if(arrUrl[0].length != 0 || arrUrl[1].length == 0) {
+                    return {valid : false};
+                }
+                return { valid : true};
+            }
+        })
     },
     components: {
         Loader
@@ -198,7 +282,11 @@ export default {
             file_display_name: this.fileInfo.file_display_name,
             file_description: this.fileInfo.file_description,
             file_name_original: this.fileInfo.file_name_original,
-            file_original_name: ''
+            file_original_name: '',
+            optionUploadFile: this.fileInfo.optionUploadFile,
+            fileBaseMedia: this.fileInfo.fileBaseMedia,
+            option_upload_file: 0,
+            url_file_path: ''
         };
     },
     props: ["urlAction", "urlFileList", "fileInfo"],
@@ -239,6 +327,8 @@ export default {
             formData.append("file_code", this.pre_code + (this.file_code != null && this.file_code != '' ? this.file_code.trim() : ''));
             formData.append("file_display_name", this.file_display_name);
             formData.append("file_description", this.file_description);
+            formData.append("option_upload_file", this.option_upload_file);
+            formData.append("url_file_path", this.url_file_path);
             if (this.file_attach) {
                 formData.append('file_attach', this.file_attach);
             }
@@ -259,10 +349,18 @@ export default {
                 })
                 .catch(e => {
                     this.flagShowLoader = false;
-                    that.errors.add({
-                        field: 'file_code',
-                        msg: e.response.data.errors.file_code[0]
-                    });
+                    if(e.response.data.errors.file_code) {
+                        that.errors.add({
+                            field: 'file_code',
+                            msg: e.response.data.errors.file_code[0]
+                        });
+                    }
+                    if(e.response.data.errors.url_file_path) {
+                         that.errors.add({
+                            field: 'url_file_path',
+                            msg: e.response.data.errors.url_file_path[0]
+                        });
+                    }
                 });
         }
     }

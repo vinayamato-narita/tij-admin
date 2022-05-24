@@ -16,6 +16,7 @@ use App\Components\TIJAdminAzureComponent;
 use App\Enums\AzureFolderEnum;
 use Carbon\Carbon;
 use App\Enums\FileTypeEnum;
+use App\Enums\OptionUploadFile;
 use Log;
 
 class FileController extends BaseController
@@ -105,8 +106,13 @@ class FileController extends BaseController
             ['name' => 'create_file'],
         ]);
 
+        $optionUploadFile = OptionUploadFile::asSelectArray();
+        $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+        
         return view('file.create', [
-            'breadcrumbs' => $breadcrumbs
+            'breadcrumbs' => $breadcrumbs,
+            'optionUploadFile' => $optionUploadFile,
+            'fileBaseMedia' => $fileBaseMedia
         ]);
     }
 
@@ -117,17 +123,29 @@ class FileController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);        
         }
-
-        $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);
-        if (!$name) {
-            return response()->json([
-                'status' => 'NG'
-            ], StatusCode::BAD_REQUEST);
-        }
         $file = new File();
-        $file->file_name = $name;
-        $file->file_path = AzureFolderEnum::MEDIA . '/' . $name;
-        $file->file_name_original = $request->file_attach->getClientOriginalName();
+        if($request->option_upload_file == OptionUploadFile::PC) {
+            $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);
+            if (!$name) {
+                return response()->json([
+                    'status' => 'NG'
+                ], StatusCode::BAD_REQUEST);
+            }
+            
+            $file->file_name = $name;
+            $file->file_path = AzureFolderEnum::MEDIA . '/' . $name;
+            $file->file_name_original = $request->file_attach->getClientOriginalName();
+        }else {
+            $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+            $arrUrl = explode($fileBaseMedia, $request->url_file_path);
+            
+            $orgirinalName = $arrUrl[1]; 
+
+            $file->file_path = AzureFolderEnum::MEDIA . "/" . $orgirinalName;
+            $file->file_name = $orgirinalName;
+            $file->file_name_original = $orgirinalName;
+        }
+        
         $file->file_code = $request->file_code;
         $file->file_display_name = $request->file_display_name;
         $file->file_description = $request->file_description ?? '';
@@ -147,11 +165,17 @@ class FileController extends BaseController
             ['name' => 'file_list'],
             ['name' => 'edit_file', $id],
         ]);
+
+        $optionUploadFile = OptionUploadFile::asSelectArray();
+        $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+
         $fileInfo = File::where('file_id', $id)->firstOrFail();
         $fileInfo->_token = csrf_token();
         $fileInfo->file_path = $this->getUrlFileBase() . $fileInfo->file_path;
         $fileInfo->pre_code = substr($fileInfo->file_code,0, 10);
         $fileInfo->file_code = substr($fileInfo->file_code,10);
+        $fileInfo->optionUploadFile = $optionUploadFile;
+        $fileInfo->fileBaseMedia = $fileBaseMedia;
 
         return view('file.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -172,7 +196,7 @@ class FileController extends BaseController
         $fileInfo->file_display_name = $request->file_display_name;
         $fileInfo->file_description = $request->file_description ?? '';
        
-        if($request->file_attach) {
+        if($request->option_upload_file == OptionUploadFile::PC && $request->file_attach) {
             $name = TIJAdminAzureComponent::upload(AzureFolderEnum::MEDIA, $request->file_attach);
             if (!$name) {
                 return response()->json([
@@ -184,6 +208,16 @@ class FileController extends BaseController
             $fileInfo->file_name_original = $request->file_attach->getClientOriginalName();
         }
 
+        if($request->option_upload_file == OptionUploadFile::CLOUD) {
+            $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+            $arrUrl = explode($fileBaseMedia, $request->url_file_path);
+            
+            $orgirinalName = $arrUrl[1]; 
+
+            $fileInfo->file_path = AzureFolderEnum::MEDIA . "/" . $orgirinalName;
+            $fileInfo->file_name = $orgirinalName;
+            $fileInfo->file_name_original = $orgirinalName;
+        }
         $fileInfo->save();  
 
         return response()->json([

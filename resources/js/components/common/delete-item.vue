@@ -39,7 +39,6 @@ export default {
               _token: Laravel.csrfToken
             })
             .then(function (response) {
-              console.log(response)
               that.flagShowLoader = false;
               if (response.data.status == "NG") {
                 that

@@ -164,6 +164,27 @@ class GroupCourseDecision extends Command
                                     PointSubscriptionHistory::where('order_id', '=', $pointSubscriptionHistory->order_id)
                                         ->update(['receive_payment_date' => Carbon::now()]);
                                     Log::info("update sales order success");
+
+                                    //send mail student
+                                    $studentName = $pointSubscriptionHistory->student->student_name;
+                                    $studentEmail = $pointSubscriptionHistory->student->student_email;
+
+                                    $langType = $pointSubscriptionHistory->student->lang_type;
+                                    $courseInfo = $course->course_infos->where('lang_type', $langType)->first();
+
+                                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, $langType);
+
+                                    if ($mailPattern) {
+                                        $mailSubject = $mailPattern[0]->mail_subject;
+                                        $mailBody = $mailPattern[0]->mail_body;
+                                        $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
+                                        $mailBody = str_replace("#COURSE_NAME#", !empty($courseInfo) ? $courseInfo->course_name : $course->course_name, $mailBody);
+
+                                        Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
+                                            $message->to($studentEmail)
+                                                ->subject($mailSubject);
+                                        });
+                                    }
                                 }
                             }
                         } catch (\Exception $e) {

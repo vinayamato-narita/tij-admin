@@ -92,6 +92,19 @@ class CourseGroupUserController extends BaseController
                 $emails = Student::whereIn('student_email', $emails)
                             ->where('is_lms_user', 1)
                             ->pluck('student_email')->toArray();
+                $psh = DB::table('point_subscription_history')
+                    ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
+                    ->whereIn('student_email', $emails)
+                    ->whereIn('course_id', $courseIds)
+                    ->where('payment_status', '=', PaymentStatus::SUCCESS)
+                    ->get()->toArray();
+                $boughtCourse = [];
+                if (!empty($psh)) {
+                    foreach ($psh as $p) {
+                        $p = (array) $p;
+                        $boughtCourse[$p['course_id']][] = $p['student_email'];
+                    }
+                }
 
                 $dataImport = [];
                 foreach ($data as $key => $line) {
@@ -137,6 +150,12 @@ class CourseGroupUserController extends BaseController
                                 if (!empty($dataImport[$tmpCourseId]) && in_array($value, $dataImport[$tmpCourseId])) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = "メールアドレスとコースIDが重複しています";
+                                    break;
+                                }
+
+                                if (!empty($boughtCourse[$tmpCourseId]) && in_array($value, $boughtCourse[$tmpCourseId])) {
+                                    $setSession = false;
+                                    $data[$key]["error_list"][] = "すでにこのコースを購入しています。同じグループコースを複数回購入することはできません。";
                                     break;
                                 }
 

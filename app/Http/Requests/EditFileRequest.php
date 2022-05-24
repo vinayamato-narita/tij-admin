@@ -36,7 +36,7 @@ class EditFileRequest extends FormRequest
                 }),
             ],
             'option_upload_file' => 'required|enum_value:' . OptionUploadFile::class . ',false',
-            'url_file_path' => ['required_if:option_upload_file,' . OptionUploadFile::CLOUD,
+            'url_file_path' => [
                 function ($attribute, $value, $fail) {
                     if($value) {
                         $fileBaseMedia = env('AZURE_STORAGE_URL');

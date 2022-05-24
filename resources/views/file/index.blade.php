@@ -62,6 +62,13 @@
                                                                     <li>
                                                                         <a class="dropdown-item" href="{{ route('file.edit', $file->file_id) }}"><i class="fa fa-book mr-2"></i>確認・編集</a>
                                                                     </li>
+                                                                    <li>
+                                                                        <delete-item
+                                                                            :delete-action="{{ json_encode(route('file.destroy', $file->file_id)) }}"
+                                                                            :message-confirm="{{ json_encode('このメディアを削除しますか？') }}"
+                                                                        >
+                                                                        </delete-item>
+                                                                    </li>
                                                                 </ul>
                                                             </div>
                                                         </td>

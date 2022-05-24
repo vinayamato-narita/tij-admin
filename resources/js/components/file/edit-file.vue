@@ -11,7 +11,7 @@
                 </div>
                 <div class="fade-in">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-7">
                             <div class="card">
                                 <form
                                     class="basic-form"
@@ -29,7 +29,7 @@
                                                 for="text-input"
                                                 >ID</span
                                             ></label>
-                                            <div class="col-md-3 pt-7">
+                                            <div class="col-md-8 pt-7">
                                                 {{ file_id }}
                                             </div>
                                         </div>
@@ -41,7 +41,7 @@
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3">
+                                            <div class="col-md-8">
                                                 <div class="flex">
                                                     <span style="margin-right: 10px" class="pt-7">{{ pre_code }}</span>
                                                     <input
@@ -65,7 +65,7 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
                                                 >ダウンロードURL</label>
-                                            <div class="col-md-9 pt-7">
+                                            <div class="col-md-8 pt-7">
                                                 <a :href="file_path" target="_blank">{{ file_name_original }}</a>
                                             </div>
                                         </div>
@@ -77,7 +77,7 @@
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3" >
+                                            <div class="col-md-5" >
                                                  <select
                                                     class="form-control"
                                                     name="option_upload_file"
@@ -97,7 +97,7 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
                                                 >メディアファイル</label>
-                                            <div class="col-md-9 ">
+                                            <div class="col-md-9">
                                                 <div class="flex">
                                                     <button type="button" v-on:click="newFile"
                                                         class="btn btn-primary  mr-2">新規ファイル追加
@@ -121,17 +121,14 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ファイルパス<span
-                                                    class="glyphicon glyphicon-star"
-                                                ></span
-                                            ></label>
-                                            <div class="col-md-6">
+                                                >ファイルパス</label>
+                                            <div class="col-md-8">
                                                 <input
                                                     class="form-control"
                                                     name="url_file_path"
                                                     v-model="url_file_path"
                                                     v-validate="
-                                                        'required|max:255|format_url'
+                                                        'max:255|format_url'
                                                     "
                                                 />
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('url_file_path')"
@@ -148,7 +145,7 @@
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3">
+                                            <div class="col-md-8">
                                                 <input
                                                     class="form-control"
                                                     name="file_display_name"
@@ -168,7 +165,7 @@
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
                                                 >説明</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <textarea
                                                     class="form-control"
                                                     rows="5"
@@ -206,6 +203,30 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="title-page">メディア一覧</h5>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>種別</th>
+                                                <th>メディア概要</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="file in fileInfo.mediaList">
+                                                <td>{{ file.media_type }}</td>
+                                                <td>{{ file.media_name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,3 +387,13 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+    .pt-0 {
+        padding-top: 0;
+    }
+    th {
+        border-top: none;
+    }
+</style>
+

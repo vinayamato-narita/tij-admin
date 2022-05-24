@@ -260,7 +260,7 @@ class AbilityTestResultController extends BaseController
                 return redirect()->route('abilityTestResult.show', $id);
         } else {
             $now = Carbon::now();
-            if ($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) > env('MAX_HOURS_COMMENT')) {
+            if (($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) > env('MAX_HOURS_COMMENT')) || $testComment->comment_start_time == null) {
                 $testComment->comment_start_time = Carbon::now();
                 $testComment->teacher_admin_id = Auth::user()->admin_user_id;
                 if (!$testComment->save())

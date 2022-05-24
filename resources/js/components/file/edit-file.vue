@@ -211,7 +211,7 @@
                                 <div class="card-header">
                                     <h5 class="title-page">メディア一覧</h5>
                                 </div>
-                                <div class="card-body pt-0">
+                                <div class="card-body pt-0" v-if="fileInfo.mediaList.length > 0">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -227,6 +227,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="card-body" v-if="fileInfo.mediaList.length == 0">
+                                    <data-empty></data-empty> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -240,6 +243,7 @@
 <script type="text/javascript">
 import axios from "axios";
 import Loader from "./../common/loader.vue";
+import DataEmpty from "./../common/data-empty.vue";
 import moment from 'moment'
 
 export default {
@@ -291,7 +295,7 @@ export default {
         })
     },
     components: {
-        Loader
+        Loader, DataEmpty
     },
     data() {
         return {

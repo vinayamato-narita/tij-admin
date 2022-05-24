@@ -14,6 +14,8 @@ use App\Http\Requests\CreateAdminRequest;
 use App\Http\Requests\EditAdminRequest;
 use Hash;
 use Log;
+use Illuminate\Support\Facades\Auth;
+use App\Enums\AdminRole;
 
 class AdminController extends BaseController
 {
@@ -22,6 +24,16 @@ class AdminController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $role = Auth::user()->role;
+            if($role == AdminRole::SYSTEM){
+                return $next($request);
+            }
+           return redirect('/dashboard');
+        });
+    }
     public function index(Request $request)
     {
         $breadcrumbComponent = new BreadcrumbComponent();

@@ -61,9 +61,9 @@ class GroupCourseDecision extends Command
         $cancelCourseIds = [];
         $decideCourseIds = [];
 
-        $getMailStudentJp = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::JA);
+        $getMailStudentJa = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::JA);
         $getMailStudentEn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::EN);
-        $getMailStudentCn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::ZH);
+        $getMailStudentZh = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::ZH);
 
         foreach ($courses as $course) {
             try {
@@ -177,10 +177,10 @@ class GroupCourseDecision extends Command
                                     $langType = $pointSubscriptionHistory->student->lang_type;
                                     $courseInfo = $course->course_infos->where('lang_type', $langType)->first();
                                     $courseName = !empty($courseInfo) ? $courseInfo->course_name : $course->course_name;
-                                    
-                                    if ($langType == LangType::JA && $getMailStudentJp) {
-                                        $mailSubject = $getMailStudentJp[0]->mail_subject;
-                                        $mailBody = $getMailStudentJp[0]->mail_body;
+
+                                    if ($langType == LangType::JA && $getMailStudentJa) {
+                                        $mailSubject = $getMailStudentJa[0]->mail_subject;
+                                        $mailBody = $getMailStudentJa[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
                                         $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
 
@@ -202,9 +202,9 @@ class GroupCourseDecision extends Command
                                         });
                                     }
 
-                                    if ($langType == LangType::ZH && $getMailStudentCn) {
-                                        $mailSubject = $getMailStudentCn[0]->mail_subject;
-                                        $mailBody = $getMailStudentCn[0]->mail_body;
+                                    if ($langType == LangType::ZH && $getMailStudentZh) {
+                                        $mailSubject = $getMailStudentZh[0]->mail_subject;
+                                        $mailBody = $getMailStudentZh[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
                                         $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
 

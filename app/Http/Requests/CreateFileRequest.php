@@ -36,12 +36,14 @@ class CreateFileRequest extends FormRequest
             'file_attach' => 'required_if:option_upload_file,' . OptionUploadFile::PC,
             'url_file_path' => ['required_if:option_upload_file,' . OptionUploadFile::CLOUD,
                 function ($attribute, $value, $fail) {
-                    $fileBaseMedia = env('AZURE_STORAGE_URL');
-                    $arrUrl = explode($fileBaseMedia, $value);
-                    $orgirinalName = $arrUrl[1]; 
-                    
-                    if (!Storage::disk('azure')->exists($orgirinalName)) {
-                        return $fail('指定のURLにファイルが存在しません。');
+                    if($value) {
+                        $fileBaseMedia = env('AZURE_STORAGE_URL');
+                        $arrUrl = explode($fileBaseMedia, $value);
+                        $orgirinalName = $arrUrl[1]; 
+                        
+                        if (!Storage::disk('azure')->exists($orgirinalName)) {
+                            return $fail('指定のURLにファイルが存在しません。');
+                        }
                     }
                 }],
             'file_display_name' => 'required|max:255',

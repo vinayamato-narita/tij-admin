@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Enums\LangType;
 
 class GroupCourseDecision extends Command
 {
@@ -59,6 +60,10 @@ class GroupCourseDecision extends Command
         $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->where('group_lesson_status', GroupLessonStatus::BEFORE_DECIDE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
         $cancelCourseIds = [];
         $decideCourseIds = [];
+
+        $getMailStudentJp = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::JA);
+        $getMailStudentEn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::EN);
+        $getMailStudentCn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::ZH);
 
         foreach ($courses as $course) {
             try {
@@ -171,14 +176,37 @@ class GroupCourseDecision extends Command
 
                                     $langType = $pointSubscriptionHistory->student->lang_type;
                                     $courseInfo = $course->course_infos->where('lang_type', $langType)->first();
-
-                                    $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, $langType);
-
-                                    if ($mailPattern) {
-                                        $mailSubject = $mailPattern[0]->mail_subject;
-                                        $mailBody = $mailPattern[0]->mail_body;
+                                    $courseName = !empty($courseInfo) ? $courseInfo->course_name : $course->course_name;
+                                    
+                                    if ($langType == LangType::JA && $getMailStudentJp) {
+                                        $mailSubject = $getMailStudentJp[0]->mail_subject;
+                                        $mailBody = $getMailStudentJp[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
-                                        $mailBody = str_replace("#COURSE_NAME#", !empty($courseInfo) ? $courseInfo->course_name : $course->course_name, $mailBody);
+                                        $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
+
+                                        Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
+                                            $message->to($studentEmail)
+                                                ->subject($mailSubject);
+                                        });
+                                    }
+
+                                    if ($langType == LangType::EN && $getMailStudentEn) {
+                                        $mailSubject = $getMailStudentEn[0]->mail_subject;
+                                        $mailBody = $getMailStudentEn[0]->mail_body;
+                                        $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
+                                        $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
+
+                                        Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
+                                            $message->to($studentEmail)
+                                                ->subject($mailSubject);
+                                        });
+                                    }
+
+                                    if ($langType == LangType::ZH && $getMailStudentCn) {
+                                        $mailSubject = $getMailStudentCn[0]->mail_subject;
+                                        $mailBody = $getMailStudentCn[0]->mail_body;
+                                        $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
+                                        $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
 
                                         Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
                                             $message->to($studentEmail)

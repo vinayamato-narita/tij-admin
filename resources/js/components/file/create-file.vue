@@ -53,6 +53,29 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
+                                                >アップロード方法<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
+                                            <div class="col-md-3" >
+                                                 <select
+                                                    class="form-control"
+                                                    name="option_upload_file"
+                                                    v-model="
+                                                        option_upload_file
+                                                    "
+                                                    v-validate="'required'"
+                                                >
+                                                    <option :value="key" v-for="(value, key) in optionUploadFile">
+                                                        {{ value }}</option
+                                                    >
+                                                </select>                                               
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" v-if="option_upload_file == 0">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
                                                 >メディアファイル<span
                                                     class="glyphicon glyphicon-star"
                                                 ></span
@@ -66,7 +89,7 @@
                                                     <input type="file" name="file_attach" ref="newFile"
                                                         v-on:change="changeFile" class="hidden"
                                                         v-validate="
-                                                            'required'
+                                                            'max_sz_50|required'
                                                         "
                                                     />
                                                 </div>
@@ -74,6 +97,29 @@
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_attach')"
                                                 >
                                                     {{ errors.first("file_attach") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" v-if="option_upload_file == 1">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >ファイルパス<span
+                                                    class="glyphicon glyphicon-star"
+                                                ></span
+                                            ></label>
+                                            <div class="col-md-6">
+                                                <input
+                                                    class="form-control"
+                                                    name="url_file_path"
+                                                    v-model="url_file_path"
+                                                    v-validate="
+                                                        'required|max:255|format_url'
+                                                    "
+                                                />
+                                                <div class="input-group is-danger" role="alert" v-if="errors.has('url_file_path')"
+                                                >
+                                                    {{ errors.first("url_file_path") }}
                                                 </div>
                                             </div>
                                         </div>
@@ -85,7 +131,7 @@
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <input
                                                     class="form-control"
                                                     name="file_display_name"
@@ -167,7 +213,8 @@ export default {
                     max: "メディアコードは255文字以内で入力してください"
                 },
                 file_attach: {
-                    required: "メディアファイルを選択してください"
+                    required: "メディアファイルを選択してください",
+                    max_sz_50 : "メディアファイルを50MBを超えた為、アップロードできません。"
                 },
                 file_display_name: {
                     required: "メディア名を入力してください",
@@ -175,10 +222,35 @@ export default {
                 },
                 file_description: {
                     max: "説明は20000文字以内で入力してください"
+                },
+                url_file_path: {
+                    required: "ファイルパス入力してください",
+                    format_url: "内に保存されるファイルのURLを指定してください。"
                 }
             }
         };
         this.$validator.localize("en", messError);
+
+        this.$validator.extend("max_sz_50", {
+            validate(value, args) {
+                if (value[0] && value[0].size > (50 * 1024 * 1024))
+                    return {valid : false};
+                return { valid : true};
+            }
+        })
+        let that = this;
+        this.$validator.extend("format_url", {
+            validate(value, args) {
+                if (!value.includes(that.fileBaseMedia)) {
+                    return {valid : false};
+                }
+                let arrUrl = value.split(that.fileBaseMedia);
+                if(arrUrl[0].length != 0 || arrUrl[1].length == 0) {
+                    return {valid : false};
+                }
+                return { valid : true};
+            }
+        })
     },
     components: {
         Loader
@@ -191,10 +263,12 @@ export default {
             file_description: '',
             _token: Laravel.csrfToken,
             pre_code: 'ME' + moment().format("YMMDD"),
-            file_original_name: ''
+            file_original_name: '',
+            option_upload_file: 0,
+            url_file_path: ''
         };
     },
-    props: ["urlAction", "urlFileList"],
+    props: ["urlAction", "urlFileList", "optionUploadFile", "fileBaseMedia"],
     mounted() {},
     methods: {
         newFile() {
@@ -233,6 +307,8 @@ export default {
             formData.append("file_code", this.pre_code + (this.file_code != null && this.file_code != '' ? this.file_code.trim() : ''));
             formData.append("file_display_name", this.file_display_name);
             formData.append("file_description", this.file_description);
+            formData.append("option_upload_file", this.option_upload_file);
+            formData.append("url_file_path", this.url_file_path);
             if (this.file_attach) {
                 formData.append('file_attach', this.file_attach);
             }
@@ -252,10 +328,18 @@ export default {
                 })
                 .catch(e => {
                     this.flagShowLoader = false;
-                    that.errors.add({
-                        field: 'file_code',
-                        msg: e.response.data.errors.file_code[0]
-                    });
+                    if(e.response.data.errors.file_code) {
+                        that.errors.add({
+                            field: 'file_code',
+                            msg: e.response.data.errors.file_code[0]
+                        });
+                    }
+                    if(e.response.data.errors.url_file_path) {
+                         that.errors.add({
+                            field: 'url_file_path',
+                            msg: e.response.data.errors.url_file_path[0]
+                        });
+                    }
                 });
         }
     }

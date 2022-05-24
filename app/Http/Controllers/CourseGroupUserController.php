@@ -217,7 +217,7 @@ class CourseGroupUserController extends BaseController
                     $studentId = $emails[$i]['student_id'];
 
                     // create order
-                    $orderId = $studentId.'tij'.time();
+                    $orderId = $courseId.$k.$studentId.'tij'.time();
                     $orderId = sprintf("%027s", $orderId);
                     $order = array(
                         'order_id' => $orderId,

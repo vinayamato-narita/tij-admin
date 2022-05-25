@@ -84,7 +84,7 @@ class RemindMailController extends BaseController
 
         $remindMail = SendRemindMailPattern::where([
             'send_remind_mail_pattern_id' => $id,
-        ])->with(['sendRemindMailTiming'])->first();
+        ])->with(['sendRemindMailTiming'])->firstOrFail();
 
         $mailEnInfo = SendRemindMailPatternInfo::where(['send_remind_mail_pattern_id' => $id, 'lang_type' => LangType::EN])->first();
         $mailZhInfo = SendRemindMailPatternInfo::where(['send_remind_mail_pattern_id' => $id, 'lang_type' => LangType::ZH])->first();
@@ -115,7 +115,7 @@ class RemindMailController extends BaseController
 
         $remindMail = SendRemindMailPattern::where([
             'send_remind_mail_pattern_id' => $id,
-        ])->with(['sendRemindMailTiming'])->first();
+        ])->with(['sendRemindMailTiming'])->firstOrFail();
         $enum = RemindMailTimmingMinutesEnum::getValues();
 
         if (!$remindMail) return redirect()->route('SendRemindMailPattern.index');

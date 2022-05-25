@@ -168,6 +168,14 @@ class TestController extends BaseController
     public function destroy($id)
     {
         try {
+            if (TestResult::where('test_id', $id)->exists()) {
+                return response()->json([
+                    'status' => 'NG',
+                    'message' => ' 学習者がテストを実施したため、削除できません。',
+                    'data' => [],
+                ], StatusCode::OK);
+            }
+
             $test = Test::where('test_id', $id)->delete();
 
         } catch (\Exception $ex) {
@@ -544,6 +552,11 @@ class TestController extends BaseController
                     $testSubQuestion = TestSubQuestion::with('tags')->find($subQuestion->testSubQuestionId);
 
                 } else {
+                    if (TestResult::where('test_id', $id)->exists())
+                        return response()->json([
+                            'status' => 'NG',
+                            'msg' => 'cannot add subquestion has test result',
+                        ], StatusCode::UNPROCESSABLE_ENTITY);
                     $testSubQuestion = new TestSubQuestion();
 
                 }

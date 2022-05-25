@@ -223,17 +223,17 @@ class GroupCourseDecision extends Command
             }
         }
 
-        // if (!empty($cancelCourseIds)) {
-        //     Course::whereIn('course_id', $cancelCourseIds)->update(['group_lesson_status' => GroupLessonStatus::CANCEL]);
-        //     PointSubscriptionHistory::whereIn('course_id', $cancelCourseIds)->delete();
-        //     StudentPointHistory::whereIn('course_id', $cancelCourseIds)->delete();
-        //     LessonSchedule::whereIn('course_id', $cancelCourseIds)->delete();
-        //     LessonHistory::whereIn('course_id', $cancelCourseIds)->delete();
-        // }
+        if (!empty($cancelCourseIds)) {
+            Course::whereIn('course_id', $cancelCourseIds)->update(['group_lesson_status' => GroupLessonStatus::CANCEL]);
+            PointSubscriptionHistory::whereIn('course_id', $cancelCourseIds)->delete();
+            StudentPointHistory::whereIn('course_id', $cancelCourseIds)->delete();
+            LessonSchedule::whereIn('course_id', $cancelCourseIds)->delete();
+            LessonHistory::whereIn('course_id', $cancelCourseIds)->delete();
+        }
 
-        // if (!empty($decideCourseIds)) {
-        //     Course::whereIn('course_id', $decideCourseIds)->update(['group_lesson_status' => GroupLessonStatus::COURSE_DECIDE]);
-        // }
+        if (!empty($decideCourseIds)) {
+            Course::whereIn('course_id', $decideCourseIds)->update(['group_lesson_status' => GroupLessonStatus::COURSE_DECIDE]);
+        }
 
         Log::info('group course decision batch end');
     }

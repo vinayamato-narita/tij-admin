@@ -224,7 +224,7 @@ export default {
                     max: "説明は20000文字以内で入力してください"
                 },
                 url_file_path: {
-                    required: "メディアURL入力してください",
+                    required: "メディアURLを入力してください",
                     format_url: "AzureStorage内に保存されるファイルのURLを指定してください。"
                 }
             }

@@ -315,14 +315,14 @@
         </li>
 
         <li class="c-sidebar-nav-item">
-            @if (Auth::user()->role==AdminRole::SYSTEM) 
+            @if (Auth::user()->role==AdminRole::SYSTEM)
             <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ADMINUSER) }}" href="{{route('admin.index')}}">
                 <svg class="c-sidebar-nav-icon">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                 </svg>
                 管理ユーザ管理
             </a>
-            @else 
+            @else
             @endif
         </li>
 
@@ -344,14 +344,14 @@
                         Zoomアカウント管理
                     </a>
                 </li>
-                <li class="c-sidebar-nav-item">
+                {{-- <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link {{ AdminUserRightComponent::getActiveMenu(ZOOM_SETTING) }}" href="{{route('zoomSetting.edit')}}">
                         <svg class="c-sidebar-nav-icon">
                             <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-book') }}"></use>
                         </svg>
                         Zoom設定
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
     </ul>

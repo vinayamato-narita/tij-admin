@@ -133,7 +133,7 @@
                                     <input type="checkbox" v-model="linkZoomScheduleFlag" :disabled="selectedEvent != null && boughtCourse.includes(selectedEvent.course_id)">
                                     <span class="slider round"></span>
                                 </label>
-                                <a v-if="linkZoomScheduleFlag" @click="showZoomSetting = !showZoomSetting" href="javascript:;" class="btn-link-zoom">Zoom設定詳細表示</a>
+                                <!-- <a v-if="linkZoomScheduleFlag" @click="showZoomSetting = !showZoomSetting" href="javascript:;" class="btn-link-zoom">Zoom設定詳細表示</a> -->
                             </div>
                         </div>
                         <div class="form-group row" v-if="!linkZoomScheduleFlag">

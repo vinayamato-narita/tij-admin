@@ -161,7 +161,11 @@ export default {
     },
     methods :{
       importFile() {
-         let that = this 
+        let that = this 
+        this.error="";
+        this.success="";
+        that.emails=[];
+        
         this.$validator.validateAll().then((valid) => {
           if (valid) {
             let formData = new FormData();

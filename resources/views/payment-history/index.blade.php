@@ -1,6 +1,6 @@
 @php
     use App\Components\SearchQueryComponent;
-    use App\Enums\PaidStatus;
+    use App\Enums\PaymentWay;
 @endphp
 
 @extends('layouts.default')
@@ -46,7 +46,7 @@
                                             :page-limit="{{ $pageLimit }}"
                                             :url="{{ json_encode(route('paymentHistory.index')) }}" 
                                             :data-query="{{json_encode(!empty($request) ? $request->all() : new stdClass)}}"
-                                            :payment-type="{{ json_encode($paymentType) }}"
+                                            :payment-ways="{{ json_encode($paymentWays) }}"
                                             ></payment-history-search>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                                     <th class="text-left min-width-150">@sortablelink('amount', '売上')</th>
                                                     <th class="text-left min-width-150">@sortablelink('tax', '消費税')</th>
                                                     <th class="text-left min-width-150">@sortablelink('point_count', '付与回数')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_paid_status', '支払状況')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('payment_way', '支払方法')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_receive_payment_date', '入金日')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_payment_term', '支払期限')</th>
                                                     
@@ -92,7 +92,7 @@
                                                         <td class="text-left">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-left">{{ number_format($payment->tax) }}</td>
                                                         <td class="text-left">{{ $payment->point_count }}</td>
-                                                        <td class="text-left">{{ PaidStatus::getDescription($payment->j_paid_status) }}</td>
+                                                        <td class="text-left">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>
                                                         <td class="text-left">{{ $payment->j_payment_term }}</td>
 

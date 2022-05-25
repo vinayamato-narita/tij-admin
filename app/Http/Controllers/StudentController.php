@@ -47,7 +47,8 @@ use App\Enums\AdminRole;
 use App\Enums\LmsUserEnum;
 use Auth;
 use App\Models\Country;
- 
+use App\Enums\PaymentWay;
+
 class StudentController extends BaseController
 {
     /**
@@ -495,7 +496,7 @@ class StudentController extends BaseController
             'point_subscription_history.set_course_id as set_course_id',
             'course.course_name as course_name',
             'course.course_type',
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status')
+            'point_subscription_history.payment_way as payment_way'
         )
         ->leftJoin('course', function($join) {
             $join->on('point_subscription_history.course_id', '=', 'course.course_id');
@@ -508,11 +509,6 @@ class StudentController extends BaseController
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
                 $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
             });
-        }
-        if (isset($request['sort'])) {
-            if ($request['sort'] == "j_paid_status") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('j_paid_status','ASC') : $queryBuilder->orderBy('j_paid_status','DESC');
-            }
         }
         $paymentHistoryList = $queryBuilder->sortable(['point_subscription_history_id' => 'desc'])->paginate($pageLimit);
 
@@ -536,22 +532,17 @@ class StudentController extends BaseController
 
         $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
-        $paymentType = [];
+        $payment_ways = PaymentWay::asSelectArray();
         $courseList = [];
         if ($studentInfo->is_lms_user) {
-            $paymentType = PaidStatus::asSelectArray();
             $courseList = DB::select('CALL sp_admin_get_course_list_lms(?,?)', array($studentInfo->student_id, COURSE_FREE_ID));
         }else {
-            $paymentType = [
-                0 => 'G',
-                1 => 'CSV'
-            ];
             $courseList = DB::select('CALL sp_admin_get_course_list');
         }
 
         $studentInfo->_token = csrf_token();
-        $studentInfo->payment_type_list = $paymentType;
-        $studentInfo->payment_type = PaidStatus::G;
+        $studentInfo->payment_ways = $payment_ways;
+        $studentInfo->payment_way = PaymentWay::CREDIT;
         $studentInfo->course_list = $courseList;
         $studentInfo->payment_date = Carbon::now();
         $studentInfo->start_date = Carbon::now();
@@ -630,7 +621,7 @@ class StudentController extends BaseController
                     0,
                     $course->project_course_id,
                     $course->parent_id,
-                    $request->payment_type,
+                    $request->payment_way,
                     $request->payment_date,
                     '',
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
@@ -648,7 +639,7 @@ class StudentController extends BaseController
                         $request->course_id,
                         $course->project_course_id,
                         $course->parent_id,
-                        $request->payment_type,
+                        $request->payment_way,
                         $request->payment_date,
                         '',
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
@@ -672,19 +663,10 @@ class StudentController extends BaseController
         if ($paymentInfo == null) {
             return redirect()->route('student.paymentHistoryList', $id); 
         }
-        $paymentType = [];
-        if ($paymentInfo->is_lms_user) {
-            $paymentType = PaidStatus::asSelectArray();
-        }else {
-            $paymentType = [
-                0 => 'G',
-                1 => 'CSV'
-            ];
-
-        }
+        $payment_ways = PaymentWay::asSelectArray();
 
         $paymentInfo->_token = csrf_token();
-        $paymentInfo->payment_type_list = $paymentType;
+        $paymentInfo->payment_ways = $payment_ways;
         $paymentInfo->is_payment_expired = 0;
         if (!empty($paymentInfo->point_expire_date)) {
             $today = Carbon::today()->format('Y-m-d');
@@ -734,7 +716,7 @@ class StudentController extends BaseController
             array(
                 $paymentInfo->student_id,
                 $paymentInfo->point_subscription_history_id,
-                $request->payment_type,
+                $request->payment_way,
                 $request->payment_date,
                 $request->start_date,
                 $request->begin_date,

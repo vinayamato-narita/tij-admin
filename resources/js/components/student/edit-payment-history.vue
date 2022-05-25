@@ -52,15 +52,15 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >支払いタイプ</label
+                                                >支払方法</label
                                             >
                                             <div class="col-md-6">
                                                 <select
                                                     class="form-control"
-                                                    name="payment_type"
-                                                    v-model="paymentInfoEx.payment_type"
+                                                    name="payment_way"
+                                                    v-model="paymentInfoEx.payment_way"
                                                 >
-                                                    <option :value="value" v-for="(name, value) in paymentTypeList">
+                                                    <option :value="value" v-for="(name, value) in payment_ways">
                                                         {{ name }}</option
                                                     >
                                                 </select>
@@ -294,12 +294,12 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            paymentTypeList: this.paymentInfo.payment_type_list,
+            payment_ways: this.paymentInfo.payment_ways,
             paymentInfoEx: {
                 point_subscription_history_id: this.paymentInfo.point_subscription_history_id,
                 student_id: this.paymentInfo.student_id,
                 student_name: this.paymentInfo.student_name,
-                payment_type: this.paymentInfo.payment_type,
+                payment_way: this.paymentInfo.payment_way,
                 course_id: this.paymentInfo.course_id,
                 course_name: this.paymentInfo.course_name,
                 is_lms_user: this.paymentInfo.is_lms_user,

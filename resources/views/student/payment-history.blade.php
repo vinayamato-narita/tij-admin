@@ -1,7 +1,7 @@
 @php
     use App\Components\SearchQueryComponent;
     use App\Components\DateTimeComponent;
-    use App\Enums\PaidStatus;
+    use App\Enums\PaymentWay;
 @endphp
 
 @extends('layouts.default')
@@ -52,7 +52,7 @@
                                                 <tr>
                                                     <th class="text-center width-130">@sortablelink('point_subscription_history_id', '受注番号')</th>
                                                     <th class="text-center min-width-120">@sortablelink('course_name', 'コース名')</th>
-                                                    <th class="text-center min-width-120">@sortablelink('j_paid_status', '支払い方法')</th>
+                                                    <th class="text-center min-width-120">@sortablelink('payment_way', '支払い方法')</th>
                                                     <th class="text-center min-width-120">@sortablelink('amount', '支払い金額')</th>
                                                     <th class="text-center w-100">@sortablelink('payment_date', '受注日')</th>
                                                     <th class="text-center w-100">@sortablelink('begin_date', '受講開始日')</th>
@@ -66,7 +66,7 @@
                                                     <tr>
                                                         <td class="text-center">{{ $payment->point_subscription_history_id }}</td>
                                                         <td class="text-center">{{ $payment->course_name }}</td>
-                                                        <td class="text-center">{{ PaidStatus::getDescription($payment->j_paid_status) }}</td>
+                                                        <td class="text-center">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-center">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->payment_date) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->begin_date) }}</td>

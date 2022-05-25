@@ -142,18 +142,18 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >支払い状況</label
+                                                >支払方法</label
                                             >
                                             <div class="col-md-6">
                                                 <select
                                                     class="form-control"
                                                     :class="paymentInfoEx.is_lms_user != 1 ? 'disabledSelect' : ''"
-                                                    name="j_paid_status"
-                                                    v-model="paymentInfoEx.j_paid_status"
+                                                    name="payment_way"
+                                                    v-model="paymentInfoEx.payment_way"
                                                     v-validate="'required'"
                                                     :disabled="paymentInfoEx.is_lms_user != 1"
                                                 >
-                                                    <option :value="key" v-for="(value, key) in paymentInfoEx.payment_types">
+                                                    <option :value="key" v-for="(value, key) in paymentInfoEx.payment_ways">
                                                         {{ value }}</option
                                                     >
                                                 </select>

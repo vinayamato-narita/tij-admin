@@ -28,7 +28,6 @@ class PointSubscriptionHistory extends Authenticatable
         return DB::table('point_subscription_history')->select(
             'point_subscription_history.point_subscription_history_id as point_subscription_history_id',
             'point_subscription_history.student_id as student_id',
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS payment_type'),
             'point_subscription_history.point_count as point_count',
             'point_subscription_history.management_number as management_number',
             'point_subscription_history.payment_date as payment_date',
@@ -42,7 +41,8 @@ class PointSubscriptionHistory extends Authenticatable
             'student_point_history.start_date as start_date',
             'lms_project_course_student.course_begin_month as course_begin_month',
             'point_subscription_history.tax as tax',
-            'course.course_type'
+            'course.course_type',
+            'point_subscription_history.payment_way as payment_way'
         )
             ->leftJoin('course', function ($join) {
                 $join->on('point_subscription_history.course_id', '=', 'course.course_id');

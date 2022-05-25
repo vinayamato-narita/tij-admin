@@ -129,12 +129,12 @@
                                 <div class="input text">
                                     <select
                                         class="form-control"
-                                        name="j_paid_status"
-                                        v-model="dataQuery.j_paid_status"
+                                        name="payment_way"
+                                        v-model="dataQuery.payment_way"
                                         v-validate="'required'"
                                     >
                                         <option></option>
-                                        <option :value="key" v-for="(value, key) in paymentType">
+                                        <option :value="key" v-for="(value, key) in paymentWays">
                                             {{ value }}</option
                                         >
                                     </select>
@@ -156,7 +156,7 @@
 
 <script>
     export default {
-        props: ["url", "pageLimit", "dataQuery", "paymentType"],
+        props: ["url", "pageLimit", "dataQuery", "paymentWays"],
         mounted() {
             
         },

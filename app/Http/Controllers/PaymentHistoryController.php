@@ -20,6 +20,7 @@ use Log;
 use Response;
 use App\Enums\AdminRole;
 use Auth;
+use App\Enums\PaymentWay;
 
 class PaymentHistoryController extends BaseController
 {
@@ -36,11 +37,6 @@ class PaymentHistoryController extends BaseController
         ]);
         $pageLimit = $this->newListLimit($request);
 
-        $paymentType = [
-            PaidStatus::G => PaidStatus::getKey(PaidStatus::G),
-            PaidStatus::CSV => PaidStatus::getKey(PaidStatus::CSV),
-        ];
-
         $queryBuilder = PointSubscriptionHistory::select('point_subscription_history.point_subscription_history_id as id',
         	'point_subscription_history.order_id as order_id',
         	'point_subscription_history.student_id as student_id',
@@ -52,10 +48,9 @@ class PaymentHistoryController extends BaseController
         	DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
         	'point_subscription_history.amount as amount',
         	'point_subscription_history.tax as tax',
-        	'order.campaign_code as j_campaign_code',
         	'point_subscription_history.point_count as point_count',
         	'course.course_type',
-        	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
+        	'point_subscription_history.payment_way as payment_way',
         	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
         	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
         )
@@ -75,7 +70,6 @@ class PaymentHistoryController extends BaseController
                 $query->where($this->escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('student.student_name', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('student.company_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('order.campaign_code', $request['search_input']))
                     ->orWhere($this->escapeLikeSentence('point_subscription_history.item_name', $request['search_input']));
             });
         }
@@ -110,11 +104,8 @@ class PaymentHistoryController extends BaseController
             if ($request['item_name'] != "") {
                 $queryBuilder = $queryBuilder->where($this->escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
             }
-            if ($request['campaign_code'] != "") {
-                $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
-            }
-            if (isset($request['j_paid_status']) && $request['j_paid_status'] != "") {
-                $queryBuilder = $queryBuilder->whereRaw('IF(point_subscription_history.payment_way = 2, point_subscription_history.payment_way + point_subscription_history.paid_status, point_subscription_history.payment_way) = '. $request['j_paid_status']);
+            if (isset($request['payment_way']) && $request['payment_way'] != "") {
+                $queryBuilder = $queryBuilder->where('point_subscription_history.payment_way', $request['payment_way']);
             }
         }
 
@@ -125,12 +116,7 @@ class PaymentHistoryController extends BaseController
             if ($request['sort'] == "j_company_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) DESC');
             }
-            if ($request['sort'] == "j_campaign_code") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('order.campaign_code','ASC') : $queryBuilder->orderBy('order.campaign_code','DESC');
-            }
-            if ($request['sort'] == "j_paid_status") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) DESC');
-            }
+            
             if ($request['sort'] == "j_receive_payment_date") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) DESC');
             }
@@ -156,12 +142,14 @@ class PaymentHistoryController extends BaseController
 
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
+        $paymentWays = PaymentWay::asSelectArray();
+
         return view('payment-history.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,
             'pageLimit' => $pageLimit,
             'paymentList' => $paymentList,
-            'paymentType' => $paymentType,
+            'paymentWays' => $paymentWays,
             'total_amount' => $total_amount,
             'total_tax' => $total_tax,
             'adminSystem' => $adminSystem,
@@ -197,7 +185,7 @@ class PaymentHistoryController extends BaseController
             $this->convertShijis("法人名"),
             $this->convertShijis("売上"),
             $this->convertShijis("消費税"),
-            $this->convertShijis("支払い状況"),
+            $this->convertShijis("支払方法"),
             $this->convertShijis("入金日"),
             $this->convertShijis("支払期限")
         ];
@@ -223,7 +211,7 @@ class PaymentHistoryController extends BaseController
             DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
+            'point_subscription_history.payment_way as payment_way',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term'),
         )
@@ -241,7 +229,6 @@ class PaymentHistoryController extends BaseController
                 $query->where(CommonComponent::escapeLikeSentence('point_subscription_history.order_id', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('student.student_name', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('student.company_name', $request['search_input']))
-                    ->orWhere(CommonComponent::escapeLikeSentence('order.campaign_code', $request['search_input']))
                     ->orWhere(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['search_input']));
             });
         }
@@ -277,11 +264,8 @@ class PaymentHistoryController extends BaseController
             if ($request['item_name'] != "") {
                 $queryBuilder = $queryBuilder->where(CommonComponent::escapeLikeSentence('point_subscription_history.item_name', $request['item_name']));
             }
-            if ($request['campaign_code'] != "") {
-                $queryBuilder = $queryBuilder->where('order.campaign_code', $request['campaign_code']);
-            }
-            if (isset($request['j_paid_status']) && $request['j_paid_status'] != "") {
-                $queryBuilder = $queryBuilder->whereRaw('IF(point_subscription_history.payment_way = 2, point_subscription_history.payment_way + point_subscription_history.paid_status, point_subscription_history.payment_way) = '. $request['j_paid_status']);
+            if (isset($request['payment_way']) && $request['payment_way'] != "") {
+                $queryBuilder = $queryBuilder->where('point_subscription_history.payment_way', $request['payment_way']);
             }
         }
 
@@ -291,7 +275,7 @@ class PaymentHistoryController extends BaseController
             $item['point_expire_date'] = DateTimeComponent::getDate($item['point_expire_date']);
             $item['amount'] = number_format($item['amount']);
             $item['tax'] = number_format($item['tax']);
-            $item['j_paid_status'] = PaidStatus::getDescription($item['j_paid_status']);
+            $item['payment_way'] = PaymentWay::getDescription($item['payment_way']);
 
         	return $item;
         });
@@ -308,7 +292,7 @@ class PaymentHistoryController extends BaseController
             $input['法人名'] = $this->convertShijis($item['j_company_name']);
             $input['売上'] = $this->convertShijis($item['amount']);
             $input['消費税'] = $this->convertShijis($item['tax']);
-            $input['支払い状況'] = $this->convertShijis($item['j_paid_status']);
+            $input['支払方法'] = $this->convertShijis($item['payment_way']);
             $input['入金日'] = $this->convertShijis($item['j_receive_payment_date']);
             $input['支払期限'] = $this->convertShijis($item['j_payment_term']);
             fputcsv($file, $input);
@@ -337,7 +321,7 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.tax as tax',
             'order.campaign_code as j_campaign_code',
             'point_subscription_history.point_count as point_count',
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN point_subscription_history.payment_way + point_subscription_history.paid_status ELSE point_subscription_history.payment_way END) AS j_paid_status'),
+            'point_subscription_history.payment_way as payment_way',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
         )
@@ -351,7 +335,7 @@ class PaymentHistoryController extends BaseController
         ->where('point_subscription_history.point_subscription_history_id', $id)->firstOrFail();
 
         $paymentInfo->_token = csrf_token();
-        $paymentInfo->payment_types = PaidStatus::asSelectArray();
+        $paymentInfo->payment_ways = PaymentWay::asSelectArray();
 
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -376,13 +360,11 @@ class PaymentHistoryController extends BaseController
                 'status' => 'NG',
             ], StatusCode::NOT_FOUND);
         }
-        $payment_type = $request->j_paid_status;
         $paid_status = 1;
-        if ($request->j_paid_status >= 2) {
-            $payment_type = 2;
-            $paid_status = $request->j_paid_status - 2;
+        if ($request->payment_way >= 2) {
+            $paid_status = $request->payment_way - 2;
         }
-        $paymentInfo->payment_way = $payment_type;
+        $paymentInfo->payment_way = $request->payment_way;
         $paymentInfo->paid_status = $paid_status;
 
         $paymentInfo->save();

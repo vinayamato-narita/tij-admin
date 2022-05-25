@@ -429,7 +429,7 @@ class TeacherController extends BaseController
         if ($lessonSchedules > 0) {
             return response()->json([
                 'status' => 'NG',
-                'message' => ' 講師を削除できません',
+                'message' => 'スケジュールが予約されているため、講師を削除できません',
                 'data' => [],
             ], StatusCode::OK);
         }

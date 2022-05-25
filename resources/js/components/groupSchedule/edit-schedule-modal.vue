@@ -430,12 +430,15 @@ export default {
                                 icon: "success",
                                 confirmButtonText: "OK"
                             }).then(result => {
-                                var url = window.location.href;
-                                if (url.indexOf('?') > -1){
-                                   url += '&selectedDate=' + that.startDateTime
-                                }else{
-                                   url += '?selectedDate=' + that.startDateTime
+                                var url_string = window.location.href
+                                var url = new URL(url_string);
+                                if (url.searchParams.has('selectedDate')) {
+                                    url.searchParams.set('selectedDate', that.startDateTime)
+                                } else {
+                                    url.searchParams.append('selectedDate', that.startDateTime)
                                 }
+                                url.search = url.searchParams;
+                                url        = url.toString();
                                 window.location.href = url;
                             });
                         } else {

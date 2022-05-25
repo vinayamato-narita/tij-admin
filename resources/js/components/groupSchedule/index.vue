@@ -78,7 +78,7 @@ export default {
         return {
             baseUrl: Laravel.baseUrl,
             flagShowLoader : false,
-            selectedDate : new Date(),
+            selectedDate : null,
             selectedEvent : null,
             selectedTime : new Date(),
             courseData : null,
@@ -96,6 +96,8 @@ export default {
             console.log(c)
             if (c) {
                 this.selectedDate = c
+            } else {
+                this.selectedDate = new Date()
             }
         },
         cellDblclick(event) {

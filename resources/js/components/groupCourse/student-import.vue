@@ -111,7 +111,7 @@
                                   </td>
 
                                   <td>
-                                    {{ email }}
+                                    {{ email.student_email }}
                                   </td>
                                 </tr>
                               </tbody>
@@ -168,15 +168,13 @@ export default {
             formData.append('file', this.file);
             axios.post( that.urlSave, formData,{headers: {'Content-Type': 'multipart/form-data'} })
             .then(function(res){
-              console.log(res);
+            
               if(res.data.status==true){
                 that.success = res.data.message
-               
+               that.emails=res.data.data
+                 console.log( that.emails);
               }
               else{
-                if(res.data.emails){
-                  that.emails=res.data.emails
-                }
                 that.error=res.data.message  
               }
             })

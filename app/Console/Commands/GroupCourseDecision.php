@@ -178,7 +178,7 @@ class GroupCourseDecision extends Command
                                     $courseInfo = $course->course_infos->where('lang_type', $langType)->first();
                                     $courseName = !empty($courseInfo) ? $courseInfo->course_name : $course->course_name;
 
-                                    if ($langType == LangType::JA && $getMailStudentJa) {
+                                    if ($langType == LangType::JA && count($getMailStudentJa)) {
                                         $mailSubject = $getMailStudentJa[0]->mail_subject;
                                         $mailBody = $getMailStudentJa[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
@@ -190,7 +190,7 @@ class GroupCourseDecision extends Command
                                         });
                                     }
 
-                                    if ($langType == LangType::EN && $getMailStudentEn) {
+                                    if ($langType == LangType::EN && count($getMailStudentEn)) {
                                         $mailSubject = $getMailStudentEn[0]->mail_subject;
                                         $mailBody = $getMailStudentEn[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
@@ -202,7 +202,7 @@ class GroupCourseDecision extends Command
                                         });
                                     }
 
-                                    if ($langType == LangType::ZH && $getMailStudentZh) {
+                                    if ($langType == LangType::ZH && count($getMailStudentZh)) {
                                         $mailSubject = $getMailStudentZh[0]->mail_subject;
                                         $mailBody = $getMailStudentZh[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);

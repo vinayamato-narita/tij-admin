@@ -89,6 +89,15 @@ export default {
         }
     },
     methods :{
+        setSelectedDate() {
+            var url_string = window.location.href
+            var url = new URL(url_string);
+            var c = url.searchParams.get("selectedDate");
+            console.log(c)
+            if (c) {
+                this.selectedDate = c
+            }
+        },
         cellDblclick(event) {
             this.selectedEvent = null
             this.selectedTime = event
@@ -97,6 +106,7 @@ export default {
         ready(event) {
             console.log(event)
             this.getSchedule(event)
+            this.setSelectedDate()
         },
         viewChange(event) {
             console.log(event)

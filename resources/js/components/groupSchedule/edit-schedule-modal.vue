@@ -430,7 +430,13 @@ export default {
                                 icon: "success",
                                 confirmButtonText: "OK"
                             }).then(result => {
-                                window.location.reload()
+                                var url = window.location.href;
+                                if (url.indexOf('?') > -1){
+                                   url += '&selectedDate=' + that.startDateTime
+                                }else{
+                                   url += '?selectedDate=' + that.startDateTime
+                                }
+                                window.location.href = url;
                             });
                         } else {
                             that.$swal({

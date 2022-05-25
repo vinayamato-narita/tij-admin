@@ -9,6 +9,7 @@ use App\Enums\UserType;
 use App\Enums\OrderStatus;
 use App\Enums\SubsPaidStatus;
 use App\Enums\PaymentWay;
+use App\Enums\PaymentStatus;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseLesson;

@@ -176,6 +176,8 @@ class CourseGroupUserController extends BaseController
         if (empty($errorMessage) && $setSession) {
             session()->forget('usersImportData');
             session()->put('usersImportData', $dataImport);
+            session()->forget('originData');
+            session()->put('originData', $data);
         }
 
         return view('groupCourse.user_import', [
@@ -195,6 +197,8 @@ class CourseGroupUserController extends BaseController
 
         $data = session()->get('usersImportData');
         session()->forget('usersImportData');
+        $originData = session()->get('originData');
+        session()->forget('originData');
 
         if (empty($data)) {
             return redirect(route('courseGroupUser.import'));
@@ -205,10 +209,64 @@ class CourseGroupUserController extends BaseController
         foreach ($data as $key => $item) {
             $emails = array_merge($emails,$item);
         }
+        $psh = DB::table('point_subscription_history')
+            ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
+            ->whereIn('student_email', $emails)
+            ->whereIn('course_id', $courseIds)
+            ->where('payment_status', '=', PaymentStatus::SUCCESS)
+            ->get()->toArray();
         $emails = Student::whereIn('student_email', $emails)
                     ->get()
                     ->keyBy('student_email')
                     ->toArray();
+
+        // check course is bought
+        $boughtCourse = [];
+        $errorCheck = false;
+        if (!empty($psh)) {
+            foreach ($psh as $p) {
+                $p = (array) $p;
+                $boughtCourse[$p['course_id']][] = $p['student_email'];
+            }
+        }
+        foreach ($originData as $key => $line) {
+            $originData[$key]['error_list'] = [];
+
+            $tmpCourseId = 0;
+            foreach ($line as $keyLine => $value) {
+                switch ($keyLine) {
+
+                    case 'course_id':
+                        $tmpCourseId = $value;
+                        break;
+
+                    case 'email':
+                        if (!empty($boughtCourse[$tmpCourseId]) && in_array($value, $boughtCourse[$tmpCourseId])) {
+                            $errorCheck = true;
+                            $data[$key]["error_list"][] = "すでにこのコースを購入しています。同じグループコースを複数回購入することはできません。";
+                            break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+        if ($errorCheck) {
+            return view('groupCourse.user_import', [
+                'dataImport' => $data,
+                'showList' => true,
+                'errorMessage' => '',
+            ]);
+        }
+
+        if (!empty($boughtCourse[$tmpCourseId]) && in_array($value, $boughtCourse[$tmpCourseId])) {
+            $setSession = false;
+            $data[$key]["error_list"][] = "すでにこのコースを購入しています。同じグループコースを複数回購入することはできません。";
+            break;
+        }
+
 
         try {
             $courseInfo = DB::table('course')

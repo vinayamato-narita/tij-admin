@@ -104,7 +104,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ファイルパス<span
+                                                >メディアURL<span
                                                     class="glyphicon glyphicon-star"
                                                 ></span
                                             ></label>
@@ -224,8 +224,8 @@ export default {
                     max: "説明は20000文字以内で入力してください"
                 },
                 url_file_path: {
-                    required: "ファイルパス入力してください",
-                    format_url: "内に保存されるファイルのURLを指定してください。"
+                    required: "メディアURLを入力してください",
+                    format_url: "AzureStorage内に保存されるファイルのURLを指定してください。"
                 }
             }
         };

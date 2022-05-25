@@ -121,7 +121,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >ファイルパス</label>
+                                                >メディアURL</label>
                                             <div class="col-md-8">
                                                 <input
                                                     class="form-control"
@@ -263,8 +263,8 @@ export default {
                     max: "説明は20000文字以内で入力してください"
                 },
                 url_file_path: {
-                    required: "ファイルパス入力してください",
-                    format_url: "内に保存されるファイルのURLを指定してください。"
+                    required: "メディアURLを入力してください",
+                    format_url: "AzureStorage内に保存されるファイルのURLを指定してください。"
                 },
                 file_attach: {
                     max_sz_50 : "メディアファイルを50MBを超えた為、アップロードできません。"

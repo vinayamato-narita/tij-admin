@@ -125,7 +125,7 @@ class SendMailBeforeLessonStart extends Command
         $scheduleId = 0;
         foreach($lessonSchedules as $lessonSchedule) 
         {
-            if ($lessonSchedule->lang_type == LangType::JA && $getMailStudentJp) {
+            if ($lessonSchedule->lang_type == LangType::JA && count($getMailStudentJp)) {
                 $mailSubject = $getMailStudentJp[0]->mail_subject;
                 $mailBody = $getMailStudentJp[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
@@ -143,7 +143,7 @@ class SendMailBeforeLessonStart extends Command
                 });
             }
 
-            if ($lessonSchedule->lang_type == LangType::EN && $getMailStudentEn) {
+            if ($lessonSchedule->lang_type == LangType::EN && count($getMailStudentEn)) {
                 $mailSubject = $getMailStudentEn[0]->mail_subject;
                 $mailBody = $getMailStudentEn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
@@ -161,7 +161,7 @@ class SendMailBeforeLessonStart extends Command
                 });
             }
 
-            if ($lessonSchedule->lang_type == LangType::ZH && $getMailStudentCn) {
+            if ($lessonSchedule->lang_type == LangType::ZH && count($getMailStudentCn)) {
                 $mailSubject = $getMailStudentCn[0]->mail_subject;
                 $mailBody = $getMailStudentCn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);

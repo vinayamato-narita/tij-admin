@@ -111,7 +111,7 @@
                                   </td>
 
                                   <td>
-                                    {{ email }}
+                                    {{ email.student_email }}
                                   </td>
                                 </tr>
                               </tbody>
@@ -171,12 +171,9 @@ export default {
               console.log(res);
               if(res.data.status==true){
                 that.success = res.data.message
-               
+                 that.emails=res.data.data
               }
               else{
-                if(res.data.emails){
-                  that.emails=res.data.emails
-                }
                 that.error=res.data.message  
               }
             })

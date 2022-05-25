@@ -96,7 +96,7 @@ class CourseGroupUserController extends BaseController
                 $psh = DB::table('point_subscription_history')
                     ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
                     ->whereIn('student_email', $emails)
-                    ->whereIn('course_id', $courseIds)
+                    ->whereIn('point_subscription_history.course_id', $courseIds)
                     ->where('payment_status', '=', PaymentStatus::SUCCESS)
                     ->get()->toArray();
                 $boughtCourse = [];
@@ -213,7 +213,7 @@ class CourseGroupUserController extends BaseController
         $psh = DB::table('point_subscription_history')
             ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
             ->whereIn('student_email', $emails)
-            ->whereIn('course_id', $courseIds)
+            ->whereIn('point_subscription_history.course_id', $courseIds)
             ->where('payment_status', '=', PaymentStatus::SUCCESS)
             ->get()->toArray();
         $emails = Student::whereIn('student_email', $emails)

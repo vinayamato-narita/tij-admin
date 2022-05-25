@@ -108,7 +108,7 @@ class GroupCourseDecision extends Command
 
                         $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::STUDENT_CANCEL_LESSON, $langType);
 
-                        if ($mailPattern) {
+                        if (count($mailPattern)) {
                             $mailSubject = $mailPattern[0]->mail_subject;
                             $mailBody = $mailPattern[0]->mail_body;
                             $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
@@ -123,12 +123,9 @@ class GroupCourseDecision extends Command
 
                     //send mail teacher
                     foreach ($course->lessonSchedules as $lessonSchedule) {
+                        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, LangType::JA);
 
-                        $langTypeTeacher  = $lessonSchedule->teacher->teacherInfo->lang_type;
-
-                        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, $langTypeTeacher);
-
-                        if ($mailPattern) {
+                        if (count($mailPattern)) {
                             $mailSubject = $mailPattern[0]->mail_subject;
                             $mailBody = $mailPattern[0]->mail_body;
                             $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);

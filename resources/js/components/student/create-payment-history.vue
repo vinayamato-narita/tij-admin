@@ -42,15 +42,15 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >支払いタイプ</label
+                                                >支払方法</label
                                             >
                                             <div class="col-md-6">
                                                 <select
                                                     class="form-control"
-                                                    name="payment_type"
-                                                    v-model="studentInfoEx.payment_type"
+                                                    name="payment_way"
+                                                    v-model="studentInfoEx.payment_way"
                                                 >
-                                                    <option :value="value" v-for="(name, value) in paymentTypeList">
+                                                    <option :value="value" v-for="(name, value) in payment_ways">
                                                         {{ name }}</option
                                                     >
                                                 </select>
@@ -244,17 +244,17 @@ export default {
     data() {
         return {
             flagShowLoader: false,
-            paymentTypeList: this.studentInfo.payment_type_list,
+            payment_ways: this.studentInfo.payment_ways,
             courseList: this.studentInfo.course_list,
             studentInfoEx: {
                 student_id: this.studentInfo.student_id,
                 student_name: this.studentInfo.student_name,
-                payment_type: this.studentInfo.payment_type,
                 is_lms_user: this.studentInfo.is_lms_user,
                 point_count: this.studentInfo.point_count,
                 payment_date: new Date(this.studentInfo.payment_date),
                 begin_date: new Date(this.studentInfo.begin_date),
                 amount: new Date(this.studentInfo.amount),
+                payment_way: this.studentInfo.payment_way,
             }
         };
     },

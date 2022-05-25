@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Enums\PaidStatus;
+use App\Enums\PaymentWay;
 
 class PaymentHistoryRequest extends FormRequest
 {
@@ -30,7 +30,7 @@ class PaymentHistoryRequest extends FormRequest
             'payment_date' => 'required|date',
             'begin_date' => 'required|date',
             'amount' => 'required|integer|between:0,1000000000',
-            'payment_type' => 'required|enum_value:' . PaidStatus::class . ',false'
+            'payment_way' => 'required|enum_value:' . PaymentWay::class . ',false'
         ];
     }
 }

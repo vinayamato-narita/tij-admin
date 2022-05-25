@@ -5,6 +5,7 @@ use App\Enums\LangTypeOption;
 use App\Enums\TestType;
 use App\Enums\AdminRole;
 use App\Enums\OptionUploadFile;
+use App\Enums\PaymentWay;
 return [
     InquiryFlag::class => [
         InquiryFlag::SUPPORTED => '対応済',
@@ -34,5 +35,10 @@ return [
     OptionUploadFile::class => [
         OptionUploadFile::PC => 'ローカルPC',
         OptionUploadFile::CLOUD => 'クラウド',
+    ],
+    PaymentWay::class => [
+        PaymentWay::CREDIT => 'C',
+        PaymentWay::PAYPAL => 'P',
+        PaymentWay::IMPORT => 'CSV',
     ],
 ];

@@ -1247,3 +1247,6 @@ pre {
 .w-310 {
     width: 310px;
 }
+.form-control:disabled {
+    background-color: #eee !important;
+}

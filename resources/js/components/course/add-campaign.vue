@@ -153,6 +153,8 @@
 
 <script>
     import Loader from "./../common/loader.vue";
+    import moment from 'moment-timezone'
+
 
     export default {
         name: "course-add-campaign",
@@ -230,8 +232,13 @@
             },
             submit(e) {
                 let that = this;
+
                 axios
-                    .post(that.urlAction, that.campaign)
+                    .post(that.urlAction, {
+                        startDate: moment(this.campaign.startDate).format('YYYY-MM-DD HH:mm:ss'),
+                        endDate: moment(this.campaign.endDate).format('YYYY-MM-DD HH:mm:ss'),
+                        price: this.campaign.price
+                    })
                     .then(response => {
                         that.flagShowLoader = false;
                         if (response.data.status == "OK") {

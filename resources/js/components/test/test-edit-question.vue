@@ -415,7 +415,7 @@
                                     </div>
 
                                     <div class="pr-5 pl-5">
-                                        <button type="button" v-on:click="addSubQuestion" class="btn btn-primary w-100 mr-2">設問追加</button>
+                                        <button type="button" v-on:click="addSubQuestion" v-if="!this.isHasTestResult" class="btn btn-primary w-100 mr-2">設問追加</button>
 
                                     </div>
 

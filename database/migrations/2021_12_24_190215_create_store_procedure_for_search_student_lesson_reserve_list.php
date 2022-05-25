@@ -67,6 +67,7 @@ class CreateStoreProcedureForSearchStudentLessonReserveList extends Migration
                 INNER JOIN teacher_lesson tl ON tchr.teacher_id = tl.teacher_id  AND tl.lesson_id = _lesson_id
                 LEFT JOIN course_lesson cl ON cl.lesson_id = ls.lesson_id
                 INNER JOIN course c ON c.course_id = _course_id
+                LEFT JOIN point_subscription_history psh ON psh.course_id = _course_id AND psh.student_id = _student_id
             WHERE
                 ls.is_lesson_end = 0
                 AND ls.teacher_id = _teacher_id
@@ -80,10 +81,11 @@ class CreateStoreProcedureForSearchStudentLessonReserveList extends Migration
                 AND ls.lesson_type_id <> 0
                 AND ls.lesson_subscription_type IN(1,3,7)
                 AND ((cl.course_id = _course_id AND cl.lesson_id = _lesson_id) OR cl.course_id IS NULL) -- ? de lam gi: cl.course_id IS NULL - chua dat bai hoc, nguoc lai la dat roi va co the cancel
+                AND (psh.point_subscription_history_id IS NULL OR psh.point_expire_date >= ls.lesson_starttime)
             GROUP BY ls.lesson_schedule_id
             HAVING lesson_reserve_type <> 2
             ORDER BY
-                lesson_date, lesson_starttime ASC
+                lesson_date, lesson_starttime, point_expire_date ASC
             ;
         END;
         ";

@@ -261,13 +261,6 @@ class CourseGroupUserController extends BaseController
             ]);
         }
 
-        if (!empty($boughtCourse[$tmpCourseId]) && in_array($value, $boughtCourse[$tmpCourseId])) {
-            $setSession = false;
-            $data[$key]["error_list"][] = "すでにこのコースを購入しています。同じグループコースを複数回購入することはできません。";
-            break;
-        }
-
-
         try {
             $courseInfo = DB::table('course')
                 ->selectRaw('

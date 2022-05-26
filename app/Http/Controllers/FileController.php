@@ -178,11 +178,11 @@ class FileController extends BaseController
         $fileInfo->optionUploadFile = $optionUploadFile;
         $fileInfo->fileBaseMedia = $fileBaseMedia;
 
-        $mediaList = DB::select("select preparation_name as media_name, '予習' as media_type from preparation where file_id = " . $id . "
-        union select review_name as media_name, '復習' as media_type from review  where file_id = " . $id . "
-        union select lesson_text_name  as media_name, '学習者用テキスト' as media_type from lesson_text where lesson_text_student_file_id = " . $id . "
-        union select lesson_text_name  as media_name, '講師者用テキスト' as media_type from lesson_text where lesson_text_teacher_file_id = " . $id . "
-        union select test_name as media_name, 'テスト問題' as media_type from test inner join test_question on test.test_id = test_question.test_id where file_id = " . $id);
+        $mediaList = DB::select("select preparation_name as media_name, '予習' as media_type, CONCAT('/preparation', '/', preparation_id) as href from preparation where file_id = " . $id . "
+        UNION ALL select review_name as media_name, '復習' as media_type, CONCAT('/review', '/', review_id) as href from review where file_id = " . $id . "
+        UNION ALL select lesson_text_name  as media_name, '学習者用テキスト' as media_type, CONCAT('/text', '/', lesson_text_id) as href from lesson_text where lesson_text_student_file_id = " . $id . "
+        UNION ALL select lesson_text_name  as media_name, '講師者用テキスト' as media_type, CONCAT('/text', '/', lesson_text_id) as href from lesson_text where lesson_text_teacher_file_id = " . $id . "
+        UNION ALL select test_name as media_name, 'テスト問題' as media_type, CONCAT('/test', '/', test.test_id) as href from test inner join test_question on test.test_id = test_question.test_id where file_id = " . $id);
 
         $fileInfo->mediaList = $mediaList;
 
@@ -240,10 +240,10 @@ class FileController extends BaseController
 
         try {
             $mediaList = DB::select("select preparation_name as media_name, '予習' as media_type from preparation where file_id = " . $id . "
-            union select review_name as media_name, '復習' as media_type from review  where file_id = " . $id . "
-            union select lesson_text_name  as media_name, '学習者用テキスト' as media_type from lesson_text where lesson_text_student_file_id = " . $id . "
-            union select lesson_text_name  as media_name, '講師者用テキスト' as media_type from lesson_text where lesson_text_teacher_file_id = " . $id . "
-            union select test_name as media_name, 'テスト問題' as media_type from test inner join test_question on test.test_id = test_question.test_id where file_id = " . $id);
+            UNION ALL select review_name as media_name, '復習' as media_type from review  where file_id = " . $id . "
+            UNION ALL select lesson_text_name  as media_name, '学習者用テキスト' as media_type from lesson_text where lesson_text_student_file_id = " . $id . "
+            UNION ALL select lesson_text_name  as media_name, '講師者用テキスト' as media_type from lesson_text where lesson_text_teacher_file_id = " . $id . "
+            UNION ALL select test_name as media_name, 'テスト問題' as media_type from test inner join test_question on test.test_id = test_question.test_id where file_id = " . $id);
 
             if ($mediaList) {
                 return response()->json([

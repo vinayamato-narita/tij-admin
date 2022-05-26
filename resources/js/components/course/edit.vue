@@ -222,6 +222,7 @@
                                                 <div>
                                                     <input class=" checkbox" id="isForlms_0" name="isForLMS"
                                                         type="radio"
+                                                        :disabled="courseBought"
                                                         value="0"
                                                         @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="isForlms_0">
@@ -232,6 +233,7 @@
                                                     <input class=" checkbox" id="isForlms_1" name="isForLMS"
                                                         type="radio"
                                                         value="1"
+                                                        :disabled="courseBought"
                                                         @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="isForlms_1">
                                                         法人
@@ -652,7 +654,7 @@
                 errorsData: {},
             };
         },
-        props: ["listCourseUrl", "updateUrl", 'detailCourseUrl', 'course', ],
+        props: ["listCourseUrl", "updateUrl", 'detailCourseUrl', 'course', 'courseBought'],
         mounted() {},
         computed : {
         },

@@ -1092,7 +1092,7 @@ class StudentController extends BaseController
         $studentInfo->in_japan_flag = $request->in_japan_flag;
         $studentInfo->country_id = $request->country_id != 0 ? $request->country_id : null;
         $studentInfo->city = $request->city;
-        $studentInfo->is_lms_user = $request->is_lms_user;
+/*        $studentInfo->is_lms_user = $request->is_lms_user;*/
 
         $studentInfo->save();  
 

@@ -234,7 +234,6 @@ export default {
                             headers: { "Content-Type": "multipart/form-data" }
                         })
                         .then(function(res) {
-                            console.log(res);
                             that.flagShowLoader = false;
                             if (res.data.status == true) {
                                 that.success = res.data.message;
@@ -242,7 +241,7 @@ export default {
                                 that.password = res.data.pass;
                             } else {
                                 that.$swal({
-                                    text: res.data.message,
+                                    text: res.data.message.email+res.data.message.null,
                                     icon: "error",
                                     confirmButtonText: "OK"
                                 }).then(result => {

@@ -510,7 +510,7 @@ class CourseGroupUserController extends BaseController
                     }
 
                     if (in_array($value['student_email'], $emails) == true) {
-                        $msg['error_list'] =  $value['student_email'] . 'đã tồn tại';
+                        $msg['error_list'] =  $value['student_email'] . 'すでに存在しています。';
                         break;
                     }
                     if ($value['student_name'] == null) {

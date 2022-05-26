@@ -504,13 +504,18 @@ public function importStudent(Request $request)
                         'message' => '拡張子が異なります。「xlsx」ファイルを指定してください。'
                     ]);
                 }
-                foreach ($keys as  $value) {
+                $result = [];
+                foreach ($keys as $key=> $value) {
 
+                    if($value[6]!=null) {
+                        $result[$key]=$value[6];
+                    }
+                  
                     if (in_array($value[2], $emails) == true) {
                         break;
                     }
                     if ($value[0] == null || $value[1] == null || $value[2] == null || $value[3] == null || $value[4] == null || $value[5] == null || $value[6] == null) {
-                        break;
+                        break; 
                     }
                     $insert[] = [
                         'student_name' => $value[0] . " ",
@@ -522,32 +527,40 @@ public function importStudent(Request $request)
                         'password' => Hash::make($value[6]),
                     ];
                 }
-
+                
+                foreach ($keys as $key => $res){
+                   if($res[6]!=null) 
+                    $result[$key]=$res[6];
+                }
                 if (isset($insert) && count($insert) > 0) {
                     DB::table('student')->insert($insert);
+                    foreach ($insert as $key => $value){
+                        foreach ($result as $res){
+                            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype=32, $lang="ja");
+                            if ($mailPattern) {
+                                $mailSubject = $mailPattern[0]->mail_subject;
+                                $mailBody = $mailPattern[0]->mail_body;
+                                $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
+                                $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
+                                
+                                Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
+                                    $message->to($value['student_email'])
+                                        ->subject($mailSubject);
+                                });
+                            }
+                        }
+                    }
                     return response()->json([
                         'status' => true,
                         'message' => '法人ユーザーを登録しました。',
-                        'data' => $insert
+                        'data' => $insert,
+                        'pass'=>$result
                     ]);
-                    foreach ($insert as $key => $value){
-                        $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype=32, $lang="ja");
-                        if ($mailPattern) {
-                            $mailSubject = $mailPattern[0]->mail_subject;
-                            $mailBody = $mailPattern[0]->mail_body;
-                            $mailBody = str_replace("#STUDENT_NAME#", $value[2], $mailBody);
-                            $mailBody = str_replace("#STUDENT_PASSWORD#", $value[6], $mailBody);
-                            
-                            Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
-                                $message->to($value[2])
-                                    ->subject($mailSubject);
-                            });
-                        }
-                    }
-                } else {
+                } 
+                else {
                     return response()->json([
                         'status' => false,
-                        'message' => 'データを入力してください。',
+                        'message' => 'すべてのフィールドに記入してください。',
                     ]);
                 }
             }

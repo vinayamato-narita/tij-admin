@@ -505,6 +505,10 @@ public function importStudent(Request $request)
                     ]);
                 }
                 $result = [];
+                $msg=[
+                    'email' => '',
+                    'null'=>''
+                ];
                 foreach ($keys as $key=> $value) {
 
                     if($value[6]!=null) {
@@ -512,9 +516,11 @@ public function importStudent(Request $request)
                     }
                   
                     if (in_array($value[2], $emails) == true) {
+                        $msg['email'] = $msg['email'] . $value[2];
                         break;
                     }
                     if ($value[0] == null || $value[1] == null || $value[2] == null || $value[3] == null || $value[4] == null || $value[5] == null || $value[6] == null) {
+                        $msg['email']="すべてのフィールドに記入してください。";
                         break; 
                     }
                     $insert[] = [
@@ -526,6 +532,9 @@ public function importStudent(Request $request)
                         'company_name' => $value[5],
                         'password' => Hash::make($value[6]),
                     ];
+                }
+                if( $msg['email']){
+                    $msg['email'] = 'メール'. $msg['email'] .'使用済み。';
                 }
                 
                 foreach ($keys as $key => $res){
@@ -560,7 +569,7 @@ public function importStudent(Request $request)
                 else {
                     return response()->json([
                         'status' => false,
-                        'message' => 'すべてのフィールドに記入してください。',
+                        'message' => $msg,
                     ]);
                 }
             }

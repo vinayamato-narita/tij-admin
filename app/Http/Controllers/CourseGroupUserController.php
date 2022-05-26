@@ -30,7 +30,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SendRemindMailPattern;
-use Illuminate\Support\Facades\Mail; 
+use Illuminate\Support\Facades\Mail;
 
 class CourseGroupUserController extends BaseController
 {
@@ -81,9 +81,9 @@ class CourseGroupUserController extends BaseController
                 });
                 $courseIds = array_unique($courseIds);
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                            ->where('is_for_lms', 1)
-                            ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                            ->pluck('course_id')->toArray();
+                    ->where('is_for_lms', 1)
+                    ->where('course_type', CourseTypeEnum::GROUP_COURSE)
+                    ->pluck('course_id')->toArray();
 
                 $emails = Arr::pluck($data, 'email');
                 $emails = Arr::where($emails, function ($value, $key) {
@@ -91,8 +91,8 @@ class CourseGroupUserController extends BaseController
                 });
                 $emails = array_unique($emails);
                 $emails = Student::whereIn('student_email', $emails)
-                            ->where('is_lms_user', 1)
-                            ->pluck('student_email')->toArray();
+                    ->where('is_lms_user', 1)
+                    ->pluck('student_email')->toArray();
                 $psh = DB::table('point_subscription_history')
                     ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
                     ->whereIn('student_email', $emails)
@@ -208,7 +208,7 @@ class CourseGroupUserController extends BaseController
         $courseIds = array_keys($data);
         $emails = [];
         foreach ($data as $key => $item) {
-            $emails = array_merge($emails,$item);
+            $emails = array_merge($emails, $item);
         }
         $psh = DB::table('point_subscription_history')
             ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
@@ -217,9 +217,9 @@ class CourseGroupUserController extends BaseController
             ->where('payment_status', '=', PaymentStatus::SUCCESS)
             ->get()->toArray();
         $emails = Student::whereIn('student_email', $emails)
-                    ->get()
-                    ->keyBy('student_email')
-                    ->toArray();
+            ->get()
+            ->keyBy('student_email')
+            ->toArray();
 
         // check course is bought
         $boughtCourse = [];
@@ -264,7 +264,8 @@ class CourseGroupUserController extends BaseController
 
         try {
             $courseInfo = DB::table('course')
-                ->selectRaw('
+                ->selectRaw(
+                    '
                     course.*,
                     course_campaign.price as campaign_price,
                     course_info.course_info_id'
@@ -274,8 +275,8 @@ class CourseGroupUserController extends BaseController
                 })
                 ->leftJoin('course_campaign', function ($join) {
                     $join->on('course_campaign.course_id', '=', 'course.course_id')
-                         ->where('course_campaign.campaign_start_time', '<=', Carbon::now())
-                         ->where('course_campaign.campaign_end_time', '>=', Carbon::now());
+                        ->where('course_campaign.campaign_start_time', '<=', Carbon::now())
+                        ->where('course_campaign.campaign_end_time', '>=', Carbon::now());
                 })
                 ->whereIn('course.course_id', $courseIds)
                 ->get()
@@ -288,7 +289,7 @@ class CourseGroupUserController extends BaseController
                     $studentId = $emails[$i]['student_id'];
 
                     // create order
-                    $orderId = $courseId.$k.$studentId.'tij'.time();
+                    $orderId = $courseId . $k . $studentId . 'tij' . time();
                     $orderId = sprintf("%027s", $orderId);
                     $order = array(
                         'order_id' => $orderId,
@@ -306,7 +307,7 @@ class CourseGroupUserController extends BaseController
                     );
                     DB::table('order')->insert($order);
 
-                    $paymentDate= date('Y-m-d H:i:s');
+                    $paymentDate = date('Y-m-d H:i:s');
 
                     $data = array(
                         $studentId,
@@ -328,29 +329,29 @@ class CourseGroupUserController extends BaseController
                     );
 
                     // sp_insert_point_subscription
-                    $ret = DB::select('call sp_insert_point_subscription(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',$data);
+                    $ret = DB::select('call sp_insert_point_subscription(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', $data);
 
                     // update paid status
                     PointSubscriptionHistory::where('order_id', '=', $orderId)
-                      ->update([
-                        'paid_status' => SubsPaidStatus::SUCCESS,
-                        'payment_way' => PaymentWay::IMPORT
-                    ]);
+                        ->update([
+                            'paid_status' => SubsPaidStatus::SUCCESS,
+                            'payment_way' => PaymentWay::IMPORT
+                        ]);
 
                     $psid = DB::table('point_subscription_history')
-                                ->where('student_id', '=', $studentId)
-                                ->max('point_subscription_history_id');
+                        ->where('student_id', '=', $studentId)
+                        ->max('point_subscription_history_id');
 
                     $lessonSchedule = DB::table('lesson_schedule')
                         ->where('course_id', '=', $courseId)
                         ->get()->toArray();
-                    foreach($lessonSchedule as $schedule) {
+                    foreach ($lessonSchedule as $schedule) {
                         $schedule = (array) $schedule;
                         // insert student_point_history
                         $data = array(
                             'student_id' => $studentId,
                             'pay_date' => $paymentDate,
-                            'pay_description' => 'レッスン付与 ('.$courseInfo[$courseId]->course_name.')',
+                            'pay_description' => 'レッスン付与 (' . $courseInfo[$courseId]->course_name . ')',
                             'pay_type' => 0,
                             'point_count' => -1,
                             'expire_date' => Carbon::parse($paymentDate)->addDays($courseInfo[$courseId]->expire_day)->format('Y-m-d 23:59:59'),
@@ -370,7 +371,7 @@ class CourseGroupUserController extends BaseController
                             $courseId,
                         );
 
-                        $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)',$data);
+                        $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)', $data);
                         LessonSchedule::where('lesson_schedule_id', '=', $schedule["lesson_schedule_id"])
                             ->update(['lesson_reserve_type' => $schedule["lesson_reserve_type"]]);
                     }
@@ -381,14 +382,12 @@ class CourseGroupUserController extends BaseController
                 'listBreadcrumb' => $listBreadcrumb,
                 'result' => true,
             ]);
-
         } catch (Exception $e) {
             return view('groupCourse.user_import_success', [
                 'listBreadcrumb' => $listBreadcrumb,
                 'result' => false,
             ]);
         }
-
     }
 
     private function checkHeaderImport($headerData)
@@ -455,7 +454,7 @@ class CourseGroupUserController extends BaseController
         foreach ($data as $key => $value) {
             $value = array_slice($value, 0, count(UserType::COURSE_STUDENT_IMPORT_HEADER));
 
-            if (count(UserType::COURSE_USER_KEY_IMPORT) == count($value)) {
+            if (count(UserType::COURSE_STUDENT_KEY_IMPORT) == count($value)) {
                 $data[$key] = array_combine(UserType::COURSE_STUDENT_KEY_IMPORT, $value);
             }
 
@@ -469,17 +468,19 @@ class CourseGroupUserController extends BaseController
         return $data;
     }
 
-public function importView(){
-    return view('groupCourse.student_import');
-}
+    public function importView()
+    {
+        return view('groupCourse.student_import');
+    }
 
-public function importStudent(Request $request)
+    public function importStudent(Request $request)
     {
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
             $emails = Student::pluck('student_email')->toArray();
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
+            $dataImport = $this->readDataStudentImport($data[0]);
             if ($ext !== "xlsx") {
                 return response()->json([
                     'status' => false,
@@ -493,65 +494,74 @@ public function importStudent(Request $request)
                 ]);
             }
             if (!empty($data) && count($data) > 0) {
-
-                unset($data[0][0]);
-
-                $keys = $data[0];
-
-                if (count($keys) > 1001) {
+                if (count($dataImport) > 1001) {
                     return response()->json([
                         'status' => false,
                         'message' => '拡張子が異なります。「xlsx」ファイルを指定してください。'
                     ]);
                 }
                 $result = [];
-                $msg=[
-                    'email' => '',
-                    'null'=>''
-                ];
-                foreach ($keys as $key=> $value) {
+                $msg = [];
+                unset($dataImport[0]);
+                foreach ($dataImport as $key => $value) {
 
-                    if($value[6]!=null) {
-                        $result[$key]=$value[6];
+                    if ($value['password'] != null) {
+                        $result[$key] = $value['password'];
                     }
-                  
-                    if (in_array($value[2], $emails) == true) {
-                        $msg['email'] = $msg['email'] . $value[2];
+
+                    if (in_array($value['student_email'], $emails) == true) {
+                        $msg['error_list'] =  $value['student_email'] . 'đã tồn tại';
                         break;
                     }
-                    if ($value[0] == null || $value[1] == null || $value[2] == null || $value[3] == null || $value[4] == null || $value[5] == null || $value[6] == null) {
-                        $msg['email']="すべてのフィールドに記入してください。";
-                        break; 
+                    if ($value['student_name'] == null) {
+                        $msg['error_list'] = "姓名を入力してください。";
+                        break;
+                    }
+                    if ($value['student_nickname'] == null) {
+                        $msg['error_list'] = "ニックネームを入力してください。";
+                        break;
+                    }
+                    if ($value['student_email'] == null) {
+                        $msg['error_list'] = "メールアドレスを入力してください。";
+                        break;
+                    }
+                    if ($value['student_birthday'] == null) {
+                        $msg['error_list'] = "生年月日を入力してください。";
+                        break;
+                    }
+                    if ($value['student_sex'] == null) {
+                        $msg['error_list'] = "性別を入力してください。";
+                        break;
+                    }
+                    if ($value['company_name'] == null) {
+                        $msg['error_list'] = "法人名を入力してください。";
+                        break;
+                    }
+                    if ($value['password'] == null) {
+                        $msg['error_list'] = "パスワードを入力してください。";
+                        break;
                     }
                     $insert[] = [
-                        'student_name' => $value[0] . " ",
-                        'student_nickname' => $value[1],
-                        'student_email' =>  $value[2],
-                        'student_birthday' =>  $value[3],
-                        'student_sex' =>  $value[4],
-                        'company_name' => $value[5],
-                        'password' => Hash::make($value[6]),
+                        'student_name' => $value['student_name'] . " ",
+                        'student_nickname' => $value['student_nickname'],
+                        'student_email' =>  $value['student_email'],
+                        'student_birthday' =>  $value['student_birthday'],
+                        'student_sex' =>  $value['student_sex'],
+                        'company_name' => $value['company_name'],
+                        'password' => Hash::make($value['password']),
                     ];
-                }
-                if( $msg['email']){
-                    $msg['email'] = 'メール'. $msg['email'] .'使用済み。';
-                }
-                
-                foreach ($keys as $key => $res){
-                   if($res[6]!=null) 
-                    $result[$key]=$res[6];
                 }
                 if (isset($insert) && count($insert) > 0) {
                     DB::table('student')->insert($insert);
-                    foreach ($insert as $key => $value){
-                        foreach ($result as $res){
-                            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype=32, $lang="ja");
+                    foreach ($insert as $key => $value) {
+                        foreach ($result as $res) {
+                            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = "ja");
                             if ($mailPattern) {
                                 $mailSubject = $mailPattern[0]->mail_subject;
                                 $mailBody = $mailPattern[0]->mail_body;
                                 $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
                                 $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
-                                
+
                                 Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
                                     $message->to($value['student_email'])
                                         ->subject($mailSubject);
@@ -563,32 +573,31 @@ public function importStudent(Request $request)
                         'status' => true,
                         'message' => '法人ユーザーを登録しました。',
                         'data' => $insert,
-                        'pass'=>$result
+                        'pass' => $result
                     ]);
-                } 
-                else {
+                } else {
                     return response()->json([
                         'status' => false,
-                        'message' => $msg,
+                        'message' => $msg['error_list'],
                     ]);
                 }
             }
         }
     }
 
-private function checkHeaderStudentImport($headerData)
-{
-    $res = true;
-    $headerDefault = array_values(UserType::COURSE_STUDENT_IMPORT_HEADER);
+    private function checkHeaderStudentImport($headerData)
+    {
+        $res = true;
+        $headerDefault = array_values(UserType::COURSE_STUDENT_IMPORT_HEADER);
 
-    $headerData = array_map('strtolower', $headerData);
-    $headerDefault = array_map('strtolower', $headerDefault);
-    $headerAdd = array_slice($headerData, 0, count($headerDefault));
+        $headerData = array_map('strtolower', $headerData);
+        $headerDefault = array_map('strtolower', $headerDefault);
+        $headerAdd = array_slice($headerData, 0, count($headerDefault));
 
-    if ($headerAdd != $headerDefault) {
-        $res = false;
+        if ($headerAdd != $headerDefault) {
+            $res = false;
+        }
+
+        return $res;
     }
-
-    return $res;
-}
 }

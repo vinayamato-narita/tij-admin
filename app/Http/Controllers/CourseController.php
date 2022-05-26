@@ -19,6 +19,7 @@ use App\Models\CourseTag;
 use App\Models\CourseTest;
 use App\Models\CourseVideo;
 use App\Models\Lesson;
+use App\Models\PointSubscriptionHistory;
 use App\Models\Tag;
 use App\Models\Test;
 use Carbon\Carbon;
@@ -773,9 +774,12 @@ class CourseController extends BaseController
             'course_id' => $id,
         ])->first();
         if (!$course) return redirect()->route('course.index');
+        $courseBought = PointSubscriptionHistory::where(['course_id' => $id,
+            'payment_status' => 1])->exists();
         return view('course.edit', [
             'breadcrumbs' => $breadcrumbs,
             'course' => $course,
+            'courseBought' => $courseBought
         ]);
     }
 
@@ -837,7 +841,10 @@ class CourseController extends BaseController
                 $course->course_description = $request->courseDescription ?? ' ';
                 $course->course_target = $request->courseTarget ?? ' ';
                 $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
-                $course->is_for_lms = $request->isForLMS;
+                if (!PointSubscriptionHistory::where([
+                    'course_id' => $id,
+                    'payment_status' => 1])->exists())
+                    $course->is_for_lms = $request->isForLMS;
                 $course->course_type = $request->courseType;
                 if (in_array($request->courseType, [CourseTypeEnum::REGULAR_COURSE, CourseTypeEnum::ABILITY_TEST_COURSE])) {
                     $course->expire_day = $request->expireDay ?? 1;

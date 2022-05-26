@@ -351,12 +351,14 @@
                                                         <label style="margin-right: 20px"><input
                                                             type="radio"
                                                             name="is_lms_user"
+                                                            disabled
                                                             v-model="studentInfoEx.is_lms_user"
                                                             value="0"
                                                         /> 個人</label>
                                                         <label><input
                                                             type="radio"
                                                             name="is_lms_user"
+                                                            disabled
                                                             v-model="studentInfoEx.is_lms_user"
                                                             value="1"
                                                         /> 法人</label>

@@ -6,6 +6,7 @@
             :list-course-url = "{{json_encode(route('course.index'))}}"
             :detail-course-url = "{{json_encode(route('course.show', $course->course_id))}}"
             :course ="{{json_encode($course)}}"
+            :course-bought="{{ json_encode($courseBought) }}"
     >
 
     </course-edit>

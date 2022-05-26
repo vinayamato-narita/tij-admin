@@ -241,7 +241,7 @@ export default {
                                 that.password = res.data.pass;
                             } else {
                                 that.$swal({
-                                    text: res.data.message.email+res.data.message.null,
+                                    text: res.data.message,
                                     icon: "error",
                                     confirmButtonText: "OK"
                                 }).then(result => {

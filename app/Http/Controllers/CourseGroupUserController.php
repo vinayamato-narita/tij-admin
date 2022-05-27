@@ -529,6 +529,10 @@ class CourseGroupUserController extends BaseController
                         $msg['error_list'] = "生年月日を入力してください。";
                         break;
                     }
+                    if(preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$value['student_birthday'])==false) {
+                        $msg['error_list'] = "生年月日を正しい形式YYYY-MM-DDで入力してください。";
+                        break;
+                    }
                     if ($value['student_sex'] == null) {
                         $msg['error_list'] = "性別を入力してください。";
                         break;

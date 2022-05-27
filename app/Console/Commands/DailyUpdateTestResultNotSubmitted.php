@@ -79,17 +79,19 @@ class DailyUpdateTestResultNotSubmitted extends Command
                         $teacherMailSubject = $mailDataStudent[0]->mail_subject;
                         $teacherMailBody = $mailDataStudent[0]->mail_body;
                         $teacherMailBody = str_replace("#COURSE_NAME#", $testResult->course->course_name, $teacherMailBody);
-                        Log::info(json_encode($teachersTest));
-                        $dateTimeByTZ = $expire->setTimezone($teachersTest->teacher->timeZone->diff_time);
-                        $dateByTZ = $dateTimeByTZ->format("Y/m/d");
-                        $timeByTZ = $dateTimeByTZ->format('H:i');
-                        $teacherMailBody = str_replace("#TEST_LIMIT_DATE#", $dateByTZ, $teacherMailBody);
-                        $teacherMailBody = str_replace("#TEST_LIMIT_TIME#", " " . $timeByTZ, $teacherMailBody);
-                        $teacherMailBody = str_replace("#MY_PAGE_URL#", env('APP_URL_TEACHER') . '/login', $teacherMailBody);
-                        Mail::raw($teacherMailBody, function ($message) use ($teacherMailSubject, $teacherMailBody, $teachersTest) {
-                            $message->to($teachersTest->teacher->teacher_email)
-                                ->subject($teacherMailSubject);
-                        });
+                        if (isset($teachersTest->teacher)) {
+                            $dateTimeByTZ = $expire->setTimezone($teachersTest->teacher->timeZone->diff_time);
+                            $dateByTZ = $dateTimeByTZ->format("Y/m/d");
+                            $timeByTZ = $dateTimeByTZ->format('H:i');
+                            $teacherMailBody = str_replace("#TEST_LIMIT_DATE#", $dateByTZ, $teacherMailBody);
+                            $teacherMailBody = str_replace("#TEST_LIMIT_TIME#", " " . $timeByTZ, $teacherMailBody);
+                            $teacherMailBody = str_replace("#MY_PAGE_URL#", env('APP_URL_TEACHER') . '/login', $teacherMailBody);
+                            Mail::raw($teacherMailBody, function ($message) use ($teacherMailSubject, $teacherMailBody, $teachersTest) {
+                                $message->to($teachersTest->teacher->teacher_email)
+                                    ->subject($teacherMailSubject);
+                            });
+                        }
+
 
                     }
 

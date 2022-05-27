@@ -9,6 +9,7 @@ use App\Models\TestResultDetail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class DailyUpdateTestResultNotSubmitted extends Command
@@ -45,6 +46,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
     public function handle()
     {
 
+        Log::info('---start run: daily_update_test_result_not_submitted:run---');
         $testResults = DB::table('test_result')
             ->join('test', 'test_result.test_id', '=', 'test.test_id')
             ->whereNull('test_end_time')
@@ -52,6 +54,8 @@ class DailyUpdateTestResultNotSubmitted extends Command
             ->whereIn('test_type', [TestType::ABILITY, TestType::ENDCOURSE])
             ->get();
         foreach ($testResults as $testResultStd) {
+            Log::info('--- handle with test_result_id = ' . $testResultStd->test_result_id);
+
             $testResult = TestResult::with('test', 'course')->find($testResultStd->test_result_id);
             $testResult->test_end_time = Carbon::parse($testResult->test_start_time)->addMinutes($testResult->execution_time);
             $resultTotalScore = TestResultDetail::with('testSubQuestion')->where([

@@ -79,6 +79,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
                         $teacherMailSubject = $mailDataStudent[0]->mail_subject;
                         $teacherMailBody = $mailDataStudent[0]->mail_body;
                         $teacherMailBody = str_replace("#COURSE_NAME#", $testResult->course->course_name, $teacherMailBody);
+                        Log::info(json_encode($teachersTest));
                         $dateTimeByTZ = $expire->setTimezone($teachersTest->teacher->timeZone->diff_time);
                         $dateByTZ = $dateTimeByTZ->format("Y/m/d");
                         $timeByTZ = $dateTimeByTZ->format('H:i');

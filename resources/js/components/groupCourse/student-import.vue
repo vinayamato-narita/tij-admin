@@ -94,50 +94,48 @@
                                                 <th
                                                     class="column-title"
                                                     style="width: 60px"
+                                                ></th>
+                                                <th
+                                                    class="column-title"
+                                                    style="min-width: 180px"
                                                 >
-                                                    NO.
+                                                    姓名
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Fullname
+                                                    ニックネーム
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Nick name
+                                                    メールアドレス
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Emails
+                                                    生年月日
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Date of Birth
+                                                    性別
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Male
+                                                    法人名
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Company
-                                                </th>
-                                                <th
-                                                    class="column-title"
-                                                    style="min-width: 180px"
-                                                >
-                                                    Password
+                                                    パスワード
                                                 </th>
                                             </tr>
                                         </thead>
@@ -165,7 +163,24 @@
                                                     {{ email.student_birthday }}
                                                 </td>
                                                 <td>
-                                                    {{ email.student_sex }}
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                1
+                                                        "
+                                                    >男</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                2
+                                                        "
+                                                    > 女性</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                3
+                                                        "
+                                                    >回答しない</p>
                                                 </td>
                                                 <td>
                                                     {{ email.company_name }}
@@ -215,7 +230,7 @@ export default {
             success: "",
             error: "",
             emails: [],
-            password: [],
+            password: []
         };
     },
     methods: {

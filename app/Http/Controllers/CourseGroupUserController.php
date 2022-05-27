@@ -501,8 +501,15 @@ class CourseGroupUserController extends BaseController
                     ]);
                 }
                 $result = [];
-                $msg = [];
+                $msg['error_list'] = "";
                 unset($dataImport[0]);
+                if (count($dataImport) == 0) {
+                    $msg['error_list'] = "データを入力してください。";
+                    return response()->json([
+                        'status' => false,
+                        'message' =>  $msg['error_list'],
+                    ]);
+                }
                 foreach ($dataImport as $key => $value) {
 
                     if ($value['password'] != null) {
@@ -529,7 +536,7 @@ class CourseGroupUserController extends BaseController
                         $msg['error_list'] = "生年月日を入力してください。";
                         break;
                     }
-                    if(preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$value['student_birthday'])==false) {
+                    if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $value['student_birthday']) == false) {
                         $msg['error_list'] = "生年月日を正しい形式YYYY-MM-DDで入力してください。";
                         break;
                     }

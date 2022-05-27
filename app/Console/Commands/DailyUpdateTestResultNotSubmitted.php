@@ -74,7 +74,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
 
             if ($testResult->save())
                 foreach ($teachersTests as $teachersTest) {
-                    $mailDataStudent = $this->_getRemindMail(48, $teachersTest->teacher->lang_type);
+                    $mailDataStudent = $this->_getRemindMail(48, null);
                     if (!empty($mailDataStudent)) {
                         $teacherMailSubject = $mailDataStudent[0]->mail_subject;
                         $teacherMailBody = $mailDataStudent[0]->mail_body;

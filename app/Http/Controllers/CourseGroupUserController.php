@@ -64,7 +64,7 @@ class CourseGroupUserController extends BaseController
             $data = $this->readDataImport($data[0]);
 
             if (!$dataCheck) {
-                $errorMessage = 'ファイルのフォーマットが異なります。正しいファイルフォーマットダウンロードしてファイルを指定してください。';
+                $errorMessage = 'ファイルのフォーマットが異なります。正しいフォーマットファイルをダウンロードして、読込用ファイルを作成してください。';
             }
 
             if (count($data) > 1001) {

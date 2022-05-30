@@ -27,7 +27,13 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VeeValidate, {
     locale: "ja"
 });
-
+Vue.mixin({
+    data () {
+     return {
+         regexMixin:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()!@`'_+=\-\[\]\';,.\/{}|:<>?~\\\\]{8,16}$/
+     }
+    }
+  })
 Vue.use(VModal);
 Vue.use(VueSweetalert2);
 import moment from 'moment-timezone'

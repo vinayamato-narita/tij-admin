@@ -152,7 +152,7 @@ class BreadcrumbComponent
                 'route_str' => "csv.index",
             ],
             'inquiry_subject_index' => [
-                'text' => '問い合わせ件名管理',
+                'text' => '問い合わせ件名一覧',
                 'route_str' => "inquirySubject.index",
             ],
             'show_inquiry_subject' => [
@@ -276,11 +276,11 @@ class BreadcrumbComponent
                 'route_str' => "paymentHistory.edit",
             ],
             'lesson_schedule_index' => [
-                'text' => 'スケジュール管理',
+                'text' => 'プライベートレッスンスケジュール',
                 'route_str' => 'lessonSchedule.index'
             ],
             'group_schedule_index' => [
-                'text' => 'グループレッスンスケジュール管理',
+                'text' => 'グループレッスンスケジュール',
                 'route_str' => 'groupSchedule.index'
             ],
             'student_point_history_list' => [
@@ -368,7 +368,7 @@ class BreadcrumbComponent
                 'route_str' => 'abilityTestResult.answerDetail'
             ],
             'zoom_account_list' => [
-                'text' => 'ZOOMアカウント一覧',
+                'text' => 'グループレッスンzoomアカウント一覧',
                 'route_str' => 'zoomAccount.index'
             ],
             'zoom_account_add' => [
@@ -420,7 +420,7 @@ class BreadcrumbComponent
                 'route_str' => 'groupLesson.getStudent'
             ],
             'group_course_user_import' => [
-                'text' => 'インポート',
+                'text' => '法人グループコース登録',
                 'route_str' => 'courseGroupUser.import'
             ],
             'group_course_save_user_import' => [
@@ -442,6 +442,10 @@ class BreadcrumbComponent
             'public_comment_list' => [
                 'text' => '学習者単位',
                 'route_str' => 'publicComment.index'
+            ],
+            'import_view' => [
+                'text' => '法人ユーザ登録',
+                'route_str' => 'courseGroupUser.importView'
             ],
         ];
     }

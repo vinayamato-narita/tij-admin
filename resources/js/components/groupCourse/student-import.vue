@@ -12,7 +12,7 @@
                     <div class="page-heading">
                         <div class="page-heading-left">
                             <h5>
-                                法人ユーザ
+                                法人ユーザ登録
                             </h5>
                         </div>
                     </div>

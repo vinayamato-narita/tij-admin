@@ -5,7 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            グループレッスンスケジュール管理
+                            グループレッスンスケジュール
                         </h5>
                     </div>
                 </div>

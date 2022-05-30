@@ -523,6 +523,10 @@ class CourseGroupUserController extends BaseController
                         $msg['error_list'] = "生年月日を正しい形式YYYY-MM-DDで入力してください。";
                         break;
                     }
+                    if (preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@!#$%^&+=-_<>,.:;/?(){}]{8,16}$/", $value['password']) == false) {
+                        $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
+                        break;
+                    }
                     if ($value['student_sex'] == null) {
                         $msg['error_list'] = "性別を入力してください。";
                         break;

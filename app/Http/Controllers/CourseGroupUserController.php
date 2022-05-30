@@ -80,21 +80,23 @@ class CourseGroupUserController extends BaseController
                     return is_integer($value);
                 });
                 $courseIds = array_unique($courseIds);
-                $psh = DB::table('point_subscription_history')
-                    ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
-                    ->whereIn('student_email', $emails)
-                    ->whereIn('point_subscription_history.course_id', $courseIds)
-                    ->where('payment_status', '=', PaymentStatus::SUCCESS)
-                    ->get()->toArray();
-                $courseIds = Course::whereIn('course_id', $courseIds)
-                            ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                            ->pluck('is_for_lms', 'course_id')->toArray();
 
                 $emails = Arr::pluck($data, 'email');
                 $emails = Arr::where($emails, function ($value, $key) {
                     return !empty($value);
                 });
                 $emails = array_unique($emails);
+
+                $psh = DB::table('point_subscription_history')
+                    ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
+                    ->whereIn('student_email', $emails)
+                    ->whereIn('point_subscription_history.course_id', $courseIds)
+                    ->where('payment_status', '=', PaymentStatus::SUCCESS)
+                    ->get()->toArray();
+
+                $courseIds = Course::whereIn('course_id', $courseIds)
+                            ->where('course_type', CourseTypeEnum::GROUP_COURSE)
+                            ->pluck('is_for_lms', 'course_id')->toArray();
                 $emails = Student::whereIn('student_email', $emails)
                             ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];

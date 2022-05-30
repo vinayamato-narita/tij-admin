@@ -41,7 +41,8 @@ class FixSpGetMailBuyCourse extends Migration
                 lmscss.start_date,
                 lmscss.expired_date,
                 lmscss.course_begin_month,
-                psh.point_subscription_history_id,
+                psh.point_subscription_history_id,,
+                psh.payment_way
                 pt.payment_type_name
                  FROM
                 `order` AS od

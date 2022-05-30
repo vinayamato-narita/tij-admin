@@ -80,10 +80,15 @@ class CourseGroupUserController extends BaseController
                     return is_integer($value);
                 });
                 $courseIds = array_unique($courseIds);
+                $psh = DB::table('point_subscription_history')
+                    ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
+                    ->whereIn('student_email', $emails)
+                    ->whereIn('point_subscription_history.course_id', $courseIds)
+                    ->where('payment_status', '=', PaymentStatus::SUCCESS)
+                    ->get()->toArray();
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                            ->where('is_for_lms', 1)
                             ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                            ->pluck('course_id')->toArray();
+                            ->pluck('is_for_lms', 'course_id')->toArray();
 
                 $emails = Arr::pluck($data, 'email');
                 $emails = Arr::where($emails, function ($value, $key) {
@@ -91,14 +96,7 @@ class CourseGroupUserController extends BaseController
                 });
                 $emails = array_unique($emails);
                 $emails = Student::whereIn('student_email', $emails)
-                            ->where('is_lms_user', 1)
-                            ->pluck('student_email')->toArray();
-                $psh = DB::table('point_subscription_history')
-                    ->join('student', 'student.student_id', '=', 'point_subscription_history.student_id')
-                    ->whereIn('student_email', $emails)
-                    ->whereIn('point_subscription_history.course_id', $courseIds)
-                    ->where('payment_status', '=', PaymentStatus::SUCCESS)
-                    ->get()->toArray();
+                            ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];
                 if (!empty($psh)) {
                     foreach ($psh as $p) {
@@ -126,9 +124,15 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (!in_array($value, $courseIds)) {
+                                if (!isset($courseIds[$value])) {
                                     $setSession = false;
-                                    $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": コースIDが無効です";
+                                    $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": コースIDが存在しません";
+                                    break;
+                                }
+
+                                if (empty($courseIds[$value])) {
+                                    $setSession = false;
+                                    $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": 個人向けコースのコースIDです";
                                     break;
                                 }
 
@@ -142,9 +146,15 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (!in_array($value, $emails)) {
+                                if (!isset($emails[$value])) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": メールアドレスが存在しません";
+                                    break;
+                                }
+
+                                if (empty($emails[$value])) {
+                                    $setSession = false;
+                                    $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": 個人ユーザのメールアドレスです";
                                     break;
                                 }
 

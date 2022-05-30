@@ -56,14 +56,6 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($commentList as $index => $item)
-                                                @php
-                                                    $lessonTime = "";
-                                                    if (!empty($item['lesson_starttime']) && !empty($item['lesson_endtime'])) {
-                                                        $start = strtotime($item['lesson_starttime']);
-                                                        $end = strtotime($item['lesson_endtime']);
-                                                        $lessonTime = date('Y-m-d H:i', $start).'~'.date('H:i', $end);   
-                                                    }
-                                                @endphp
                                                     <tr class="row-comment" data-time="{{ $item['lesson_time'] }}" data-comment="{{ $item }}">
                                                         <td class="text-left">{{ $item['lesson_time'] }}</td>
                                                         <td class="text-left">{{ $item['student_id'] }}</td>
@@ -163,7 +155,7 @@
                                         <b>コース名</b>
                                     </div>
                                     <div class="col-md-9 cm-content">
-                                        <p id="course_name" class="content"></p>
+                                        <p id="course_name" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +207,7 @@
                                         <b>画面などの操作はスムーズでしたか。</b>
                                     </div>
                                     <div class="col-md-6">
-                                        <p id="skype_voice_rating_from_student" class="content"></p>
+                                        <p id="skype_voice_rating_from_student" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>    
@@ -229,7 +221,7 @@
                                         <b>レッスンに対する感想</b>
                                     </div>
                                     <div class="col-md-9 cm-content">
-                                        <p style="white-space: pre-line" id="comment_from_student_to_office" class="content"></p>
+                                        <p style="white-space: pre-line" id="comment_from_student_to_office" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>                    
@@ -247,7 +239,7 @@
                                         <b>出（0）欠（1）</b>
                                     </div>
                                     <div class="col-md-6">
-                                        <p id="skype_voice_rating_from_teacher" class="content"></p>
+                                        <p id="skype_voice_rating_from_teacher" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>    
@@ -261,7 +253,7 @@
                                         <b>学習者へのコメント</b>
                                     </div>
                                     <div class="col-md-9 cm-content">
-                                        <p style="white-space: pre-line" id="comment_from_teacher_to_student" class="content"></p>
+                                        <p style="white-space: pre-line" id="comment_from_teacher_to_student" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>                    
@@ -275,7 +267,7 @@
                                         <b>事務局へのコメント</b>
                                     </div>
                                     <div class="col-md-9 cm-content">
-                                        <p style="white-space: pre-line" id="comment_from_teacher_to_office" class="content"></p>
+                                        <p style="white-space: pre-line" id="comment_from_teacher_to_office" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>                    

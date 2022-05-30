@@ -483,7 +483,7 @@ class CourseGroupUserController extends BaseController
                 $msg['error_list'] = "拡張子が異なります。「xlsx」ファイルを指定してください。";
             }
             if (!$dataCheck) {
-                $msg['error_list'] = "データを入力してください。";
+                $msg['error_list'] = "ファイルのフォーマットが異なります。";
             }
             if (!empty($data) && count($data) > 0) {
                 if (count($dataImport) > 1001) {

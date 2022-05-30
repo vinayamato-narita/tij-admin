@@ -8,6 +8,7 @@ use App\Components\BreadcrumbComponent;
 use App\Models\LessonHistory;
 use App\Models\StudentPointHistory;
 use Log;
+use DB;
 
 class CommentController extends BaseController
 {
@@ -26,7 +27,8 @@ class CommentController extends BaseController
             
         $queryBuilder = StudentPointHistory::select('student.student_id as student_id', 'teacher_rating', 'teacher_attitude',
             'teacher_punctual', 'skype_voice_rating_from_student', 'comment_from_student_to_office', 'skype_voice_rating_from_teacher', 'comment_from_teacher_to_student', 'comment_from_teacher_to_office', 'note_from_student_to_teacher', 'course.course_name as course_name',
-            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime', 'student.student_nickname as student_nickname', 'teacher.teacher_nickname as teacher_nickname', 'student_point_history.student_point_history_id')
+            'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime', 'student.student_nickname as student_nickname', 'teacher.teacher_nickname as teacher_nickname', 'student_point_history.student_point_history_id',
+            DB::raw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) as lesson_time'))
             ->join('student', function($join) {
                 $join->on('student_point_history.student_id', '=', 'student.student_id');
             })
@@ -51,9 +53,7 @@ class CommentController extends BaseController
                     ->orWhere('lesson_history.comment_from_teacher_to_student', '<>', "")
                     ->orWhere('lesson_history.comment_from_teacher_to_office', '<>', "")
                     ->orWhere('lesson_history.note_from_student_to_teacher', '<>', "");
-            })
-            ->groupBy('student_point_history.lesson_schedule_id')
-            ->groupBy('student_point_history.student_id');
+            });
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -96,8 +96,14 @@ class CommentController extends BaseController
             if ($request['sort'] == "comment_from_teacher_to_office") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_office','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_office','DESC');
             }
+            if ($request['sort'] == "teacher_nickname") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher.teacher_nickname','ASC') : $queryBuilder->orderBy('teacher.teacher_nickname','DESC');
+            }
+            if ($request['sort'] == "lesson_time") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) DESC');
+            }
         }
-        $commentList = $queryBuilder->sortable(['id' => 'desc'])->paginate($pageLimit);
+        $commentList = $queryBuilder->sortable(['lesson_starttime' => 'DESC'])->paginate($pageLimit);
 
         return view('comment.index', [
             'breadcrumbs' => $breadcrumbs,

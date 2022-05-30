@@ -39,10 +39,10 @@
                                         <table class="table table-responsive-sm table-striped border" id="fontSize">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left">レッスン日時</th>
+                                                    <th class="text-left" style="width: 89px">@sortablelink('lesson_time', 'レッスン日時') </th>
                                                     <th class="text-left">@sortablelink('student_id', '学習者番号')</th>
                                                     <th class="text-left">@sortablelink('student_nickname', '学習者のニックネーム')</th>
-                                                    <th class="text-left">講師のニックネーム</th>
+                                                    <th class="text-left">@sortablelink('teacher_nickname', '講師のニックネーム') </th>
                                                     <th class="text-left">@sortablelink('course_name', 'コース')</th>
                                                     <th class="text-left">@sortablelink('teacher_rating', '評価項目1')</th>
                                                     <th class="text-left">@sortablelink('teacher_attitude', '評価項目2')</th>
@@ -64,8 +64,8 @@
                                                         $lessonTime = date('Y-m-d H:i', $start).'~'.date('H:i', $end);   
                                                     }
                                                 @endphp
-                                                    <tr class="row-comment" data-time="{{ $lessonTime }}" data-comment="{{ $item }}">
-                                                        <td class="text-left">{{ $lessonTime }}</td>
+                                                    <tr class="row-comment" data-time="{{ $item['lesson_time'] }}" data-comment="{{ $item }}">
+                                                        <td class="text-left">{{ $item['lesson_time'] }}</td>
                                                         <td class="text-left">{{ $item['student_id'] }}</td>
                                                         <td class="text-left">{{ $item['student_nickname'] }}</td>
                                                         <td class="text-left">{{ $item['teacher_nickname'] }}</td>

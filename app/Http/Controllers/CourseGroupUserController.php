@@ -472,7 +472,7 @@ class CourseGroupUserController extends BaseController
     {
         $result = [];
         $msg['error_list'] = "";
-        $insert=[]; 
+        $insert = [];
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
@@ -494,6 +494,12 @@ class CourseGroupUserController extends BaseController
                     $msg['error_list'] = "データを入力してください。";
                 }
                 foreach ($dataImport as $key => $value) {
+
+                    $excel_date = $value['student_birthday'];
+                    $unix_date = ($excel_date - 25569) * 86400;
+                    $excel_date = 25569 + ($unix_date / 86400);
+                    $unix_date = ($excel_date - 25569) * 86400;
+                
 
                     if ($value['password'] != null) {
                         $result[$key] = $value['password'];
@@ -519,11 +525,7 @@ class CourseGroupUserController extends BaseController
                         $msg['error_list'] = "生年月日を入力してください。";
                         break;
                     }
-                    if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $value['student_birthday']) == false) {
-                        $msg['error_list'] = "生年月日を正しい形式YYYY-MM-DDで入力してください。";
-                        break;
-                    }
-                    if (preg_match("/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@!#$%^&+=-_<>,.:;/?(){}]{8,16}$/", $value['password']) == false) {
+                    if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
                         $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                         break;
                     }
@@ -543,7 +545,7 @@ class CourseGroupUserController extends BaseController
                         'student_name' => $value['student_name'] . " ",
                         'student_nickname' => $value['student_nickname'],
                         'student_email' =>  $value['student_email'],
-                        'student_birthday' =>  $value['student_birthday'],
+                        'student_birthday' => gmdate("Y/m/d", $unix_date),
                         'student_sex' =>  $value['student_sex'],
                         'company_name' => $value['company_name'],
                         'password' => Hash::make($value['password']),
@@ -570,8 +572,7 @@ class CourseGroupUserController extends BaseController
                 }
             }
         }
-    //    dd(json_encode($dataImport))  ;
-        return view('groupCourse.student_import',[
+        return view('groupCourse.student_import', [
             'dataImport' => $insert,
             'showList' => $result,
             'errorMessage' => $msg,

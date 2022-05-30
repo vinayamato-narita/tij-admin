@@ -639,9 +639,12 @@
                                             class="form-control"
                                             name="password_confirm"
                                             v-model="password_confirm"
-                                            v-validate="
-                                                'required|confirmed:password'
-                                            "
+                                                                                            v-validate="{
+                            regex: regexMixin,
+                            required: true,
+                            max: 16,
+                            min : 8
+                                                }"
                                         />
                                         <div
                                             class="input-group is-danger "
@@ -737,10 +740,10 @@ export default {
                     max: "連絡事項は20000文字以内で入力してください",
                 },
                 password: {
-                      required: 'パスワードを入力してください。',
-                        max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
-                        min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
-                        regex: 'パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。'
+                    required: 'パスワードを入力してください。',
+                    max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                    min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                    regex: 'パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。'
                 },
                 password_confirm: {
                     required: "パスワード（確認）を入力してください",

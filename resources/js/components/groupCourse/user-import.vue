@@ -12,7 +12,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            ユーザ一括登録
+                            法人グループコース登録
                         </h5>
                     </div>
                 </div>

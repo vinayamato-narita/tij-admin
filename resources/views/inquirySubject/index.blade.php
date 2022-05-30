@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', '問い合わせ件名管理')
+@section('title', '問い合わせ件名一覧')
 @section('content')
 <div class="c-body">
     <main class="c-main pt-0">
@@ -11,7 +11,7 @@
             <div class="page-heading">
                 <div class="pull-left">
                     <h5>
-                    問い合わせ件名管理
+                    問い合わせ件名一覧
                     </h5>
                 </div>
                 <div class="pull-right mrb-5">

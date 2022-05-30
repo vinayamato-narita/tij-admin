@@ -3,7 +3,7 @@
 @endphp
 
 @extends('layouts.default')
-@section('title', 'ZOOMアカウント一覧')
+@section('title', 'グループレッスンzoomアカウント一覧')
 
 @section('content')
     <div class="c-body">
@@ -12,8 +12,7 @@
                 <div class="page-heading">
                     <div class="pull-left">
                         <h5>
-                            ZOOMアカウント一覧
-
+                            グループレッスンzoomアカウント一覧
                         </h5>
                     </div>
                     <div class="pull-right mrb-5">

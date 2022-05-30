@@ -195,6 +195,7 @@ class CourseGroupUserController extends BaseController
             'dataImport' => $data,
             'showList' => $showList,
             'errorMessage' => $errorMessage,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
@@ -480,6 +481,10 @@ class CourseGroupUserController extends BaseController
 
     public function importView(Request $request)
     {
+        $breadcrumbComponent = new BreadcrumbComponent();
+        $breadcrumbs = $breadcrumbComponent->generateBreadcrumb([
+            ['name' => 'import_view']
+        ]);
         $result = [];
         $msg['error_list'] = "";
         $insert = [];
@@ -586,6 +591,7 @@ class CourseGroupUserController extends BaseController
             'dataImport' => $insert,
             'showList' => $result,
             'errorMessage' => $msg,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
     private function checkHeaderStudentImport($headerData)

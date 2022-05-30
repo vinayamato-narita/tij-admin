@@ -5,8 +5,7 @@
                 <div class="page-heading">
                     <div class="page-heading-left">
                         <h5>
-                            レッスン新規作成
-
+                            プライベートレッスンスケジュール
                         </h5>
                     </div>
                 </div>

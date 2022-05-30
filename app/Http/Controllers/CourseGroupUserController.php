@@ -468,13 +468,11 @@ class CourseGroupUserController extends BaseController
         return $data;
     }
 
-    public function importView()
+    public function importView(Request $request)
     {
-        return view('groupCourse.student_import');
-    }
-
-    public function importStudent(Request $request)
-    {
+        $result = [];
+        $msg['error_list'] = "";
+        $insert=[]; 
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
@@ -482,33 +480,18 @@ class CourseGroupUserController extends BaseController
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
             $dataImport = $this->readDataStudentImport($data[0]);
             if ($ext !== "xlsx") {
-                return response()->json([
-                    'status' => false,
-                    'message' => '拡張子が異なります。「xlsx」ファイルを指定してください。'
-                ]);
+                $msg['error_list'] = "拡張子が異なります。「xlsx」ファイルを指定してください。";
             }
             if (!$dataCheck) {
-                return response()->json([
-                    'status' => false,
-                    'message' => ' データを入力してください。',
-                ]);
+                $msg['error_list'] = "データを入力してください。";
             }
             if (!empty($data) && count($data) > 0) {
                 if (count($dataImport) > 1001) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => '拡張子が異なります。「xlsx」ファイルを指定してください。'
-                    ]);
+                    $msg['error_list'] = "データを入力してください。";
                 }
-                $result = [];
-                $msg['error_list'] = "";
                 unset($dataImport[0]);
                 if (count($dataImport) == 0) {
                     $msg['error_list'] = "データを入力してください。";
-                    return response()->json([
-                        'status' => false,
-                        'message' =>  $msg['error_list'],
-                    ]);
                 }
                 foreach ($dataImport as $key => $value) {
 
@@ -580,22 +563,16 @@ class CourseGroupUserController extends BaseController
                             }
                         }
                     }
-                    return response()->json([
-                        'status' => true,
-                        'message' => '法人ユーザーを登録しました。',
-                        'data' => $insert,
-                        'pass' => $result
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => false,
-                        'message' => $msg['error_list'],
-                    ]);
                 }
             }
         }
+    //    dd(json_encode($dataImport))  ;
+        return view('groupCourse.student_import',[
+            'dataImport' => $insert,
+            'showList' => $result,
+            'errorMessage' => $msg,
+        ]);
     }
-
     private function checkHeaderStudentImport($headerData)
     {
         $res = true;

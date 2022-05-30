@@ -81,11 +81,11 @@
                         </div>
                         <div class="form-group row" v-if="errorMessage">
                             <div class="col-sm-10 offset-md-2 is-danger">
-                                {{ errorMessage }}
+                                {{ errorMessage.error_list }}
                             </div>
                         </div>
 
-                        <div v-if="emails.length > 0">
+                        <div v-if="dataImport.length > 0">
                             <div class="form-group row">
                                 <div class="col-sm-8 offset-md-2">
                                     <table class="table table-import-user">
@@ -143,7 +143,7 @@
                                         <tbody>
                                             <tr
                                                 v-for="(email,
-                                                indexUser) in emails"
+                                                indexUser) in dataImport"
                                                 :key="indexUser++"
                                             >
                                                 <td>
@@ -187,7 +187,7 @@
                                                 </td>
                                                 <td
                                                     v-for="(pass,
-                                                    indexUser) in password"
+                                                    indexUser) in showList"
                                                     :key="indexUser"
                                                 >
                                                     {{ pass }}
@@ -235,39 +235,11 @@ export default {
     },
     methods: {
         importFile() {
-            let that = this;
-            this.error = "";
-            this.success = "";
-            that.emails = [];
-            this.flagShowLoader = true;
-            this.$validator.validateAll().then(valid => {
-                if (valid) {
-                    let formData = new FormData();
-                    formData.append("file", this.file);
-                    axios
-                        .post(that.urlSave, formData, {
-                            headers: { "Content-Type": "multipart/form-data" }
-                        })
-                        .then(function(res) {
-                            that.flagShowLoader = false;
-                            if (res.data.status == true) {
-                                that.success = res.data.message;
-                                that.emails = res.data.data;
-                                that.password = res.data.pass;
-                            } else {
-                                that.$swal({
-                                    text: res.data.message,
-                                    icon: "error",
-                                    confirmButtonText: "OK"
-                                }).then(result => {
-                                    location.reload();
-                                });
-                            }
-                        })
-                        .catch(function(err) {});
-                }
-            });
-            this.flagShowLoader = false;
+          this.$validator.validateAll().then((valid) => {
+          if (valid) {
+            this.$refs.importUsers.submit();
+          }
+        });
         },
         onFileChange(e) {
             this.nameFile = "";

@@ -29,7 +29,8 @@ class FixSpBuyCourseSuccess extends Migration
                 st.student_name,
                 DATE_ADD(IF(_payment_date = '',  NOW(), DATE_FORMAT(_payment_date,'%Y-%m-%d 23:59:59')), INTERVAL cs.expire_day DAY) AS expire_date,  
                 psh.amount,
-                psh.tax
+                psh.tax,
+                psh.payment_way
             FROM
                 `order` AS od
             LEFT JOIN course AS cs

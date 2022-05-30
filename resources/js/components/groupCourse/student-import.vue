@@ -57,7 +57,7 @@
                                     読込
                                 </button>
                                 <a
-                                    href="/files/import_format/course_student_import.xlsx"
+                                    href="/files/import_format/student_import.xlsx"
                                     class="btn btn-default"
                                     >フォーマットファイル</a
                                 >
@@ -81,11 +81,11 @@
                         </div>
                         <div class="form-group row" v-if="errorMessage">
                             <div class="col-sm-10 offset-md-2 is-danger">
-                                {{ errorMessage }}
+                                {{ errorMessage.error_list }}
                             </div>
                         </div>
 
-                        <div v-if="emails.length > 0">
+                        <div v-if="dataImport.length > 0">
                             <div class="form-group row">
                                 <div class="col-sm-8 offset-md-2">
                                     <table class="table table-import-user">
@@ -94,50 +94,48 @@
                                                 <th
                                                     class="column-title"
                                                     style="width: 60px"
+                                                ></th>
+                                                <th
+                                                    class="column-title"
+                                                    style="min-width: 180px"
                                                 >
-                                                    NO.
+                                                    姓名
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Fullname
+                                                    ニックネーム
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Nick name
+                                                    メールアドレス
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Emails
+                                                    生年月日
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Date of Birth
+                                                    性別
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Male
+                                                    法人名
                                                 </th>
                                                 <th
                                                     class="column-title"
                                                     style="min-width: 180px"
                                                 >
-                                                    Company
-                                                </th>
-                                                <th
-                                                    class="column-title"
-                                                    style="min-width: 180px"
-                                                >
-                                                    Password
+                                                    パスワード
                                                 </th>
                                             </tr>
                                         </thead>
@@ -145,7 +143,7 @@
                                         <tbody>
                                             <tr
                                                 v-for="(email,
-                                                indexUser) in emails"
+                                                indexUser) in dataImport"
                                                 :key="indexUser++"
                                             >
                                                 <td>
@@ -165,14 +163,31 @@
                                                     {{ email.student_birthday }}
                                                 </td>
                                                 <td>
-                                                    {{ email.student_sex }}
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                1
+                                                        "
+                                                    >男</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                2
+                                                        "
+                                                    > 女性</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                3
+                                                        "
+                                                    >回答しない</p>
                                                 </td>
                                                 <td>
                                                     {{ email.company_name }}
                                                 </td>
                                                 <td
                                                     v-for="(pass,
-                                                    indexUser) in password"
+                                                    indexUser) in showList"
                                                     :key="indexUser"
                                                 >
                                                     {{ pass }}
@@ -215,44 +230,16 @@ export default {
             success: "",
             error: "",
             emails: [],
-            password: [],
+            password: []
         };
     },
     methods: {
         importFile() {
-            let that = this;
-            this.error = "";
-            this.success = "";
-            that.emails = [];
-            this.flagShowLoader = true;
-            this.$validator.validateAll().then(valid => {
-                if (valid) {
-                    let formData = new FormData();
-                    formData.append("file", this.file);
-                    axios
-                        .post(that.urlSave, formData, {
-                            headers: { "Content-Type": "multipart/form-data" }
-                        })
-                        .then(function(res) {
-                            that.flagShowLoader = false;
-                            if (res.data.status == true) {
-                                that.success = res.data.message;
-                                that.emails = res.data.data;
-                                that.password = res.data.pass;
-                            } else {
-                                that.$swal({
-                                    text: res.data.message.email+res.data.message.null,
-                                    icon: "error",
-                                    confirmButtonText: "OK"
-                                }).then(result => {
-                                    location.reload();
-                                });
-                            }
-                        })
-                        .catch(function(err) {});
-                }
-            });
-            this.flagShowLoader = false;
+          this.$validator.validateAll().then((valid) => {
+          if (valid) {
+            this.$refs.importUsers.submit();
+          }
+        });
         },
         onFileChange(e) {
             this.nameFile = "";

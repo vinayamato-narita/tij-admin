@@ -17,7 +17,7 @@ final class UserType extends Enum
         'student_email' => 'メールアドレス',
         'student_birthday' => '生年月日',
         'student_sex' => '性別',
-        'company_name' => '法人名',
+        'company_name' => '法人',
         'password' => 'パスワード',
         
     ];

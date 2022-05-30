@@ -57,7 +57,7 @@
                             読込
                           </button>
                           <a
-                            href="/files/import_format/course_user_import.xlsx"
+                            href="/files/import_format/course_import.xlsx"
                             class="btn btn-default"
                             >フォーマットファイル</a
                           >

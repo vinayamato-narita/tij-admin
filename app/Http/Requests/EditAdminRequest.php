@@ -34,7 +34,7 @@ class EditAdminRequest extends FormRequest
                     return $query->where('admin_user_id', '!=', $this->admin_user_id);
                 }),
             ],
-            'password' => 'nullable|min:8|max:32|regex:/^[A-Za-z0-9]*$/i',
+            'password' => 'nullable|min:8|max:32',
             'admin_user_description' => 'max:2000'
         ];
     }

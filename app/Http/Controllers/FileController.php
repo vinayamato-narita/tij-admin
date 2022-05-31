@@ -261,7 +261,7 @@ class FileController extends BaseController
         }
         return response()->json([
             'status' => 'OK',
-            'message' => 'お知らせの削除が完了しました。',
+            'message' => 'メディア削除が完了しました。',
         ], StatusCode::OK);
     }
 }

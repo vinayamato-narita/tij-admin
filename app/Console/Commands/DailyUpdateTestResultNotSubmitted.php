@@ -57,7 +57,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
             Log::info('--- handle with test_result_id = ' . $testResultStd->test_result_id);
 
             $testResult = TestResult::with('test', 'course')->find($testResultStd->test_result_id);
-            $testResult->test_end_time = Carbon::parse($testResult->test_start_time)->addMinutes($testResult->execution_time);
+            $testResult->test_end_time = Carbon::parse($testResult->test_start_time)->addMinutes($testResult->test->execution_time);
             $resultTotalScore = TestResultDetail::with('testSubQuestion')->where([
                 'test_result_id' => $testResult->test_result_id,
             ])->whereColumn('answer', 'like', 'correct_answer')
@@ -99,6 +99,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
 
 
             }
+            $testResult->save();
         }
 
         return Command::SUCCESS;

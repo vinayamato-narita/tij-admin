@@ -114,6 +114,9 @@ class CourseGroupUserController extends BaseController
                     if ($key == 0) {
                         continue;
                     }
+                    if ($key == 1) {
+                        continue;
+                    }
 
                     $tmpCourseId = 0;
                     foreach ($line as $keyLine => $value) {
@@ -182,7 +185,7 @@ class CourseGroupUserController extends BaseController
                         }
                     }
                 }
-                unset($data[0]);
+                unset($data[0],$data[1]);
             }
         }
 
@@ -489,6 +492,7 @@ class CourseGroupUserController extends BaseController
         ]);
         $result = [];
         $msg['error_list'] = "";
+        $msg['success'] = "";
         $insert = [];
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
@@ -500,94 +504,108 @@ class CourseGroupUserController extends BaseController
                 $msg['error_list'] = "拡張子が異なります。「xlsx」ファイルを指定してください。";
             }
             if (!$dataCheck) {
-                $msg['error_list'] = "ファイルのフォーマットが異なります。";
+                $msg['error_list'] = "ファイルのフォーマットが異なります。正しいファイルフォーマットダウンロードしてファイルを指定してください。";
             }
-            if (!empty($data) && count($data) > 0) {
-                if (count($dataImport) > 1001) {
-                    $msg['error_list'] = "データを入力してください。";
-                }
-                unset($dataImport[0]);
-                if (count($dataImport) == 0) {
-                    $msg['error_list'] = "データを入力してください。";
-                }
-                foreach ($dataImport as $key => $value) {
-
-                    $excel_date = $value['student_birthday'];
-                    $unix_date = ($excel_date - 25569) * 86400;
-                    $excel_date = 25569 + ($unix_date / 86400);
-                    $unix_date = ($excel_date - 25569) * 86400;
-                
-
-                    if ($value['password'] != null) {
-                        $result[$key] = $value['password'];
+            if (empty($msg['error_list'])) {
+                if (!empty($data) && count($data) > 0) {
+                    if (count($dataImport) > 1001) {
+                        $msg['error_list'] = "一回の操作で登録するユーザ数は、1000ユーザまでにしてください";
                     }
-
-                    if (in_array($value['student_email'], $emails) == true) {
-                        $msg['error_list'] =  $value['student_email'] . 'すでに存在しています。';
-                        break;
+                    unset($dataImport[0],$dataImport[1]);
+                    if (count($dataImport) == 0) {
+                        $msg['error_list'] = "データを入力してください。";
                     }
-                    if ($value['student_name'] == null) {
-                        $msg['error_list'] = "姓名を入力してください。";
-                        break;
+                    foreach ($dataImport as $key => $value) {
+    
+                        $excel_date = $value['student_birthday'];
+                        $unix_date = ($excel_date - 25569) * 86400;
+                        $excel_date = 25569 + ($unix_date / 86400);
+                        $unix_date = ($excel_date - 25569) * 86400;
+                    
+    
+                        if ($value['password'] != null) {
+                            $result[$key] = $value['password'];
+                        }
+    
+                        if (in_array($value['student_email'], $emails) == true) {
+                            $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
+                            break;
+                        }
+                        if ($value['student_firstname'] == null) {
+                            $msg['error_list'] = "姓を入力してください。";
+                            break;
+                        }
+                        if ($value['student_lastname'] == null) {
+                            $msg['error_list'] = "名を入力してください。";
+                            break;
+                        }
+                        if ($value['student_nickname'] == null) {
+                            $msg['error_list'] = "ニックネームを入力してください。";
+                            break;
+                        }
+                        if ($value['student_email'] == null) {
+                            $msg['error_list'] = "メールアドレスを入力してください。";
+                            break;
+                        }
+                        if ($value['student_birthday'] == null) {
+                            $msg['error_list'] = "生年月日を入力してください。";
+                            break;
+                        }
+                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
+                            $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
+                            break;
+                        }
+                        if ( !isset($value['student_sex']) ) {
+                            $msg['error_list'] = "性別を入力してください。";
+                            break;
+                        }
+                        if ($value['company_name'] == null) {
+                            $msg['error_list'] = "法人を入力してください。";
+                            break;
+                        }
+                        if ($value['password'] == null) {
+                            $msg['error_list'] = "パスワードを入力してください。";
+                            break;
+                        }
+                        if ($value['lang_type'] == null) {
+                            $msg['error_list'] = "言語を入力してください。";
+                            break;
+                        }
+                        $insert[] = [
+                            'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
+                            'student_nickname' => $value['student_nickname'],
+                            'student_email' =>  $value['student_email'],
+                            'student_birthday' => gmdate("Y/m/d", $unix_date),
+                            'student_sex' =>  $value['student_sex'],
+                            'company_name' => $value['company_name'],
+                            'password' => Hash::make($value['password']),
+                            'lang_type'=>$value['lang_type'],
+                            'is_lms_user'=>1
+                        ];
                     }
-                    if ($value['student_nickname'] == null) {
-                        $msg['error_list'] = "ニックネームを入力してください。";
-                        break;
-                    }
-                    if ($value['student_email'] == null) {
-                        $msg['error_list'] = "メールアドレスを入力してください。";
-                        break;
-                    }
-                    if ($value['student_birthday'] == null) {
-                        $msg['error_list'] = "生年月日を入力してください。";
-                        break;
-                    }
-                    if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
-                        $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
-                        break;
-                    }
-                    if ($value['student_sex'] == null) {
-                        $msg['error_list'] = "性別を入力してください。";
-                        break;
-                    }
-                    if ($value['company_name'] == null) {
-                        $msg['error_list'] = "法人名を入力してください。";
-                        break;
-                    }
-                    if ($value['password'] == null) {
-                        $msg['error_list'] = "パスワードを入力してください。";
-                        break;
-                    }
-                    $insert[] = [
-                        'student_name' => $value['student_name'] . " ",
-                        'student_nickname' => $value['student_nickname'],
-                        'student_email' =>  $value['student_email'],
-                        'student_birthday' => gmdate("Y/m/d", $unix_date),
-                        'student_sex' =>  $value['student_sex'],
-                        'company_name' => $value['company_name'],
-                        'password' => Hash::make($value['password']),
-                    ];
-                }
-                if (isset($insert) && count($insert) > 0) {
-                    DB::table('student')->insert($insert);
-                    foreach ($insert as $key => $value) {
-                        foreach ($result as $res) {
-                            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = "ja");
-                            if ($mailPattern) {
-                                $mailSubject = $mailPattern[0]->mail_subject;
-                                $mailBody = $mailPattern[0]->mail_body;
-                                $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
-                                $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
-
-                                Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
-                                    $message->to($value['student_email'])
-                                        ->subject($mailSubject);
-                                });
+                    if (isset($insert) && count($insert) > 0) {
+                        DB::table('student')->insert($insert);
+                        $msg['success'] = "インポートの成功。";
+                        foreach ($insert as $key => $value) {
+                            foreach ($result as $res) {
+                                $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);
+                                if ($mailPattern) {
+                                    $mailSubject = $mailPattern[0]->mail_subject;
+                                    $mailBody = $mailPattern[0]->mail_body;
+                                    $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
+                                    $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
+    
+                                    Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
+                                        $message->to($value['student_email'])
+                                            ->subject($mailSubject);
+                                    });
+                                }
                             }
                         }
                     }
                 }
             }
+          
         }
         return view('groupCourse.student_import', [
             'dataImport' => $insert,

@@ -180,6 +180,7 @@ class GroupCourseDecision extends Command
                                         $mailBody = $getMailStudentJa[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
                                         $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
+                                        $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
 
                                         Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
                                             $message->to($studentEmail)
@@ -192,6 +193,7 @@ class GroupCourseDecision extends Command
                                         $mailBody = $getMailStudentEn[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
                                         $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
+                                        $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
 
                                         Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
                                             $message->to($studentEmail)
@@ -204,6 +206,7 @@ class GroupCourseDecision extends Command
                                         $mailBody = $getMailStudentZh[0]->mail_body;
                                         $mailBody = str_replace("#STUDENT_NAME#", $studentName, $mailBody);
                                         $mailBody = str_replace("#COURSE_NAME#", $courseName, $mailBody);
+                                        $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
 
                                         Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
                                             $message->to($studentEmail)

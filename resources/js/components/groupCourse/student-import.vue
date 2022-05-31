@@ -137,6 +137,12 @@
                                                 >
                                                     パスワード
                                                 </th>
+                                                  <th
+                                                    class="column-title"
+                                                    style="min-width: 180px"
+                                                >
+                                                    言語
+                                                </th>
                                             </tr>
                                         </thead>
 
@@ -166,19 +172,19 @@
                                                     <p
                                                         v-if="
                                                             email.student_sex ==
-                                                                1
+                                                               0
                                                         "
-                                                    >男</p>
+                                                    >男子</p>
                                                     <p
                                                         v-if="
                                                             email.student_sex ==
-                                                                2
+                                                                1
                                                         "
                                                     > 女性</p>
                                                     <p
                                                         v-if="
                                                             email.student_sex ==
-                                                                3
+                                                                2
                                                         "
                                                     >回答しない</p>
                                                 </td>
@@ -191,6 +197,26 @@
                                                     :key="indexUser"
                                                 >
                                                     {{ pass }}
+                                                </td>
+                                                    <td>
+                                                    <p
+                                                        v-if="
+                                                            email.lang_type ==
+                                                             'ja'
+                                                        "
+                                                    >日本語</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                'en'
+                                                        "
+                                                    > 英語</p>
+                                                    <p
+                                                        v-if="
+                                                            email.student_sex ==
+                                                                'zh'
+                                                        "
+                                                    >中国語</p>
                                                 </td>
                                             </tr>
                                         </tbody>

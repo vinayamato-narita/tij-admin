@@ -583,7 +583,7 @@ class CourseGroupUserController extends BaseController
                         DB::table('student')->insert($insert);
                         foreach ($insert as $key => $value) {
                             foreach ($result as $res) {
-                                $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = "ja");
+                                $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);
                                 if ($mailPattern) {
                                     $mailSubject = $mailPattern[0]->mail_subject;
                                     $mailBody = $mailPattern[0]->mail_body;

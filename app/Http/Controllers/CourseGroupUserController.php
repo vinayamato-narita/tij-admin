@@ -528,11 +528,11 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['student_firstname'] == null) {
-                            $msg['error_list'] = "名を入力してください。";
+                            $msg['error_list'] = "姓を入力してください。";
                             break;
                         }
                         if ($value['student_lastname'] == null) {
-                            $msg['error_list'] = "あなたの姓を入力。";
+                            $msg['error_list'] = "名を入力してください。";
                             break;
                         }
                         if ($value['student_nickname'] == null) {
@@ -556,7 +556,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['company_name'] == null) {
-                            $msg['error_list'] = "法人名を入力してください。";
+                            $msg['error_list'] = "法人を入力してください。";
                             break;
                         }
                         if ($value['password'] == null) {
@@ -564,7 +564,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['lang_type'] == null) {
-                            $msg['error_list'] = "言語を選択してください。";
+                            $msg['error_list'] = "言語を入力してください。";
                             break;
                         }
                         $insert[] = [

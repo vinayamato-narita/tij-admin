@@ -18,7 +18,7 @@
                                     <div class="form-group">
                                         <label for="ccnumber">パスワード<span class="text-danger">*</span></label>
                                         <input class="form-control" type="password" name="password" v-model="dataToken.password"  v-validate="{
-                            regex: regexMixin,
+                            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()!@`'_+=\-\[\]\';,.\/{}|:<>?~\\\\]{8,16}$/,
                             required: true,
                             max: 16,
                             min : 8

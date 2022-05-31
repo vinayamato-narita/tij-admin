@@ -527,8 +527,12 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] =  $value['student_email'] . 'すでに存在しています。';
                             break;
                         }
-                        if ($value['student_name'] == null) {
-                            $msg['error_list'] = "姓名を入力してください。";
+                        if ($value['student_firstname'] == null) {
+                            $msg['error_list'] = "名を入力してください。";
+                            break;
+                        }
+                        if ($value['student_lastname'] == null) {
+                            $msg['error_list'] = "あなたの姓を入力。";
                             break;
                         }
                         if ($value['student_nickname'] == null) {
@@ -547,7 +551,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                             break;
                         }
-                        if ($value['student_sex'] == null) {
+                        if ( !isset($value['student_sex']) ) {
                             $msg['error_list'] = "性別を入力してください。";
                             break;
                         }
@@ -559,14 +563,20 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードを入力してください。";
                             break;
                         }
+                        if ($value['lang_type'] == null) {
+                            $msg['error_list'] = "言語を選択してください。";
+                            break;
+                        }
                         $insert[] = [
-                            'student_name' => $value['student_name'] . " ",
+                            'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
                             'student_birthday' => gmdate("Y/m/d", $unix_date),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' => Hash::make($value['password']),
+                            'lang_type'=>$value['lang_type'],
+                            'is_lms_user'=>1
                         ];
                     }
                     if (isset($insert) && count($insert) > 0) {

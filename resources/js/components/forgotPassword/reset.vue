@@ -17,7 +17,12 @@
                                 <div class="col-sm-8">
                                     <div class="form-group">
                                         <label for="ccnumber">パスワード<span class="text-danger">*</span></label>
-                                        <input class="form-control" type="password" name="password" v-model="dataToken.password" v-validate="'required|min:8|max:15|password_rule'" ref="password">
+                                        <input class="form-control" type="password" name="password" v-model="dataToken.password"     v-validate="{
+                            regex: regexMixin,
+                            required: true,
+                            max: 16,
+                            min : 8
+                                                }" ref="password">
                                         <div class="input-group error" role="alert" v-if="errors.has('password')">
                                             {{ errors.first("password") }}
                                         </div>
@@ -62,10 +67,10 @@ export default {
         let messError = {
             custom: {
                 password: {
-                    required: "パスワードを入力してください。",
-                    max: "パスワードは15文字以内で入力してください。",
-                    min: "パスワードは8文字以上で入力してください。",
-                    password_rule: "パスワードは半角英数字で、大文字、小文字、数字で入力してください。"
+                    required: 'パスワードを入力してください。',
+                    max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                    min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                    regex: 'パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。'
                 },
                 password_confirm: {
                     required: "パスワード（確認用）を入力してください。",

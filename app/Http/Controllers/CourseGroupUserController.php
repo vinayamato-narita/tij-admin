@@ -489,6 +489,7 @@ class CourseGroupUserController extends BaseController
         ]);
         $result = [];
         $msg['error_list'] = "";
+        $msg['success'] = "";
         $insert = [];
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
@@ -581,6 +582,7 @@ class CourseGroupUserController extends BaseController
                     }
                     if (isset($insert) && count($insert) > 0) {
                         DB::table('student')->insert($insert);
+                        $msg['success'] = "インポートの成功。";
                         foreach ($insert as $key => $value) {
                             foreach ($result as $res) {
                                 $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);

@@ -74,12 +74,12 @@
                                 {{ error }}
                             </div>
                         </div>
-                        <div class="form-group row" v-if="success">
+                        <div class="form-group row" v-if="errorMessage.success">
                             <div class="col-sm-10 offset-md-2 is-success">
-                                {{ success }}
+                                {{ errorMessage.success }}
                             </div>
                         </div>
-                        <div class="form-group row" v-if="errorMessage">
+                        <div class="form-group row" v-if="errorMessage.error_list">
                             <div class="col-sm-10 offset-md-2 is-danger">
                                 {{ errorMessage.error_list }}
                             </div>

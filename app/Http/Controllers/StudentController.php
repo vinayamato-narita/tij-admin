@@ -325,7 +325,6 @@ class StudentController extends BaseController
             'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime',
             'lesson_schedule.lesson_date as lesson_date', 'course.course_name as course_name',
             'lesson_text.lesson_text_name as lesson_text_name', 'teacher.teacher_name as teacher_name',
-            'point_subscription_history.set_course_id as set_course_id',
             'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher')
             ->join('course', function($join) {
                 $join->on('lesson_history.course_id', '=', 'course.course_id');
@@ -344,12 +343,6 @@ class StudentController extends BaseController
             })
             ->leftJoin('teacher', function($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
-            })
-            ->leftJoin('student_point_history', function($join) {
-                $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
-            })
-            ->leftJoin('point_subscription_history', function($join) {
-                $join->on('student_point_history.point_subscription_id', '=', 'point_subscription_history.point_subscription_history_id');
             })
             ->where('lesson_history.student_lesson_reserve_type', 3)
             ->where('lesson_history.student_id', $id);
@@ -380,9 +373,6 @@ class StudentController extends BaseController
             }
             if ($request['sort'] == "teacher_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher.teacher_name','ASC') : $queryBuilder->orderBy('teacher.teacher_name','DESC');
-            }
-            if ($request['sort'] == "set_course_id") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('point_subscription_history.set_course_id','ASC') : $queryBuilder->orderBy('point_subscription_history.set_course_id','DESC');
             }
         }
         $lessonHistoryList = $queryBuilder->sortable(['lesson_starttime' => 'desc'])->paginate($pageLimit);

@@ -102,7 +102,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >評価（学習者→先生）</label
+                                                >評価（学習者→講師）</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.average }}
@@ -122,7 +122,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >コメント（先生→学習者）</label
+                                                >コメント（講師→学習者）</label
                                             >
                                             <div class="col-md-6 pt-7">
                                                 {{ lessonHistoryInfoEx.comment_from_teacher_to_student }}

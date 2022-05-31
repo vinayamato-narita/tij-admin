@@ -86,9 +86,9 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
             CASE  _add_point
               WHEN 0 THEN
                 SET _rtn = 1;
-              ELSE
+              -- ELSE
                   -- Process with course free
-                  call sp_disable_course_free(_student_id);
+                  -- call sp_disable_course_free(_student_id);
 
             END CASE;
             UPDATE student

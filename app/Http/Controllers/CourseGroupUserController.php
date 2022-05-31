@@ -508,7 +508,7 @@ class CourseGroupUserController extends BaseController
                     if (count($dataImport) > 1001) {
                         $msg['error_list'] = "一回の操作で登録するユーザ数は、1000ユーザまでにしてください";
                     }
-                    unset($dataImport[0]);
+                    unset($dataImport[0],$dataImport[1]);
                     if (count($dataImport) == 0) {
                         $msg['error_list'] = "データを入力してください。";
                     }

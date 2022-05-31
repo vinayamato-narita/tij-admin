@@ -51,7 +51,6 @@
                                                     <th class="text-center min-width-120" style="width: 15%">@sortablelink('lesson_text_name', 'テキスト名')</th>
                                                     <th class="text-center w-100">@sortablelink('teacher_name', '講師名')</th>
                                                     <th class="text-center w-100">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
-                                                    <th class="text-center w-100">@sortablelink('set_course_id', 'セットコード')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -65,7 +64,6 @@
                                                         <td class="text-center">{{ $lesson->lesson_text_name }}</td>
                                                         <td class="text-center">{{ $lesson->teacher_name }}</td>
                                                         <td class="text-center">{{ $lesson->skype_voice_rating_from_teacher }}</td>
-                                                        <td class="text-center">{{ $lesson->set_course_id }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

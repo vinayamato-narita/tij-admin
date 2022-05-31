@@ -114,6 +114,9 @@ class CourseGroupUserController extends BaseController
                     if ($key == 0) {
                         continue;
                     }
+                    if ($key == 1) {
+                        continue;
+                    }
 
                     $tmpCourseId = 0;
                     foreach ($line as $keyLine => $value) {
@@ -182,7 +185,7 @@ class CourseGroupUserController extends BaseController
                         }
                     }
                 }
-                unset($data[0]);
+                unset($data[0],$data[1]);
             }
         }
 

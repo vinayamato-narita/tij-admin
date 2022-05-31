@@ -639,12 +639,9 @@
                                             class="form-control"
                                             name="password_confirm"
                                             v-model="password_confirm"
-                                                                                            v-validate="{
-                            regex: regexMixin,
-                            required: true,
-                            max: 16,
-                            min : 8
-                                                }"
+                                             v-validate="
+                                                'required|confirmed:password'
+                                            "
                                         />
                                         <div
                                             class="input-group is-danger "

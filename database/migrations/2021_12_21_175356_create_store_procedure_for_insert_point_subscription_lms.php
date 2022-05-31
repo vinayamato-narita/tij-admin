@@ -103,7 +103,7 @@ class CreateStoreProcedureForInsertPointSubscriptionLms extends Migration
               ELSE
 
                   -- Process with course free
-                  CALL sp_disable_course_free(_student_id);
+                  -- CALL sp_disable_course_free(_student_id);
 
                   CALL lms_insert_project_course_student(_project_course_id, _project_id, _course_id, _student_id, _start_date, @expired_date, _start_date_origin);
             END CASE;

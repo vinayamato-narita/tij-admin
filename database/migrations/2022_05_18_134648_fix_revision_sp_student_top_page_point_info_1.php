@@ -24,7 +24,6 @@ class FixRevisionSpStudentTopPagePointInfo1 extends Migration
             SET @timezone_id = COALESCE((SELECT timezone_id FROM student WHERE student_id = _student_id),1);
             SET @time_diff_from = COALESCE((SELECT diff_time * 60 FROM timezone tz WHERE tz.timezone_id = 1 LIMIT 1),9 * 60);
             SET @time_diff_to = COALESCE((SELECT diff_time * 60 FROM timezone WHERE timezone_id = @timezone_id),9 * 60);
-            SET @current_course=(SELECT course_id FROM student WHERE student_id =_student_id );
 
                SELECT SUM(p.point_count) as remain_point,
                       COALESCE(psh.point_expire_date, p.expire_date) as expire_date,
@@ -49,12 +48,6 @@ class FixRevisionSpStudentTopPagePointInfo1 extends Migration
                 AND p.paid_status = 1
                 AND TIMESTAMP(expire_date) >= TIMESTAMP(NOW())
                 AND psh.payment_status = 1
-                AND
-                   CASE
-                      WHEN @current_course > 1
-                      THEN p.course_id >1
-                      ELSE 1=1
-                   END
                GROUP BY DATE_FORMAT(expire_date,'%Y/%m/%d'), p.point_subscription_id
                ;
             END

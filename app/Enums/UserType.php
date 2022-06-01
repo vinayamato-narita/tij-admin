@@ -17,7 +17,7 @@ final class UserType extends Enum
         'student_nickname' => 'ニックネーム',
         'student_email' => 'メールアドレス',
         'student_birthday' => '生年月日',
-        'student_sex' => '性別(0:男子、1:女性、2:回答しない)',
+        'student_sex' => '性別(0:男性、1:女性、2:回答しない)',
         'company_name' => '法人名',
         'password' => 'パスワード',
         'lang_type'=>'言語（ja:日本語、en:英語、zh:中国語）'

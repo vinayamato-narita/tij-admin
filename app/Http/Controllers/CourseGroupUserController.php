@@ -587,7 +587,7 @@ class CourseGroupUserController extends BaseController
                 
                     if (isset($insert) && count($insert) > 0 && $msg['error_list']=="") {
                         DB::table('student')->insert($insert);
-                        $msg['success'] = "インポートの成功。";
+                        $msg['success'] = "法人ユーザを登録しました。";
                         foreach ($insert as $key => $value) {
                             foreach ($result as $k => $res) {
                                 if($k!=$key) {
@@ -599,6 +599,8 @@ class CourseGroupUserController extends BaseController
                                     $mailBody = $mailPattern[0]->mail_body;
                                     $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
                                     $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
+                                    $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
+                                    $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
     
                                     Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
                                         $message->to($value['student_email'])

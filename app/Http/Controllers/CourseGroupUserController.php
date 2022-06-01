@@ -584,7 +584,8 @@ class CourseGroupUserController extends BaseController
                             'is_lms_user'=>1
                         ];
                     }
-                    if (isset($insert) && count($insert) > 0 && $msg['error_list']="") {
+                
+                    if (isset($insert) && count($insert) > 0 && $msg['error_list']=="") {
                         DB::table('student')->insert($insert);
                         $msg['success'] = "法人ユーザを登録しました。";
                         foreach ($insert as $key => $value) {

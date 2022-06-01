@@ -501,11 +501,12 @@ class CourseGroupUserController extends BaseController
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
             $dataImport = $this->readDataStudentImport($data[0]);
             if ($ext !== "xlsx") {
-                $msg['error_list'] = "拡張子が異なります。「xlsx」ファイルを指定してください。";
+                $msg['error_list'] = "ファイルのフォーマットが異なります。";
             }
             if (!$dataCheck) {
-                $msg['error_list'] = "ファイルのフォーマットが異なります。正しいファイルフォーマットダウンロードしてファイルを指定してください。";
+                $msg['error_list'] = "データに誤りがあります。";
             }
+            dd($dataImport[0]);
             if (empty($msg['error_list'])) {
                 if (!empty($data) && count($data) > 0) {
                     if (count($dataImport) > 1001) {
@@ -515,6 +516,7 @@ class CourseGroupUserController extends BaseController
                     if (count($dataImport) == 0) {
                         $msg['error_list'] = "データを入力してください。";
                     }
+                    
                     foreach ($dataImport as $key => $value) {
     
                         $excel_date = $value['student_birthday'];
@@ -583,7 +585,7 @@ class CourseGroupUserController extends BaseController
                             'is_lms_user'=>1
                         ];
                     }
-                    if (isset($insert) && count($insert) > 0) {
+                    if (isset($insert) && count($insert) > 0 && $msg['error_list']="") {
                         DB::table('student')->insert($insert);
                         $msg['success'] = "インポートの成功。";
                         foreach ($insert as $key => $value) {
@@ -602,6 +604,9 @@ class CourseGroupUserController extends BaseController
                                 }
                             }
                         }
+                    }
+                    else {
+                        $insert =[];
                     }
                 }
             }

@@ -564,7 +564,6 @@ class StudentController extends BaseController
         })
         ->where('point_subscription_history.del_flag', 0)
         ->where('point_subscription_history.student_id', $id)
-        ->where('point_subscription_history.payment_status', 1)
         ->groupBy('point_subscription_history_id');
 
         if (isset($request['search_input'])) {

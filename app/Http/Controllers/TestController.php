@@ -343,7 +343,7 @@ class TestController extends BaseController
                     $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                     $file->file_type = FileTypeEnum::TEST_RELATED;
                     $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
-                    $file->file_display_name = $test->test_name . str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
+                    $file->file_display_name = str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
                     $file->save();
                     $testQuestion->file_id = $file->file_id;
                 }
@@ -393,7 +393,7 @@ class TestController extends BaseController
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                         $file->file_type = FileTypeEnum::TEST_RELATED;
                         $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
-                        $file->file_display_name = $test->test_name . str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
+                        $file->file_display_name = str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
                         $file->save();
                         $testSubQuestion->explanation_file_id = $file->file_id;
                     }
@@ -518,7 +518,7 @@ class TestController extends BaseController
                     $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                     $file->file_type = FileTypeEnum::TEST_RELATED;
                     $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
-                    $file->file_display_name = $test->test_name . str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
+                    $file->file_display_name = str_replace('.' . $request->fileSelected->extension(), '', $request->fileSelected->getClientOriginalName());
                     $file->save();
                     $testQuestion->file_id = $file->file_id;
                 }
@@ -589,7 +589,7 @@ class TestController extends BaseController
                         $file->file_path = AzureFolderEnum::TEST . '/' . $name;
                         $file->file_type = FileTypeEnum::TEST_RELATED;
                         $file->file_code = 'TS' . Carbon::now()->format('Ymd') . Carbon::now()->timestamp . Str::random(3);
-                        $file->file_display_name = $test->test_name . str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
+                        $file->file_display_name =  str_replace('.' . $f->extension(), '', $f->getClientOriginalName());
                         $file->save();
                         $testSubQuestion->explanation_file_id = $file->file_id;
                     }

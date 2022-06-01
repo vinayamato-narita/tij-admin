@@ -88,7 +88,7 @@ class GroupCourseDecision extends Command
                                 if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
                                     $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
                                 } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
-                                    $result = $gmoService->cancelTranPaypal($orderID, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->cancelTranPaypal($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
                                 }
 
                                 if (!empty($result)) {
@@ -159,7 +159,7 @@ class GroupCourseDecision extends Command
                                 if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
                                     $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
                                 } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
-                                    $result = $gmoService->paypalSales($orderID, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->paypalSales($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
                                 }
 
                                 if (!empty($result)) {

@@ -4,7 +4,7 @@
 @endphp
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand">
-        <img class="c-sidebar-brand-full" src="{{ url('images/logo.png') }}" width="55" height="46" alt="CoreUI Logo">
+        <img class="c-sidebar-brand-full" src="{{ url('images/logo.png') }}" height="46" alt="CoreUI Logo">
         <img class="c-sidebar-brand-minimized" src="{{ url('images/logo.png') }}" width="55" height="46" alt="CoreUI Logo">
     </div>
     <ul class="c-sidebar-nav">

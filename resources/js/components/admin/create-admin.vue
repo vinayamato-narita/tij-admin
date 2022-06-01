@@ -87,11 +87,11 @@
                                                     name="password"
                                                     v-model="adminInfo.password"
                                                     ref="password"
-                                                                          v-validate="{
-                            regex: regexMixin,
-                            required: true,
-                            max: 16,
-                            min : 8
+                                                    v-validate="{
+                                                        required: true,
+                                                        max: 16,
+                                                        min : 8,
+                                                        regex: regexMixin,
                                                 }"
                                                 />
                                                 <div
@@ -220,8 +220,8 @@ export default {
                 },
                 password: {
                     required: 'パスワードを入力してください。',
-                    max: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
-                    min: 'パスワードは少なくとも、英字1字と数字1字を含む、記号を除く8字～16字の半角英数字で入力してください。',
+                    max: 'パスワードは16文字以内で入力してください。',
+                    min: 'パスワードは8文字以上で入力してください。',
                     regex: 'パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。'
                 },
                 password_confirm: {

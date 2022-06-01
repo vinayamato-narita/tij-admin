@@ -180,12 +180,8 @@
                                                 <td>
                                                     {{ email.company_name }}
                                                 </td>
-                                                <td
-                                                    v-for="(pass,
-                                                    indexUser) in showList"
-                                                    :key="indexUser"
-                                                >
-                                                    {{ pass }}
+                                                <td>
+                                                    {{ email.password }}}
                                                 </td>
                                                 <td  v-if="email.lang_type == 'ja'">
                                                 日本語
@@ -222,7 +218,7 @@ export default {
         Loader,
         VueCal
     },
-    props: ["errorMessage", "showList", "dataImport", "urlSave"],
+    props: ["errorMessage", "dataImport", "urlSave"],
     mounted() {},
     data() {
         return {

@@ -522,12 +522,6 @@ class CourseGroupUserController extends BaseController
                         $unix_date = ($excel_date - 25569) * 86400;
                         $excel_date = 25569 + ($unix_date / 86400);
                         $unix_date = ($excel_date - 25569) * 86400;
-                    
-    
-                        if ($value['password'] != null) {
-                            $result[$key] = $value['password'];
-                        }
-    
                         if (in_array($value['student_email'], $emails) == true) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;
@@ -583,22 +577,28 @@ class CourseGroupUserController extends BaseController
                             'lang_type'=>$value['lang_type'],
                             'is_lms_user'=>1
                         ];
+                        $result[]=[
+                            'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
+                            'student_nickname' => $value['student_nickname'],
+                            'student_email' =>  $value['student_email'],
+                            'student_birthday' => gmdate("Y/m/d", $unix_date),
+                            'student_sex' =>  $value['student_sex'],
+                            'company_name' => $value['company_name'],
+                            'password' =>$value['password'],
+                            'lang_type'=>$value['lang_type'],
+                            'is_lms_user'=>1
+                        ];
                     }
-                
                     if (isset($insert) && count($insert) > 0 && $msg['error_list']=="") {
                         DB::table('student')->insert($insert);
                         $msg['success'] = "法人ユーザを登録しました。";
-                        foreach ($insert as $key => $value) {
-                            foreach ($result as $k => $res) {
-                                if($k!=$key) {
-                                    break;
-                                }
+                        foreach ($result as $value) {
                                 $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);
                                 if ($mailPattern) {
                                     $mailSubject = $mailPattern[0]->mail_subject;
                                     $mailBody = $mailPattern[0]->mail_body;
                                     $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
-                                    $mailBody = str_replace("#STUDENT_PASSWORD#", $res, $mailBody);
+                                    $mailBody = str_replace("#STUDENT_PASSWORD#", $value['password'], $mailBody);
                                     $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
                                     $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
     
@@ -607,19 +607,17 @@ class CourseGroupUserController extends BaseController
                                             ->subject($mailSubject);
                                     });
                                 }
-                            }
                         }
                     }
                     else {
-                        $insert =[];
+                        $result = [];
                     }
                 }
             }
           
         }
         return view('groupCourse.student_import', [
-            'dataImport' => $insert,
-            'showList' => $result,
+            'dataImport' => $result,
             'errorMessage' => $msg,
             'breadcrumbs' => $breadcrumbs,
         ]);

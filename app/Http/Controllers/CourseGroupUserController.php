@@ -506,7 +506,6 @@ class CourseGroupUserController extends BaseController
             if (!$dataCheck) {
                 $msg['error_list'] = "データに誤りがあります。";
             }
-            dd($dataImport[0]);
             if (empty($msg['error_list'])) {
                 if (!empty($data) && count($data) > 0) {
                     if (count($dataImport) > 1001) {

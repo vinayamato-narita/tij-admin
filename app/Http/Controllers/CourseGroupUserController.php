@@ -499,7 +499,7 @@ class CourseGroupUserController extends BaseController
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
             $emails = Student::pluck('student_email')->toArray();
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
-            $dataImport = $this->readDataStudentImport($data[0]);
+            $dataImport = $this->readDataStudentImport($data[0]);      
             if ($ext !== "xlsx") {
                 $msg['error_list'] = "ファイルのフォーマットが異なります。";
             }
@@ -517,11 +517,6 @@ class CourseGroupUserController extends BaseController
                     }
                     
                     foreach ($dataImport as $key => $value) {
-    
-                        $excel_date = $value['student_birthday'];
-                        $unix_date = ($excel_date - 25569) * 86400;
-                        $excel_date = 25569 + ($unix_date / 86400);
-                        $unix_date = ($excel_date - 25569) * 86400;
                         if (in_array($value['student_email'], $emails) == true) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;
@@ -544,6 +539,10 @@ class CourseGroupUserController extends BaseController
                         }
                         if ($value['student_birthday'] == null) {
                             $msg['error_list'] = "生年月日を入力してください。";
+                            break;
+                        }
+                        if (strtotime($value['student_birthday'])==false) {
+                            $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }
                         if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
@@ -570,7 +569,7 @@ class CourseGroupUserController extends BaseController
                             'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' => gmdate("Y/m/d", $unix_date),
+                            'student_birthday' =>  date('Y-m-d',strtotime($value['student_birthday'])),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' => Hash::make($value['password']),
@@ -581,7 +580,7 @@ class CourseGroupUserController extends BaseController
                             'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' => gmdate("Y/m/d", $unix_date),
+                            'student_birthday' => date('Y-m-d',strtotime($value['student_birthday'])),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' =>$value['password'],

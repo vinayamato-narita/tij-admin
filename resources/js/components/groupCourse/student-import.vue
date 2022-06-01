@@ -87,7 +87,7 @@
 
                         <div v-if="dataImport.length > 0">
                             <div class="form-group row">
-                                <div class="col-sm-8 offset-md-2">
+                                <div class="col-sm-8 offset-md-2 table-responsive">
                                     <table class="table table-import-user">
                                         <thead>
                                             <tr class="headings">
@@ -181,7 +181,7 @@
                                                     {{ email.company_name }}
                                                 </td>
                                                 <td>
-                                                    {{ email.password }}}
+                                                    {{ email.password }}
                                                 </td>
                                                 <td  v-if="email.lang_type == 'ja'">
                                                 日本語
@@ -273,4 +273,5 @@ export default {
     font-weight: 700;
     white-space: nowrap;
 }
+
 </style>

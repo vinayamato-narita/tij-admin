@@ -585,7 +585,7 @@ class CourseGroupUserController extends BaseController
                     }
                     if (isset($insert) && count($insert) > 0) {
                         DB::table('student')->insert($insert);
-                        $msg['success'] = "インポートの成功。";
+                        $msg['success'] = "法人ユーザを登録しました。";
                         foreach ($insert as $key => $value) {
                             foreach ($result as $res) {
                                 $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);

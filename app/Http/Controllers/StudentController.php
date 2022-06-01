@@ -564,6 +564,7 @@ class StudentController extends BaseController
         })
         ->where('point_subscription_history.del_flag', 0)
         ->where('point_subscription_history.student_id', $id)
+        ->where('point_subscription_history.payment_status', 1)
         ->groupBy('point_subscription_history_id');
 
         if (isset($request['search_input'])) {
@@ -1218,7 +1219,7 @@ class StudentController extends BaseController
             $mailBody = $mailPattern[0]->mail_body;
             $mailBody = str_replace("#STUDENT_NAME#", $studentInfo->student_name, $mailBody);
             $mailBody = str_replace("#STUDENT_MAIL#", $studentInfo->student_email, $mailBody);
-            $mailBody = str_replace("#LOGIN#", env('APP_URL_STUDENT'), $mailBody);
+            $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($studentInfo, $mailSubject) {
                 $message->to($studentInfo->student_email)

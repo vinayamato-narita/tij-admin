@@ -44,6 +44,7 @@ class FixSpStudentGetPaymentList extends Migration
         WHERE
             psh.student_id = _student_id
             AND psh.del_flag = 0
+            AND psh.payment_status = 1
         ORDER BY
             psh.payment_date DESC
         ;

@@ -63,7 +63,8 @@ class PaymentHistoryController extends BaseController
         ->leftJoin('student', function($join) {
             $join->on('point_subscription_history.student_id', '=', 'student.student_id');
         })
-        ->where('point_subscription_history.del_flag', 0);
+        ->where('point_subscription_history.del_flag', 0)
+        ->where('point_subscription_history.payment_status', 1);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

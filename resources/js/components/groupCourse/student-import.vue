@@ -168,55 +168,29 @@
                                                 <td>
                                                     {{ email.student_birthday }}
                                                 </td>
-                                                <td>
-                                                    <p
-                                                        v-if="
-                                                            email.student_sex ==
-                                                               0
-                                                        "
-                                                    >男子</p>
-                                                    <p
-                                                        v-if="
-                                                            email.student_sex ==
-                                                                1
-                                                        "
-                                                    > 女性</p>
-                                                    <p
-                                                        v-if="
-                                                            email.student_sex ==
-                                                                2
-                                                        "
-                                                    >回答しない</p>
+                                                <td  v-if="email.student_sex ==0">
+                                                男子
+                                                </td>
+                                                 <td  v-if="email.student_sex ==1">
+                                                女性
+                                                </td>
+                                                 <td  v-if="email.student_sex ==2">
+                                                回答しない
                                                 </td>
                                                 <td>
                                                     {{ email.company_name }}
                                                 </td>
-                                                <td
-                                                    v-for="(pass,
-                                                    indexUser) in showList"
-                                                    :key="indexUser"
-                                                >
-                                                    {{ pass }}
+                                                <td>
+                                                    {{ email.password }}}
                                                 </td>
-                                                    <td>
-                                                    <p
-                                                        v-if="
-                                                            email.lang_type ==
-                                                             'ja'
-                                                        "
-                                                    >日本語</p>
-                                                    <p
-                                                        v-if="
-                                                            email.student_sex ==
-                                                                'en'
-                                                        "
-                                                    > 英語</p>
-                                                    <p
-                                                        v-if="
-                                                            email.student_sex ==
-                                                                'zh'
-                                                        "
-                                                    >中国語</p>
+                                                <td  v-if="email.lang_type == 'ja'">
+                                                日本語
+                                                </td>
+                                                <td  v-if="email.lang_type =='en'">
+                                                英語
+                                                </td>
+                                                <td  v-if="email.lang_type =='zh'">
+                                                中国語
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -244,7 +218,7 @@ export default {
         Loader,
         VueCal
     },
-    props: ["errorMessage", "showList", "dataImport", "urlSave"],
+    props: ["errorMessage", "dataImport", "urlSave"],
     mounted() {},
     data() {
         return {

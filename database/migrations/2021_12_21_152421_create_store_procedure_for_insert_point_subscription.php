@@ -82,15 +82,15 @@ class CreateStoreProcedureForInsertPointSubscription extends Migration
         CASE
           WHEN _payment_way IN (0,1) THEN
 
-            SET   _add_point = COALESCE((SELECT point_count FROM course WHERE course_id = _course_id),0);
-            CASE  _add_point
-              WHEN 0 THEN
-                SET _rtn = 1;
+            -- SET   _add_point = COALESCE((SELECT point_count FROM course WHERE course_id = _course_id),0);
+            -- CASE  _add_point
+              -- WHEN 0 THEN
+                -- SET _rtn = 1;
               -- ELSE
                   -- Process with course free
                   -- call sp_disable_course_free(_student_id);
 
-            END CASE;
+            -- END CASE;
             UPDATE student
              SET
                course_id = IF(_set_course_id = 0, _course_id, _set_course_id)

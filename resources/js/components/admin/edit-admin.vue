@@ -85,12 +85,11 @@
                                                     name="password"
                                                     v-model="adminInfoEx.password"
                                                     ref="password"
-                                                                     v-validate="{
-                            regex: regexMixin,
-                            required: true,
-                            max: 16,
-                            min : 8
-                                                }"
+                                                    v-validate="{
+                                                        regex: regexMixin,
+                                                        max: 16,
+                                                        min : 8
+                                                    }"
                                                 />
                                                 <div
                                                     class="input-group is-danger"

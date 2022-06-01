@@ -517,6 +517,7 @@ class CourseGroupUserController extends BaseController
                     }
                     
                     foreach ($dataImport as $key => $value) {
+                        $date = str_replace('/', '-', $value['student_birthday']);
                         if (in_array($value['student_email'], $emails) == true) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;
@@ -541,7 +542,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;
                         }
-                        if (strtotime($value['student_birthday'])==false) {
+                        if (strtotime($date)==false) {
                             $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }

@@ -207,13 +207,13 @@
                                                     >日本語</p>
                                                     <p
                                                         v-if="
-                                                            email.student_sex ==
+                                                            email.lang_type ==
                                                                 'en'
                                                         "
                                                     > 英語</p>
                                                     <p
                                                         v-if="
-                                                            email.student_sex ==
+                                                            email.lang_type ==
                                                                 'zh'
                                                         "
                                                     >中国語</p>

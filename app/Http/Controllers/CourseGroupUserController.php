@@ -517,6 +517,7 @@ class CourseGroupUserController extends BaseController
                     }
                     
                     foreach ($dataImport as $key => $value) {
+                        $date = str_replace('/', '-', $value['student_birthday']);
                         if (in_array($value['student_email'], $emails) == true) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;
@@ -541,7 +542,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;
                         }
-                        if (strtotime($value['student_birthday'])==false) {
+                        if (strtotime($date)==false || !date('L', strtotime($date))) {
                             $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }
@@ -569,7 +570,7 @@ class CourseGroupUserController extends BaseController
                             'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' =>  date('Y-m-d',strtotime($value['student_birthday'])),
+                            'student_birthday' =>  date('d/m/Y',strtotime($date)),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' => Hash::make($value['password']),
@@ -580,7 +581,7 @@ class CourseGroupUserController extends BaseController
                             'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' => date('Y-m-d',strtotime($value['student_birthday'])),
+                            'student_birthday' =>  date('Y/m/d',strtotime($date)),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' =>$value['password'],

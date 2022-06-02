@@ -222,7 +222,7 @@
                                         <tbody>
                                             <tr v-for="file in fileInfo.mediaList">
                                                 <td>{{ file.media_type }}</td>
-                                                <td><a :href="file.href" target="_blank">{{ file.media_name }}</a></td>
+                                                <td><a :href="file.href" target="_blank" style="color: inherit;">{{ file.media_name }}</a></td>
                                             </tr>
                                         </tbody>
                                     </table>

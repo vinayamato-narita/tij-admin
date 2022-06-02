@@ -30,6 +30,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SendRemindMailPattern;
+use DateTime;
 use Illuminate\Support\Facades\Mail;
 
 class CourseGroupUserController extends BaseController
@@ -542,7 +543,8 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;
                         }
-                        if (strtotime($date)==false || !date('L', strtotime($date))) {
+                        
+                        if (strtotime($date)==false ||$this->checkmydate($date)==false){
                             $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }
@@ -637,4 +639,9 @@ class CourseGroupUserController extends BaseController
 
         return $res;
     }
+    function checkmydate($date) {
+        $tempDate = explode('-', $date);
+        // checkdate(month, day, year)
+        return checkdate($tempDate[1], $tempDate[2], $tempDate[0]);
+      }
 }

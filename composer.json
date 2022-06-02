@@ -59,7 +59,7 @@
             "database/factories"
         ],
         "files": [
-
+            "app/constants.php"
         ]
     },
     "autoload-dev": {

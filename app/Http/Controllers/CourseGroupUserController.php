@@ -542,7 +542,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;
                         }
-                        if (strtotime($date)==false) {
+                        if (strtotime($date)==false || !date('L', strtotime($date))) {
                             $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }

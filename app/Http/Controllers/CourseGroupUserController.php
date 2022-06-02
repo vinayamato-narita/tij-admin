@@ -581,7 +581,7 @@ class CourseGroupUserController extends BaseController
                             'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' =>  date('d/m/Y',strtotime($date)),
+                            'student_birthday' =>  date('Y/m/d',strtotime($date)),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' =>$value['password'],

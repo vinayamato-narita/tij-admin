@@ -548,11 +548,11 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "生年月日間違ったフォーマット。";
                             break;
                         }
-                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
+                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~]{8,16}$/',$value['password']) == false) {
                             $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                             break;
                         }
-                        if ( !isset($value['student_sex']) ) {
+                        if ( !isset($value['student_sex']) || !array_key_exists($value['student_sex'], [0,1,2]) )  {
                             $msg['error_list'] = "性別を入力してください。";
                             break;
                         }
@@ -564,7 +564,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードを入力してください。";
                             break;
                         }
-                        if ($value['lang_type'] == null) {
+                        if ($value['lang_type'] == null ||!array_key_exists($value['lang_type'], ['ja','en','zh'])) {
                             $msg['error_list'] = "言語を入力してください。";
                             break;
                         }

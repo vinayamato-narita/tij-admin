@@ -108,7 +108,7 @@ class FileController extends BaseController
         ]);
 
         $optionUploadFile = OptionUploadFile::asSelectArray();
-        $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+        $fileBaseMedia = config('env.AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
         
         return view('file.create', [
             'breadcrumbs' => $breadcrumbs,
@@ -137,7 +137,7 @@ class FileController extends BaseController
             $file->file_path = AzureFolderEnum::MEDIA . '/' . $name;
             $file->file_name_original = $request->file_attach->getClientOriginalName();
         }else {
-            $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+            $fileBaseMedia = config('env.AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
             $arrUrl = explode($fileBaseMedia, $request->url_file_path);
             
             $orgirinalName = $arrUrl[1]; 
@@ -168,7 +168,7 @@ class FileController extends BaseController
         ]);
 
         $optionUploadFile = OptionUploadFile::asSelectArray();
-        $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+        $fileBaseMedia = config('env.AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
 
         $fileInfo = File::where('file_id', $id)->firstOrFail();
         $fileInfo->_token = csrf_token();
@@ -220,7 +220,7 @@ class FileController extends BaseController
         }
 
         if($request->option_upload_file == OptionUploadFile::CLOUD && $request->url_file_path) {
-            $fileBaseMedia = env('AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
+            $fileBaseMedia = config('env.AZURE_STORAGE_URL') . "/" . AzureFolderEnum::MEDIA . "/";
             $arrUrl = explode($fileBaseMedia, $request->url_file_path);
             
             $orgirinalName = $arrUrl[1]; 

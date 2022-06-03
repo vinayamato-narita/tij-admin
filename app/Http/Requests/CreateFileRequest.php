@@ -37,7 +37,7 @@ class CreateFileRequest extends FormRequest
             'url_file_path' => ['required_if:option_upload_file,' . OptionUploadFile::CLOUD,
                 function ($attribute, $value, $fail) {
                     if($value) {
-                        $fileBaseMedia = env('AZURE_STORAGE_URL');
+                        $fileBaseMedia = config('env.AZURE_STORAGE_URL');
                         $arrUrl = explode($fileBaseMedia, $value);
                         $orgirinalName = $arrUrl[1]; 
                         

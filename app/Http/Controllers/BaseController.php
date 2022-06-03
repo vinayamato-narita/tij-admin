@@ -146,6 +146,6 @@ class BaseController extends Controller
     }
 
     public function getUrlFileBase(){
-        return env('AZURE_STORAGE_ENDPOINT') . '/' . env('AZURE_STORAGE_CONTAINER'). '/';
+        return config('env.AZURE_STORAGE_ENDPOINT') . '/' . config('env.AZURE_STORAGE_CONTAINER'). '/';
     }
 }

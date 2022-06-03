@@ -134,8 +134,8 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
-                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
-                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -152,8 +152,8 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_en, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_en, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
-                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
-                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -170,8 +170,8 @@ class SendMailBeforeLessonStart extends Command
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_cn, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_cn, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
-                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
-                $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
+                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
 
                 Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
                     $message->to($lessonSchedule->student_email)
@@ -196,7 +196,7 @@ class SendMailBeforeLessonStart extends Command
             $mailBody = str_replace("#LESSON_TIME_JP#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
             $mailBody = str_replace("#ZOOM_URL#", $lessonSchedule->zoom_url, $mailBody);
-            $mailBody = str_replace("#TEACHER_MY_PAGE_URL#", env('APP_URL_TEACHER'), $mailBody);
+            $mailBody = str_replace("#TEACHER_MY_PAGE_URL#", config('env.APP_URL_TEACHER'), $mailBody);
 
             if ($lessonSchedule->course_type == CourseTypeEnum::REGULAR_COURSE) {
                 $mailBody = str_replace("#STUDENT_NICKNAME#", $lessonSchedule->student_nickname, $mailBody);

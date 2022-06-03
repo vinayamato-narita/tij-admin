@@ -20,6 +20,6 @@ class File extends Model
 
     public function getAzureStoragePathAttribute()
     {
-        return env('AZURE_STORAGE_URL') .  '/' . $this->file_path;
+        return config('env.AZURE_STORAGE_URL') .  '/' . $this->file_path;
     }
 }

@@ -53,7 +53,7 @@ class Teacher extends Model
     public function getAvatarSrcAttribute()
     {
         if (!empty($this->photo_savepath))
-            return env('AZURE_STORAGE_ENDPOINT') . '/'. env('AZURE_STORAGE_CONTAINER') . '/' . $this->photo_savepath;
+            return config('env.AZURE_STORAGE_ENDPOINT') . '/'. config('env.AZURE_STORAGE_CONTAINER') . '/' . $this->photo_savepath;
         return null;
     }
 }

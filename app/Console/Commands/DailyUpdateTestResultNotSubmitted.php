@@ -70,7 +70,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
                 $testResult->is_reviewed = false;
             if ($testResult->test->test_type === TestType::ABILITY) {
                 $teachersTests = TeacherTest::with('teacher.timeZone')->where('test_id', $testResult->test->test_id)->get();
-                $expire = Carbon::now()->addDays(env('SKILL_TEST_REVIEW_EXPIRED_DATE'));
+                $expire = Carbon::now()->addDays(config('env.SKILL_TEST_REVIEW_EXPIRED_DATE'));
 
             if ($testResult->save())
                 foreach ($teachersTests as $teachersTest) {
@@ -85,7 +85,7 @@ class DailyUpdateTestResultNotSubmitted extends Command
                             $timeByTZ = $dateTimeByTZ->format('H:i');
                             $teacherMailBody = str_replace("#TEST_LIMIT_DATE#", $dateByTZ, $teacherMailBody);
                             $teacherMailBody = str_replace("#TEST_LIMIT_TIME#", " " . $timeByTZ, $teacherMailBody);
-                            $teacherMailBody = str_replace("#MY_PAGE_URL#", env('APP_URL_TEACHER') . '/login', $teacherMailBody);
+                            $teacherMailBody = str_replace("#MY_PAGE_URL#", config('env.APP_URL_TEACHER') . '/login', $teacherMailBody);
                             Mail::raw($teacherMailBody, function ($message) use ($teacherMailSubject, $teacherMailBody, $teachersTest) {
                                 $message->to($teachersTest->teacher->teacher_email)
                                     ->subject($teacherMailSubject);

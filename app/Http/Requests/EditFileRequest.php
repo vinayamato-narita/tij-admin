@@ -39,7 +39,7 @@ class EditFileRequest extends FormRequest
             'url_file_path' => [
                 function ($attribute, $value, $fail) {
                     if($value) {
-                        $fileBaseMedia = env('AZURE_STORAGE_URL');
+                        $fileBaseMedia = config('env.AZURE_STORAGE_URL');
                         $arrUrl = explode($fileBaseMedia, $value);
                         $orgirinalName = $arrUrl[1]; 
                         

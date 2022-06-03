@@ -64,6 +64,7 @@ import 'vue-cal/dist/vuecal.css'
 import axios from "axios";
 import Loader from "../common/loader.vue";
 import EditScheduleModal from "./edit-schedule-modal";
+import moment from 'moment-timezone'
 
 export default {
     components: {
@@ -82,6 +83,7 @@ export default {
             selectedEvent : null,
             selectedTime : new Date(),
             courseData : null,
+            thisWeek : true,
             events: [
               // events.
             ],
@@ -96,6 +98,10 @@ export default {
             console.log(c)
             if (c) {
                 this.selectedDate = c
+                var now = moment();
+                var input = moment(c);
+                this.thisWeek = (now.isoWeek() == input.isoWeek())
+                console.log(this.thisWeek)
             } else {
                 this.selectedDate = new Date()
             }
@@ -106,11 +112,15 @@ export default {
             this.$modal.show('edit-schedule-modal');
         },
         ready(event) {
+            console.log("ready")
             console.log(event)
-            this.getSchedule(event)
             this.setSelectedDate()
+            if (this.thisWeek) {
+                this.getSchedule(event)
+            }
         },
         viewChange(event) {
+            console.log("viewChange")
             console.log(event)
             this.getSchedule(event)
         },

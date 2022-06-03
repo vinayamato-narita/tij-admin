@@ -352,6 +352,7 @@ class CourseGroupUserController extends BaseController
                     PointSubscriptionHistory::where('order_id', '=', $orderId)
                         ->update([
                             'paid_status' => SubsPaidStatus::SUCCESS,
+                            'payment_status' => PaymentStatus::SUCCESS,
                             'payment_way' => PaymentWay::IMPORT
                         ]);
 

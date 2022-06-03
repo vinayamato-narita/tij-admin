@@ -39,7 +39,7 @@ class UpdateTestCommentExpired extends Command
      */
     public function handle()
     {
-        $maxHoursComment = env('MAX_HOURS_COMMENT');
+        $maxHoursComment = config('env.MAX_HOURS_COMMENT');
         $beforeMaxHourseComment = Carbon::now()->subHours($maxHoursComment);
         DB::table('test_comment')->whereNull('comment_end_time')
             ->where('comment_start_time', '<', $beforeMaxHourseComment)

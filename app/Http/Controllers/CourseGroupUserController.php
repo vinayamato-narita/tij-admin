@@ -546,14 +546,14 @@ class CourseGroupUserController extends BaseController
                         }
                         
                         if (strtotime($date)==false ||$this->checkmydate($date)==false){
-                            $msg['error_list'] = "生年月日間違ったフォーマット。";
+                            $msg['error_list'] = "生年月日のフォーマットが異なります。生年月日はyyyy/mm/ddの形式で入力してください。";
                             break;
                         }
-                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]{8,16}$/', $value['password']) == false) {
+                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~]{8,16}$/',$value['password']) == false) {
                             $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                             break;
                         }
-                        if ( !isset($value['student_sex']) ) {
+                        if ( !isset($value['student_sex'])|| !array_key_exists($value['student_sex'], [0,1,2]) ) {
                             $msg['error_list'] = "性別を入力してください。";
                             break;
                         }
@@ -565,7 +565,7 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードを入力してください。";
                             break;
                         }
-                        if ($value['lang_type'] == null) {
+                        if ($value['lang_type'] == null ||!in_array($value['lang_type'], ['ja','en','zh'])) {
                             $msg['error_list'] = "言語を入力してください。";
                             break;
                         }
@@ -602,8 +602,8 @@ class CourseGroupUserController extends BaseController
                                     $mailBody = $mailPattern[0]->mail_body;
                                     $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
                                     $mailBody = str_replace("#STUDENT_PASSWORD#", $value['password'], $mailBody);
-                                    $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
-                                    $mailBody = str_replace("#ZOOM_MANUAL_URL#", env('ZOOM_MANUAL_URL'), $mailBody);
+                                    $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                                    $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
     
                                     Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
                                         $message->to($value['student_email'])

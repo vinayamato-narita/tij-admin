@@ -157,6 +157,12 @@ class CourseController extends BaseController
                     $course->course_start_date = $request->courseStartDate;
                 }
 
+                if ($course->is_for_lms == 1) {
+                    $course->course_type = 1;
+                    $course->group_lesson_status =1;
+                }
+
+
                 $course->save();
 
                 DB::commit();

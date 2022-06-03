@@ -247,6 +247,7 @@
                                                 <div>
                                                     <input class=" checkbox" id="courseType_0" name="courseType"
                                                         type="radio"
+                                                        :disabled="isForLMS == 1"
                                                         value="0"
                                                         @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_0">
@@ -258,6 +259,7 @@
                                                     <input class=" checkbox" id="courseType_1" name="courseType"
                                                            type="radio"
                                                            value="1"
+                                                           :disabled="isForLMS == 1"
                                                            @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_1">
                                                         グループコース
@@ -268,7 +270,8 @@
                                                     <input class=" checkbox" id="courseType_2" name="courseType"
                                                         type="radio"
                                                         value="2"
-                                                        @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
+                                                           :disabled="isForLMS == 1"
+                                                           @input="changeInput()" v-model="courseType" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="courseType_2">
                                                         実力テスト用コース
                                                     </label>
@@ -657,6 +660,10 @@
         computed : {
         },
         watch: {
+            isForLMS() {
+                if (this.isForLMS == 1)
+                    this.courseType = 1
+            },
             courseStartDateDate () {
                 this.refreshRelatedDateTime();
             },

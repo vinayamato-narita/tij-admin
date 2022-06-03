@@ -167,7 +167,7 @@ class AbilityTestResultController extends BaseController
         $disableComment = false;
         $now = Carbon::now();
 
-        if (!empty($testResult->test_comment) && $testResult->test_comment->comment_start_time && $testResult->test_comment->comment_end_time === null && $now->diffInHours($testResult->test_comment->comment_start_time) <= env('MAX_HOURS_COMMENT') && $testResult->test_comment->teacher_admin_id != Auth::user()->admin_user_id)
+        if (!empty($testResult->test_comment) && $testResult->test_comment->comment_start_time && $testResult->test_comment->comment_end_time === null && $now->diffInHours($testResult->test_comment->comment_start_time) <= config('env.MAX_HOURS_COMMENT') && $testResult->test_comment->teacher_admin_id != Auth::user()->admin_user_id)
             $disableComment = true;
 
         return view('abilityTestResult.show', [
@@ -260,14 +260,14 @@ class AbilityTestResultController extends BaseController
                 return redirect()->route('abilityTestResult.show', $id);
         } else {
             $now = Carbon::now();
-            if (($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) > env('MAX_HOURS_COMMENT')) || $testComment->comment_start_time == null) {
+            if (($testComment->comment_end_time === null && $now->diffInHours($testComment->comment_start_time) > config('env.MAX_HOURS_COMMENT')) || $testComment->comment_start_time == null) {
                 $testComment->comment_start_time = Carbon::now();
                 $testComment->teacher_admin_id = Auth::user()->admin_user_id;
                 if (!$testComment->save())
                     return redirect()->route('abilityTestResult.show', $id);
             }
 
-            if ($testComment->comment_end_time === null && $testComment->comment_start_time && $now->diffInHours($testComment->comment_start_time) <= env('MAX_HOURS_COMMENT') && $testComment->teacher_admin_id != Auth::user()->admin_user_id)
+            if ($testComment->comment_end_time === null && $testComment->comment_start_time && $now->diffInHours($testComment->comment_start_time) <= config('env.MAX_HOURS_COMMENT') && $testComment->teacher_admin_id != Auth::user()->admin_user_id)
                 $disableComment = true;
         }
 

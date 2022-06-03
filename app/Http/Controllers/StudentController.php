@@ -1218,7 +1218,7 @@ class StudentController extends BaseController
             $mailBody = $mailPattern[0]->mail_body;
             $mailBody = str_replace("#STUDENT_NAME#", $studentInfo->student_name, $mailBody);
             $mailBody = str_replace("#STUDENT_MAIL#", $studentInfo->student_email, $mailBody);
-            $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", env('APP_URL_STUDENT'), $mailBody);
+            $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
             
             Mail::raw($mailBody, function ($message) use ($studentInfo, $mailSubject) {
                 $message->to($studentInfo->student_email)

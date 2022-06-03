@@ -23,6 +23,6 @@ class Student extends Authenticatable
 
     public function pointSubscriptionHistories()
     {
-        return $this->hasMany('App\Models\PointSubscriptionHistory', 'student_id', 'student_id');
+        return $this->hasMany('App\Models\PointSubscriptionHistory', 'student_id', 'student_id')->orderBy('payment_status', 'desc');
     }
 }

@@ -546,7 +546,7 @@ class CourseGroupUserController extends BaseController
                         }
                         
                         if (strtotime($date)==false ||$this->checkmydate($date)==false){
-                            $msg['error_list'] = "生年月日間違ったフォーマット。";
+                            $msg['error_list'] = "生年月日のフォーマットが異なります。生年月日はyyyy/mm/ddの形式で入力してください。";
                             break;
                         }
                         if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~]{8,16}$/',$value['password']) == false) {

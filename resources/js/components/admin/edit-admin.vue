@@ -86,7 +86,6 @@
                                                     v-model="adminInfoEx.password"
                                                     ref="password"
                                                     v-validate="{
-                                                        required: true,
                                                         max: 16,
                                                         min : 8,
                                                         regex: regexMixin,
@@ -219,7 +218,6 @@ export default {
                     email: "メールアドレスを正確に入力してください"
                 },
                 password: {
-                    required: 'パスワードを入力してください。',
                     max: 'パスワードは16文字以内で入力してください。',
                     min: 'パスワードは8文字以上で入力してください。',
                     regex: 'パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。'

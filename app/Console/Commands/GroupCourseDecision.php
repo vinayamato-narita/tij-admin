@@ -86,9 +86,9 @@ class GroupCourseDecision extends Command
                             if (!empty($order)) {
                                 $result = false;
                                 if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
-                                    $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->alterTran(JobCdType::CANCEL, $order["AccessID"], $order["AccessPass"], $order["Amount"] + $order["Tax"]);
                                 } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
-                                    $result = $gmoService->cancelTranPaypal($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->cancelTranPaypal($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"] + $order["Tax"]);
                                 }
 
                                 if (!empty($result)) {
@@ -157,9 +157,9 @@ class GroupCourseDecision extends Command
                             if (!empty($order)) {
                                 $result = false;
                                 if ($pointSubscriptionHistory->payment_way == PaymentWay::CREDIT) {
-                                    $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->alterTran(JobCdType::SALES, $order["AccessID"], $order["AccessPass"], $order["Amount"] + $order["Tax"]);
                                 } elseif ($pointSubscriptionHistory->payment_way == PaymentWay::PAYPAL) {
-                                    $result = $gmoService->paypalSales($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"]);
+                                    $result = $gmoService->paypalSales($pointSubscriptionHistory->order_id, $order["AccessID"], $order["AccessPass"], $order["Amount"] + $order["Tax"]);
                                 }
 
                                 if (!empty($result)) {

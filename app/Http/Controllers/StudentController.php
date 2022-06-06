@@ -1187,7 +1187,7 @@ class StudentController extends BaseController
             ], StatusCode::BAD_REQUEST);
         }
         try {
-            Student::where('id', $id)->delete();
+            Student::where('student_id', $id)->delete();
             StudentPointHistory::where('student_id', $id)->delete();
             LmsProjectStudent::where('student_id', $id)->delete();
 

@@ -52,6 +52,15 @@ export default {
             })
             .catch(error => {
               that.flagShowLoader = false;
+              that
+                .$swal({
+                  title: error.response.data.message,
+                  icon: "error",
+                  confirmButtonText: "OK"
+                })
+                .then(function () {
+                  location.reload();
+                });
             });
         }
       });

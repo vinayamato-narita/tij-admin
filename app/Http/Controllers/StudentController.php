@@ -1177,6 +1177,13 @@ class StudentController extends BaseController
 
     public function destroy($id)
     {
+        $pointSubcriptionHistories = PointSubscriptionHistory::where('student_id', $id)->where('payment_status', 1)->first();
+        if($pointSubcriptionHistories) {
+            return response()->json([
+                'status' => 'NG',
+                'message' => '学習者が既にコースを購入しているため削除できません。',
+            ], StatusCode::BAD_REQUEST);
+        }
         try {
             Student::where('id', $id)->delete();
             StudentPointHistory::where('student_id', $id)->delete();

@@ -57,7 +57,7 @@ class GroupCourseDecision extends Command
         $gmoService = new GmoService();
 
         $yesterday = Carbon::yesterday()->format('Y-m-d');
-        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->where('group_lesson_status', GroupLessonStatus::BEFORE_DECIDE)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
+        $courses = Course::whereDate('decide_date', $yesterday)->where('course_type', CourseTypeEnum::GROUP_COURSE)->where('group_lesson_status', GroupLessonStatus::BEFORE_DECIDE)->where('is_for_lms', 0)->with(['pointSubscriptionHistories', 'pointSubscriptionHistories.student', 'lessonSchedules', 'lessonSchedules.teacher', 'lessonSchedules.teacher.teacherInfo'])->get();
         $cancelCourseIds = [];
         $decideCourseIds = [];
 

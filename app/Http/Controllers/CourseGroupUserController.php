@@ -353,7 +353,8 @@ class CourseGroupUserController extends BaseController
                         ->update([
                             'paid_status' => SubsPaidStatus::SUCCESS,
                             'payment_status' => PaymentStatus::SUCCESS,
-                            'payment_way' => PaymentWay::IMPORT
+                            'payment_way' => PaymentWay::IMPORT,
+                            'point_expire_date' => $courseInfo[$courseId]->publish_date_to
                         ]);
 
                     $psid = DB::table('point_subscription_history')
@@ -372,7 +373,7 @@ class CourseGroupUserController extends BaseController
                             'pay_description' => 'レッスン付与 (' . $courseInfo[$courseId]->course_name . ')',
                             'pay_type' => 0,
                             'point_count' => -1,
-                            'expire_date' => Carbon::parse($paymentDate)->addDays($courseInfo[$courseId]->expire_day)->format('Y-m-d 23:59:59'),
+                            'expire_date' => $courseInfo[$courseId]->publish_date_to,
                             'lesson_schedule_id' => $schedule['lesson_schedule_id'],
                             'course_id' => $courseId,
                             'start_date' => $paymentDate,

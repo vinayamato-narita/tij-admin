@@ -51,8 +51,7 @@ class PaymentHistoryController extends BaseController
         	'point_subscription_history.point_count as point_count',
         	'course.course_type',
         	'point_subscription_history.payment_way as payment_way',
-        	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
-        	DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
+        	DB::raw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") AS j_receive_payment_date'),
         )
         ->leftJoin('order', function($join) {
             $join->on('point_subscription_history.order_id', '=', 'order.order_id');
@@ -118,10 +117,7 @@ class PaymentHistoryController extends BaseController
             }
             
             if ($request['sort'] == "j_receive_payment_date") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) DESC');
-            }
-            if ($request['sort'] == "j_payment_term") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ASC') : $queryBuilder->orderByRaw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") DESC');
             }
             if ($request['sort'] == "amount") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('CAST(point_subscription_history.amount AS INT) ASC') : $queryBuilder->orderByRaw('CAST(point_subscription_history.amount AS INT) DESC');

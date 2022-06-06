@@ -105,6 +105,7 @@ class UpdateSpLessonHistoryForHtml extends Migration
                 ,ls.zoom_url
                 ,ls.link_zoom_schedule_flag
                 ,ls.zoom_schedule_id
+                ,lh.student_lesson_start
             FROM
                 lesson_history lh
                 LEFT JOIN lesson_schedule ls ON lh.lesson_schedule_id = ls.lesson_schedule_id

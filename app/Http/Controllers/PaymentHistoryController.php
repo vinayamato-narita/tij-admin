@@ -45,6 +45,7 @@ class PaymentHistoryController extends BaseController
         	'point_subscription_history.point_expire_date as point_expire_date',
         	'point_subscription_history.item_name as item_name',
         	'student.student_name as j_student_name',
+            'student.company_name as j_company_name',
         	DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
         	'point_subscription_history.amount as amount',
         	'point_subscription_history.tax as tax',

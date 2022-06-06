@@ -472,6 +472,15 @@
 
                                                         </div>
 
+                                                    </div>
+
+                                                    <div class="col-md-3">
+
+                                                    </div>
+                                                    <div class="col-md-9 ml-0">
+                                                            <span>
+                                                                コース登録後は開催日時の変更はできません
+                                                            </span>
 
                                                     </div>
                                                 </div>

@@ -69,7 +69,6 @@
                                                     <th class="text-left min-width-150">@sortablelink('point_count', '付与回数')</th>
                                                     <th class="text-left min-width-150">@sortablelink('payment_way', '支払方法')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_receive_payment_date', '入金日')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('j_payment_term', '支払期限')</th>
                                                     
                                                     <th class="w-100"></th>
                                                 </tr>
@@ -94,7 +93,6 @@
                                                         <td class="text-left">{{ $payment->point_count }}</td>
                                                         <td class="text-left">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>
-                                                        <td class="text-left">{{ $payment->j_payment_term }}</td>
 
                                                         <td class="text-left">
                                                             <div class="btn-group">

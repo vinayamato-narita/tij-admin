@@ -81,7 +81,9 @@ class SendMailBeforeLessonStart extends Command
             DB::raw("COALESCE(len.lesson_name, lesson.lesson_name) AS lesson_name_en"),
             DB::raw("COALESCE(lcn.lesson_name, lesson.lesson_name) AS lesson_name_cn"),
             DB::raw("COALESCE(lten.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_en"),
-            DB::raw("COALESCE(ltcn.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_cn")
+            DB::raw("COALESCE(ltcn.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_cn"),
+            'course.course_name',
+            'teacher.teacher_name'
         )->join('student_point_history', function($join) {
             $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
         })
@@ -115,6 +117,9 @@ class SendMailBeforeLessonStart extends Command
         ->leftJoin('lesson_text_info as ltcn', function($join) {
             $join->on('lesson_text.lesson_text_id', '=', 'ltcn.lesson_text_id')
             ->where('ltcn.lang_type', LangType::ZH);
+        })
+        ->join('course', function($join) {
+            $join->on('lesson_schedule.course_id', '=', 'course.course_id');
         })
         ->where('lesson_schedule.course_id', '>', 1)
         ->where('lesson_schedule.lesson_starttime', '>=', $timeStart)
@@ -187,6 +192,7 @@ class SendMailBeforeLessonStart extends Command
             $mailBody = str_replace("#TEACHER_NAME#", $lessonSchedule->teacher_name, $mailBody);
             $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
             $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
+            $mailBody = str_replace("#COURSE_NAME#", $lessonSchedule->course_name, $mailBody);
 
             $diff_time = $timeZones[$lessonSchedule->timezone_id];
 

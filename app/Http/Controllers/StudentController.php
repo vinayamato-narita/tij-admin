@@ -344,7 +344,11 @@ class StudentController extends BaseController
             ->leftJoin('teacher', function($join) {
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
-            ->where('lesson_history.student_lesson_reserve_type', 3)
+            ->join('student_point_history', function($join) use ($id){
+                $join->on('student_point_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
+                    ->where('student_point_history.student_id', '=', $id)
+                    ->where('student_point_history.point_count', '<', 0);
+            })
             ->where('lesson_history.student_id', $id);
 
         if (isset($request['search_input'])) {
@@ -829,12 +833,10 @@ class StudentController extends BaseController
                 'student.company_name as custom_company_name'
             )
             ->leftJoin('lesson_history', function($join) {
-                $join->on('student.student_id', '=', 'lesson_history.student_id')
-                    ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
+                $join->on('student.student_id', '=', 'lesson_history.student_id');
             })
             ->leftJoin('lesson_schedule', function($join) {
-                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id')
-                    ->where('lesson_history.student_lesson_reserve_type', '<>', 2);
+                $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
             })
             ->groupBy('student.student_id');
 

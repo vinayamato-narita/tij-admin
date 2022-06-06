@@ -454,6 +454,7 @@
                                                                 v-model="courseStartDateDate"
                                                                 :format="'YYYY/MM/DD'"
                                                                 type="date"
+                                                                disabled
                                                         ></date-picker>
                                                         <input type="hidden" name="courseStartDateDate" v-validate="'required|custom_date'" v-model="courseStartDateDate">
 
@@ -467,6 +468,7 @@
                                                                 v-model="courseStartDateTime"
                                                                 :format="'HH:mm'"
                                                                 type="time"
+                                                                disabled
                                                         ></date-picker>
                                                         <input type="hidden" name="courseStartDateDate" v-validate="'required'" v-model="courseStartDateTime">
 

@@ -1,5 +1,6 @@
 @php
     use App\Enums\StudentEntryType;
+    use App\Enums\LmsUserEnum;
 @endphp
 @extends('layouts.default')
 @section('title', '学習者情報編集')
@@ -12,5 +13,6 @@
     	:message-confirm="{{ json_encode('この学習者を削除しますか？') }}"
     	:url-update-password="{{json_encode(route('student.updatePassword'))}}" 
 		:is_tmp_entry="{{json_encode(StudentEntryType::getDescription($studentInfo->is_tmp_entry))}}"
+        :is-lms-user="{{ json_encode(LmsUserEnum::CORPORATION) }}"
     ></edit-student>
 @endsection

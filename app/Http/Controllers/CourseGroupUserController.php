@@ -10,6 +10,7 @@ use App\Enums\OrderStatus;
 use App\Enums\SubsPaidStatus;
 use App\Enums\PaymentWay;
 use App\Enums\PaymentStatus;
+use App\Enums\LangType;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseLesson;
@@ -393,6 +394,29 @@ class CourseGroupUserController extends BaseController
                         $ret = DB::select('call sp_student_lesson_reserve_register(?,?,?,?,?)', $data);
                         LessonSchedule::where('lesson_schedule_id', '=', $schedule["lesson_schedule_id"])
                             ->update(['lesson_reserve_type' => $schedule["lesson_reserve_type"]]);
+                    }
+
+                    // send mail 「一括登録　法人会員　コース申込」 to student
+                    $student = DB::table('student')
+                        ->where('student_id', '=', $studentId)
+                        ->get()->toArray();
+                    if (!empty($student)) {
+                        $getMailStudent = SendRemindMailPattern::getRemindmailPatternInfo(MailType::IMPORT_STUDENT_COURSE, $student[0]->lang_type);
+                        if (count($getMailStudent)) {
+                            $mailSubject = $getMailStudent[0]->mail_subject;
+                            $mailBody = $getMailStudent[0]->mail_body;
+                            $mailBody = str_replace("#STUDENT_NAME#", $student[0]->student_name, $mailBody);
+                            $mailBody = str_replace("#COURSE_NAME#", $courseInfo[$courseId]->course_name, $mailBody);
+                            $mailBody = str_replace("#COURSE_COUNT#", $courseInfo[$courseId]->point_count, $mailBody);
+                            $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                            $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
+                            $studentEmail = $student[0]->student_email;
+
+                            Mail::raw($mailBody, function ($message) use ($studentEmail, $mailSubject) {
+                                $message->to($studentEmail)
+                                    ->subject($mailSubject);
+                            });
+                        }
                     }
                 }
             }

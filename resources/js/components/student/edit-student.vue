@@ -213,7 +213,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row" v-if="studentInfoEx.is_lms_user != studentInfoExlms_user">
+                                                <div class="form-group row" v-if="studentInfoEx.is_lms_user == isLmsUser">
                                                     <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
@@ -225,7 +225,7 @@
                                                             name="company_name"
                                                             v-model="studentInfoEx.company_name"
                                                             v-validate="
-                                                                'max:255'
+                                                                'max:255' 
                                                             "
                                                         />
                                                         <div
@@ -774,7 +774,7 @@ export default {
             password_confirm: "",
         };
     },
-    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry'],
+    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry', "isLmsUser"],
     mounted() {
         console.log(this.studentInfoEx.lang_type)
         if (this.studentInfoEx.country_id == null) {

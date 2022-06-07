@@ -42,6 +42,8 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes();
         $schedule->command('daily_update_test_result_not_submitted:run')
             ->everyFiveMinutes();
+        $schedule->command('send_mail_test_review_remind:run')
+            ->hourly();
     }
 
     /**

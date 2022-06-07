@@ -11,6 +11,7 @@ use App\Enums\SubsPaidStatus;
 use App\Enums\PaymentWay;
 use App\Enums\PaymentStatus;
 use App\Enums\LangType;
+use App\Enums\MailType;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseLesson;

@@ -83,7 +83,8 @@ class SendMailBeforeLessonStart extends Command
             DB::raw("COALESCE(lten.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_en"),
             DB::raw("COALESCE(ltcn.lesson_text_name, lesson_text.lesson_text_name) AS lesson_text_name_cn"),
             'course.course_name',
-            'teacher.teacher_name'
+            'teacher.teacher_name',
+            'student.student_id',
         )->join('student_point_history', function($join) {
             $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
         })
@@ -125,6 +126,7 @@ class SendMailBeforeLessonStart extends Command
         ->where('lesson_schedule.lesson_starttime', '>=', $timeStart)
         ->where('lesson_schedule.lesson_starttime', '<=', $timeEnd)
         ->orderBy('lesson_schedule.lesson_schedule_id')
+        ->groupBy('lesson_schedule_id', 'student_id')
         ->get();
 
         $scheduleId = 0;

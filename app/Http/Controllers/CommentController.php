@@ -53,7 +53,8 @@ class CommentController extends BaseController
                     ->orWhere('lesson_history.comment_from_teacher_to_student', '<>', "")
                     ->orWhere('lesson_history.comment_from_teacher_to_office', '<>', "")
                     ->orWhere('lesson_history.note_from_student_to_teacher', '<>', "");
-            });
+            })
+            ->orderBy('lesson_time', 'desc');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

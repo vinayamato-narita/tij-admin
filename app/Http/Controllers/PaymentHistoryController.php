@@ -113,7 +113,7 @@ class PaymentHistoryController extends BaseController
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student.student_name','ASC') : $queryBuilder->orderBy('student.student_name','DESC');
             }
             if ($request['sort'] == "j_company_name") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE "" END) DESC');
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('student.company_name ASC') : $queryBuilder->orderByRaw('student.company_name DESC');
             }
             
             if ($request['sort'] == "j_receive_payment_date") {

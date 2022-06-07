@@ -14,5 +14,7 @@
     	:url-update-password="{{json_encode(route('student.updatePassword'))}}" 
 		:is_tmp_entry="{{json_encode(StudentEntryType::getDescription($studentInfo->is_tmp_entry))}}"
         :is-lms-user="{{ json_encode(LmsUserEnum::CORPORATION) }}"
+		:url-check-email="{{ json_encode(route('student.checkEmail')) }}"
+		
     ></edit-student>
 @endsection

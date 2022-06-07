@@ -1364,4 +1364,19 @@ class StudentController extends BaseController
             'status' => 'OK',
         ], StatusCode::OK);
     }
+
+    public function checkEmail(Request $request)
+    {
+        $valid = !Student::where(function ($query) use ($request) {
+            if (isset($request['id'])) {
+                $query->where('student_id', '!=', $request["id"]);
+            }
+            $query->where(['student_email' => $request["value"]]);
+            $query->where(['is_tmp_entry' => StudentEntryTypeEnum::USING]);
+        })->exists();
+
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
+    }
 }

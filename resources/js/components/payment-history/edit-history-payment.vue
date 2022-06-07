@@ -189,21 +189,6 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label
-                                                class="col-md-3 col-form-label text-md-right"
-                                                for="text-input"
-                                                >支払期限</label
-                                            >
-                                            <div class="col-md-6">
-                                                <input
-                                                    class="form-control"
-                                                    name="j_payment_term"
-                                                    v-model="paymentInfoEx.j_payment_term"
-                                                    :disabled="true"
-                                                />
-                                            </div>
-                                        </div>
 
                                         <div class="line"></div>
                                         <div class="form-group">

@@ -554,6 +554,7 @@ class StudentController extends BaseController
             'point_subscription_history.management_number as management_number', 
             'point_subscription_history.corporation_code as corporation_code', 
             'point_subscription_history.amount as amount', 
+            'point_subscription_history.tax as tax', 
             'point_subscription_history.payment_date as payment_date',
             'point_subscription_history.begin_date as begin_date',
             'point_subscription_history.point_expire_date as point_expire_date',

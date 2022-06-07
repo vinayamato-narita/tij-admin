@@ -67,7 +67,7 @@
                                                         <td class="text-center">{{ $payment->point_subscription_history_id }}</td>
                                                         <td class="text-center">{{ $payment->course_name }}</td>
                                                         <td class="text-center">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
-                                                        <td class="text-center">{{ number_format($payment->amount) }}</td>
+                                                        <td class="text-center">{{ number_format($payment->amount + $payment->tax) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->payment_date) }}</td>
                                                         <td class="text-center">{{ DateTimeComponent::getDate($payment->begin_date) }}</td>
                                                         <td class="text-center">

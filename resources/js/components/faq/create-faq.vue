@@ -22,7 +22,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >No.<span class="glyphicon glyphicon-star"
+                                                > 表示順<span class="glyphicon glyphicon-star"
                                                     ></span
                                                 ></label
                                             >
@@ -155,10 +155,10 @@ export default {
         let messError = {
             custom: {
                 no_faq: {
-                    required: "No.を入力してください",
-                    decimal: "No.は半角数字を入力してください",
-                    min_value: "No.は1～1000000000 を入力してください",
-                    max_value: "No.は1～1000000000 を入力してください",
+                    required: "表示順を入力してください",
+                    decimal: "表示順は半角数字を入力してください",
+                    min_value: "表示順は1～1000000000 を入力してください",
+                    max_value: "表示順は1～1000000000 を入力してください",
                 },
                 faq_category_id: {
                     required: "カテゴリを入力してください",

@@ -206,7 +206,8 @@ Route::group([
     Route::get('/student/show-point-history/{id}', 'StudentController@showPointHistory')->name('student.showPointHistory');
     Route::post('/student/update-point-history', 'StudentController@updatePointHistory')->name('student.updatePointHistory');
     Route::post('/student/cancel-point-history', 'StudentController@cancelPointHistory')->name('student.cancelPointHistory');
-
+    Route::post('/student/check-email', 'StudentController@checkEmail')->name('student.checkEmail');
+    
     Route::get('/admin/edit-role/{id}', 'AdminController@editRole')->name('admin.editRole');
     Route::post('/admin/update-role', 'AdminController@updateRole')->name('admin.updateRole');
 

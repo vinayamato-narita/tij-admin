@@ -200,7 +200,7 @@
                                                             name="student_email"
                                                             v-model="studentInfoEx.student_email"
                                                             v-validate="
-                                                                'required|email_format|max:255'
+                                                                'required|email_format|max:255|unique_custom'
                                                             "
                                                         />
                                                         <div
@@ -677,6 +677,7 @@
 import axios from "axios";
 import Loader from "./../common/loader.vue";
 import BtnDelete from "./../common/btn-delete.vue";
+import studentImportVue from '../groupCourse/student-import.vue';
 
 export default {
     created: function() {
@@ -706,6 +707,7 @@ export default {
                     required: "メールアドレスを入力してください",
                     email_format: "メールアドレスを正確に入力してください",
                     max: "メールアドレスは255文字以内で入力してください",
+                    unique_custom: "このメールアドレスは既に登録されています。"
                 },
                 company_name: {
                     max: "法人名は255文字以内で入力してください",
@@ -761,6 +763,24 @@ export default {
             }
         };
         this.$validator.localize("en", messError);
+        let  that = this;
+        this.$validator.extend("unique_custom", {
+            validate(value, args) {
+                return axios
+                    .post(that.urlCheckEmail, {
+                        _token: Laravel.csrfToken,
+                        value: value,
+                        id: that.studentInfoEx.id
+                    })
+                    .then(function (response) {
+                        return {
+                            valid: response.data.valid,
+                        };
+                    })
+                    .catch((error) => {
+                    });
+            },
+        });
     },
     components: {
         Loader,
@@ -774,9 +794,10 @@ export default {
             password_confirm: "",
         };
     },
-    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry', "isLmsUser"],
+    props: ["urlAction", "urlStudentList", "studentInfo", 'deleteAction', 'messageConfirm', 'urlUpdatePassword','is_tmp_entry', "isLmsUser", "urlCheckEmail"],
     mounted() {
         console.log(this.studentInfoEx.lang_type)
+        console.log('xxx ', this.urlCheckEmail)
         if (this.studentInfoEx.country_id == null) {
             this.studentInfoEx.country_id = 0;
         }

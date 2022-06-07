@@ -28,7 +28,7 @@ use App\Enums\LangType;
                                         <label
                                             class="col-md-3 col-form-label text-md-right"
                                             for="text-input"
-                                            >No.:</label
+                                            >表示順:</label
                                         >
                                         <div class="col-md-3 pd-7">
                                             {{ $faqInfo->no_faq }}

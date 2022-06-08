@@ -745,16 +745,16 @@ class TeacherController extends BaseController
             return $item;
         });
 
-        foreach ($dataExport as &$item) {
-            $input = [];
-            $input["レッスン日"] = $this->convertShijis($item['lesson_date']) .
-                $input["レッスン時間"] = $this->convertShijis($item['lesson_starttime']) .
-                $input["コース名"] = $this->convertShijis($item['course_name']) .
-                $input["レッスン名"] = $this->convertShijis($item['lesson_name']) .
-                $input["テキスト名"] = $this->convertShijis($item['lesson_text_name']) .
-                $input["学習者番号"] = $this->convertShijis($item['student_id']) .
-                $input["学習者名"] = $this->convertShijis($item['student_name']) .
-                fputcsv($file, $item);
+        $input = [];
+        foreach ($dataExport as $item) {
+            $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
+            $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
+            $input['course_name'] = $this->convertShijis($item['course_name']);
+            $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
+            $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);
+            $input['student_id'] = $this->convertShijis($item['student_id']);
+            $input['student_name'] = $this->convertShijis($item['student_name']);
+            fputcsv($file, $input);
         }
 
         return Response::download(public_path() . '/csv_file/users/' . $fileName, $fileName, $header);

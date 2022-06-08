@@ -245,14 +245,14 @@ class InquiryController extends BaseController
 
         foreach ($inquiryList as $inquiry) {
             $input = [];
-            $input["問合せ番号"] = $inquiry['inquiry_id'];
-            $input["日時"] = $inquiry['inquiry_date'];
-            $input["問い合わせ件名"] = $inquiry['inquiry_subject'];
-            $input["学習者番号"] = $inquiry['student_id'];
-            $input["名前"] = $inquiry['student_name'];
-            $input["メールアドレス"] = $inquiry['j_student_email'];
-            $input["対応状況"] = $inquiry['inquiry_flag'];
-            $input["問い合わせ内容"] = $inquiry['inquiry_body'];
+            $input["問合せ番号"] = $this->convertShijis($inquiry['inquiry_id']);
+            $input["日時"] = $this->convertShijis($inquiry['inquiry_date']);
+            $input["問い合わせ件名"] = $this->convertShijis($inquiry['inquiry_subject']);
+            $input["学習者番号"] = $this->convertShijis($inquiry['student_id']);
+            $input["名前"] = $this->convertShijis($inquiry['student_name']);
+            $input["メールアドレス"] = $this->convertShijis($inquiry['j_student_email']);
+            $input["対応状況"] = $this->convertShijis($inquiry['inquiry_flag']);
+            $input["問い合わせ内容"] = $this->convertShijis($inquiry['inquiry_body']);
 
             fputcsv($file, $input);
         }

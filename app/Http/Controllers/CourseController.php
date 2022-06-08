@@ -19,6 +19,7 @@ use App\Models\CourseTag;
 use App\Models\CourseTest;
 use App\Models\CourseVideo;
 use App\Models\Lesson;
+use App\Models\LessonSchedule;
 use App\Models\PointSubscriptionHistory;
 use App\Models\Tag;
 use App\Models\Test;
@@ -94,6 +95,41 @@ class CourseController extends BaseController
             'pageLimit' => $pageLimit,
             'courseList' => $coureList,
         ]);
+    }
+
+    public function destroy($id) {
+        $course = Course::where('course_id', $id)->first();
+        if ($course == null) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::OK);
+        }
+
+        if (CourseLesson::where('course_id', $id)->exists() ||
+            PointSubscriptionHistory::where('course_id', $id)->exists() ||
+            LessonSchedule::where('course_id', $id)->exists())
+            return response()->json([
+                'status' => 'NG',
+                'message' => 'コースが既に使用されているため、削除できません。',
+            ], StatusCode::OK);
+
+
+
+        try {
+            $course = Course::where('course_id', $id)->delete();
+
+        } catch (ModelNotFoundException $ex) {
+            return response()->json([
+                'status' => 'NG',
+                'data' => [],
+            ], StatusCode::NOT_FOUND);
+        }
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'コース削除が完了しました。',
+            'data' => [],
+        ], StatusCode::OK);
+
     }
 
 

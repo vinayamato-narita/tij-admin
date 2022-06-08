@@ -89,6 +89,13 @@
                                                                                         class="fa fa-info mr-2"></i>情報</a>
                                                                         @endif
                                                                     </li>
+                                                                    <li>
+                                                                        <delete-item
+                                                                                :delete-action="{{ json_encode(route('course.destroy',  $course->course_id)) }}"
+                                                                                :message-confirm="{{ json_encode('このコースを削除しますか？') }}"
+                                                                        >
+                                                                        </delete-item>
+                                                                    </li>
 
                                                                 </ul>
                                                             </div>

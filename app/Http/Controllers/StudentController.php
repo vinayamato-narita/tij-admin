@@ -85,7 +85,8 @@ class StudentController extends BaseController
                 $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
             ->join('lesson_history', function($join) {
-                $join->on('lesson_schedule.lesson_schedule_id', '=', 'lesson_history.lesson_schedule_id');;
+                $join->on('student_point_history.lesson_schedule_id', '=', 'lesson_history.lesson_schedule_id')
+                ->on('student_point_history.student_id', '=', 'lesson_history.student_id');
             })
             ->where(function($query) {
                 $query->orWhere('lesson_history.teacher_rating', '<>', 0)
@@ -97,7 +98,8 @@ class StudentController extends BaseController
                     ->orWhere('lesson_history.comment_from_teacher_to_office', '<>', "")
                     ->orWhere('lesson_history.note_from_student_to_teacher', '<>', "");
             })
-            ->where('student_point_history.student_id', $id);
+            ->where('student_point_history.student_id', $id)
+            ->groupBy('lesson_history_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -146,8 +148,10 @@ class StudentController extends BaseController
             if ($request['sort'] == "lesson_time") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderByRaw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) ASC') : $queryBuilder->orderByRaw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) DESC');
             }
+        }else {
+            $queryBuilder->orderBy('lesson_time', 'desc');
         }
-        $commentList = $queryBuilder->sortable(['update_date' => 'desc'])->paginate($pageLimit);
+        $commentList = $queryBuilder->paginate($pageLimit);
 
         return view('student.comment', [
             'breadcrumbs' => $breadcrumbs,

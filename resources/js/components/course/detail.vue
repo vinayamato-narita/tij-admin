@@ -486,7 +486,8 @@
                                     <ol style="margin-left: -30px;list-style-type: none;">
                                         <li v-for="campaign in this.course.campaigns">
                                             <div class="row" style="margin: 5px 0px; padding: 5px 10px; border-bottom: 1px ridge;">
-                                                <div class="col-md-10 wrap-long-text"> {{ campaign.campaign_start_time | formatDateTime}} - {{ campaign.campaign_end_time | formatDateTime}}</div>
+                                                <div class="col-md-2 wrap-long-text"> {{ campaign.price | formatMoney}}</div>
+                                                <div class="col-md-8 wrap-long-text"> {{ campaign.campaign_start_time | formatDateTime}} - {{ campaign.campaign_end_time | formatDateTime}}</div>
                                                 <div class="col-md-2">
                                                     <DeleteItem
                                                             :delete-action="getUriCampaignDelete(course.course_id , campaign.course_campaign_id)"

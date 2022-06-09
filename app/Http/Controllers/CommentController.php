@@ -108,7 +108,7 @@ class CommentController extends BaseController
         }else {
             $queryBuilder->orderBy('lesson_time', 'desc');
         }
-        $commentList = $queryBuilder->paginate($pageLimit);
+        $commentList = $queryBuilder->sortable(['lesson_time' => 'desc'])->paginate($pageLimit);
 
         return view('comment.index', [
             'breadcrumbs' => $breadcrumbs,

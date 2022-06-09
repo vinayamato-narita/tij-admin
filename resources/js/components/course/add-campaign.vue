@@ -191,8 +191,8 @@
                     return axios
                         .post(that.existCampaignDatetime, {
                             _token: Laravel.csrfToken,
-                            startDate: that.campaign.startDate,
-                            endDate: that.campaign.endDate,
+                            startDate:  moment(that.campaign.startDate).format('YYYY-MM-DD HH:mm:ss'),
+                            endDate:  moment(that.campaign.endDate).format('YYYY-MM-DD HH:mm:ss'),
                             type: args[0],
                         })
                         .then(function (response) {

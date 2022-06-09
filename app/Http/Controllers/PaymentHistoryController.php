@@ -182,8 +182,7 @@ class PaymentHistoryController extends BaseController
             $this->convertShijis("売上"),
             $this->convertShijis("消費税"),
             $this->convertShijis("支払方法"),
-            $this->convertShijis("入金日"),
-            $this->convertShijis("支払期限")
+            $this->convertShijis("入金日")
         ];
 
 
@@ -202,14 +201,15 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.begin_date as begin_date',
             'point_subscription_history.point_expire_date as point_expire_date',
             'point_subscription_history.point_subscription_history_id as id',
+            'point_subscription_history.item_name as item_name',
             'point_subscription_history.course_code as course_code',
             'student.student_name as j_student_name',
-            DB::raw("(CASE WHEN student.is_lms_user = 1 THEN '' ELSE student.company_name END) AS j_company_name"),
+            'student.company_name as j_company_name',
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
             'point_subscription_history.payment_way as payment_way',
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term'),
+            DB::raw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") AS j_receive_payment_date')
+
         )
         ->leftJoin('order', function($join) {
             $join->on('point_subscription_history.order_id', '=', 'order.order_id');
@@ -290,7 +290,6 @@ class PaymentHistoryController extends BaseController
             $input['消費税'] = $this->convertShijis($item['tax']);
             $input['支払方法'] = $this->convertShijis($item['payment_way']);
             $input['入金日'] = $this->convertShijis($item['j_receive_payment_date']);
-            $input['支払期限'] = $this->convertShijis($item['j_payment_term']);
             fputcsv($file, $input);
         }
 

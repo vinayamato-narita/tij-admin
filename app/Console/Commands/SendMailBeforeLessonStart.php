@@ -85,8 +85,13 @@ class SendMailBeforeLessonStart extends Command
             'course.course_name',
             'teacher.teacher_name',
             'student.student_id',
-        )->join('student_point_history', function($join) {
+        )
+        ->join('student_point_history', function($join) {
             $join->on('lesson_schedule.lesson_schedule_id', '=', 'student_point_history.lesson_schedule_id');
+        })
+        ->join('point_subscription_history', function($join) {
+            $join->on('student_point_history.point_subscription_id', '=', 'point_subscription_history.point_subscription_history_id')
+                ->where('point_subscription_history.payment_status', 1);
         })
         ->join('teacher', function($join) {
             $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');

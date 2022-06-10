@@ -486,7 +486,7 @@ class TeacherController extends BaseController
         $lessonList = Lesson::select("lesson_id", "lesson_name")->get()->toArray();
 
         foreach ($lessonList as $lesson) {
-            $header[] = $this->convertShijis($this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name']));
+            $header[] = $this->convertShijis($lesson['lesson_id'] . ":" . $lesson['lesson_name']);
         }
 
         $queryBuilder = new Teacher();
@@ -534,9 +534,9 @@ class TeacherController extends BaseController
             $input["動画URL"] = $this->convertShijis($teacher['movie_savepath']);
             foreach ($lessionIds as $lessionId) {
                 if (array_key_exists($teacher['teacher_id'], $teacherLessonList) && array_key_exists($lessionId, $teacherLessonList[$teacher['teacher_id']])) {
-                    $input[$this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name'])] = "1";
+                    $input[$lesson['lesson_id'] . ":" . $lesson['lesson_name']] = 1;
                 } else {
-                    $input[$this->convert_text($lesson['lesson_id'] . ":" . $lesson['lesson_name'])] = "0";
+                    $input[$lesson['lesson_id'] . ":" . $lesson['lesson_name']] = 0;
                 }
             }
             $dataExport[] = $input;

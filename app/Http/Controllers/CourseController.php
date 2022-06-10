@@ -495,7 +495,7 @@ class CourseController extends BaseController
             return $query->whereBetween('campaign_start_time', [$startDate, $endDate])
                 ->orWhereBetween('campaign_end_time', [$startDate, $endDate])
                 ->orWhere(function ($query) use ($startDate, $endDate) {
-                    return $query->whereDate('campaign_start_time', '<=', $startDate)->whereDate('campaign_end_time', '>=', $endDate);
+                    return $query->where('campaign_start_time', '<=', $startDate)->where('campaign_end_time', '>=', $endDate);
                 });
         })->exists();
 
@@ -530,8 +530,8 @@ class CourseController extends BaseController
         $campaign = new CourseCampaign();
         $campaign->course_id = $courseId;
         $campaign->price = $request->price;
-        $campaign->campaign_start_time = Carbon::parse($request->startDate);
-        $campaign->campaign_end_time = Carbon::parse($request->endDate);
+        $campaign->campaign_start_time = Carbon::parse($request->startDate)->format('Y-m-d H:i:00');
+        $campaign->campaign_end_time = Carbon::parse($request->endDate)->format('Y-m-d H:i:59');
         $ret = $campaign->save();
         if ($ret) {
             return response()->json([

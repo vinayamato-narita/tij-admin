@@ -62,9 +62,13 @@ class CourseGroupUserController extends BaseController
                 $errorMessage = '拡張子が異なります。「xlsx」ファイルを指定してください。';
             }
 
-            $data = Excel::toArray(new CourseUsersImport, $request->file);
-            $dataCheck = $this->checkHeaderImport($data[0][0]);
-            $data = $this->readDataImport($data[0]);
+            $data = [];
+            $dataCheck = true;
+            if (empty($errorMessage)) {
+                $data = Excel::toArray(new CourseUsersImport, $request->file);
+                $dataCheck = $this->checkHeaderImport($data[0][0]);
+                $data = $this->readDataImport($data[0]);
+            }
 
             if (!$dataCheck) {
                 $errorMessage = 'ファイルのフォーマットが異なります。正しいフォーマットファイルをダウンロードして、読込用ファイルを作成してください。';

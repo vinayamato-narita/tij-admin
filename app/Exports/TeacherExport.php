@@ -98,7 +98,7 @@ class TeacherExport implements FromCollection, WithHeadings
         $lessonList = Lesson::select("lesson_id", "lesson_name")->get()->toArray();
 
         foreach ($lessonList as $lesson) {
-            $header[] = $this->convert_text($lesson['lesson_id'].":".$lesson['lesson_name']);
+            $header[] = $lesson['lesson_id'].":".$lesson['lesson_name'];
         }
 
         foreach ($header as $item) {

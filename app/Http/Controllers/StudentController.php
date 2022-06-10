@@ -1372,7 +1372,6 @@ class StudentController extends BaseController
                 $query->where('student_id', '!=', $request["id"]);
             }
             $query->where(['student_email' => $request["value"]]);
-            $query->where(['is_tmp_entry' => StudentEntryTypeEnum::USING]);
         })->exists();
 
         return response()->json([

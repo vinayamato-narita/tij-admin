@@ -258,16 +258,16 @@ class LessonStatusController extends BaseController
             $row['レッスン日'] = $this->convertShijis($item->lesson_date);
             $row['レッスン時間'] = $this->convertShijis($item->lesson_time);
             $row['レッスン予約時間'] = $this->convertShijis($item->student_book_time);
-            $row['レッスン名'] = $this->convertShijis($this->convert_text($item->lesson_name));
-            $row['テキスト名'] = $this->convertShijis($this->convert_text($item->lesson_text_name));
-            $row['講師名'] = $this->convertShijis($this->convert_text($item->teacher_name));
+            $row['レッスン名'] = $this->convertShijis($item->lesson_name);
+            $row['テキスト名'] = $this->convertShijis($item->lesson_text_name);
+            $row['講師名'] = $this->convertShijis($item->teacher_name);
             $row['学習者番号'] = $this->convertShijis($item->student_id);
-            $row['学習者ニックネーム'] = $this->convertShijis($this->convert_text($item->student_nickname));
-            $row['学習者スカイプ名'] = $this->convertShijis($this->convert_text($item->student_skype_name));
+            $row['学習者ニックネーム'] = $this->convertShijis($item->student_nickname);
+            $row['学習者スカイプ名'] = $this->convertShijis($item->student_skype_name);
             $row['評価（学習者→講師）'] = $this->convertShijis($item->teacher_rating);
             $row['評価（講師→学習者）'] = $this->convertShijis($item->student_rating);
-            $row['コメント（学習者→講師）'] = $this->convertShijis($this->convert_text($item->comment_from_student_to_teacher));
-            $row['コメント（講師→学習者）'] = $this->convertShijis($this->convert_text($item->comment_from_teacher_to_student));
+            $row['コメント（学習者→講師）'] = $this->convertShijis($item->comment_from_student_to_teacher);
+            $row['コメント（講師→学習者）'] = $this->convertShijis($item->comment_from_teacher_to_student);
 
             fputcsv($file, array($row['レッスン日'],$row['レッスン時間'],$row['レッスン予約時間'],$row['レッスン名'],$row['テキスト名'],$row['講師名'],$row['学習者番号'],$row['学習者ニックネーム'],$row['学習者スカイプ名'],$row['評価（学習者→講師）'],$row['評価（講師→学習者）'],$row['コメント（学習者→講師）'],$row['コメント（講師→学習者）']));
         }

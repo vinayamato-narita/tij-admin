@@ -770,7 +770,7 @@ export default {
                     .post(that.urlCheckEmail, {
                         _token: Laravel.csrfToken,
                         value: value,
-                        id: that.studentInfoEx.id
+                        id: that.studentInfoEx.student_id
                     })
                     .then(function (response) {
                         return {

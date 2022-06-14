@@ -13,7 +13,7 @@
 
         <div class="input-group-btn">
             <div class="btn-group" role="group">
-                <div class="dropdown dropdown-lg">
+                <div class="dropdown dropdown-lg" ref="input-group">
                     <button type="button" class="btn btn-sm dropdown-toggle btn-drop-detail" data-toggle="dropdown" aria-expanded="false">
                         <span class="caret"></span>
                     </button>
@@ -60,6 +60,7 @@
                                         :format="'YYYY/MM/DD'"
                                         v-model="dataQueryEx.create_date"
                                         type="date"
+                                        v-on:change="onchangeDP"
                                     ></date-picker>
                                 </div>
                             </div> 
@@ -82,13 +83,18 @@
         props: ["url", "pageLimit", "dataQuery"],
         mounted() {},
         data() {
-        return {
-            dataQueryEx: {
-                first_lesson_date: new Date(this.dataQuery.first_lesson_date ?? ""),
-                check_company_code: this.dataQuery.check_company_code
-            },
-            check_company_code: true
-        };
-    },
+            return {
+                dataQueryEx: {
+                    first_lesson_date: new Date(this.dataQuery.first_lesson_date ?? ""),
+                    check_company_code: this.dataQuery.check_company_code
+                },
+                check_company_code: true
+            };
+        },
+        methods: {
+            onchangeDP() {
+                this.$refs['input-group'].classList.value = this.$refs['input-group'].classList.value + 'show';
+            }
+        }
     };
 </script>

@@ -14,7 +14,7 @@
 
             <div class="input-group-btn">
                 <div class="btn-group" role="group">
-                    <div class="dropdown dropdown-lg">
+                    <div class="dropdown dropdown-lg" ref="input-group">
                         <button type="button" class="btn btn-sm dropdown-toggle btn-drop-detail" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                         </button>

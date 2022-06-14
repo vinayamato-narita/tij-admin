@@ -40,6 +40,8 @@ use App\Enums\FileTypeEnum;
 use App\Models\File;
 use Illuminate\Support\Facades\Log;
 use App\Models\LessonSchedule;
+use App\Enums\CourseTypeEnum;
+
 class TeacherController extends BaseController
 {
     /**
@@ -670,6 +672,7 @@ class TeacherController extends BaseController
         $header = [
             $this->convertShijis("レッスン日"),
             $this->convertShijis("レッスン時間"),
+            $this->convertShijis("コースタイプ"),
             $this->convertShijis("コース名"),
             $this->convertShijis("レッスン名"),
             $this->convertShijis("テキスト名"),
@@ -690,6 +693,7 @@ class TeacherController extends BaseController
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
+            'course.course_type',
             'lesson.lesson_name',
             'lesson_text.lesson_text_name',
             'lesson_history.student_id',
@@ -742,6 +746,7 @@ class TeacherController extends BaseController
         $dataExport = $queryBuilder->get()->map(function ($item, $key) {
             $item['lesson_date'] = DateTimeComponent::getDate($item['lesson_date']);
             $item['lesson_starttime'] = DateTimeComponent::getStartEndTime($item['lesson_starttime'], $item['lesson_endtime']);
+            $item['course_type'] = $item['course_type'] == CourseTypeEnum:: REGULAR_COURSE ? "プライベート" : "グループ";
             return $item;
         });
 
@@ -749,6 +754,7 @@ class TeacherController extends BaseController
         foreach ($dataExport as $item) {
             $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
             $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
+            $input['course_type'] = $this->convertShijis($item['course_type']);
             $input['course_name'] = $this->convertShijis($item['course_name']);
             $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
             $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);

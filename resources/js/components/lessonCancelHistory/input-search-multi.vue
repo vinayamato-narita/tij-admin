@@ -14,7 +14,7 @@
 
             <div class="input-group-btn">
                 <div class="btn-group" role="group">
-                    <div class="dropdown dropdown-lg">
+                    <div class="dropdown dropdown-lg" ref="input-group">
                         <button type="button" class="btn btn-sm dropdown-toggle btn-drop-detail" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
                         </button>
@@ -30,6 +30,7 @@
                                                 :format="'YYYY/MM/DD'"
                                                 style="width: 180px !important"
                                                 type="date"
+                                                v-on:change="onchangeDP"
                                         ></date-picker>
 
                                         ～
@@ -40,6 +41,7 @@
                                                 :format="'YYYY/MM/DD'"
                                                 style="width: 180px !important"
                                                 type="date"
+                                                v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -54,6 +56,7 @@
                                                 style="width: 180px !important"
                                                 type="date"
                                                 :value="dataQuery.lessonDateStart"
+                                                v-on:change="onchangeDP"
                                         ></date-picker>
 
                                         ～
@@ -64,6 +67,7 @@
                                                 :format="'YYYY/MM/DD'"
                                                 style="width: 180px !important"
                                                 type="date"
+                                                v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -131,6 +135,9 @@
                 else
                     $('#popup-multi').hide();
 
+            },
+            onchangeDP() {
+                this.$refs['input-group'].classList.value = this.$refs['input-group'].classList.value + 'show';
             }
         }
     };

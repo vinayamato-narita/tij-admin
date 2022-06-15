@@ -12,7 +12,7 @@
         </form>
         <div class="input-group-btn">
             <div class="btn-group" role="group">
-                <div class="dropdown dropdown-lg">
+                <div class="dropdown dropdown-lg" ref="input-group">
                     <button type="button" class="btn btn-sm dropdown-toggle btn-drop-detail" data-toggle="dropdown" aria-expanded="false">
                         <span class="caret"></span>
                     </button>
@@ -30,6 +30,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.payment_date_start"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                     <div class="col-md-1">
@@ -41,6 +42,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.payment_date_end"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -55,6 +57,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.begin_date_start"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                     <div class="col-md-1">
@@ -66,6 +69,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.begin_date_end"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -80,6 +84,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.point_expire_date_start"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                     <div class="col-md-1">
@@ -91,6 +96,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.point_expire_date_end"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -161,16 +167,21 @@
             
         },
         data() {
-        return {
-            dataQueryEx: {
-                payment_date_start: new Date(this.dataQuery.payment_date_start ?? ""),
-                payment_date_end: new Date(this.dataQuery.payment_date_end ?? ""),
-                begin_date_start: new Date(this.dataQuery.begin_date_start ?? ""),
-                begin_date_end: new Date(this.dataQuery.begin_date_end ?? ""),
-                point_expire_date_start: new Date(this.dataQuery.point_expire_date_start ?? ""),
-                point_expire_date_end: new Date(this.dataQuery.point_expire_date_end ?? ""),
-            },
-        };
-    },
+            return {
+                dataQueryEx: {
+                    payment_date_start: new Date(this.dataQuery.payment_date_start ?? ""),
+                    payment_date_end: new Date(this.dataQuery.payment_date_end ?? ""),
+                    begin_date_start: new Date(this.dataQuery.begin_date_start ?? ""),
+                    begin_date_end: new Date(this.dataQuery.begin_date_end ?? ""),
+                    point_expire_date_start: new Date(this.dataQuery.point_expire_date_start ?? ""),
+                    point_expire_date_end: new Date(this.dataQuery.point_expire_date_end ?? ""),
+                },
+            };
+        },
+        methods: {
+            onchangeDP() {
+                this.$refs['input-group'].classList.value = this.$refs['input-group'].classList.value + 'show';
+            }
+        }
     };
 </script>

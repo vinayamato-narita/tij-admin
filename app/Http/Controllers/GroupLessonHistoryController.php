@@ -88,48 +88,40 @@ class GroupLessonHistoryController extends BaseController
             return;
         }
         $request = Session::get('exportGroupLesson');
-        $fileName = "groupLesson".date("Y-m-d").".csv";
-
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
+        $fileName = "group_lesson".date("Y-m-d").".csv";
 
         $header = [
-            $this->convertShijis("レッスンコード"),
-            $this->convertShijis("レッスン日"),
-            $this->convertShijis("レッスン時間"),
-            $this->convertShijis("レッスン予約時間"),
-            $this->convertShijis("レッスン名"),
-            $this->convertShijis("テキスト名"),
-            $this->convertShijis("講師コード"),
-            $this->convertShijis("講師名"),
-            $this->convertShijis("講師メールアドレス")
+            "レッスンコード",
+            "レッスン日",
+            "レッスン時間",
+            "レッスン予約時間",
+            "レッスン名",
+            "テキスト名",
+            "講師コード",
+            "講師名",
+            "講師メールアドレス"
         ];
 
-        if (!file_exists(public_path() . '/csv_file/group_lesson')) {
-            mkdir(public_path() . '/csv_file/group_lesson', 0777, true);
+        if (!file_exists(public_path() . '/csv_file/users')) {
+            mkdir(public_path() . '/csv_file/users', 0777, true);
         }
-        $localPath = public_path() . '/csv_file/group_lesson/' . $fileName;
-        $file = fopen($localPath, 'w');
-        fputcsv($file, $header);
+        $localPath = public_path() . '/csv_file/users/' . $fileName;
 
         $queryBuilder = LessonSchedule::select('lesson.lesson_id', 'lesson_schedule.lesson_date', 'lesson_schedule.lesson_starttime', 'lesson_schedule.lesson_endtime', 'lesson.lesson_name', 'lesson_text.lesson_text_name', 'teacher.teacher_id', 'teacher.teacher_name', 'teacher.teacher_email')
         ->leftJoin('teacher', function($join) {
             $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
         })
-        ->leftJoin('course', function($join) {
-            $join->on('lesson_schedule.course_id', '=', 'course.course_id');
+        ->join('course', function($join) {
+            $join->on('lesson_schedule.course_id', '=', 'course.course_id')
+            ->where('course.course_type', CourseTypeEnum::GROUP_COURSE);
         })
         ->leftJoin('lesson', function($join) {
             $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
         })
         ->leftJoin('lesson_text', function($join) {
             $join->on('lesson_schedule.lesson_text_id', '=', 'lesson_text.lesson_text_id');
-        });
+        })
+        ->where('lesson_endtime' , '<', Carbon::now());
 
         if (!empty($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -153,28 +145,16 @@ class GroupLessonHistoryController extends BaseController
             }
         }
 
-        $dataExport = $queryBuilder->whereHas('course', function ($q) {
-            return $q->where('course_type', CourseTypeEnum::GROUP_COURSE);
-        })->where('lesson_endtime' , '<', Carbon::now())->get()->toArray();
+        $dataExport = $queryBuilder->get()->map(function($item, $key) {
+            $item['lesson_date'] = isset($item['lesson_starttime']) ? date('Y-m-d', strtotime($item['lesson_starttime'])) : "";
+            $item['lesson_starttime'] = isset($item['lesson_starttime']) ? date('H:i:s', strtotime($item['lesson_starttime'])) : "";
+            $item['lesson_endtime'] = isset($item['lesson_endtime']) ? date('H:i:s', strtotime($item['lesson_endtime'])) : "";
+            return $item;
+        })->toArray();
 
-        $input = [];
-        foreach($dataExport as $item) {
-            $input['lesson_id'] = $this->convertShijis($item['lesson_id']);
-            $lessonDate = isset($item['lesson_starttime']) ? date('Y-m-d', strtotime($item['lesson_starttime'])) : "";
-            $input['lesson_date'] = $this->convertShijis($lessonDate);
-            $lessonStartTime = isset($item['lesson_starttime']) ? date('H:i:s', strtotime($item['lesson_starttime'])) : "";
-            $input['lesson_starttime'] = $this->convertShijis($lessonStartTime);
-            $lessonEndTime = isset($item['lesson_endtime']) ? date('H:i:s', strtotime($item['lesson_endtime'])) : "";
-            $input['lesson_endtime'] = $this->convertShijis($lessonEndTime);
-            $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
-            $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);
-            $input['teacher_id'] = $this->convertShijis($item['teacher_id']);
-            $input['teacher_name'] = $this->convertShijis($item['teacher_name']);
-            $input['teacher_email'] = $this->convertShijis($item['teacher_email']);
+        $this->writecsv($dataExport, $header, $fileName, $localPath);
 
-            fputcsv($file, $input);
-        }
-        return Response::download(public_path() . '/csv_file/group_lesson/' . $fileName, $fileName, $header);
+        return Response::download($localPath, $fileName);
     }
 
     public function studentAttendance(Request $request, $id)

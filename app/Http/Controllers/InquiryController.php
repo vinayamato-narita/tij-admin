@@ -193,6 +193,7 @@ class InquiryController extends BaseController
         //
     }
 
+
     public function exportInquiry($searchInput = null)
     {
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;

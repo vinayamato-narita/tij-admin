@@ -103,8 +103,6 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 学習者登録情報ページURL：#STUDENT_SETTING_URL#
 Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 
-
-
 【レッスン予約時】
 【レッスン予約後】
 【レッスンキャンセル時】

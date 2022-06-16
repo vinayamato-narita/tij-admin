@@ -15,4 +15,5 @@ final class RemindMailTimmingMinutesEnum extends Enum
     const OptionTwo = 60;
     const OptionThree = 90;
     const OptionFour = 120;
+    const OptionFive = 60* 24;
 }

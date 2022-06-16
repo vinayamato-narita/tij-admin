@@ -39,7 +39,7 @@
                                             </label>
                                             <div class="col-md-4 text-md-left p-2">
 
-                                                <select name="timmingMinutes" style="width: 100px" class="form-control valid" id="timmingMinutes" v-model="timmingMinutes" aria-invalid="false">
+                                                <select name="timmingMinutes" disabled style="width: 100px" class="form-control valid" id="timmingMinutes" v-model="timmingMinutes" aria-invalid="false">
                                                     <option v-for="tm in this.$attrs['enum']" :value="tm" :selected="(tm == timmingMinutes) ? true : false">
                                                         {{tm}}
                                                     </option>

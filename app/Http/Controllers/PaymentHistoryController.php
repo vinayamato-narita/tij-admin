@@ -281,7 +281,7 @@ class PaymentHistoryController extends BaseController
             $item['point_expire_date'] = DateTimeComponent::getDate($item['point_expire_date']);
             $item['amount'] = number_format($item['amount']);
             $item['tax'] = number_format($item['tax']);
-            $item['payment_way'] = PaymentWay::getDescription($item['payment_way']);
+            $item['payment_way'] = $item['payment_way'] == PaymentWay::CREDIT ? "-" : PaymentWay::getDescription($item['payment_way']);
 
         	return $item;
         });

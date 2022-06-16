@@ -124,12 +124,19 @@
                             </div> 
 
                             <div class="form-group">
-                                <label>商品名</label>
+                                <label>コースID</label>
                                 <div class="input text">
-                                    <input type="text" name="item_name" class="form-control input-sm" placeholder="商品名を入力してください" :value="dataQuery.item_name">
+                                    <input type="text" name="course_code" class="form-control input-sm" placeholder="コースIDを入力してください" :value="dataQuery.course_code">
                                 </div>
                             </div> 
 
+                            <div class="form-group">
+                                <label>コース名</label>
+                                <div class="input text">
+                                    <input type="text" name="item_name" class="form-control input-sm" placeholder="コース名を入力してください" :value="dataQuery.item_name">
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
                                 <label>支払方法</label>
                                 <div class="input text">

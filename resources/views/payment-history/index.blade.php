@@ -1,6 +1,7 @@
 @php
     use App\Components\SearchQueryComponent;
     use App\Enums\PaymentWay;
+    use App\Enums\PaymentStatus;
 @endphp
 
 @extends('layouts.default')
@@ -93,7 +94,7 @@
                                                         <td class="text-left">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-left">{{ number_format($payment->tax) }}</td>
                                                         <td class="text-left">{{ $payment->point_count }}</td>
-                                                        <td class="text-left">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
+                                                        <td class="text-left">{{ $payment->payment_status == PaymentStatus::PENDING ?  "-" : PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>
 
                                                         <td class="text-left">

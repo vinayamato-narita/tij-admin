@@ -21,6 +21,8 @@ use Response;
 use App\Enums\AdminRole;
 use Auth;
 use App\Enums\PaymentWay;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentWayEx;
 
 class PaymentHistoryController extends BaseController
 {
@@ -52,6 +54,7 @@ class PaymentHistoryController extends BaseController
         	'point_subscription_history.point_count as point_count',
         	'course.course_type',
         	'point_subscription_history.payment_way as payment_way',
+            'point_subscription_history.payment_status as payment_status',
         	DB::raw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") AS j_receive_payment_date'),
         )
         ->leftJoin('order', function($join) {
@@ -214,7 +217,8 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
             'point_subscription_history.payment_way as payment_way',
-            DB::raw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") AS j_receive_payment_date')
+            DB::raw('DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") AS j_receive_payment_date'),
+            'point_subscription_history.payment_status as payment_status'
 
         )
         ->leftJoin('order', function($join) {
@@ -281,7 +285,7 @@ class PaymentHistoryController extends BaseController
             $item['point_expire_date'] = DateTimeComponent::getDate($item['point_expire_date']);
             $item['amount'] = number_format($item['amount']);
             $item['tax'] = number_format($item['tax']);
-            $item['payment_way'] = PaymentWay::getDescription($item['payment_way']);
+            $item['payment_way'] = $item['payment_status'] == PaymentStatus::PENDING ? "-" : PaymentWay::getDescription($item['payment_way']);
 
         	return $item;
         });
@@ -329,7 +333,8 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.point_count as point_count',
             'point_subscription_history.payment_way as payment_way',
             DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(point_subscription_history.receive_payment_date, "%Y-%m-%d") ELSE "" END) AS j_receive_payment_date'),
-            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term')
+            DB::raw('(CASE WHEN point_subscription_history.payment_way = 2 THEN DATE_FORMAT(order.payment_term, "%Y-%m-%d") ELSE "" END) AS j_payment_term'),
+            'point_subscription_history.payment_status as payment_status'
         )
         ->leftJoin('order', function($join) {
             $join->on('point_subscription_history.order_id', '=', 'order.order_id');
@@ -341,7 +346,10 @@ class PaymentHistoryController extends BaseController
         ->where('point_subscription_history.point_subscription_history_id', $id)->firstOrFail();
 
         $paymentInfo->_token = csrf_token();
-        $paymentInfo->payment_ways = PaymentWay::asSelectArray();
+        if($paymentInfo->payment_status == PaymentStatus::PENDING) {
+            $paymentInfo->payment_way = PaymentWayEx::PENDING;
+        }
+        $paymentInfo->payment_ways = PaymentWayEx::asSelectArray();
 
         return view('payment-history.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -366,18 +374,20 @@ class PaymentHistoryController extends BaseController
                 'status' => 'NG',
             ], StatusCode::NOT_FOUND);
         }
-        $paid_status = 1;
-        if ($request->payment_way >= 2) {
-            $paid_status = $request->payment_way - 2;
+        $payment_status = 1;
+        if ($request->payment_way >= PaymentWayEx::PENDING) {
+            $payment_status = 0;
+        }else {
+            $paymentInfo->payment_way = $request->payment_way;
         }
-        $paymentInfo->payment_way = $request->payment_way;
-        $paymentInfo->paid_status = $paid_status;
+        
+        $paymentInfo->payment_status = $payment_status;
 
         $paymentInfo->save();
 
         DB::table('student_point_history')
             ->where('point_subscription_id', $request->id)
-            ->update(['paid_status' => $paid_status]);
+            ->update(['paid_status' => $payment_status]);
 
         return response()->json([
             'status' => 'OK',

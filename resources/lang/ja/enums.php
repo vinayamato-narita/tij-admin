@@ -6,6 +6,7 @@ use App\Enums\TestType;
 use App\Enums\AdminRole;
 use App\Enums\OptionUploadFile;
 use App\Enums\PaymentWay;
+use App\Enums\PaymentWayEx;
 return [
     InquiryFlag::class => [
         InquiryFlag::SUPPORTED => '対応済',
@@ -37,8 +38,14 @@ return [
         OptionUploadFile::CLOUD => 'クラウド',
     ],
     PaymentWay::class => [
-        PaymentWay::CREDIT => '-',
+        PaymentWay::CREDIT => 'C',
         PaymentWay::PAYPAL => 'P',
         PaymentWay::IMPORT => 'CSV',
+    ],
+    PaymentWayEx::class => [
+        PaymentWayEx::CREDIT => 'C',
+        PaymentWayEx::PAYPAL => 'P',
+        PaymentWayEx::IMPORT => 'CSV',
+        PaymentWayEx::PENDING => '-'
     ],
 ];

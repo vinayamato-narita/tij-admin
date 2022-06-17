@@ -193,6 +193,7 @@ class InquiryController extends BaseController
         //
     }
 
+
     public function exportInquiry($searchInput = null)
     {
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
@@ -201,31 +202,21 @@ class InquiryController extends BaseController
         }
         $fileName = "contact_".date("Y_m_d").".csv";
 
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
-
         $header = [
-            $this->convertShijis("問合せ番号"), 
-            $this->convertShijis("日時"), 
-            $this->convertShijis("問い合わせ件名"), 
-            $this->convertShijis("学習者番号"), 
-            $this->convertShijis("名前"), 
-            $this->convertShijis("メールアドレス"), 
-            $this->convertShijis("対応状況"), 
-            $this->convertShijis("問い合わせ内容")
+            "問合せ番号", 
+            "日時", 
+            "問い合わせ件名", 
+            "学習者番号", 
+            "名前", 
+            "メールアドレス", 
+            "対応状況", 
+            "問い合わせ内容"
         ];
 
         if (!file_exists(public_path().'/csv_file/users')) {
             mkdir(public_path().'/csv_file/users', 0777, true);
         }
         $localPath = public_path().'/csv_file/users/'.$fileName;
-        $file = fopen($localPath, 'w');
-        fputcsv($file, $header);
 
         $queryBuilder = AdminInquiry::leftJoin('student', 'student.student_id', '=', 'admin_inquiry.user_id')
         	->select('admin_inquiry.inquiry_id as inquiry_id', 'inquiry_date', 'inquiry_subject', 'admin_inquiry.user_id as student_id', 'student.student_name as student_name', DB::raw('ifnull(admin_inquiry.user_mail,student.student_email) as j_student_email'), 'inquiry_flag', 'inquiry_body');
@@ -241,23 +232,11 @@ class InquiryController extends BaseController
         $inquiryList = $queryBuilder->get()->map(function($item, $key) {
         	$item['inquiry_flag'] = InquiryFlag::getDescription($item['inquiry_flag']);
         	return $item;
-        });
+        })->toArray();
 
-        foreach ($inquiryList as $inquiry) {
-            $input = [];
-            $input["問合せ番号"] = $this->convertShijis($inquiry['inquiry_id']);
-            $input["日時"] = $this->convertShijis($inquiry['inquiry_date']);
-            $input["問い合わせ件名"] = $this->convertShijis($inquiry['inquiry_subject']);
-            $input["学習者番号"] = $this->convertShijis($inquiry['student_id']);
-            $input["名前"] = $this->convertShijis($inquiry['student_name']);
-            $input["メールアドレス"] = $this->convertShijis($inquiry['j_student_email']);
-            $input["対応状況"] = $this->convertShijis($inquiry['inquiry_flag']);
-            $input["問い合わせ内容"] = $this->convertShijis($inquiry['inquiry_body']);
+        $this->writecsv($inquiryList, $header, $fileName, $localPath);
 
-            fputcsv($file, $input);
-        }
-
-        return Response::download(public_path().'/csv_file/users/'.$fileName, $fileName, $header);
+        return Response::download($localPath, $fileName);
     }
 
 }

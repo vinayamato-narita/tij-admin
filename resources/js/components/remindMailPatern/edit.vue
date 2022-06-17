@@ -39,7 +39,7 @@
                                             </label>
                                             <div class="col-md-4 text-md-left p-2">
 
-                                                <select name="timmingMinutes" style="width: 100px" class="form-control valid" id="timmingMinutes" v-model="timmingMinutes" aria-invalid="false">
+                                                <select name="timmingMinutes" disabled style="width: 100px" class="form-control valid" id="timmingMinutes" v-model="timmingMinutes" aria-invalid="false">
                                                     <option v-for="tm in this.$attrs['enum']" :value="tm" :selected="(tm == timmingMinutes) ? true : false">
                                                         {{tm}}
                                                     </option>
@@ -81,14 +81,27 @@
                                                 <textarea rows="20" class="form-control" value=""  disabled>
 【無料会員登録時】
 【法人会員登録時】
-【パスワード変更時】
-本登録用URL:　#CONFIRM_URL#
-送信先学習者名:　#STUDENT_NAME#
-LPお問い合わせぺージURL：#LP_URL#
+学習者名:　#STUDENT_NAME#
 学習者パスワード：#STUDENT_PASSWORD#
+学習者マイページログインリンク：#STUDENT_MY_PAGE_URL#
+Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
+
+【パスワード変更時】
+学習者名:　#STUDENT_NAME#
+学習者ログインID:　#STUDENT_MAIL#
+学習者マイページログインリンク：#STUDENT_MY_PAGE_URL#
 管理者パスワード再発行ページURL：#ADMIN_CHANGEPASS_URL#
-学習者パスワード再発行ページURL：#STUDENT_CHANGEPASS_URL#
-講師パスワード再発行ページURL：#TEACHER_CHANGEPASS_URL#
+学習者パスワード再発行ページURL：#CHANGEPASS_URL#
+講師パスワード再発行ページURL：#CHANGEPASS_URL#
+
+【コース購入時】
+学習者名:　#STUDENT_NAME#
+コース名:　#COURSE_NAME#
+コース料金:　#COURSE_PRICE#　円
+受講回数：#COURSE_COUNT#
+支払方法：#COURSE_PAYMENT#
+学習者登録情報ページURL：#STUDENT_SETTING_URL#
+Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 
 【レッスン予約時】
 【レッスン予約後】
@@ -98,23 +111,24 @@ LPお問い合わせぺージURL：#LP_URL#
 講師ニックネーム:　#TEACHER_NICKNAME#
 学習者名:　#STUDENT_NAME#
 学習者ニックネーム:　#STUDENT_NICKNAME#
+コース名:　#COURSE_NAME#
+レッスン名:　#LESSON_NAME#
+テキスト名:　#LESSON_TEXT_NAME#
 レッスン開始日：#LESSON_DATE#
 レッスン開始時間：#LESSON_TIME#
 レッスン開始日（JST）：#LESSON_DATE_JST#
 レッスン開始時間（JST）：#LESSON_TIME_JST#
-レッスン名:　#LESSON_NAME#
-テキスト名:　#LESSON_TEXT_NAME#
 ZoomミーティングURL：#ZOOM_URL#
 学習者マイページログインリンク：#STUDENT_MY_PAGE_URL#
 学習者登録情報ページURL：#STUDENT_SETTING_URL#
 Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 
 【実力テスト提出時】
-実力テスト評価期限日（JST）：#TEST_LIMIT_DATE#
-実力テスト評価期限時（JST）：#TEST_LIMIT_TIME#
+実力テスト評価期限日：#TEST_LIMIT_DATE#
+実力テスト評価期限時：#TEST_LIMIT_TIME#
 講師マイページログインリンク：#TEACHER_MY_PAGE_URL#
 
-【GMO決済時】
+<!-- 【GMO決済時】
 オーダーID:　#ORDER_ID#
 コースID:　#COURSE_ID#
 コース名:　#COURSE_NAME#
@@ -124,7 +138,7 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 お支払い金額:　#COURSE_TOTAL#　円
 決済日時:　#ORDER_DATE#
 有効期限:#EXPIRE_DATE#
-受講回数：#COURSE_COUNT#
+受講回数：#COURSE_COUNT# -->
 
 【講師コメント登録メール】
 講師ニックネーム:　#TEACHER_NICKNAME#
@@ -143,20 +157,8 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 お問い合わせ内容：#INQUIRY_BODY#
 
                                                 </textarea>
-
-
-
                                             </div>
                                         </div>
-
-
-
-
-
-
-
-
-
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">

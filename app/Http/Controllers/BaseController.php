@@ -6,6 +6,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AdminUserRight;
 use Log;
+use Response;
 
 class BaseController extends Controller
 {
@@ -147,5 +148,27 @@ class BaseController extends Controller
 
     public function getUrlFileBase(){
         return config('env.AZURE_STORAGE_ENDPOINT') . '/' . config('env.AZURE_STORAGE_CONTAINER'). '/';
+    }
+
+    public function arr2csv($rows, $path) {
+        $fp = fopen($path, 'r+b');
+        foreach($rows as $fields) {
+            fputcsv($fp, $fields);
+        }
+        rewind($fp);
+        // Convert CRLF
+        $tmp = str_replace(PHP_EOL, "\r\n", stream_get_contents($fp));
+        fclose($fp);
+        // Convert row data from UTF-8 to Shift-JS
+        return mb_convert_encoding($tmp, 'SJIS', 'UTF-8');
+    }
+
+    public function writecsv($data, $header, $fileName, $path) {
+        // Prepend header
+        array_unshift($data, $header);
+        // Open file to write stream data
+        $f = fopen($path, 'w+');
+        fwrite($f, $this->arr2csv($data, $path));
+        fclose($f);
     }
 }

@@ -97,7 +97,7 @@
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="text-input"
-                                                >商品名</label
+                                                >コース名</label
                                             >
                                             <div class="col-md-6">
                                                 <input

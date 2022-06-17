@@ -1,6 +1,7 @@
 @php
     use App\Components\SearchQueryComponent;
     use App\Enums\PaymentWay;
+    use App\Enums\PaymentStatus;
 @endphp
 
 @extends('layouts.default')
@@ -61,7 +62,8 @@
                                                     <th class="text-left min-width-150">@sortablelink('payment_date', '受注日時')</th>
                                                     <th class="text-left min-width-150">@sortablelink('begin_date', '受講開始日')</th>
                                                     <th class="text-left min-width-150">@sortablelink('point_expire_date', '有効期限日')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('item_name', '商品名')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('course_code', 'コースID')</th>
+                                                    <th class="text-left min-width-150">@sortablelink('item_name', 'コース名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_student_name', '学習者名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('j_company_name', '法人名')</th>
                                                     <th class="text-left min-width-150">@sortablelink('amount', '売上')</th>
@@ -85,13 +87,14 @@
                                                                 {{ $payment->point_expire_date }}
                                                             @endif
                                                         </td>
+                                                        <td class="text-left">{{ $payment->course_code }}</td>
                                                         <td class="text-left">{{ $payment->item_name }}</td>
                                                         <td class="text-left">{{ $payment->j_student_name }}</td>
                                                         <td class="text-left">{{ $payment->j_company_name }}</td>
                                                         <td class="text-left">{{ number_format($payment->amount) }}</td>
                                                         <td class="text-left">{{ number_format($payment->tax) }}</td>
                                                         <td class="text-left">{{ $payment->point_count }}</td>
-                                                        <td class="text-left">{{ PaymentWay::getDescription($payment->payment_way) }}</td>
+                                                        <td class="text-left">{{ $payment->payment_status == PaymentStatus::PENDING ?  "-" : PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>
 
                                                         <td class="text-left">

@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                        <div class="form-group row hidden" v-if="linkZoomScheduleFlag && showZoomSetting">
                             <label
                                 class="col-md-3 col-form-label text-md-right"
                                 for="text-input"
@@ -174,7 +174,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                        <div class="form-group row hidden" v-if="linkZoomScheduleFlag && showZoomSetting">
                             <label
                                 class="col-md-3 col-form-label text-md-right"
                                 for="text-input"
@@ -216,7 +216,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                        <div class="form-group row hidden" v-if="linkZoomScheduleFlag && showZoomSetting">
                             <label
                                 class="col-md-3 col-form-label text-md-right"
                                 for="text-input"
@@ -258,7 +258,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row" v-if="linkZoomScheduleFlag && showZoomSetting">
+                        <div class="form-group row hidden" v-if="linkZoomScheduleFlag && showZoomSetting">
                             <label
                                 class="col-md-3 col-form-label text-md-right"
                                 for="autoRecording"

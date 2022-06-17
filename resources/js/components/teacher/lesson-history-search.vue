@@ -12,7 +12,7 @@
         </form>
         <div class="input-group-btn">
             <div class="btn-group" role="group">
-                <div class="dropdown dropdown-lg">
+                <div class="dropdown dropdown-lg" ref="input-group">
                     <button type="button" class="btn btn-sm dropdown-toggle btn-drop-detail" data-toggle="dropdown" aria-expanded="false">
                         <span class="caret"></span>
                     </button>
@@ -30,6 +30,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.lesson_date_start"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                     <div class="col-md-1">
@@ -41,6 +42,7 @@
                                             :format="'YYYY/MM/DD'"
                                             v-model="dataQueryEx.lesson_date_end"
                                             type="date"
+                                            v-on:change="onchangeDP"
                                         ></date-picker>
                                     </div>
                                 </div>
@@ -66,12 +68,23 @@
             
         },
         data() {
-        return {
-            dataQueryEx: {
-                lesson_date_start: new Date(this.dataQuery.lesson_date_start ?? ""),
-                lesson_date_end: new Date(this.dataQuery.lesson_date_end ?? ""),
+            return {
+                dataQueryEx: {
+                    lesson_date_start: new Date(this.dataQuery.lesson_date_start ?? ""),
+                    lesson_date_end: new Date(this.dataQuery.lesson_date_end ?? ""),
+                },
+            };
+        },
+        methods: {
+            hideShow() {
+                if (this.$refs['input-group'].classList.value.includes('show')) {
+                    this.$refs['input-group'].classList.value = 'input-group show';
+                }
+                event.stopPropagation();
             },
-        };
-    },
+            onchangeDP() {
+                this.$refs['input-group'].classList.value = this.$refs['input-group'].classList.value + 'show';
+            }
+        }
     };
 </script>

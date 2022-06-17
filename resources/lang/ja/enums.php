@@ -37,7 +37,7 @@ return [
         OptionUploadFile::CLOUD => 'クラウド',
     ],
     PaymentWay::class => [
-        PaymentWay::CREDIT => 'C',
+        PaymentWay::CREDIT => '-',
         PaymentWay::PAYPAL => 'P',
         PaymentWay::IMPORT => 'CSV',
     ],

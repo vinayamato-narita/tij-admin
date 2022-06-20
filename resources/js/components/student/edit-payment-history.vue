@@ -373,16 +373,16 @@ export default {
             },
             begin_date: new Date(this.paymentInfo.begin_date),
             point_expire_date: new Date(this.paymentInfo.point_expire_date),
-            startDate : new Date(),
-            endDate : new Date(this.paymentInfo.payment_date),
+            startDate : new Date("2022-05-30"),
+            endDate : new Date("2022-05-30 00:00:00"),
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],
     mounted() {
-        let startDate = new Date();
-        let endDate = new Date(this.paymentInfo.payment_date);
-        console.log(startDate)
-        console.log(endDate)
+        let startDate11 = new Date();
+        let endDate11 = new Date(this.paymentInfo.payment_date);
+        console.log(startDate11)
+        console.log(endDate11)
     },
     methods: {
         fomartDate(date) {

@@ -136,6 +136,24 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test 3</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_to" 
+                                                    id="lesson_date_to" 
+                                                    v-model="endDate"
+                                                >
+                                                </date-picker>
+                                            </div>
+                                        </div>
                                         <!-- end test -->
                                         <div class="form-group row">
                                             <label
@@ -360,8 +378,26 @@ export default {
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],
-    mounted() {},
+    mounted() {
+        let startDate = new Date();
+        let endDate = new Date(this.paymentInfo.payment_date);
+        console.log(startDate)
+        console.log(endDate)
+    },
     methods: {
+        fomartDate(date) {
+          let d = new Date(date);
+          let month = (d.getMonth() + 1).toString();
+          let day = d.getDate().toString();
+          let year = d.getFullYear();
+          if (month.length < 2) {
+            month = '0' + month;
+          }
+          if (day.length < 2) {
+            day = '0' + day;
+          }
+          return [year, month, day].join('-');
+        },
         disabledBeforeToday(date) {
             return date < new Date(new Date().setHours(0, 0, 0, 0));
         },

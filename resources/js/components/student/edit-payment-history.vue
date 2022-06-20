@@ -103,13 +103,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    :input-attr="{ name: 'payment_date'}"
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="payment_date" 
+                                                    id="payment_date" 
                                                     v-model="paymentInfoEx.payment_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
                                                 ></date-picker>
                                                 <div
                                                     class="input-group is-danger"

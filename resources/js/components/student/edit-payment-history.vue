@@ -92,7 +92,51 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <!-- test -->
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_from" 
+                                                    id="lesson_date_from" 
+                                                    v-model="startDate"
+                                                >
+                                                </date-picker>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test 2</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_to" 
+                                                    id="lesson_date_to" 
+                                                    v-model="endDate"
+                                                >
+                                                </date-picker>
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                    v-if="errors.has('lesson_date_to')"
+                                                >
+                                                    {{ errors.first("lesson_date_to") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end test -->
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -310,7 +354,9 @@ export default {
                 tax: this.paymentInfo.tax,
             },
             begin_date: new Date(this.paymentInfo.begin_date),
-            point_expire_date: new Date(this.paymentInfo.point_expire_date)
+            point_expire_date: new Date(this.paymentInfo.point_expire_date),
+            startDate : new Date(),
+            endDate : new Date(),
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],

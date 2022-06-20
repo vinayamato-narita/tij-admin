@@ -528,12 +528,25 @@ class CourseGroupUserController extends BaseController
         $insert = [];
         if ($request->isMethod('POST')) {
             $ext = $request->file->getClientOriginalExtension();
+            if ($ext !== "xlsx") {
+                $msg['error_list'] = "ファイルのフォーマットが異なります。";
+                return view('groupCourse.student_import', [
+                    'dataImport' => $result,
+                    'errorMessage' => $msg,
+                    'breadcrumbs' => $breadcrumbs,
+                ]);
+            }
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
             $emails = Student::pluck('student_email')->toArray();
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
             $dataImport = $this->readDataStudentImport($data[0]);      
             if ($ext !== "xlsx") {
                 $msg['error_list'] = "ファイルのフォーマットが異なります。";
+                return view('groupCourse.student_import', [
+                    'dataImport' => $result,
+                    'errorMessage' => $msg,
+                    'breadcrumbs' => $breadcrumbs,
+                ]);
             }
             if (!$dataCheck) {
                 $msg['error_list'] = "データに誤りがあります。";
@@ -542,6 +555,14 @@ class CourseGroupUserController extends BaseController
                 if (!empty($data) && count($data) > 0) {
                     if (count($dataImport) > 1001) {
                         $msg['error_list'] = "一回の操作で登録するユーザ数は、1000ユーザまでにしてください";
+                        if ($ext !== "xlsx") {
+                            $msg['error_list'] = "ファイルのフォーマットが異なります。";
+                            return view('groupCourse.student_import', [
+                                'dataImport' => $result,
+                                'errorMessage' => $msg,
+                                'breadcrumbs' => $breadcrumbs,
+                            ]);
+                        }
                     }
                     unset($dataImport[0],$dataImport[1]);
                     if (count($dataImport) == 0) {

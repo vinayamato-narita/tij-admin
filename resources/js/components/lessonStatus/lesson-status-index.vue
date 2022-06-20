@@ -22,7 +22,14 @@
                                         <div class="form-inline">
                                             <div class="input text">
                                                 <label for="lesson_date_from">レッスン日&nbsp;</label>
-                                                <date-picker :format="'YYYY/MM/DD'" type="date" readonly="readonly" name="lesson_date_from" id="lesson_date_from" v-model="startDate">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_from" 
+                                                    id="lesson_date_from" 
+                                                    v-model="startDate"
+                                                >
                                                 </date-picker>
                                             </div>
                                             <div class="form-group">

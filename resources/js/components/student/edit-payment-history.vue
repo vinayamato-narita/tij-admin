@@ -103,7 +103,7 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    name="payment_date"
+                                                    :input-attr="{ name: 'payment_date'}"
                                                     v-model="paymentInfoEx.payment_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"
@@ -131,7 +131,7 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    name="begin_date"
+                                                    :input-attr="{ name: 'begin_date'}"
                                                     v-model="paymentInfoEx.begin_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"
@@ -160,7 +160,7 @@
                                             <div class="col-md-6">
                                                 <date-picker
                                                     :disabled-date="disabledBeforeToday"
-                                                    name="point_expire_date"
+                                                    :input-attr="{ name: 'point_expire_date'}"
                                                     v-model="paymentInfoEx.point_expire_date"
                                                     :format="'YYYY/MM/DD'"
                                                     type="date"

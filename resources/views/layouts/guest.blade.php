@@ -31,7 +31,7 @@
         <meta name="msapplication-TileImage" content="{{ asset('assets/favicon/ms-icon-144x144.png')}}">
         <meta name="theme-color" content="#ffffff">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <script src="{{ asset('js/guestApp.js') }}" defer></script>
+       
 
         @yield('css')
         <script>
@@ -61,6 +61,7 @@
                 session()->forget('Message.flash');
             @endphp
         </div>
+        <script src="{{ asset('js/guestApp.js') }}" defer></script>
         <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
         <script src="{{ asset('js/coreui-utils.js') }}"></script>
         @yield('javascript')

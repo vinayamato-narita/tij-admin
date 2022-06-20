@@ -373,8 +373,8 @@ export default {
             },
             begin_date: new Date(this.paymentInfo.begin_date),
             point_expire_date: new Date(this.paymentInfo.point_expire_date),
-            startDate : new Date(this.paymentInfo.payment_date),
-            endDate : new Date("2022-05-30 23:59:59"),
+            startDate : new Date(String(this.paymentInfo.payment_date)),
+            endDate : new Date("2022-05-30 00:00:00"),
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],

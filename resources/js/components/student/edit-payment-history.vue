@@ -130,10 +130,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    :input-attr="{ name: 'begin_date'}"
-                                                    v-model="paymentInfoEx.begin_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="begin_date" 
+                                                    id="begin_date" 
+                                                    v-model="begin_date"
                                                     v-validate="
                                                         'required'
                                                     "
@@ -158,14 +160,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    :disabled-date="disabledBeforeToday"
-                                                    :input-attr="{ name: 'point_expire_date'}"
-                                                    v-model="paymentInfoEx.point_expire_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="point_expire_date" 
+                                                    id="point_expire_date" 
+                                                    v-model="point_expire_date"
                                                 ></date-picker>
                                                 <div
                                                     class="input-group is-danger"
@@ -309,6 +309,8 @@ export default {
                 amount: this.paymentInfo.amount,
                 tax: this.paymentInfo.tax,
             },
+            begin_date: new Date(this.paymentInfo.begin_date),
+            point_expire_date: new Date(this.paymentInfo.point_expire_date)
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],

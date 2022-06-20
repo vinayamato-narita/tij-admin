@@ -30,7 +30,7 @@ class PointSubscriptionHistory extends Authenticatable
             'point_subscription_history.student_id as student_id',
             'point_subscription_history.point_count as point_count',
             'point_subscription_history.management_number as management_number',
-            DB::raw('DATE_FORMAT(point_subscription_history.payment_date, "%Y-%m-%d") as payment_date'),
+            'point_subscription_history.payment_date as payment_date',
             'point_subscription_history.begin_date as begin_date',
             'point_subscription_history.point_expire_date as point_expire_date',
             'point_subscription_history.amount as amount',

@@ -41,10 +41,10 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('zoom_account_name', ' アカウント名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('api_key', ' APIキー')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('api_secret', ' API SECRET')</th>
-                                                    <th class="text-left min-width-150"></th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('zoom_account_name', ' アカウント名')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('api_key', ' APIキー')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('api_secret', ' API SECRET')</th>
+                                                    <th class="text-left min-width-150 white-space"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

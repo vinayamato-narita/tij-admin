@@ -30,16 +30,15 @@ class PointSubscriptionHistory extends Authenticatable
             'point_subscription_history.student_id as student_id',
             'point_subscription_history.point_count as point_count',
             'point_subscription_history.management_number as management_number',
-            'point_subscription_history.payment_date as payment_date',
-            'point_subscription_history.begin_date as begin_date',
-            'point_subscription_history.point_expire_date as point_expire_date',
+            DB::raw('DATE_FORMAT(point_subscription_history.payment_date, "%Y-%m-%d") as payment_date'),
+            DB::raw('DATE_FORMAT(point_subscription_history.begin_date, "%Y-%m-%d") as begin_date'),
+            DB::raw('DATE_FORMAT(point_subscription_history.point_expire_date, "%Y-%m-%d") as point_expire_date'),
             'point_subscription_history.amount as amount',
             'course.course_id as course_id',
             'course.course_name as course_name',
             'student.student_name as student_name',
             'student.is_lms_user as is_lms_user',
-            'student_point_history.start_date as start_date',
-            'lms_project_course_student.course_begin_month as course_begin_month',
+            DB::raw('DATE_FORMAT(student_point_history.start_date, "%Y-%m-%d") as start_date'),
             'point_subscription_history.tax as tax',
             'course.course_type',
             'point_subscription_history.payment_way as payment_way'
@@ -55,15 +54,6 @@ class PointSubscriptionHistory extends Authenticatable
             })
             ->leftJoin('student_point_history', function ($join) {
                 $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id');
-            })
-            ->leftJoin('lms_project_course_student', function ($join) {
-                $join->on('point_subscription_history.point_subscription_history_id', '=', 'lms_project_course_student.point_subscription_id');
-            })
-            ->leftJoin('lms_project', function ($join) {
-                $join->on('lms_project_course_student.project_id', '=', 'lms_project.project_id');
-            })
-            ->leftJoin('lms_company', function ($join) {
-                $join->on('lms_project.company_id', '=', 'lms_company.company_id');
             })
             ->where('point_subscription_history.point_subscription_history_id', $id)
             ->where('point_subscription_history.del_flag', 0)

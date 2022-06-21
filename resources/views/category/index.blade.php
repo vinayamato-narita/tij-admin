@@ -45,9 +45,9 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('order_num', ' 表示順')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('category_name', ' カテゴリ名')</th>
-                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('order_num', ' 表示順')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('category_name', ' カテゴリ名')</th>
+                                                    <th class="text-left min-width-120 white-space"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

@@ -41,10 +41,10 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('file_id', 'ID')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('file_code', 'メディアコード ')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('file_display_name', 'メディア名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('file_description', '説明')</th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('file_id', 'ID')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('file_code', 'メディアコード ')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('file_display_name', 'メディア名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('file_description', '説明')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

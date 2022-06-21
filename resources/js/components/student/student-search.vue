@@ -85,10 +85,8 @@
         data() {
             return {
                 dataQueryEx: {
-                    first_lesson_date: new Date(this.dataQuery.first_lesson_date ?? ""),
-                    check_company_code: this.dataQuery.check_company_code
+                    create_date: new Date(this.dataQuery.create_date ?? ""),
                 },
-                check_company_code: true
             };
         },
         methods: {

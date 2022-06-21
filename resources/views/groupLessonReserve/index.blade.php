@@ -38,22 +38,22 @@ use App\Components\SearchQueryComponent;
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-left min-width-150">@sortablelink('course_name',
+                                                        <th class="text-left min-width-150 white-space">@sortablelink('course_name',
                                                             ' コース名')</th>
-                                                        <th class="text-left min-width-150">@sortablelink('is_for_lms',
+                                                        <th class="text-left min-width-150 white-space">@sortablelink('is_for_lms',
                                                             ' 法人/個人')</th>
-                                                        <th class="text-left min-width-120">
+                                                        <th class="text-left min-width-120 white-space">
                                                             @sortablelink('min_reserve_count', ' 最小開催人数')</th>
-                                                        <th class="text-left min-width-120">
+                                                        <th class="text-left min-width-120 white-space">
                                                             @sortablelink('max_reserve_count', ' 最大申込人数')</th>
-                                                        <th class="text-left min-width-120">
+                                                        <th class="text-left min-width-120 white-space">
                                                             @sortablelink('point_subscription_histories_count', ' 申込人数')
                                                         </th>
-                                                        <th class="text-left min-width-120">@sortablelink('decide_date',
+                                                        <th class="text-left min-width-120 white-space">@sortablelink('decide_date',
                                                             ' 開催決定日時')</th>
-                                                        <th class="text-left min-width-120">
+                                                        <th class="text-left min-width-120 white-space">
                                                             @sortablelink('reserve_end_date', ' 申込期限')</th>
-                                                        <th class="text-left min-width-120">
+                                                        <th class="text-left min-width-120 white-space">
                                                             @sortablelink('group_lesson_status', ' ステータス')</th>
                                                         <th class="text-left min-width-120"></th>
                                                     </tr>

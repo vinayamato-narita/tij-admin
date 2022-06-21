@@ -35,9 +35,9 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('student_id', '学習者ID')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('student_name', '学習者名')</th>
-                                                    <th class="text-left min-width-150" style="width: 100px"></th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('student_id', '学習者ID')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('student_name', '学習者名')</th>
+                                                    <th class="text-left min-width-150 white-space" style="width: 100px"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

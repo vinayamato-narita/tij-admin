@@ -43,13 +43,13 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('id', '問合せ番号')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('inquiry_date', '日時')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student_id', '学習者番号')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('student_name', '名前')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('j_student_email', 'メールアドレス')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('inquiry_flag', '対応状況')</th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('id', '問合せ番号')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('inquiry_date', '日時')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('inquiry_subject', '問い合わせ件名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('student_id', '学習者番号')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('student_name', '名前')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('j_student_email', 'メールアドレス')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('inquiry_flag', '対応状況')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

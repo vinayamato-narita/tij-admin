@@ -40,9 +40,9 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('no_faq', ' 表示順')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('question', ' 質問・Q')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('faqCategory.faq_category_name', ' 中カテゴリ')</th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('no_faq', ' 表示順')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('question', ' 質問・Q')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('faqCategory.faq_category_name', ' 中カテゴリ')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>

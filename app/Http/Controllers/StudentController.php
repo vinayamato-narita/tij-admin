@@ -935,7 +935,9 @@ class StudentController extends BaseController
         $number_unpublished = $studentList->total() - $number_published;
 
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
-
+        if ($request['create_date'] != "") {
+            $request['create_date'] = date("Y-m-d", strtotime($request['create_date']));
+        }
         return view('student.index', [
             'breadcrumbs' => $breadcrumbs,
             'request' => $request,

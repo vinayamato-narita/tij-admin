@@ -550,6 +550,11 @@ class CourseGroupUserController extends BaseController
             }
             if (!$dataCheck) {
                 $msg['error_list'] = "データに誤りがあります。";
+                return view('groupCourse.student_import', [
+                    'dataImport' => $result,
+                    'errorMessage' => $msg,
+                    'breadcrumbs' => $breadcrumbs,
+                ]);
             }
             if (empty($msg['error_list'])) {
                 if (!empty($data) && count($data) > 0) {
@@ -567,6 +572,11 @@ class CourseGroupUserController extends BaseController
                     unset($dataImport[0], $dataImport[1]);
                     if (count($dataImport) == 0) {
                         $msg['error_list'] = "データを入力してください。";
+                        return view('groupCourse.student_import', [
+                            'dataImport' => $result,
+                            'errorMessage' => $msg,
+                            'breadcrumbs' => $breadcrumbs,
+                        ]);
                     }
                     $temp = array_column($dataImport, 'student_email');
                     $counts = array_count_values($temp);

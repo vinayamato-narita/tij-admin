@@ -152,8 +152,8 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 お問い合わせID：#INQUIRY_ID#
 お問い合わせ日時：#INQUIRY_DATE#
 お問い合わせ件名：#INQUIRY_TITLE#
-お問い合わせお名前：#USER_TITLE#
-お問い合わせメールアドレス：#USER_EMAIL#
+お問い合わせお名前：#STUDENT_NAME#
+お問い合わせメールアドレス：#STUDENT_MAIL#
 お問い合わせ内容：#INQUIRY_BODY#
 
                                                 </textarea>

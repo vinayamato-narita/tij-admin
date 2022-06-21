@@ -92,7 +92,69 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <!-- test -->
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_from" 
+                                                    id="lesson_date_from" 
+                                                    v-model="startDate"
+                                                >
+                                                </date-picker>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test 2</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_to" 
+                                                    id="lesson_date_to" 
+                                                    v-model="endDate"
+                                                >
+                                                </date-picker>
+                                                <div
+                                                    class="input-group is-danger"
+                                                    role="alert"
+                                                    v-if="errors.has('lesson_date_to')"
+                                                >
+                                                    {{ errors.first("lesson_date_to") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="col-md-3 col-form-label text-md-right"
+                                                for="text-input"
+                                                >Test 3</label
+                                            >
+                                            <div class="col-md-6">
+                                                <date-picker 
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="lesson_date_to" 
+                                                    id="lesson_date_to" 
+                                                    v-model="endDate"
+                                                >
+                                                </date-picker>
+                                            </div>
+                                        </div>
+                                        <!-- end test -->
                                         <div class="form-group row">
                                             <label
                                                 class="col-md-3 col-form-label text-md-right"
@@ -103,13 +165,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    name="payment_date"
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="payment_date" 
+                                                    id="payment_date" 
                                                     v-model="paymentInfoEx.payment_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
                                                 ></date-picker>
                                                 <div
                                                     class="input-group is-danger"
@@ -131,10 +192,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    name="begin_date"
-                                                    v-model="paymentInfoEx.begin_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="begin_date" 
+                                                    id="begin_date" 
+                                                    v-model="begin_date"
                                                     v-validate="
                                                         'required'
                                                     "
@@ -159,14 +222,12 @@
                                             >
                                             <div class="col-md-6">
                                                 <date-picker
-                                                    :disabled-date="disabledBeforeToday"
-                                                    name="point_expire_date"
-                                                    v-model="paymentInfoEx.point_expire_date"
-                                                    :format="'YYYY/MM/DD'"
-                                                    type="date"
-                                                    v-validate="
-                                                        'required'
-                                                    "
+                                                    :format="'YYYY/MM/DD'" 
+                                                    type="date" 
+                                                    readonly="readonly" 
+                                                    name="point_expire_date" 
+                                                    id="point_expire_date" 
+                                                    v-model="point_expire_date"
                                                 ></date-picker>
                                                 <div
                                                     class="input-group is-danger"
@@ -310,11 +371,33 @@ export default {
                 amount: this.paymentInfo.amount,
                 tax: this.paymentInfo.tax,
             },
+            begin_date: new Date(this.paymentInfo.begin_date),
+            point_expire_date: new Date(this.paymentInfo.point_expire_date),
+            startDate : new Date(String(this.paymentInfo.payment_date)),
+            endDate : new Date("2022-05-30 00:00:00"),
         };
     },
     props: ["urlAction", "urlDestroyPaymentHistory", "urlPaymentHistoryList", "paymentInfo"],
-    mounted() {},
+    mounted() {
+        let startDate11 = new Date();
+        let endDate11 = new Date(this.paymentInfo.payment_date);
+        console.log(startDate11)
+        console.log(endDate11)
+    },
     methods: {
+        fomartDate(date) {
+          let d = new Date(date);
+          let month = (d.getMonth() + 1).toString();
+          let day = d.getDate().toString();
+          let year = d.getFullYear();
+          if (month.length < 2) {
+            month = '0' + month;
+          }
+          if (day.length < 2) {
+            day = '0' + day;
+          }
+          return [year, month, day].join('-');
+        },
         disabledBeforeToday(date) {
             return date < new Date(new Date().setHours(0, 0, 0, 0));
         },

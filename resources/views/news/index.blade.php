@@ -56,7 +56,7 @@
                                                         <td class="text-left">{{ $news->news_update_date }}</td>
                                                         <td class="text-left">{{ $news->news_subject_ja }}</td>
                                                         <td class="text-left">{{ $news->news_title }}</td>
-                                                        <td class="text-left"><nl2br tag="p" :text="{{json_encode($newsInfo->news_body)}}"></nl2br>{{ $news->news_body }}</td>
+                                                        <td class="text-left"><nl2br tag="p" :text="{{json_encode($news->news_body)}}"></nl2br></td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

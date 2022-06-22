@@ -603,10 +603,6 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "ニックネームを入力してください。";
                             break;
                         }
-                        if ($value['student_email'] == null) {
-                            $msg['error_list'] = "メールアドレスを入力してください。";
-                            break;
-                        }
                         if ($value['student_birthday'] == null) {
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;

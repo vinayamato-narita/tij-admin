@@ -579,10 +579,14 @@ class CourseGroupUserController extends BaseController
                         ]);
                     }
                     $temp = array_column($dataImport, 'student_email');
-                    $counts = array_count_values($temp);
                     foreach ($dataImport as $key => $value) {
                         
                         $date = str_replace('/', '-', $value['student_birthday']);
+                        if ($value['student_email'] == null) {
+                            $msg['error_list'] = "メールアドレスを入力してください。";
+                            break;
+                        }
+                        $counts = array_count_values($temp);
                         if (in_array($value['student_email'], $emails) == true || $counts[$value['student_email']]>1) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;

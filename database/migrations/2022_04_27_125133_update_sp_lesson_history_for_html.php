@@ -121,7 +121,7 @@ class UpdateSpLessonHistoryForHtml extends Migration
             WHERE       
                 ls.teacher_id = _teacher_id
                 AND student_lesson_reserve_type IN (1,3,4,5)
-                AND ls.lesson_date BETWEEN DATE_FORMAT(_dateFrom,'%Y-%m-%d 00:00:00') AND DATE_FORMAT(_dateTo,'%Y-%m-%d 23:59:59')
+                AND ls.lesson_starttime BETWEEN DATE_FORMAT(_dateFrom,'%Y-%m-%d 00:00:00') AND DATE_FORMAT(_dateTo,'%Y-%m-%d 23:59:59')
                 GROUP BY lh.lesson_schedule_id
             ORDER BY 
                 lesson_starttime DESC;

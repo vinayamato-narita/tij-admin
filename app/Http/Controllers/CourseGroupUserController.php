@@ -616,8 +616,12 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                             break;
                         }
-                        if (!isset($value['student_sex']) || !array_key_exists($value['student_sex'], [0, 1, 2])) {
+                        if (!isset($value['student_sex']) ) {
                             $msg['error_list'] = "性別を入力してください。";
+                            break;
+                        }
+                        if (!array_key_exists($value['student_sex'], [0, 1, 2])) {
+                            $msg['error_list'] = "データに誤りがあります";
                             break;
                         }
                         if ($value['company_name'] == null) {

@@ -632,8 +632,12 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードを入力してください。";
                             break;
                         }
-                        if ($value['lang_type'] == null || !in_array($value['lang_type'], ['ja', 'en', 'zh'])) {
+                        if ($value['lang_type'] == null ) {
                             $msg['error_list'] = "言語を入力してください。";
+                            break;
+                        }
+                        if (!in_array($value['lang_type'], ['ja', 'en', 'zh'])) {
+                            $msg['error_list'] = "データに誤りがあります";
                             break;
                         }
                         $insert[] = [

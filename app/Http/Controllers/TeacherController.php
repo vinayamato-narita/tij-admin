@@ -471,6 +471,7 @@ class TeacherController extends BaseController
 
         $header = [
             $this->convertShijis("講師名"),
+            $this->convertShijis("講師コード"),
             $this->convertShijis("ニックネーム"),
             $this->convertShijis("生年月日"),
             $this->convertShijis("メアド"),
@@ -522,6 +523,7 @@ class TeacherController extends BaseController
         foreach ($teacherList as $teacher) {
             $input = array();
             $input["講師名"] = $this->convertShijis($teacher['teacher_name']);
+            $input["講師コード"] = $this->convertShijis($teacher['teacher_code']);
             $input["ニックネーム"] = $this->convertShijis($teacher['teacher_nickname']);
             $input["生年月日"] = isset($item['teacher_birthday']) ? $this->convertShijis(date('Y-m-d', strtotime($item['teacher_birthday']))) : "";
             $input["メアド"] = $this->convertShijis($teacher['teacher_email']);
@@ -654,10 +656,7 @@ class TeacherController extends BaseController
 
     public function lessonHistoryExport($id)
     {
-        $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
-        if (!$adminSystem) {
-            return;
-        }
+        $teacherInfo = Teacher::where('teacher_id', $id)->first();
         $request = Session::get('teacherLessonHistory');
         $fileName = "teacher_lesson_history_" . date("Y-m-d") . ".csv";
 
@@ -670,6 +669,7 @@ class TeacherController extends BaseController
         );
 
         $header = [
+            $this->convertShijis("講師コード"),
             $this->convertShijis("レッスン日"),
             $this->convertShijis("レッスン時間"),
             $this->convertShijis("コースタイプ"),
@@ -752,6 +752,7 @@ class TeacherController extends BaseController
 
         $input = [];
         foreach ($dataExport as $item) {
+            $input['teacher_code'] = $this->convertShijis($teacherInfo->teacher_code);
             $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
             $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
             $input['course_type'] = $this->convertShijis($item['course_type']);

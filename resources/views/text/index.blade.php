@@ -41,8 +41,8 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-150">@sortablelink('lesson_text_name', ' テキスト名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('lesson_text_description', ' 説明')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('lesson_text_name', ' テキスト名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('lesson_text_description', ' 説明')</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

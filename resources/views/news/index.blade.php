@@ -41,11 +41,11 @@
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('is_show_on_student_top', 'トップ表示')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('news_update_date', '日時')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('news_subject_ja', '対象')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('news_title', 'タイトル')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('news_body', '内容')</th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('is_show_on_student_top', 'トップ表示')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('news_update_date', '日時')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('news_subject_ja', '対象')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('news_title', 'タイトル')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('news_body', '内容')</th>
                                                     <th class="w-100"></th>
                                                 </tr>
                                             </thead>
@@ -56,7 +56,7 @@
                                                         <td class="text-left">{{ $news->news_update_date }}</td>
                                                         <td class="text-left">{{ $news->news_subject_ja }}</td>
                                                         <td class="text-left">{{ $news->news_title }}</td>
-                                                        <td class="text-left">{{ $news->news_body }}</td>
+                                                        <td class="text-left"><nl2br tag="p" :text="{{json_encode($news->news_body)}}"></nl2br></td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

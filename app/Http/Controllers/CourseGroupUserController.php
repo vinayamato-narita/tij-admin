@@ -102,10 +102,10 @@ class CourseGroupUserController extends BaseController
                     ->get()->toArray();
 
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                            ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                            ->pluck('is_for_lms', 'course_id')->toArray();
+                    ->where('course_type', CourseTypeEnum::GROUP_COURSE)
+                    ->pluck('is_for_lms', 'course_id')->toArray();
                 $emails = Student::whereIn('student_email', $emails)
-                            ->pluck('is_lms_user', 'student_email')->toArray();
+                    ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];
                 if (!empty($psh)) {
                     foreach ($psh as $p) {
@@ -192,7 +192,7 @@ class CourseGroupUserController extends BaseController
                         }
                     }
                 }
-                unset($data[0],$data[1]);
+                unset($data[0], $data[1]);
             }
         }
 
@@ -539,7 +539,7 @@ class CourseGroupUserController extends BaseController
             $data = Excel::toArray(new StudentsImport, $request->file('file'));
             $emails = Student::pluck('student_email')->toArray();
             $dataCheck = $this->checkHeaderStudentImport($data[0][0]);
-            $dataImport = $this->readDataStudentImport($data[0]);      
+            $dataImport = $this->readDataStudentImport($data[0]);
             if ($ext !== "xlsx") {
                 $msg['error_list'] = "ファイルのフォーマットが異なります。";
                 return view('groupCourse.student_import', [
@@ -550,6 +550,11 @@ class CourseGroupUserController extends BaseController
             }
             if (!$dataCheck) {
                 $msg['error_list'] = "データに誤りがあります。";
+                return view('groupCourse.student_import', [
+                    'dataImport' => $result,
+                    'errorMessage' => $msg,
+                    'breadcrumbs' => $breadcrumbs,
+                ]);
             }
             if (empty($msg['error_list'])) {
                 if (!empty($data) && count($data) > 0) {
@@ -564,14 +569,25 @@ class CourseGroupUserController extends BaseController
                             ]);
                         }
                     }
-                    unset($dataImport[0],$dataImport[1]);
+                    unset($dataImport[0], $dataImport[1]);
                     if (count($dataImport) == 0) {
                         $msg['error_list'] = "データを入力してください。";
+                        return view('groupCourse.student_import', [
+                            'dataImport' => $result,
+                            'errorMessage' => $msg,
+                            'breadcrumbs' => $breadcrumbs,
+                        ]);
                     }
-                    
+                    $temp = array_column($dataImport, 'student_email');
                     foreach ($dataImport as $key => $value) {
+                        
                         $date = str_replace('/', '-', $value['student_birthday']);
-                        if (in_array($value['student_email'], $emails) == true) {
+                        if ($value['student_email'] == null) {
+                            $msg['error_list'] = "メールアドレスを入力してください。";
+                            break;
+                        }
+                        $counts = array_count_values($temp);
+                        if (in_array($value['student_email'], $emails) == true || $counts[$value['student_email']]>1) {
                             $msg['error_list'] =  $value['student_email'] . 'はすでに存在しています。';
                             break;
                         }
@@ -587,25 +603,25 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "ニックネームを入力してください。";
                             break;
                         }
-                        if ($value['student_email'] == null) {
-                            $msg['error_list'] = "メールアドレスを入力してください。";
-                            break;
-                        }
                         if ($value['student_birthday'] == null) {
                             $msg['error_list'] = "生年月日を入力してください。";
                             break;
                         }
-                        
-                        if (strtotime($date)==false ||$this->checkmydate($date)==false){
+
+                        if (strtotime($date) == false || $this->checkmydate($date) == false) {
                             $msg['error_list'] = "生年月日のフォーマットが異なります。生年月日はyyyy/mm/ddの形式で入力してください。";
                             break;
                         }
-                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~]{8,16}$/',$value['password']) == false) {
+                        if (preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d#!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~]{8,16}$/', $value['password']) == false) {
                             $msg['error_list'] = "パスワードは少なくとも、英字1字と数字1字を含む、8字～16字の半角英数字または記号で入力してください。";
                             break;
                         }
-                        if ( !isset($value['student_sex'])|| !array_key_exists($value['student_sex'], [0,1,2]) ) {
+                        if (!isset($value['student_sex']) ) {
                             $msg['error_list'] = "性別を入力してください。";
+                            break;
+                        }
+                        if (!array_key_exists($value['student_sex'], [0, 1, 2])) {
+                            $msg['error_list'] = "データに誤りがあります";
                             break;
                         }
                         if ($value['company_name'] == null) {
@@ -616,59 +632,57 @@ class CourseGroupUserController extends BaseController
                             $msg['error_list'] = "パスワードを入力してください。";
                             break;
                         }
-                        if ($value['lang_type'] == null ||!in_array($value['lang_type'], ['ja','en','zh'])) {
+                        if ($value['lang_type'] == null || !in_array($value['lang_type'], ['ja', 'en', 'zh'])) {
                             $msg['error_list'] = "言語を入力してください。";
                             break;
                         }
                         $insert[] = [
-                            'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
+                            'student_name' => $value['student_firstname'] . " " . $value['student_lastname'],
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' =>  date('d/m/Y',strtotime($date)),
+                            'student_birthday' =>  date('d/m/Y', strtotime($date)),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
                             'password' => Hash::make($value['password']),
-                            'lang_type'=>$value['lang_type'],
-                            'is_lms_user'=>1
+                            'lang_type' => $value['lang_type'],
+                            'is_lms_user' => 1
                         ];
-                        $result[]=[
-                            'student_name' => $value['student_firstname'] . " ".$value['student_lastname'] ,
+                        $result[] = [
+                            'student_name' => $value['student_firstname'] . " " . $value['student_lastname'],
                             'student_nickname' => $value['student_nickname'],
                             'student_email' =>  $value['student_email'],
-                            'student_birthday' =>  date('Y/m/d',strtotime($date)),
+                            'student_birthday' =>  date('Y/m/d', strtotime($date)),
                             'student_sex' =>  $value['student_sex'],
                             'company_name' => $value['company_name'],
-                            'password' =>$value['password'],
-                            'lang_type'=>$value['lang_type'],
-                            'is_lms_user'=>1
+                            'password' => $value['password'],
+                            'lang_type' => $value['lang_type'],
+                            'is_lms_user' => 1
                         ];
                     }
-                    if (isset($insert) && count($insert) > 0 && $msg['error_list']=="") {
+                    if (isset($insert) && count($insert) > 0 && $msg['error_list'] == "") {
                         DB::table('student')->insert($insert);
                         $msg['success'] = "法人ユーザを登録しました。";
                         foreach ($result as $value) {
-                                $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);
-                                if ($mailPattern) {
-                                    $mailSubject = $mailPattern[0]->mail_subject;
-                                    $mailBody = $mailPattern[0]->mail_body;
-                                    $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
-                                    $mailBody = str_replace("#STUDENT_PASSWORD#", $value['password'], $mailBody);
-                                    $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
-                                    $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
-    
-                                    Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
-                                        $message->to($value['student_email'])
-                                            ->subject($mailSubject);
-                                    });
-                                }
+                            $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo($mailtype = 32, $lang = $value['lang_type']);
+                            if ($mailPattern) {
+                                $mailSubject = $mailPattern[0]->mail_subject;
+                                $mailBody = $mailPattern[0]->mail_body;
+                                $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
+                                $mailBody = str_replace("#STUDENT_PASSWORD#", $value['password'], $mailBody);
+                                $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
+                                $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
+
+                                Mail::raw($mailBody, function ($message) use ($value, $mailSubject) {
+                                    $message->to($value['student_email'])
+                                        ->subject($mailSubject);
+                                });
+                            }
                         }
-                    }
-                    else {
+                    } else {
                         $result = [];
                     }
                 }
             }
-          
         }
         return view('groupCourse.student_import', [
             'dataImport' => $result,
@@ -691,9 +705,10 @@ class CourseGroupUserController extends BaseController
 
         return $res;
     }
-    function checkmydate($date) {
+    function checkmydate($date)
+    {
         $tempDate = explode('-', $date);
         // checkdate(month, day, year)
         return checkdate($tempDate[1], $tempDate[2], $tempDate[0]);
-      }
+    }
 }

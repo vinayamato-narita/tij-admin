@@ -42,13 +42,12 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-150">@sortablelink('student_id', '学習者ID')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('student_name', '学習者名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('test_name', '実力テスト名')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('test_start_time', '受講日時')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('comment_start_time', '評価開始日時')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('custom_status', 'ステータス')</th>
-                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('student_id', '学習者ID')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('student_name', '学習者名')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('test_name', '実力テスト名')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('test_start_time', '受講日時')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('comment_start_time', '評価開始日時')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('custom_status', 'ステータス')</th>
                                                     <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>

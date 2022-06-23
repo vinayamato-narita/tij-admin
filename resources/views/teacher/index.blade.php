@@ -48,13 +48,13 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left width-130">@sortablelink('display_order', ' 表示順')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('teacher_name', ' 講師名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('teacher_nickname', ' ニックネーム')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('teacher_email', ' メールアドレス')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('last_login_date', ' 最終ログイン日時')</th>
-                                                    <th class="text-left min-width-150"></th>
-                                                    <th class="text-left min-width-150"></th>
+                                                    <th class="text-left width-130 white-space">@sortablelink('display_order', ' 表示順')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('teacher_name', ' 講師名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('teacher_nickname', ' ニックネーム')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('teacher_email', ' メールアドレス')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('last_login_date', ' 最終ログイン日時')</th>
+                                                    <th class="text-left min-width-150 white-space"></th>
+                                                    <th class="text-left min-width-150 white-space"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

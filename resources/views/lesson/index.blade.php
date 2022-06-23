@@ -41,11 +41,11 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-120">@sortablelink('lesson_name', ' レッスン名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('lesson_code', ' レッスンコード')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('lesson_description', ' 説明')</th>
-                                                    <th class="text-left min-width-120"></th>
-                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('lesson_name', ' レッスン名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('lesson_code', ' レッスンコード')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('lesson_description', ' 説明')</th>
+                                                    <th class="text-left min-width-120 white-space"></th>
+                                                    <th class="text-left min-width-120 white-space"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

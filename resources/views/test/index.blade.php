@@ -44,19 +44,18 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-150">@sortablelink('test_id',
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('test_id',
                                                         'テストID')
                                                     </th>
-                                                    <th class="text-left min-width-120">@sortablelink('test_name', '
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('test_name', '
                                                         テスト名')
                                                     </th>
-                                                    <th class="text-left min-width-120">
+                                                    <th class="text-left min-width-120 white-space">
                                                         @sortablelink('test_description', ' 説明')
                                                     </th>
-                                                    <th class="text-left min-width-120">@sortablelink('test_type', '
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('test_type', '
                                                         テスト種別')
                                                     </th>
-                                                    <th class="text-left min-width-120"></th>
                                                     <th class="text-left min-width-120"></th>
                                                 </tr>
                                                 </thead>
@@ -76,7 +75,6 @@
 
                                                         <td class="text-left">{{ TestType::getDescription($test->test_type) }}</td>
 
-                                                        <td class="text-left "></td>
                                                         <td>
                                                             <div class="btn-group" style="float:right;">
                                                                 <button class="btn btn-primary dropdown-toggle"

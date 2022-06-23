@@ -53,7 +53,9 @@ use App\Enums\LangType;
                                             >内容:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            {{ $newsInfo->news_body }}
+                                            <nl2br tag="p" :text="{{json_encode($newsInfo->news_body)}}">
+
+                                            </nl2br>
 
                                         </div>
                                     </div>

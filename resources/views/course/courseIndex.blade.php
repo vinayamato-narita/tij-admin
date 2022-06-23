@@ -44,15 +44,15 @@
                                             <table class="table table-responsive-sm table-striped border">
                                                 <thead>
                                                 <tr>
-                                                    <th class="text-left min-width-150">@sortablelink('publication_status', '公開状況')</th>
-                                                    <th class="text-left min-width-150">@sortablelink('course_id', ' コースID')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('display_order', ' 表示順')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('course_name', ' コース名')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('course_description', ' コース概要')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('point_count', ' 受講回数')</th>
-                                                    <th class="text-left min-width-120">@sortablelink('amount', ' 価格（税抜）')</th>
-                                                    <th class="text-left min-width-120"></th>
-                                                    <th class="text-left min-width-120"></th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('publication_status', '公開状況')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('course_id', ' コースID')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('display_order', ' 表示順')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('course_name', ' コース名')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('course_description', ' コース概要')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('point_count', ' 受講回数')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('amount', ' 価格（税抜）')</th>
+                                                    <th class="text-left min-width-120 white-space"></th>
+                                                    <th class="text-left min-width-120 white-space"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -70,8 +70,7 @@
                                                             @endif
                                                         </td>
                                                         <td class="text-left">{{ $course->point_count }}</td>
-                                                        <td class="text-left">  {{ number_format($course->amount, 0, ",", ",")  }}
- </td>
+                                                        <td class="text-left">  {{ number_format($course->amount, 0, ",", ",")  }}</td>
 
                                                         <td class="text-left "></td>
                                                         <td class="text-left">

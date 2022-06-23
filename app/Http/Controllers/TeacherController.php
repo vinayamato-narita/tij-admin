@@ -163,6 +163,19 @@ class TeacherController extends BaseController
         ], StatusCode::METHOD_NOT_ALLOWED);
     }
 
+    public function checkUniqueTeacherCode(Request $request)
+    {
+        $valid = !Teacher::where(function ($query) use ($request) {
+            if (isset($request['id'])) {
+                $query->where('id', '!=', $request["id"]);
+            }
+            $query->where(['teacher_code' => $request["value"]]);
+        })->exists();
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
+    }
+
     /**
      * Display the specified resource.
      *

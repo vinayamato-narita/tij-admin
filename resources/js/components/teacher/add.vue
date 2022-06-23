@@ -78,7 +78,7 @@
                                                     @input="changeInput()"
                                                     v-model="teacherCode"
                                                     v-validate="
-                                                        'required|max:10'
+                                                        'required|max:10|unique_custom_teacher_code'
                                                     "
                                                 />
 
@@ -799,7 +799,8 @@ export default {
                 },
                 teacherCode: {
                     required: "講師コードを入力してください。",
-                    max: "講師コードは10文字以内で入力してください。"
+                    max: "講師コードは10文字以内で入力してください。",
+                    unique_custom_teacher_code: "この講師コードは既に登録されています。"
                 },
                 teacherName: {
                     required: "講師名を入力してください",
@@ -836,6 +837,24 @@ export default {
             }
         };
         this.$validator.localize("en", messError);
+
+        let that = this;
+        this.$validator.extend("unique_custom_teacher_code", {
+            validate(value, args) {
+                return axios
+                    .post(that.urlCheckUnique, {
+                        _token: Laravel.csrfToken,
+                        value: value,
+                        type: args[0],
+                    })
+                    .then(function (response) {
+                        return {
+                            valid: response.data.valid,
+                        };
+                    })
+                    .catch((error) => {});
+            },
+        });
     },
     components: {
         Loader
@@ -875,7 +894,7 @@ export default {
             errFile:""
         };
     },
-    props: ["listTeacherUrl", "timeZones", "createUrl"],
+    props: ["listTeacherUrl", "timeZones", "createUrl", "urlCheckUnique"],
     mounted() {
      
     },

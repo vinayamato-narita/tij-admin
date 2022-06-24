@@ -168,7 +168,7 @@ class TeacherController extends BaseController
     {
         $valid = !Teacher::where(function ($query) use ($request) {
             if (isset($request['id'])) {
-                $query->where('id', '!=', $request["id"]);
+                $query->where('teacher_id', '!=', $request["id"]);
             }
             $query->where(['teacher_code' => $request["value"]]);
         })->exists();

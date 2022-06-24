@@ -52,8 +52,9 @@ class SendMailTestReviewRemind extends Command
         //now()- 60 phút <= test.result.test_start_time + send_remind_mail_pattern.timing_minute (PHÚT) <= NOW()
         $testResults = TestResult::with('test', 'course')->whereHas('test', function ($q) {
             $q->where('test_type', TestType::ABILITY);
-        })->whereNotNull('test_end_time')->whereDate('test_start_time', '>=', Carbon::now()->subMinutes(60)->subMinutes($timmingMinutes))
-            ->whereDate('test_start_time', '<=', Carbon::now()->subMinutes($timmingMinutes))->get();
+        })->whereNotNull('test_end_time')
+            ->whereDate('test_end_time', '>=', Carbon::now()->addMinutes(60)->addMinutes(3 * 24 * 60 - $timmingMinutes))
+            ->whereDate('test_end_time', '<=', Carbon::now()->addMinutes(3 * 24 * 60 - $timmingMinutes))->get();
         $remindMailJa = $this->_getRemindMail(49, 'ja');
 
         foreach ($testResults as $testResult)

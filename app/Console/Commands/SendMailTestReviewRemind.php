@@ -48,24 +48,25 @@ class SendMailTestReviewRemind extends Command
     public function handle()
     {
         $remindMail = SendRemindMailPattern::find($this->remindMailId);
-        $timmingMinutes = $remindMail->timming_minutes;
-        //now()- 60 phút <= test.result.test_start_time + send_remind_mail_pattern.timing_minute (PHÚT) <= NOW()
+        $timmingMinutes = $remindMail->timing_minutes;
         $testResults = TestResult::with('test', 'course')->whereHas('test', function ($q) {
             $q->where('test_type', TestType::ABILITY);
         })->whereNotNull('test_end_time')
-            ->whereDate('test_end_time', '>=', Carbon::now()->addMinutes(60)->addMinutes(3 * 24 * 60 - $timmingMinutes))
-            ->whereDate('test_end_time', '<=', Carbon::now()->addMinutes(3 * 24 * 60 - $timmingMinutes))->get();
+            ->whereDate('test_end_time', '>=', Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes))
+            ->whereDate('test_end_time', '<=', Carbon::now()->subMinutes(3 * 24 * 60 - $timmingMinutes))->get();
         $remindMailJa = $this->_getRemindMail(49, 'ja');
 
+        Log::info('Find test result has test_end_time >= ' .Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes));
+        Log::info('Find test result has test_end_time <= ' .Carbon::now()->subMinutes(3 * 24 * 60 - $timmingMinutes));
         foreach ($testResults as $testResult)
         {
-            Log::info('send_mail_test_review_remind fot test_result id = ' . $testResult->test_result_id);
+            Log::info('send_mail_test_review_remind for test_result id = ' . $testResult->test_result_id);
             $teachersTests = TeacherTest::with('teacher.timeZone')->where('test_id', $testResult->test->test_id)->get();
             $expiredDateEnv = (int)config('env.SKILL_TEST_REVIEW_EXPIRED_DATE');
             $expire = Carbon::parse($testResult->test_end_time)->addDays($expiredDateEnv);
             foreach ($teachersTests as $teachersTest)
             {
-                Log::info('send_mail_test_review_remind fot teacher  id = ' . $teachersTest->teacher->id);
+                Log::info('send_mail_test_review_remind fot teacher  id = ' . $teachersTest->teacher->teacher_id);
 
                 $teacherMailSubject = $remindMailJa[0]->mail_subject;
                 $teacherMailBody = $remindMailJa[0]->mail_body;

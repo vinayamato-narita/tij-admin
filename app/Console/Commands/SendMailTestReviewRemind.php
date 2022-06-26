@@ -47,6 +47,8 @@ class SendMailTestReviewRemind extends Command
      */
     public function handle()
     {
+        Log::info('---start run: send_mail_test_review_remind:run---  ');
+
         $remindMail = SendRemindMailPattern::find($this->remindMailId);
         $timmingMinutes = $remindMail->timing_minutes;
         $testReviewExpiredTimeFrom = Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes);
@@ -92,7 +94,7 @@ class SendMailTestReviewRemind extends Command
             }
         }
 
-        Log::info('---end run: daily_update_test_result_not_submitted:run---  ');
+        Log::info('---end run: send_mail_test_review_remind:run---  ');
     }
 
     private function _getRemindMail($mailType, $langType = null) {

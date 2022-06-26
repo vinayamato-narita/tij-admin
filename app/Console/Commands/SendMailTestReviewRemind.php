@@ -91,6 +91,8 @@ class SendMailTestReviewRemind extends Command
 
             }
         }
+
+        Log::info('---end run: daily_update_test_result_not_submitted:run---  ');
     }
 
     private function _getRemindMail($mailType, $langType = null) {

@@ -49,15 +49,19 @@ class SendMailTestReviewRemind extends Command
     {
         $remindMail = SendRemindMailPattern::find($this->remindMailId);
         $timmingMinutes = $remindMail->timing_minutes;
+        $testReviewExpiredTimeFrom = Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes);
+        $testReviewExpiredTimeTo = $testReviewExpiredTimeFrom->addMinutes(60);
+
         $testResults = TestResult::with('test', 'course')->whereHas('test', function ($q) {
             $q->where('test_type', TestType::ABILITY);
         })->whereNotNull('test_end_time')
-            ->whereDate('test_end_time', '>=', Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes))
-            ->whereDate('test_end_time', '<=', Carbon::now()->subMinutes(3 * 24 * 60 - $timmingMinutes))->get();
+            ->whereDate('test_end_time', '>=', $testReviewExpiredTimeFrom)
+            ->whereDate('test_end_time', '<=', $testReviewExpiredTimeTo)->get();
         $remindMailJa = $this->_getRemindMail(49, 'ja');
 
-        Log::info('Find test result has test_end_time >= ' .Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes));
-        Log::info('Find test result has test_end_time <= ' .Carbon::now()->subMinutes(3 * 24 * 60 - $timmingMinutes));
+        Log::info('Find test result has test_end_time >= ' .$testReviewExpiredTimeFrom);
+        Log::info('Find test result has test_end_time <= ' .$testReviewExpiredTimeTo);
+        
         foreach ($testResults as $testResult)
         {
             Log::info('send_mail_test_review_remind for test_result id = ' . $testResult->test_result_id);

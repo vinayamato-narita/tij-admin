@@ -682,6 +682,9 @@ class StudentController extends BaseController
             }
         }
         
+        $currentTime = Carbon::now()->format('H:i:s');
+        $paymentDateTime = date('Y-m-d H:i:s', strtotime($request->payment_date . " " . $currentTime));
+
         if(empty($listCourseBySetCourse)) {
             DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
                 array(
@@ -692,7 +695,7 @@ class StudentController extends BaseController
                     $course->project_course_id,
                     $course->parent_id,
                     $request->payment_way,
-                    $request->payment_date,
+                    $paymentDateTime,
                     '',
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
                     $request->amount,
@@ -710,7 +713,7 @@ class StudentController extends BaseController
                         $course->project_course_id,
                         $course->parent_id,
                         $request->payment_way,
-                        $request->payment_date,
+                        $paymentDateTime,
                         '',
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
                         $request->amount,
@@ -781,13 +784,15 @@ class StudentController extends BaseController
 
             StudentPointHistory::whereIn('student_point_history_id', $studentPointHistoryIds)->delete();
         }
-       
+
+        $paymentDateTime = date('Y-m-d H:i:s', strtotime($request->payment_date . " " . date('H:i:s', strtotime($paymentInfo->payment_date_time))));
+      
         DB::select('CALL sp_admin_update_payment_history(?,?,?,?,?,?,?,?,?,?,?)', 
             array(
                 $paymentInfo->student_id,
                 $paymentInfo->point_subscription_history_id,
                 $request->payment_way,
-                $request->payment_date,
+                $paymentDateTime,
                 $request->start_date,
                 $request->begin_date,
                 $request->point_expire_date,

@@ -41,6 +41,7 @@ use App\Models\File;
 use Illuminate\Support\Facades\Log;
 use App\Models\LessonSchedule;
 use App\Enums\CourseTypeEnum;
+use Carbon\Carbon;
 
 class TeacherController extends BaseController
 {
@@ -161,6 +162,19 @@ class TeacherController extends BaseController
         return response()->json([
             'status' => 'METHOD_NOT_ALLOWED',
         ], StatusCode::METHOD_NOT_ALLOWED);
+    }
+
+    public function checkUniqueTeacherCode(Request $request)
+    {
+        $valid = !Teacher::where(function ($query) use ($request) {
+            if (isset($request['id'])) {
+                $query->where('teacher_id', '!=', $request["id"]);
+            }
+            $query->where(['teacher_code' => $request["value"]]);
+        })->exists();
+        return response()->json([
+            'valid' => $valid,
+        ], StatusCode::OK);
     }
 
     /**
@@ -337,6 +351,10 @@ class TeacherController extends BaseController
 
         $teacher = Teacher::where('teacher_id', $id)->first();
         if (!$teacher) return redirect()->route('teacher.index');
+        if($teacher->teacher_birthday) {
+            $teacher->teacher_birthday = Carbon::parse($teacher->teacher_birthday)->format('Y/m/d');
+        }
+
         $timeZones = TimeZone::all()->toArray();
         return view('teacher.edit', [
             'breadcrumbs' => $breadcrumbs,

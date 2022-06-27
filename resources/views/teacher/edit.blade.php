@@ -8,6 +8,7 @@
             :detail-teacher-url = "{{json_encode(route('teacher.show', $teacher->teacher_id))}}"
             :teacher ="{{json_encode($teacher)}}"
             :delete-action="{{ json_encode(route('teacher.destroy',  $teacher->teacher_id)) }}"
+            :url-check-unique = "{{ json_encode(route('teacher.unique_custom_teacher_code')) }}"
     >
 
     </teacher-edit>

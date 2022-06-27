@@ -41,7 +41,8 @@ class PointSubscriptionHistory extends Authenticatable
             DB::raw('DATE_FORMAT(student_point_history.start_date, "%Y-%m-%d") as start_date'),
             'point_subscription_history.tax as tax',
             'course.course_type',
-            'point_subscription_history.payment_way as payment_way'
+            'point_subscription_history.payment_way as payment_way',
+            'point_subscription_history.payment_date as payment_date_time'
         )
             ->leftJoin('course', function ($join) {
                 $join->on('point_subscription_history.course_id', '=', 'course.course_id');

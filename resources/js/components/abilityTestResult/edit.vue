@@ -29,6 +29,10 @@
                                     <div class="alert alert-secondary font-weight-bold text-center" v-if="disableComment">
                                         他の方が評価実施中のため、評価入力できません
                                     </div>
+                                    <div class="pull-left">
+                                        <b>全体点</b> :  &nbsp;{{ testResult.result_total_score === null ? 0 : testResult.result_total_score}} / {{ testResult.total_score}}
+
+                                    </div>
                                     <div class="">
                                         <table class="table table-responsive-sm table-striped border">
                                             <thead>

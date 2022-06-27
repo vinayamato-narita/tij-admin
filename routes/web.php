@@ -37,6 +37,7 @@ Route::group([
     Route::get('teacher/{id}/ability-test', 'TeacherController@abilityTest')->name('teacher.abilityTest');
     Route::post('teacher/{id}/ability-test', 'TeacherController@registerAbilityTest')->name('teacher.registerAbilityTest');
     Route::delete('teacher/{id}/ability-test/{testId}/delete', 'TeacherController@TeacherTestDelete')->name('teacher.teacheTeacherTestDeleterLessonDelete');
+    Route::post('teacher/unique_custom_teacher_code', 'TeacherController@checkUniqueTeacherCode')->name('teacher.unique_custom_teacher_code');
 
 
     Route::resource('faq', FaqController::class);

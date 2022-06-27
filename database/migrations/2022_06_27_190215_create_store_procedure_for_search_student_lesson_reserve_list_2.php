@@ -80,7 +80,7 @@ class CreateStoreProcedureForSearchStudentLessonReserveList2 extends Migration
                     ELSE c.reserve_end_date <= ls.lesson_starttime
                     END
                 AND ls.lesson_type_id <> 0
-                AND ls.lesson_starttime >= DATE_ADD(NOW() ,INTERVAL _time_to_booking MINUTE
+                AND ls.lesson_starttime >= DATE_ADD(NOW() ,INTERVAL _time_to_booking MINUTE)
                 AND ls.lesson_subscription_type IN(1,3,7)
                 AND ((cl.course_id = _course_id AND cl.lesson_id = _lesson_id) OR cl.course_id IS NULL) -- ? de lam gi: cl.course_id IS NULL - chua dat bai hoc, nguoc lai la dat roi va co the cancel
                 AND (psh.point_subscription_history_id IS NULL OR psh.point_expire_date >= ls.lesson_starttime)

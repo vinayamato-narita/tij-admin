@@ -18,7 +18,7 @@
         </li>
         <li class="c-header-nav-item dropdown d-md-down-none">
 
-            <a class="btn btn-light" href="/logout" > <svg class="c-icon mr-2">
+            <a class="btn btn-light" href="/logout" style="margin-right:10px "> <svg class="c-icon mr-2">
                     <use xlink:href="{{ url('assets/icons/coreui/free.svg#cui-account-logout') }}"></use>
                 </svg><span>Logout</span></a>
 

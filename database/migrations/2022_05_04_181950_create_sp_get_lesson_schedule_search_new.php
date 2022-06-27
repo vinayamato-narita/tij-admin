@@ -77,6 +77,7 @@ class CreateSpGetLessonScheduleSearchNew extends Migration
                                 SELECT * FROM lesson_schedule ls WHERE ls.teacher_id = te.teacher_id
                                     AND ls.lesson_starttime >= _date_from
                                     AND ls.lesson_endtime <= _date_to
+                                    AND ls.course_type = 0
                             )
                     END
                     AND CASE

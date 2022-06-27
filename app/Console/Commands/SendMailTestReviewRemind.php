@@ -59,6 +59,7 @@ class SendMailTestReviewRemind extends Command
         $testResults = TestResult::with('test', 'course')->whereHas('test', function ($q) {
             $q->where('test_type', TestType::ABILITY);
         })->whereNotNull('test_end_time')
+            ->where('is_reviewed', '=', 0)
             ->where('test_end_time', '>=', $testReviewExpiredTimeFrom)
             ->where('test_end_time', '<=', $testReviewExpiredTimeTo)->get();
         

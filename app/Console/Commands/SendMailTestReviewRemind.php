@@ -49,10 +49,12 @@ class SendMailTestReviewRemind extends Command
     {
         Log::info('---start run: send_mail_test_review_remind:run---  ');
 
+        $expiredDateEnv = (int)config('env.SKILL_TEST_REVIEW_EXPIRED_DATE');
+
         $remindMail = SendRemindMailPattern::find($this->remindMailId);
         $timmingMinutes = $remindMail->timing_minutes;
-        $testReviewExpiredTimeFrom = Carbon::now()->subMinutes(60)->subMinutes(3 * 24 * 60 - $timmingMinutes);
-        $testReviewExpiredTimeTo = Carbon::now()->subMinutes(3 * 24 * 60 - $timmingMinutes);
+        $testReviewExpiredTimeFrom = Carbon::now()->subMinutes(60)->subMinutes($expiredDateEnv * 24 * 60 - $timmingMinutes);
+        $testReviewExpiredTimeTo = Carbon::now()->subMinutes($expiredDateEnv * 24 * 60 - $timmingMinutes);
 
         $testResults = TestResult::with('test', 'course')->whereHas('test', function ($q) {
             $q->where('test_type', TestType::ABILITY);
@@ -69,7 +71,7 @@ class SendMailTestReviewRemind extends Command
         {
             Log::info('send_mail_test_review_remind for test_result id = ' . $testResult->test_result_id);
             $teachersTests = TeacherTest::with('teacher.timeZone')->where('test_id', $testResult->test->test_id)->get();
-            $expiredDateEnv = (int)config('env.SKILL_TEST_REVIEW_EXPIRED_DATE');
+            
             $expire = Carbon::parse($testResult->test_end_time)->addDays($expiredDateEnv);
             foreach ($teachersTests as $teachersTest)
             {

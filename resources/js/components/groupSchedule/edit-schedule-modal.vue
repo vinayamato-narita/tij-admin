@@ -489,9 +489,9 @@ export default {
             this.zoomUrl = this.selectedEvent != null ? this.selectedEvent.zoom_url : ''
             this.showZoomSetting = this.selectedEvent != null ? (this.selectedEvent.link_zoom_schedule_flag == 1 ? true : false) : false
 
-            var dateTime = new Date(new Date().setHours(new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' })).getHours() + 1))
+            var dateTime = this.selectedEvent != null ? this.selectedEvent.start : new Date(new Date().setHours(new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' })).getHours() + 1))
 
-            if (this.selectedTime > new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }))) {
+            if (this.selectedEvent == null && this.selectedTime > new Date(new Date().toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }))) {
                 dateTime = this.selectedTime
             }
 

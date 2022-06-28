@@ -53,7 +53,7 @@
                                                         "
                                                     />
                                                 </div>
-                                                
+
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_code')"
                                                 >
                                                     {{ errors.first("file_code") }}
@@ -66,8 +66,16 @@
                                                 for="text-input"
                                                 >ダウンロードURL</label>
                                             <div class="col-md-8 pt-7">
-                                                <a :href="file_path" target="_blank">{{ file_name_original }}</a>
+                                                <div>
+                                                    <a :href="file_path" target="_blank">{{ file_name_original }}</a>
+                                                </div>
+                                                <div>
+                                                    <img v-if="file_name_original.toLowerCase().includes('.jpg') ||
+                                                     file_name_original.toLowerCase().includes('.png')||
+                                                    file_name_original.toLowerCase().includes('.jpeg')" :src="file_path" style="width: 150px">
+                                                </div>
                                             </div>
+
                                         </div>
                                         <div class="form-group row">
                                             <label
@@ -89,7 +97,7 @@
                                                     <option :value="key" v-for="(value, key) in optionUploadFile">
                                                         {{ value }}</option
                                                     >
-                                                </select>                                               
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row" v-if="option_upload_file == 0">
@@ -110,7 +118,7 @@
                                                         "
                                                     />
                                                 </div>
-                                                
+
                                                 <div class="input-group is-danger" role="alert" v-if="errors.has('file_attach')"
                                                 >
                                                     {{ errors.first("file_attach") }}
@@ -228,7 +236,7 @@
                                     </table>
                                 </div>
                                 <div class="card-body" v-if="fileInfo.mediaList.length == 0">
-                                    <data-empty></data-empty> 
+                                    <data-empty></data-empty>
                                 </div>
                             </div>
                         </div>
@@ -357,7 +365,7 @@ export default {
             if (this.file_attach) {
                 formData.append('file_attach', this.file_attach);
             }
-            
+
             axios
                 .post(that.urlAction, formData)
                 .then(response => {

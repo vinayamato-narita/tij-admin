@@ -381,7 +381,7 @@ axios.interceptors.response.use(function (response) {
     // Do something with response error
     if(error.response.status === 419) {
         // redirect to login page
-        location.href = "/logout";
+        window.location.href = "/logout";
     }
     return Promise.reject(error);
 });

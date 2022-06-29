@@ -251,6 +251,8 @@ export default {
                 this.submitFlgConds = false
                 this.removeFlgConds = false
                 this.lessonNameSelected = ''
+                this.studentNickname = ''
+                this.studentId = ''
             }
         },
         checkConditionSubmit() {

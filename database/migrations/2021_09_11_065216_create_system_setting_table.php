@@ -35,7 +35,7 @@ class CreateSystemSettingTable extends Migration
             $table->unsignedInteger('lesson_just_before_cancel_time_lost100perPoint');
             $table->integer('lesson_just_start_booking_time')->nullable()->default(0)->comment('time before can booking lesson');
             $table->integer('free_teacher_lesson_register_time')->nullable()->default(8)->comment('XX週間前から登録可');
-            $table->integer('free_teacher_lesson_cancel_time')->nullable()->default(60)->comment('XX分前まで削除可');
+            $table->integer('free_teacher_lesson_cancel_time')->nullable()->default(30)->comment('XX分前まで削除可');
         });
     }
 

@@ -579,6 +579,11 @@ class CourseGroupUserController extends BaseController
                         ]);
                     }
                     $temp = array_column($dataImport, 'student_email');
+                    foreach ($temp as $k=> $row) {
+                        if ($row==null){
+                            unset($temp[$k]);
+                        }
+                    }
                     foreach ($dataImport as $key => $value) {
                         
                         $date = str_replace('/', '-', $value['student_birthday']);

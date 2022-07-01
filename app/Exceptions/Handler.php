@@ -50,6 +50,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            if ($request->ajax()) {
+                return response([
+                    'error' => 'expired',
+                    'success' => false,
+                ], 419);
+            } else {
+                return redirect('/logout');
+            }
+        };
         return parent::render($request, $exception);
     }
 }

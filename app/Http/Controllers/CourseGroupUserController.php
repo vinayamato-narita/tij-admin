@@ -141,7 +141,7 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (empty($courseIds[$value]->is_for_lms) || $courseIds[$value]->course_type != CourseTypeEnum::GROUP_COURSE) {
+                                if (empty($courseIds[$value]["is_for_lms"]) || $courseIds[$value]["course_type"] != CourseTypeEnum::GROUP_COURSE) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": 個人向けコースのコースIDです";
                                     break;

@@ -102,7 +102,7 @@ class CourseGroupUserController extends BaseController
                     ->get()->toArray();
 
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                    ->keyBy('course_id')->toArray();
+                    ->get()->keyBy('course_id')->toArray();
                 $emails = Student::whereIn('student_email', $emails)
                     ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];

@@ -512,7 +512,7 @@
                             let status = error.response.status;
                             if(status == 419) {
                                 that.$swal({
-                                    title: "セッションがタイムアウトしました。ログインし直してください。",
+                                    title: "セッションがタイムアウトしました。",
                                     icon: "error",
                                     confirmButtonText: "OK",
                                 }).then(function (confirm) {

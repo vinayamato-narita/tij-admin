@@ -629,7 +629,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['company_name'] == null) {
-                            $msg['error_list'] = "法人を入力してください。";
+                            $msg['error_list'] = "法人名を入力してください。";
                             break;
                         }
                         if ($value['password'] == null) {

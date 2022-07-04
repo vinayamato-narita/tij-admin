@@ -102,8 +102,7 @@ class CourseGroupUserController extends BaseController
                     ->get()->toArray();
 
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                    ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                    ->pluck('is_for_lms', 'course_id')->toArray();
+                    ->keyBy('course_id')->toArray();
                 $emails = Student::whereIn('student_email', $emails)
                     ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];
@@ -136,13 +135,13 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (!isset($courseIds[$value])) {
+                                if (empty($courseIds[$value])) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": コースIDが存在しません";
                                     break;
                                 }
 
-                                if (empty($courseIds[$value])) {
+                                if (empty($courseIds[$value]->is_for_lms) || $courseIds[$value]->course_type != CourseTypeEnum::GROUP_COURSE) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": 個人向けコースのコースIDです";
                                     break;

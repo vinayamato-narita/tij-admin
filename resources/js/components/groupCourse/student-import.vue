@@ -169,7 +169,7 @@
                                                     {{ email.student_birthday }}
                                                 </td>
                                                 <td  v-if="email.student_sex ==0">
-                                                男子
+                                                男性
                                                 </td>
                                                  <td  v-if="email.student_sex ==1">
                                                 女性

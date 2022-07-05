@@ -61,7 +61,7 @@ use App\Enums\LangType;
                                             >答え・A:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            <nl2br tag="p" v-if="{{json_encode($faqInfo->answer)}}" :text="{{json_encode($faqInfo->answer)}}">
+                                            <nl2br tag="p"  :text="{{json_encode($faqInfo->answer) ?? ""}}">
 
                                             </nl2br>
                                         </div>
@@ -97,7 +97,7 @@ use App\Enums\LangType;
                                             >答え・A:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            <nl2br tag="p" v-if="{{json_encode($faqEnInfo->answer)}}" :text="{{json_encode($faqEnInfo->answer)}}">
+                                            <nl2br tag="p"  :text="{{json_encode($faqEnInfo->answer ?? "")}}">
 
                                             </nl2br>
                                         </div>
@@ -133,7 +133,7 @@ use App\Enums\LangType;
                                             >答え・A:</label
                                         >
                                         <div class="col-md-6 pd-7">
-                                            <nl2br tag="p" v-if="{{json_encode($faqZhInfo->answer )}}" :text="{{json_encode($faqZhInfo->answer )}}">
+                                            <nl2br tag="p"  :text="{{json_encode($faqZhInfo->answer ?? "")}}">
 
                                             </nl2br>
                                         </div>

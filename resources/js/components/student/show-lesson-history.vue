@@ -25,7 +25,7 @@
                                                 >学習者番号</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                               {{ lessonHistoryInfoEx.lesson_history_id }}
+                                               {{ lessonHistoryInfoEx.student_id }}
                                             </div>
                                         </div>
                                         <div class="form-group row">

@@ -102,8 +102,7 @@ class CourseGroupUserController extends BaseController
                     ->get()->toArray();
 
                 $courseIds = Course::whereIn('course_id', $courseIds)
-                    ->where('course_type', CourseTypeEnum::GROUP_COURSE)
-                    ->pluck('is_for_lms', 'course_id')->toArray();
+                    ->get()->keyBy('course_id')->toArray();
                 $emails = Student::whereIn('student_email', $emails)
                     ->pluck('is_lms_user', 'student_email')->toArray();
                 $boughtCourse = [];
@@ -136,13 +135,13 @@ class CourseGroupUserController extends BaseController
                                     break;
                                 }
 
-                                if (!isset($courseIds[$value])) {
+                                if (empty($courseIds[$value])) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": コースIDが存在しません";
                                     break;
                                 }
 
-                                if (empty($courseIds[$value])) {
+                                if (empty($courseIds[$value]["is_for_lms"]) || $courseIds[$value]["course_type"] != CourseTypeEnum::GROUP_COURSE) {
                                     $setSession = false;
                                     $data[$key]["error_list"][] = UserType::COURSE_USER_IMPORT_HEADER[$keyLine] . ": 個人向けコースのコースIDです";
                                     break;
@@ -549,7 +548,7 @@ class CourseGroupUserController extends BaseController
                 ]);
             }
             if (!$dataCheck) {
-                $msg['error_list'] = "データに誤りがあります。";
+                $msg['error_list'] = "ファイルのフォーマットが異なります。正しいフォーマットファイルをダウンロードして、読込用ファイルを作成してください。";
                 return view('groupCourse.student_import', [
                     'dataImport' => $result,
                     'errorMessage' => $msg,
@@ -588,7 +587,7 @@ class CourseGroupUserController extends BaseController
                         
                         $date = str_replace('/', '-', $value['student_birthday']);
                         if ($value['student_email'] == null) {
-                            $msg['error_list'] = "メールアドレスを入力してください。";
+                            $msg['error_list'] = "メールアドレスに誤りがあります";
                             break;
                         }
                         $counts = array_count_values($temp);
@@ -597,19 +596,19 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['student_firstname'] == null) {
-                            $msg['error_list'] = "姓を入力してください。";
+                            $msg['error_list'] = "姓に誤りがあります";
                             break;
                         }
                         if ($value['student_lastname'] == null) {
-                            $msg['error_list'] = "名を入力してください。";
+                            $msg['error_list'] = "名に誤りがあります";
                             break;
                         }
                         if ($value['student_nickname'] == null) {
-                            $msg['error_list'] = "ニックネームを入力してください。";
+                            $msg['error_list'] = "ニックネームに誤りがあります";
                             break;
                         }
                         if ($value['student_birthday'] == null) {
-                            $msg['error_list'] = "生年月日を入力してください。";
+                            $msg['error_list'] = "生年月日に誤りがあります";
                             break;
                         }
 
@@ -622,7 +621,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if (!isset($value['student_sex']) ) {
-                            $msg['error_list'] = "性別を入力してください。";
+                            $msg['error_list'] = "性別に誤りがあります";
                             break;
                         }
                         if (!array_key_exists($value['student_sex'], [0, 1, 2])) {
@@ -630,15 +629,15 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if ($value['company_name'] == null) {
-                            $msg['error_list'] = "法人を入力してください。";
+                            $msg['error_list'] = "法人名に誤りがあります";
                             break;
                         }
                         if ($value['password'] == null) {
-                            $msg['error_list'] = "パスワードを入力してください。";
+                            $msg['error_list'] = "パスワードに誤りがあります";
                             break;
                         }
                         if ($value['lang_type'] == null ) {
-                            $msg['error_list'] = "言語を入力してください。";
+                            $msg['error_list'] = "言語に誤りがあります";
                             break;
                         }
                         if (!in_array($value['lang_type'], ['ja', 'en', 'zh'])) {

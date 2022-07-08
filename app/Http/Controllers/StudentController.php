@@ -103,9 +103,9 @@ class StudentController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('teacher_nickname', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('course_name', $request['search_input']));
+                $query->where($this->escapeLikeSentence('student.student_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('teacher.teacher_nickname', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
         if (isset($request['sort'])) {
@@ -357,10 +357,10 @@ class StudentController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('course_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lesson_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('lesson_text_name', $request['search_input']))
-                    ->orWhere($this->escapeLikeSentence('teacher_name', $request['search_input']));
+                $query->where($this->escapeLikeSentence('course.course_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('lesson.lesson_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('lesson_text.lesson_text_name', $request['search_input']))
+                    ->orWhere($this->escapeLikeSentence('teacher.teacher_name', $request['search_input']));
             });
         }
         if (isset($request['sort'])) {
@@ -577,7 +577,7 @@ class StudentController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
+                $query->where($this->escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
         $paymentHistoryList = $queryBuilder->sortable(['point_subscription_history_id' => 'desc'])->paginate($pageLimit);
@@ -1282,7 +1282,7 @@ class StudentController extends BaseController
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('course_name', $request['search_input']));
+                $query->where($this->escapeLikeSentence('course.course_name', $request['search_input']));
             });
         }
         if (isset($request['sort'])) {

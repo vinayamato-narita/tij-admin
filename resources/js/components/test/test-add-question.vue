@@ -304,7 +304,7 @@
                                                             class="form-control"
                                                             :name="'subQuestion[' + index + '][reference_url]'"
                                                             v-model="item.referenceUrl"
-                                                            v-validate="'max:30'"
+                                                            v-validate="'max:255'"
                                                     />
                                                     <div
                                                             class="input-group is-danger"

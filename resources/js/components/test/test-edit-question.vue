@@ -311,7 +311,7 @@
                                                             class="form-control"
                                                             :name="'subQuestion[' + index + '][reference_url]'"
                                                             v-model="item.referenceUrl"
-                                                            v-validate="'max:30'"
+                                                            v-validate="'max:255'"
                                                     />
                                                     <div
                                                             class="input-group is-danger"
@@ -677,6 +677,9 @@
                 messError.custom["subQuestion[" + index + "][question]"] = {
                     required: "問題文を入力してください",
                     max: "問題文は255文字以内で入力してください。",
+                };
+                messError.custom["subQuestion[" + index + "][reference_url]"] = {
+                    max: "参考URLは255文字以内で入力してください。",
                 };
                 messError.custom["subQuestion[" + index + "][answer1]"] = {
                     required: "選択肢1を入力してください。"

@@ -95,7 +95,7 @@
                                                 >出（0）欠（1）</label
                                             >
                                             <div class="col-md-6 pt-7">
-                                                {{ lessonHistoryInfoEx.skype_voice_rating_from_teacher }}
+                                                {{ lessonHistoryInfoEx.student_lesson_start == null ? 1 : 0 }}
                                             </div>
                                         </div>
                                         <div class="form-group row">

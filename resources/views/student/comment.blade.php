@@ -57,7 +57,7 @@
                                                     <th class="text-left">@sortablelink('teacher_punctual', '評価項目3')</th>
                                                     <th class="text-left">@sortablelink('skype_voice_rating_from_student', '評価項目4')</th>
                                                     <th class="text-left">@sortablelink('comment_from_student_to_office', 'レッスンに対する感想')</th>
-                                                    <th class="text-left">@sortablelink('skype_voice_rating_from_teacher', '出（0）欠（1）')</th>
+                                                    <th class="text-left">@sortablelink('student_lesson_start', '出（0）欠（1）')</th>
                                                     <th class="text-left">@sortablelink('comment_from_teacher_to_student', '学習者へのコメント')</th>
                                                     <th class="text-left">@sortablelink('comment_from_teacher_to_office', '事務局へのコメント')</th>
                                                 </tr>
@@ -75,7 +75,7 @@
                                                         <td class="text-left">{{ $item['teacher_punctual'] }}</td>
                                                         <td class="text-left">{{ Str::limit($item['skype_voice_rating_from_student'], 20) }}</td>
                                                         <td class="text-left">{{ Str::limit($item['comment_from_student_to_office'], 20) }}</td>
-                                                        <td class="text-left">{{ Str::limit($item['skype_voice_rating_from_teacher'], 20) }}</td>
+                                                        <td class="text-left">{{ $item['student_lesson_start'] }}</td>
                                                         <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_student'], 20) }}</td>
                                                         <td class="text-left">{{ Str::limit($item['comment_from_teacher_to_office'], 20) }}</td>
                                                     </tr>
@@ -247,7 +247,7 @@
                                         <b>出（0）欠（1）</b>
                                     </div>
                                     <div class="col-md-6">
-                                        <p id="skype_voice_rating_from_teacher" class="content word-break"></p>
+                                        <p id="student_lesson_start" class="content word-break"></p>
                                     </div>
                                 </div>
                             </div>    

@@ -68,10 +68,11 @@ class StudentController extends BaseController
         $studentInfo = Student::where('student_id', $id)->firstOrFail();
 
         $queryBuilder = StudentPointHistory::select('student.student_id as student_id', 'teacher_rating', 'teacher_attitude',
-            'teacher_punctual', 'skype_voice_rating_from_student', 'comment_from_student_to_office', 'skype_voice_rating_from_teacher', 'comment_from_teacher_to_student', 'comment_from_teacher_to_office', 'note_from_student_to_teacher', 'course.course_name as course_name',
+            'teacher_punctual', 'skype_voice_rating_from_student', 'comment_from_student_to_office', 'comment_from_teacher_to_student', 'comment_from_teacher_to_office', 'note_from_student_to_teacher', 'course.course_name as course_name',
             'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime', 'student.student_nickname as student_nickname', 'teacher.teacher_nickname as teacher_nickname', 'student_point_history.student_point_history_id',
             DB::raw('(CASE WHEN lesson_schedule.lesson_starttime IS NULL AND lesson_schedule.lesson_endtime IS NULL THEN "" ELSE CONCAT(DATE_FORMAT(lesson_schedule.lesson_starttime, "%Y-%m-%d %H:%i"), "~", DATE_FORMAT(lesson_schedule.lesson_endtime, "%H:%i"))  END) as lesson_time'),
-            'lesson_history.lesson_history_id as lesson_history_id')
+            'lesson_history.lesson_history_id as lesson_history_id',
+            DB::raw('(CASE WHEN lesson_history.student_lesson_start IS NULL THEN "1" ELSE "0" END) as student_lesson_start'))
             ->join('student', function($join) {
                 $join->on('student_point_history.student_id', '=', 'student.student_id');
             })
@@ -133,8 +134,8 @@ class StudentController extends BaseController
             if ($request['sort'] == "comment_from_student_to_office") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_student_to_office','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_student_to_office','DESC');
             }
-            if ($request['sort'] == "skype_voice_rating_from_teacher") {
-                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_teacher','ASC') : $queryBuilder->orderBy('lesson_history.skype_voice_rating_from_teacher','DESC');
+            if ($request['sort'] == "student_lesson_start") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.student_lesson_start','ASC') : $queryBuilder->orderBy('lesson_history.student_lesson_start','DESC');
             }
             if ($request['sort'] == "comment_from_teacher_to_student") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_student','ASC') : $queryBuilder->orderBy('lesson_history.comment_from_teacher_to_student','DESC');
@@ -329,7 +330,7 @@ class StudentController extends BaseController
             'lesson_schedule.lesson_starttime as lesson_starttime', 'lesson_schedule.lesson_endtime as lesson_endtime',
             'lesson_schedule.lesson_date as lesson_date', 'course.course_name as course_name',
             'lesson_text.lesson_text_name as lesson_text_name', 'teacher.teacher_name as teacher_name',
-            'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher')
+            'lesson_history.student_lesson_start as student_lesson_start')
             ->join('course', function($join) {
                 $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
@@ -405,7 +406,7 @@ class StudentController extends BaseController
             'course.course_id as course_id', 'lesson_history.teacher_rating as teacher_rating',
             'lesson_history.teacher_attitude as teacher_attitude', 'lesson_history.teacher_punctual as teacher_punctual',
             'lesson_history.skype_voice_rating_from_student as skype_voice_rating_from_student', 'lesson_history.comment_from_student_to_office as comment_from_student_to_office',
-            'lesson_history.comment_from_teacher_to_student as comment_from_teacher_to_student', 'lesson_history.skype_voice_rating_from_teacher as skype_voice_rating_from_teacher',
+            'lesson_history.comment_from_teacher_to_student as comment_from_teacher_to_student', 'lesson_history.student_lesson_start as student_lesson_start',
             'lesson_history.comment_from_admin_to_student as comment_from_admin_to_student')
             ->join('course', function($join) {
                 $join->on('lesson_history.course_id', '=', 'course.course_id');

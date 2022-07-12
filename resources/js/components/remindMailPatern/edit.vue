@@ -70,7 +70,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-4 text-md-left p-2">
-                                                <textarea rows="20" class="form-control" id="mailBody" type="text" name="mailBody" @input="changeInput()"  v-model="mailBody"   v-validate="'required'" />
+                                                <textarea ref="textarea1" class="form-control overflow-hidden" id="mailBody" type="text" name="mailBody" @input="changeInput()"  v-model="mailBody"   v-validate="'required'" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("mailBody") }}
@@ -78,7 +78,7 @@
 
                                             </div>
                                             <div class="col-md-5 text-md-left p-2">
-                                                <textarea rows="20" class="form-control" value=""  disabled>
+                                                <textarea ref="textarea2" class="form-control overflow-hidden" value=""  disabled>
 【無料会員登録時】
 【法人会員登録時】
 学習者名:　#STUDENT_NAME#
@@ -224,8 +224,18 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
         },
         props: ['detailRemindMailUrl', 'updateRemindMailUrl', 'remindMail'],
         mounted() {
+            this.resize();
+
         },
         methods: {
+            resize() {
+                let element1 = this.$refs["textarea1"];
+                element1.style.height = "18px";
+                element1.style.height = element1.scrollHeight + "px";
+                let element2 = this.$refs["textarea2"];
+                element2.style.height = "18px";
+                element2.style.height = element2.scrollHeight + "px";
+            },
             register() {
                 let that = this;
                 let formData = new FormData();
@@ -279,6 +289,7 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 
             },
             changeInput() {
+                this.resize();
                 this.errorsData = [];
                 this.messageText = "";
             },

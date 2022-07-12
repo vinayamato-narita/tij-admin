@@ -76,8 +76,9 @@
                                             >
                                             <div class="col-md-6">
                                                 <textarea
-                                                    class="form-control"
-                                                    rows = "5"
+                                                    class="form-control overflow-hidden"
+                                                    ref="textarea"
+                                                    @input="resize()"
                                                     name="mail_lang_body"
                                                     v-model="remindMailEx.mail_lang_body"
                                                     v-validate="
@@ -142,8 +143,15 @@ export default {
         };
     },
     props: ["urlAction", "urlRemindDetail", "remindMail"],
-    mounted() {},
+    mounted() {
+        this.resize();
+    },
     methods: {
+        resize() {
+            let element = this.$refs["textarea"];
+            element.style.height = "18px";
+            element.style.height = element.scrollHeight + "px";
+        },
         save() {
             let that = this;
             this.$validator

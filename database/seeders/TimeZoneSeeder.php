@@ -312,10 +312,16 @@ class TimeZoneSeeder extends Seeder
                 "diff_time" => "0"
             ],
 
+            [
+                "timezone_name_english" => "Greenwich Mean Time",
+                "timezone_name_native" => "(GMT) グリニッジ標準時",
+                "display_no" => "43",
+                "diff_time" => "0"
+            ],
 
             [
-                "timezone_name_english" => "(GMT) Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London",
-                "timezone_name_native" => "（GMT）グリニッジ標準時：ダブリン、エジンバラ、リスボン、ロンドン",
+                "timezone_name_english" => "Dublin, Edinburgh, Lisbon, London",
+                "timezone_name_native" => "(GMT)ダブリン、エジンバラ、 リスボン、ロンドン",
                 "display_no" => "43",
                 "diff_time" => "0"
             ],

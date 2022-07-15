@@ -27,27 +27,24 @@
                                     <div class="input text text-nowrap">
                                         <div style="width: 150px" class="d-inline-block">
                                             <date-picker
-                                                    v-model="timeFrom"
+                                                    v-model="time_from"
                                                     :format="'YYYY/MM/DD HH:mm'"
                                                     type="datetime"
                                                     v-on:change="onchangeDP"
+                                                    :input-attr="{ name: 'time_from'}"
                                             ></date-picker>
-                                            <input type="hidden" name="time_from"
-                                                   :value="timeFrom === null? '' : timeFrom.getTime()/1000">
-
                                         </div>
                                         <div class="d-inline-block">
                                             ～
                                         </div>
                                         <div style="width: 150px" class="d-inline-block">
                                             <date-picker
-                                                    v-model="timeTo"
+                                                    v-model="time_to"
                                                     :format="'YYYY/MM/DD HH:mm'"
                                                     type="datetime"
                                                     v-on:change="onchangeDP"
+                                                    :input-attr="{ name: 'time_to'}"
                                             ></date-picker>
-                                            <input type="hidden" name="time_to"
-                                                   :value="timeTo === null? '' :timeTo.getTime()/1000">
                                         </div>
                                     </div>
                                 </div>                           
@@ -70,12 +67,12 @@
     export default {
         props: ["url", "pageLimit", "dataQuery"],
         mounted() {
-
+            
         },
         data() {
             return {
-                timeFrom: (this.dataQuery.time_from === null || this.dataQuery.time_from === undefined) ? null : new Date(this.dataQuery.time_from * 1000),
-                timeTo: (this.dataQuery.time_to === null || this.dataQuery.time_to === undefined) ? null : new Date(this.dataQuery.time_to * 1000)
+                time_from: (this.dataQuery.time_from === null || this.dataQuery.time_from === undefined) ? null : new Date(this.dataQuery.time_from),
+                time_to: (this.dataQuery.time_to === null || this.dataQuery.time_to === undefined) ? null : new Date(this.dataQuery.time_to)
             }
         },
         methods: {

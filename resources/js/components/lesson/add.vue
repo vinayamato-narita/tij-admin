@@ -92,7 +92,7 @@
                                         </div> -->
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonDescription"> レッスン概要
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonDescription"> 説明
                                             : </label>
 
                                             <div class="col-md-6">

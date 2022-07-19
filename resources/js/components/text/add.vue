@@ -90,7 +90,7 @@
 
 
                                         <div class="form-group row ">
-                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextDescription"> レッスン概要 : </label>
+                                            <label class="col-md-3 col-form-label text-md-right" for="lessonTextDescription"> 説明 : </label>
 
                                             <div class="col-md-6">
                                                             <textarea class="form-control" id="lessonTextDescription"  name="lessonTextDescription"

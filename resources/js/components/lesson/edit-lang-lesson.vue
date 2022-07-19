@@ -84,7 +84,7 @@
                                             <label
                                                     class="col-md-3 col-form-label text-md-right"
                                                     for="text-input"
-                                            >レッスン概要:</label
+                                            >説明:</label
                                             >
                                             <div class="col-md-6">
                                                 <textarea

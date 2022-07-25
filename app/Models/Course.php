@@ -123,33 +123,54 @@ class Course extends Model
         return $this->hasMany('App\Models\LessonSchedule', 'course_id', 'course_id');
     }
 
+//    public function getGroupLessonAttribute()
+//    {
+//        $today = Carbon::now();
+//        $lessonDateArr = $this->lessonSchedules->pluck('lesson_date')->toArray();
+//
+//        $lessonMaxDate = '';
+//        $lessonMinDate = '';
+//        if (!empty($lessonDateArr)) {
+//            $lessonMaxDate = max($lessonDateArr);
+//            $lessonMinDate = min($lessonDateArr);
+//        }
+//
+//        if ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) > $today) {
+//            return '公開前';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) <= $today) {
+//            return '公開中';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
+//            return '開講決定';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
+//            return '開講中';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMaxDate) && count($lessonDateArr) != 0) {
+//            return '終了';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && count($lessonDateArr) == 0) {
+//            return '---';
+//        } elseif ($this->group_lesson_status == GroupLessonStatus::CANCEL) {
+//            return '不成立';
+//        }
+//    }
+
     public function getGroupLessonAttribute()
     {
-        $today = Carbon::now();
-        $lessonDateArr = $this->lessonSchedules->pluck('lesson_date')->toArray();
+        $now = Carbon::now();
 
-        $lessonMaxDate = '';
-        $lessonMinDate = '';
-        if (!empty($lessonDateArr)) {
-            $lessonMaxDate = max($lessonDateArr);
-            $lessonMinDate = min($lessonDateArr);
+        if ($this->group_lesson_status  == GroupLessonStatus::BEFORE_DECIDE) {
+            if ($this->publish_date_from > $now) return '公開前';
+            else return '公開中';
+
         }
 
-        if ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) > $today) {
-            return '公開前';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::BEFORE_DECIDE && Carbon::parse($this->publish_date_from) <= $today) {
-            return '公開中';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today < Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
-            return '開講決定';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMinDate) && count($lessonDateArr) != 0) {
-            return '開講中';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && $today >= Carbon::parse($lessonMaxDate) && count($lessonDateArr) != 0) {
-            return '終了';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::COURSE_DECIDE && count($lessonDateArr) == 0) {
-            return '---';
-        } elseif ($this->group_lesson_status == GroupLessonStatus::CANCEL) {
-            return '不成立';
+        if ($this->group_lesson_status  == GroupLessonStatus::COURSE_DECIDE) {
+            if ($this->course_start_date > $now) return '開講決定';
+            if ($this->publish_date_from < $now) return '終了';
+            else return '開講中';
+
         }
+
+        if ($this->group_lesson_status  == GroupLessonStatus::CANCEL) return '不成立';
+        return '---';
     }
 
     protected $sortableAs = ['student_point_histories_count', 'point_subscription_histories_count'];

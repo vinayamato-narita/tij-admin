@@ -93,7 +93,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Chihuahua, La Paz, Mazatlan (Summer time)",
-                "timezone_name_native" => "(GMT-06:00)チワワ、 ラパス、マサトラン（夏時間） ",
+                "timezone_name_native" => "(GMT-06:00)チワワ、ラパス、マサトラン（夏時間） ",
                 "display_no" => "12",
                 "diff_time" => "-6"
             ],
@@ -107,7 +107,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Mountain Time (US & Canada) (Summer time)",
-                "timezone_name_native" => "(GMT-06:00)山岳部標準時(米国およびカナダ)（夏時間）",
+                "timezone_name_native" => "(GMT-06:00)山岳部標準時（米国およびカナダ）（夏時間）",
                 "display_no" => "14",
                 "diff_time" => "-6"
             ],
@@ -135,7 +135,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Central Time (US & Canada) (Summer time)",
-                "timezone_name_native" => "(GMT-05:00)中部標準時(米国およびカナダ)（夏時間）",
+                "timezone_name_native" => "(GMT-05:00)中部標準時（米国およびカナダ）（夏時間）",
                 "display_no" => "18",
                 "diff_time" => "-5"
             ],
@@ -149,7 +149,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Guadalajara, Mexico City, Monterrey (Summer time)",
-                "timezone_name_native" => "(GMT-05:00)グアダラハラ、 メキシコシティ、モンテレー（夏時間）",
+                "timezone_name_native" => "(GMT-05:00)グアダラハラ、メキシコシティ、モンテレー（夏時間）",
                 "display_no" => "20",
                 "diff_time" => "-5"
             ],
@@ -321,14 +321,14 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Dublin, Edinburgh, Lisbon, London",
-                "timezone_name_native" => "(GMT)ダブリン、エジンバラ、 リスボン、ロンドン",
+                "timezone_name_native" => "(GMT)ダブリン、エジンバラ、リスボン、ロンドン",
                 "display_no" => "43",
                 "diff_time" => "0"
             ],
 
             [
                 "timezone_name_english" => "Dublin, Edinburgh, Lisbon, London (Summer time)",
-                "timezone_name_native" => "(GMT+01:00)ダブリン、エジンバラ、 リスボン、ロンドン（夏時間）",
+                "timezone_name_native" => "(GMT+01:00)ダブリン、エジンバラ、リスボン、ロンドン（夏時間）",
                 "display_no" => "44",
                 "diff_time" => "1"
             ],
@@ -342,7 +342,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna (Summer time)",
-                "timezone_name_native" => "(GMT+02:00)アムステルダム、ベルリン、 ベルン, ローマ, ストックホルム、ウィーン（夏時間）",
+                "timezone_name_native" => "(GMT+02:00)アムステルダム、ベルリン、ベルン, ローマ、ストックホルム、ウィーン（夏時間）",
                 "display_no" => "46",
                 "diff_time" => "2"
             ],
@@ -356,7 +356,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Belgrade, Bratislava, Budapest, Ljubljana, Prague (Summer time)",
-                "timezone_name_native" => "(GMT+02:00)ベオグラード、ブ ラチスラバ ブダペスト リュブリャナ、プラハ（夏時間）",
+                "timezone_name_native" => "(GMT+02:00)ベオグラード、ブラチスラバ、ブダペスト、リュブリャナ、プラハ（夏時間）",
                 "display_no" => "48",
                 "diff_time" => "2"
             ],
@@ -406,7 +406,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Athens, Beirut, Istanbul, Minsk (Summer time)",
-                "timezone_name_native" => "(GMT+03:00)アテネ、 ベイルート、イスタンブール、 ミンスク （夏時間）",
+                "timezone_name_native" => "(GMT+03:00)アテネ、ベイルート、イスタンブール、ミンスク （夏時間）",
                 "display_no" => "55",
                 "diff_time" => "3"
             ],
@@ -448,7 +448,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius (Summer time)",
-                "timezone_name_native" => "(GMT+03:00)ヘルシンキ、 キエフ、 リガ、ソフィア、 タリン、 ビリニュス（夏時間）",
+                "timezone_name_native" => "(GMT+03:00)ヘルシンキ、キエフ、リガ、ソフィア、タリン、ビリニュス（夏時間）",
                 "display_no" => "61",
                 "diff_time" => "3"
             ],
@@ -681,7 +681,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Canberra, Melbourne, Sydney (Summer time)",
-                "timezone_name_native" => "(GMT+11:00)キャンベラ、 メルボルン、シドニー（夏時間）",
+                "timezone_name_native" => "(GMT+11:00)キャンベラ、メルボルン、シドニー（夏時間）",
                 "display_no" => "94",
                 "diff_time" => "11"
             ],
@@ -731,7 +731,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Auckland, Wellington (Summer time)",
-                "timezone_name_native" => "(GMT+13:00)オークランド、 ウェリントン（夏時間）",
+                "timezone_name_native" => "(GMT+13:00)オークランド、ウェリントン（夏時間）",
                 "display_no" => "101",
                 "diff_time" => "13"
             ],

@@ -66,7 +66,7 @@ class TimeZoneSeeder extends Seeder
             ],
             [
                 "timezone_name_english" => "Pacific Time (US & Canada); Tijuana",
-                "timezone_name_native" => "(GMT-08:00)太平洋標準時（米国およびカナダ）; ティファナ",
+                "timezone_name_native" => "(GMT-08:00)太平洋標準時（米国およびカナダ）；ティファナ",
                 "display_no" => "8",
                 "diff_time" => "-8"
             ],

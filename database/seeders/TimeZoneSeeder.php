@@ -18,14 +18,14 @@ class TimeZoneSeeder extends Seeder
         $insertArr = [
             [
                 "timezone_name_english" => "Osaka,Sapporo,Tokyo",
-                "timezone_name_native" => "(GMT +09:00)大阪、札幌、東京",
+                "timezone_name_native" => "(GMT+09:00)大阪、札幌、東京",
                 "display_no" => "1",
                 "diff_time" => "9"
             ],
 
             [
                 "timezone_name_english" => "Taipei",
-                "timezone_name_native" => "(GMT +08:00)中华台北",
+                "timezone_name_native" => "(GMT+08:00)中华台北",
                 "display_no" => "2",
                 "diff_time" => "8"
             ],

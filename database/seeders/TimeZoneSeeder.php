@@ -72,7 +72,7 @@ class TimeZoneSeeder extends Seeder
             ],
             [
                 "timezone_name_english" => "Pacific Time (US & Canada); Tijuana (Summer time)",
-                "timezone_name_native" => "(GMT-07:00)太平洋標準時(米国およびカナダ); ティファナ（夏時間）",
+                "timezone_name_native" => "(GMT-07:00)太平洋標準時（米国およびカナダ）；ティファナ（夏時間）",
                 "display_no" => "9",
                 "diff_time" => "-7"
             ],
@@ -205,7 +205,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Atlantic Time(Canada) (Summer time)",
-                "timezone_name_native" => "(GMT-03:00)大西洋標準時(カナダ)（夏時間）",
+                "timezone_name_native" => "(GMT-03:00)大西洋標準時（カナダ）（夏時間）",
                 "display_no" => "28",
                 "diff_time" => "-3"
             ],

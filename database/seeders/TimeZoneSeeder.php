@@ -191,7 +191,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Indiana (East) (Summer time)",
-                "timezone_name_native" => "(GMT-04:00)インディアナ (東)（夏時間）",
+                "timezone_name_native" => "(GMT-04:00)インディアナ（東）（夏時間）",
                 "display_no" => "26",
                 "diff_time" => "-4"
             ],

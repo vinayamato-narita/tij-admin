@@ -93,7 +93,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Chihuahua, La Paz, Mazatlan (Summer time)",
-                "timezone_name_native" => "(GMT-06:00)チワワ、ラパス、マサトラン（夏時間） ",
+                "timezone_name_native" => "(GMT-06:00)チワワ、ラパス、マサトラン（夏時間）",
                 "display_no" => "12",
                 "diff_time" => "-6"
             ],
@@ -191,7 +191,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Indiana (East) (Summer time)",
-                "timezone_name_native" => "(GMT-04:00)インディアナ (東)（夏時間） ",
+                "timezone_name_native" => "(GMT-04:00)インディアナ (東)（夏時間）",
                 "display_no" => "26",
                 "diff_time" => "-4"
             ],
@@ -420,7 +420,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Bucharest (Summer time)",
-                "timezone_name_native" => "(GMT+03:00)ブカレスト（夏時間） ",
+                "timezone_name_native" => "(GMT+03:00)ブカレスト（夏時間）",
                 "display_no" => "57",
                 "diff_time" => "3"
             ],
@@ -745,7 +745,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Fiji, Kamchatka, Marshall Is. (Summer time)",
-                "timezone_name_native" => "(GMT+13:00)フィジー、カムチャツカ、マーシャル島（夏時間） ",
+                "timezone_name_native" => "(GMT+13:00)フィジー、カムチャツカ、マーシャル島（夏時間）",
                 "display_no" => "103",
                 "diff_time" => "13"
             ],

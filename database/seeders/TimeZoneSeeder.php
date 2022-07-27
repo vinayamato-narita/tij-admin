@@ -342,7 +342,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna (Summer time)",
-                "timezone_name_native" => "(GMT+02:00)アムステルダム、ベルリン、ベルン, ローマ、ストックホルム、ウィーン（夏時間）",
+                "timezone_name_native" => "(GMT+02:00)アムステルダム、ベルリン、ベルン、ローマ、ストックホルム、ウィーン（夏時間）",
                 "display_no" => "46",
                 "diff_time" => "2"
             ],
@@ -384,7 +384,7 @@ class TimeZoneSeeder extends Seeder
 
             [
                 "timezone_name_english" => "Sarajevo, Skopje, Warsaw, Zagreb (Summer time)",
-                "timezone_name_native" => "(GMT+02:00)サラエボ、スコピエ、ワルシャワ ザグレブ（夏時間）",
+                "timezone_name_native" => "(GMT+02:00)サラエボ、スコピエ、ワルシャワ、ザグレブ（夏時間）",
                 "display_no" => "52",
                 "diff_time" => "2"
             ],

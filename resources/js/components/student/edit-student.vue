@@ -316,6 +316,25 @@
 
                                                 <div class="form-group row">
                                                     <label
+                                                            class="col-md-3 col-form-label text-md-right"
+                                                            for="text-input"
+                                                    >居住地</label
+                                                    >
+                                                    <div class="col-md-9">
+                                                        <select
+                                                                class="form-control"
+                                                                name="place_of_residence"
+                                                                v-model="studentInfoEx.place_of_residence"
+                                                        >
+                                                            <option :value="key" v-for="(value, key) in studentInfoEx.studentPlaceOfResidences" :key="key">
+                                                                {{ value }}</option
+                                                            >
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label
                                                         class="col-md-3 col-form-label text-md-right"
                                                         for="text-input"
                                                         >表示言語</label

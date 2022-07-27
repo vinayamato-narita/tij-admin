@@ -1123,6 +1123,7 @@ class StudentController extends BaseController
 
         $studentInfo->countries = Country::pluck('country_name', 'country_id');
         $studentInfo->countries[0] = "DO NOT SELECT";
+        $studentInfo->studentPlaceOfResidences = Country::pluck('country_name', 'country_id');
 
         return view('student.edit', [
             'breadcrumbs' => $breadcrumbs,
@@ -1168,6 +1169,7 @@ class StudentController extends BaseController
         $studentInfo->in_japan_flag = $request->in_japan_flag;
         $studentInfo->country_id = $request->country_id != 0 ? $request->country_id : null;
         $studentInfo->city = $request->city;
+        $studentInfo->place_of_residence = $request->place_of_residence;
 /*        $studentInfo->is_lms_user = $request->is_lms_user;*/
 
         $studentInfo->save();  

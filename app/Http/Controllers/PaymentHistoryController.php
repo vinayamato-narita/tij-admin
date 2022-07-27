@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Enums\PaidStatus;
 use App\Models\PointSubscriptionHistory;
@@ -191,7 +192,8 @@ class PaymentHistoryController extends BaseController
             $this->convertShijis("売上"),
             $this->convertShijis("消費税"),
             $this->convertShijis("支払方法"),
-            $this->convertShijis("入金日")
+            $this->convertShijis("入金日"),
+            $this->convertShijis("居住地")
         ];
 
 
@@ -214,6 +216,7 @@ class PaymentHistoryController extends BaseController
             'point_subscription_history.item_name as item_name',
             'student.student_name as j_student_name',
             'student.company_name as j_company_name',
+            'student.place_of_residence as j_place_of_residence',
             'point_subscription_history.amount as amount',
             'point_subscription_history.tax as tax',
             'point_subscription_history.payment_way as payment_way',
@@ -305,6 +308,9 @@ class PaymentHistoryController extends BaseController
             $input['消費税'] = $this->convertShijis($item['tax']);
             $input['支払方法'] = $this->convertShijis($item['payment_way']);
             $input['入金日'] = $this->convertShijis($item['j_receive_payment_date']);
+            if (!empty( $item['j_place_of_residence']))
+                $input['居住地'] = $this->convertShijis(Country::where('country_id', $item['j_place_of_residence'])->first()->country_name);
+            else $input['居住地'] = $this->convertShijis('');
             fputcsv($file, $input);
         }
 

@@ -158,7 +158,7 @@
                                             <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">コースコード :
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="'max:45'" />
+                                                <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="{max:16, regex: /^[A-Za-z0-9_]+$/ }" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("paypalItemNumber") }}
@@ -560,7 +560,8 @@
                         max_value: "有効日数は1～1000000000 を入力してください",
                     },
                     paypalItemNumber : {
-                        max: "コースコードは45文字以内で入力してください。"
+                        max: "コースコードは16文字以内で入力してください。",
+                        regex: "コースコードは半角英数字および ハイフンで入力してください。"
                     },
                     minReserveCount : {
                         required: "最小開催人数はを入力してください",

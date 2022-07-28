@@ -38,7 +38,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonCode" type="text" name="lessonCode" @input="changeInput()" @keydown="keyInput" v-model="lessonCode"  v-validate="'required|max:6|min:6'" />
+                                                <input class="form-control" id="lessonCode" type="text" name="lessonCode" @input="changeInput()" @keydown="keyInput" v-model="lessonCode"  v-validate="{required: true, min: 6, max:16, regex: /^[A-Za-z0-9_]+$/}" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonCode") }}
@@ -140,8 +140,9 @@
                     },
                     lessonCode : {
                         required: "レッスンコードはを入力してください",
-                        max: "レッスンコードは6桁の英数字で入力してください",
+                        max: "レッスンコードは16桁の英数字で入力してください",
                         min: "レッスンコードは6桁の英数字で入力してください",
+                        regex: "レッスンコードは半角英数字および ハイフンで入力してください。"
                     },
 
                 },
@@ -169,7 +170,7 @@
         mounted() {},
         methods: {
             keyInput(event) {
-                switch (event.keyCode) {
+/*                switch (event.keyCode) {
                     case 8:  // Backspace
                     case 9:  // Tab
                     case 13: // Enter
@@ -186,7 +187,7 @@
                         return false;
                     }
                     break;
-                }
+                }*/
             },
             register() {
                 let that = this;

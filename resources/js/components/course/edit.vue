@@ -697,7 +697,8 @@
                 formData.append("maxReserveCount", this.maxReserveCount);
                 formData.append("minReserveCount", this.minReserveCount);
                 formData.append("amount", this.amount);
-                formData.append("paypalItemNumber", this.paypalItemNumber);
+                if (this.paypalItemNumber != null)
+                    formData.append("paypalItemNumber", this.paypalItemNumber);
                 formData.append("courseDescription", this.courseDescription);
                 formData.append("courseTarget", this.course_target);
                 formData.append("courseAttainmentTarget", this.course_attainment_target);

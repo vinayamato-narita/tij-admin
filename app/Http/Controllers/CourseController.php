@@ -176,7 +176,7 @@ class CourseController extends BaseController
                 $course->course_name = $request->courseName;
                 $course->point_count = $request->pointCount;
                 $course->amount = $request->amount;
-                $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
+                $course->paypal_item_number = $request->paypalItemNumber;
                 $course->course_description = $request->courseDescription ?? ' ';
                 $course->course_target = $request->courseTarget ?? ' ';
                 $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';
@@ -879,7 +879,7 @@ class CourseController extends BaseController
                 $course->course_name = $request->courseName;
                 $course->point_count = $request->pointCount;
                 $course->amount = $request->amount;
-                $course->paypal_item_number = $request->paypalItemNumber ?? ' ';
+                $course->paypal_item_number = $request->paypalItemNumber;
                 $course->course_description = $request->courseDescription ?? ' ';
                 $course->course_target = $request->courseTarget ?? ' ';
                 $course->course_attainment_target = $request->courseAttainmentTarget ?? ' ';

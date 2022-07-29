@@ -657,7 +657,7 @@
                 courseNameShort: '',
                 pointCount: 1,
                 amount : 1,
-                paypalItemNumber : '',
+                paypalItemNumber : null,
                 courseType: 0,
                 isForLMS : 0,
                 flagShowLoader: false,

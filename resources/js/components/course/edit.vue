@@ -158,7 +158,7 @@
                                             <label class="col-md-3 col-form-label text-md-right" for="paypalItemNumber">コースコード :
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="{max:16, regex: /^[A-Za-z0-9_]+$/ }" />
+                                                <input class="form-control" id="paypalItemNumber" type="text" name="paypalItemNumber" @input="changeInput()"  v-model="paypalItemNumber"  v-validate="{max:16, regex: /^[A-Za-z0-9-]+$/ }" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("paypalItemNumber") }}

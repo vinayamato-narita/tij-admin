@@ -39,7 +39,7 @@
                                                 ></span>
                                             </label>
                                             <div class="col-md-6">
-                                                <input class="form-control" id="lessonCode" type="text" name="lessonCode" @input="changeInput()" @keydown="keyInput" v-model="lessonCode"  v-validate="{required: true,  max:16, regex: /^[A-Za-z0-9_]+$/}" />
+                                                <input class="form-control" id="lessonCode" type="text" name="lessonCode" @input="changeInput()" @keydown="keyInput" v-model="lessonCode"  v-validate="{required: true,  max:16, regex: /^[A-Za-z0-9-]+$/}" />
 
                                                 <div class="input-group is-danger" role="alert">
                                                     {{ errors.first("lessonCode") }}

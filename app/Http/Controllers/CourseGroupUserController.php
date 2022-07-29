@@ -625,7 +625,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if (!array_key_exists($value['student_sex'], [0, 1, 2])) {
-                            $msg['error_list'] = "データに誤りがあります";
+                            $msg['error_list'] = "性別に誤りがあります";
                             break;
                         }
                         if ($value['company_name'] == null) {
@@ -641,7 +641,7 @@ class CourseGroupUserController extends BaseController
                             break;
                         }
                         if (!in_array($value['lang_type'], ['ja', 'en', 'zh'])) {
-                            $msg['error_list'] = "データに誤りがあります";
+                            $msg['error_list'] = "言語に誤りがあります";
                             break;
                         }
                         $insert[] = [

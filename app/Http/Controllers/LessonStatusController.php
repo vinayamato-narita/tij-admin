@@ -408,7 +408,7 @@ class LessonStatusController extends BaseController
         }
 
         // 合計
-        $row = array("合計");
+        $row = array( $this->convertShijis("合計"));
         $curColDate = $startDate;
         while($curColDate <= $endDate) {
             $row[] = $this->convertShijis($this->sum_of_lesson_by_date($curColDate, 1, $lessonStatus));

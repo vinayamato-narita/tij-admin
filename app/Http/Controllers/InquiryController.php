@@ -203,14 +203,14 @@ class InquiryController extends BaseController
         $fileName = "contact_".date("Y_m_d").".csv";
 
         $header = [
-            "問合せ番号", 
-            "日時", 
-            "問い合わせ件名", 
-            "学習者番号", 
-            "名前", 
-            "メールアドレス", 
-            "対応状況", 
-            "問い合わせ内容"
+            $this->convertShijis("問合せ番号"),
+            $this->convertShijis("日時"),
+            $this->convertShijis("問い合わせ件名"),
+            $this->convertShijis("学習者番号"),
+            $this->convertShijis("名前"),
+            $this->convertShijis("メールアドレス"),
+            $this->convertShijis("対応状況"),
+            $this->convertShijis("問い合わせ内容")
         ];
 
         if (!file_exists(public_path().'/csv_file/users')) {
@@ -234,9 +234,29 @@ class InquiryController extends BaseController
         	return $item;
         })->toArray();
 
-        $this->writecsv($inquiryList, $header, $fileName, $localPath);
+        $file = fopen($localPath, 'w');
+        fputcsv($file, $header);
 
-        return Response::download($localPath, $fileName);
+        foreach ($inquiryList as $inquiry) {
+            $input = array();
+            $input['inquiry_id'] = $this->convertShijis($inquiry['inquiry_id']);
+            $input['inquiry_date'] = $this->convertShijis($inquiry['inquiry_date']);
+            $input['inquiry_subject'] = $this->convertShijis($inquiry['inquiry_subject']);
+            $input['student_id'] = $this->convertShijis($inquiry['student_id']);
+            $input['student_name'] = $this->convertShijis($inquiry['student_name']);
+            $input['j_student_email'] = $this->convertShijis($inquiry['j_student_email']);
+            $input['inquiry_flag'] = $this->convertShijis($inquiry['inquiry_flag']);
+            $input['inquiry_body'] = $this->convertShijis($inquiry['inquiry_body']);
+
+            $dataExport[] = $input;
+            fputcsv($file, $input);
+        }
+/*        $this->writecsv($inquiryList, $header, $fileName, $localPath);*/
+
+
+/*        return Response::download($localPath, $fileName);*/
+        return Response::download($localPath, $fileName, $header);
+
     }
 
 }

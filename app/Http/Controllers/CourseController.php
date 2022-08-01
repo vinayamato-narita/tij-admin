@@ -638,7 +638,10 @@ class CourseController extends BaseController
     {
         $queryBuilder = new CourseLesson();
 
-        $lessonList = $queryBuilder::with('lesson')->where('course_id', $id)->sortable(['display_order' => 'asc'])->get()->toArray();
+        $lessonList = $queryBuilder::with('lesson')
+            ->where('course_id', $id)
+            ->whereHas('lesson')
+            ->sortable(['display_order' => 'asc'])->get()->toArray();
         return response()->json([
             'status' => 'OK',
             'dataList' => $lessonList

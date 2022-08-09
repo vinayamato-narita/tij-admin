@@ -13,7 +13,7 @@ use App\Models\TimeZone;
 use App\Models\Lesson;
 use App\Enums\CourseTypeEnum;
 use DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class SendMailBeforeLessonStart extends Command
 {
@@ -48,6 +48,8 @@ class SendMailBeforeLessonStart extends Command
      */
     public function handle()
     {
+        Log::info("send_mail_before_lesson_start start[start]");
+
         $getMailTeacher = SendRemindMailPattern::where('send_remind_mail_timing_type', MailType::MAIL_TEACHER_BEFORE_LESSON_START)->first();
         if($getMailTeacher == null) {
             return;
@@ -135,6 +137,10 @@ class SendMailBeforeLessonStart extends Command
         ->get();
 
         $scheduleId = 0;
+        $this->info("send_mail_before_lesson_start start:");
+        Log::info(print_r($lessonSchedules->toArray(), true));
+
+
         foreach($lessonSchedules as $lessonSchedule) 
         {
             if ($lessonSchedule->lang_type == LangType::JA && count($getMailStudentJp)) {
@@ -222,6 +228,8 @@ class SendMailBeforeLessonStart extends Command
             });
             $scheduleId = $lessonSchedule->lesson_schedule_id;
         }
+        $this->info("send_mail_before_lesson_start start[end]");
+
     }
 
     private function getDateTimeZone($date, $diff) 

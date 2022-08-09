@@ -64,6 +64,8 @@ class SendMailBeforeLessonStart extends Command
         $timingMinutes = $getMailTeacher->timing_minutes;
         $timeStart = Carbon::now()->addMinutes($timingMinutes - 5);;
         $timeEnd = Carbon::now()->addMinutes($timingMinutes);
+        Log::info($timeStart->toString());
+        Log::info($timeEnd->toString());
 
         $lessonSchedules = LessonSchedule::select('student.student_name',
             'student.lang_type',
@@ -137,7 +139,7 @@ class SendMailBeforeLessonStart extends Command
         ->get();
 
         $scheduleId = 0;
-        $this->info("send_mail_before_lesson_start start:");
+        Log::info("send_mail_before_lesson_start start:");
         Log::info(print_r($lessonSchedules->toArray(), true));
 
 

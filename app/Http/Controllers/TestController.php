@@ -667,7 +667,15 @@ class TestController extends BaseController
         }
 
         try {
-            $testQuestion = TestQuestion::where('test_question_id', $testQuestionId)->delete();
+            $ret = TestQuestion::where('test_question_id', $testQuestionId)->delete();
+            if ($ret) {
+                $testQuestionIds = TestQuestion::where('test_id', $id)->pluck('test_question_id')->toArray();
+
+                $sum = TestSubQuestion::whereIn('test_question_id', $testQuestionIds)->sum('score');
+                $test = Test::find($id);
+                $test->total_score = $sum;
+                $test->save();
+            }
 
 
         } catch (\Exception $ex) {

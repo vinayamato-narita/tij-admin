@@ -372,10 +372,10 @@ class TestController extends BaseController
                 $indexDisplayOrder =  $index + 1;
                 $testSubQuestion->display_order = $indexDisplayOrder;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
-                $testSubQuestion->answer1 = trim($subQuestion->answer1);
-                $testSubQuestion->answer2 = trim($subQuestion->answer2);
-                $testSubQuestion->answer3 = trim($subQuestion->answer3);
-                $testSubQuestion->answer4 = trim($subQuestion->answer4);
+                $testSubQuestion->answer1 = $subQuestion->answer1;
+                $testSubQuestion->answer2 = $subQuestion->answer2;
+                $testSubQuestion->answer3 = $subQuestion->answer3;
+                $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;
                 if (!empty($subQuestion->fileId)) {
@@ -564,10 +564,10 @@ class TestController extends BaseController
                 $indexDisplayOrder =  $index + 1;
                 $testSubQuestion->display_order = $indexDisplayOrder;
                 $testSubQuestion->sub_question_content = $subQuestion->question;
-                $testSubQuestion->answer1 = trim($subQuestion->answer1);
-                $testSubQuestion->answer2 = trim($subQuestion->answer2);
-                $testSubQuestion->answer3 = trim($subQuestion->answer3);
-                $testSubQuestion->answer4 = trim($subQuestion->answer4);
+                $testSubQuestion->answer1 = $subQuestion->answer1;
+                $testSubQuestion->answer2 = $subQuestion->answer2;
+                $testSubQuestion->answer3 = $subQuestion->answer3;
+                $testSubQuestion->answer4 = $subQuestion->answer4;
                 $testSubQuestion->explanation = $subQuestion->explanation;
                 $testSubQuestion->score = $subQuestion->score;
                 $testSubQuestion->reference_url = $subQuestion->referenceUrl;

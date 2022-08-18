@@ -128,8 +128,7 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 実力テスト評価期限時：#TEST_LIMIT_TIME#
 講師マイページログインリンク：#TEACHER_MY_PAGE_URL#
 
-<!-- 【GMO決済時】
-オーダーID:　#ORDER_ID#
+<!-- オーダーID:　#ORDER_ID#
 コースID:　#COURSE_ID#
 コース名:　#COURSE_NAME#
 コース料金:　#COURSE_PRICE#　円

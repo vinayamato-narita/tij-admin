@@ -7,6 +7,7 @@ use App\Enums\GroupLessonStatus;
 use App\Enums\MailType;
 use App\Enums\JobCdType;
 use App\Enums\PaymentWay;
+use App\Enums\PaymentStatus;
 use App\Models\Course;
 use App\Models\LessonHistory;
 use App\Models\LessonSchedule;
@@ -70,7 +71,8 @@ class GroupCourseDecision extends Command
                 // remove duplicated pointSubscriptionHistory
                 $pointSubscriptionHistories = [];
                 foreach ($course->pointSubscriptionHistories as $p) {
-                    if (empty($pointSubscriptionHistories[$p->student_id."_".$p->course_id])) {
+                    if (empty($pointSubscriptionHistories[$p->student_id."_".$p->course_id])
+                        && $p->payment_status == PaymentStatus::SUCCESS) {
                         $pointSubscriptionHistories[] = $p;
                     }
                 }

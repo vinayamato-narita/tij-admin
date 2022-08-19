@@ -71,8 +71,7 @@ class GroupCourseDecision extends Command
                 // remove duplicated pointSubscriptionHistory
                 $pointSubscriptionHistories = [];
                 foreach ($course->pointSubscriptionHistories as $p) {
-                    if (empty($pointSubscriptionHistories[$p->student_id."_".$p->course_id])
-                        && $p->payment_status == PaymentStatus::SUCCESS) {
+                    if ($p->payment_status == PaymentStatus::SUCCESS) {
                         $pointSubscriptionHistories[] = $p;
                     }
                 }

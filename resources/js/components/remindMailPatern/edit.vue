@@ -128,17 +128,6 @@ Zoomの利用方法案内リンク：#ZOOM_MANUAL_URL#
 実力テスト評価期限時：#TEST_LIMIT_TIME#
 講師マイページログインリンク：#TEACHER_MY_PAGE_URL#
 
-<!-- オーダーID:　#ORDER_ID#
-コースID:　#COURSE_ID#
-コース名:　#COURSE_NAME#
-コース料金:　#COURSE_PRICE#　円
-消費税:　#COURSE_TAX#　円
-支払方法：#COURSE_PAYMENT#
-お支払い金額:　#COURSE_TOTAL#　円
-決済日時:　#ORDER_DATE#
-有効期限:#EXPIRE_DATE#
-受講回数：#COURSE_COUNT# -->
-
 【講師コメント登録メール】
 講師ニックネーム:　#TEACHER_NICKNAME#
 レッスン日:　#LESSON_DATE#

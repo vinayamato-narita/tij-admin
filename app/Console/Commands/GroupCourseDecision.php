@@ -7,6 +7,7 @@ use App\Enums\GroupLessonStatus;
 use App\Enums\MailType;
 use App\Enums\JobCdType;
 use App\Enums\PaymentWay;
+use App\Enums\PaymentStatus;
 use App\Models\Course;
 use App\Models\LessonHistory;
 use App\Models\LessonSchedule;
@@ -67,12 +68,22 @@ class GroupCourseDecision extends Command
 
         foreach ($courses as $course) {
             try {
-                $reserveNum = $course->pointSubscriptionHistories->count();
+                // remove duplicated pointSubscriptionHistory
+                $pointSubscriptionHistories = [];
+                foreach ($course->pointSubscriptionHistories as $p) {
+                    if (empty($pointSubscriptionHistories[$p->student_id."_".$p->course_id])
+                        && $p->payment_status == PaymentStatus::SUCCESS) {
+                        $pointSubscriptionHistories[] = $p;
+                    }
+                }
+
+                // calculate reserved students
+                $reserveNum = $pointSubscriptionHistories->count();
 
                 if ($reserveNum < $course->min_reserve_count) {
                     $cancelCourseIds[] = $course->course_id;
 
-                    foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
+                    foreach ($pointSubscriptionHistories as $pointSubscriptionHistory) {
                         // cancel order
                         try {
                             Log::info("cancel order id:".$pointSubscriptionHistory->order_id);
@@ -143,7 +154,7 @@ class GroupCourseDecision extends Command
                 } else {
                     $decideCourseIds[] = $course->course_id;
 
-                    foreach ($course->pointSubscriptionHistories as $pointSubscriptionHistory) {
+                    foreach ($pointSubscriptionHistories as $pointSubscriptionHistory) {
                         // update sales order
                         try {
                             Log::info("update sales order id:".$pointSubscriptionHistory->order_id);

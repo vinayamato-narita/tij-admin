@@ -77,7 +77,7 @@ class GroupCourseDecision extends Command
                 }
 
                 // calculate reserved students
-                $reserveNum = $pointSubscriptionHistories->count();
+                $reserveNum = count($pointSubscriptionHistories);
 
                 if ($reserveNum < $course->min_reserve_count) {
                     $cancelCourseIds[] = $course->course_id;

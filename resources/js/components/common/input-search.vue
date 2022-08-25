@@ -3,6 +3,7 @@
         <input type="hidden" name="limit" :value="pageLimit" />
         <div class="input-group">
             <input
+                autocomplete="off"
                 name="search_input"
                 placeholder="検索"
                 class="form-control"

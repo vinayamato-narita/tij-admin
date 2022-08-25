@@ -226,7 +226,7 @@
                         that.currentPage = response.data.dataList.current_page;
                         that.lastPage = response.data.dataList.last_page;
                         that.pageList = [];
-                        if (that.currentPage < 3) {
+                        if (that.currentPage <= 3) {
                             for (let i = 1; (i <= that.currentPage + 3) && (i <= that.lastPage) ; i++)
                                 that.pageList.push(i)
                         } else {

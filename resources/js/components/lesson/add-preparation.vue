@@ -60,7 +60,7 @@
                                 <li v-if="currentPage != 1"  class="page-item">
                                     <a class="page-link" v-on:click="toPage(currentPage - 1)"  rel="prev" aria-label="previous')"><</a>
                                 </li>
-                                <li v-for="index in lastPage" class="page-item" :class="index == currentPage ? 'active' : ''">
+                                <li v-for="index in pageList " class="page-item" :class="index == currentPage ? 'active' : ''">
                                     <a class="page-link" v-on:click="toPage(index)" rel="prev" aria-label="previous')">{{index}}</a>
                                 </li>
                                 <li v-if="currentPage != lastPage"   class="page-item">
@@ -118,7 +118,7 @@
                                 <li v-if="currentPage != 1"  class="page-item">
                                     <a class="page-link" v-on:click="toPage(currentPage - 1)"  rel="prev" aria-label="previous')"><</a>
                                 </li>
-                                <li v-for="index in lastPage" class="page-item" :class="index == currentPage ? 'active' : ''">
+                                <li v-for="index in pageList " class="page-item" :class="index == currentPage ? 'active' : ''">
                                     <a class="page-link" v-on:click="toPage(index)" rel="prev" aria-label="previous')">{{index}}</a>
                                 </li>
                                 <li v-if="currentPage != lastPage"   class="page-item">
@@ -170,6 +170,8 @@
                 lastPage : 0,
                 auto : 'auto',
                 preparationId : null,
+                pageList: [],
+
 
             };
         },
@@ -205,6 +207,15 @@
                         that.currentPage = response.data.dataList.current_page;
                         that.lastPage = response.data.dataList.last_page;
                         that.dataList = response.data.dataList.data;
+                        that.pageList = [];
+                        if (that.currentPage <= 3) {
+                            for (let i = 1; (i <= that.currentPage + 3) && (i <= that.lastPage) ; i++)
+                                that.pageList.push(i)
+                        } else {
+                            for (let i = that.currentPage - 3; (i <= that.currentPage + 3) && (i <= that.lastPage) ; i++)
+                                that.pageList.push(i)
+
+                        }
                     })
                     .catch(function (error) {
                     });            },

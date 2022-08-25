@@ -210,7 +210,7 @@
                         that.dataList = response.data.dataList.data;
                         that.pageList = [];
                         if (that.currentPage < 3) {
-                            for (let i = 1; (i <= that.currentPage + 7) && (i <= that.lastPage) ; i++)
+                            for (let i = 1; (i <= that.currentPage + 3) && (i <= that.lastPage) ; i++)
                                 that.pageList.push(i)
                         } else {
                             for (let i = that.currentPage - 3; (i <= that.currentPage + 3) && (i <= that.lastPage) ; i++)

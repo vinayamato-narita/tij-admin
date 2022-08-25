@@ -1,5 +1,5 @@
 <template>
-    <form method="GET" :action="url" class="input-search">
+    <form method="GET" :action="url" class="input-search" autocomplete="off">
         <input type="hidden" name="limit" :value="pageLimit" />
         <div class="input-group">
             <input

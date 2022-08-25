@@ -1,9 +1,9 @@
 <template>
-    <form method="GET" :action="url" class="input-search" autocomplete="off">
+    <form method="GET" :action="url" class="input-search" autocomplete="false">
         <input type="hidden" name="limit" :value="pageLimit" />
         <div class="input-group">
             <input
-                autocomplete="off"
+                autocomplete="false"
                 name="search_input"
                 placeholder="検索"
                 class="form-control"

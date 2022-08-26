@@ -289,6 +289,10 @@ const MENU = [
     IMPORT_STUDENT => [
 		'courseGroupUser.importView',
     ],
+    ABILITY_TEST_RESULT => [
+        'abilityTestResult.answerDetail',
+        'abilityTestResult.show'
+    ]
 ];
 
 

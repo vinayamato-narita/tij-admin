@@ -256,6 +256,7 @@ const MENU = [
     GROUP_LESSON_RESERVE => [
         'groupLessonReserves.index',
 		'groupLessonReserves.show',
+        'groupLesson.getStudent'
     ],
     GROUP_LESSON_SCHEDULE => [
         'groupSchedule.index'

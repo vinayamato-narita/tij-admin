@@ -222,7 +222,7 @@
                                                 <div>
                                                     <input class=" checkbox" id="isForlms_0" name="isForLMS"
                                                         type="radio"
-                                                        :disabled="courseBought || course.course_type == 0"
+                                                        :disabled="courseBought"
                                                         value="0"
                                                         @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="isForlms_0">
@@ -233,7 +233,7 @@
                                                     <input class=" checkbox" id="isForlms_1" name="isForLMS"
                                                         type="radio"
                                                         value="1"
-                                                           :disabled="courseBought || course.course_type == 0"
+                                                           :disabled="courseBought"
                                                         @input="changeInput()" v-model="isForLMS" style="width: auto;height: auto;display: inline-block; ">
                                                     <label class="" for="isForlms_1">
                                                         法人

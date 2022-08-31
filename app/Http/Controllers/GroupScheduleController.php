@@ -524,6 +524,16 @@ class GroupScheduleController extends BaseController
 
     public function deleteSchedule(Request $request)
     {
+        if (gettype($request['selectedEvent']['_eid']) != 'string' || !strtotime($request['selectedEvent']['start'])
+            || !strtotime($request['selectedEvent']['end'])) {
+            echo json_encode(array(
+                'status' => 400,
+                'error_message' => __('エラーが発生しました。再度お願いします。')
+            ));
+            return;
+        }
+
+
         if (empty($request['selectedEvent']) || empty($request['selectedEvent']['lesson_schedule_id'])) {
             echo json_encode(array(
                 'status' => 400,

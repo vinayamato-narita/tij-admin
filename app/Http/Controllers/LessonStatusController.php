@@ -295,6 +295,17 @@ class LessonStatusController extends BaseController
                 'message' => 'エラーが発生しました。もう一度出力してください'
             ]);
         }
+        if (!empty($data["lesson_date_to"]) && !strtotime($data["lesson_date_to"]))
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+        if (!preg_match('/^[^\s]+$/', $data['_token']))
+            return response()->json([
+                'status' => 400,
+                'message' => 'エラーが発生しました。もう一度出力してください'
+            ]);
+
 
         $startDate = empty($data["lesson_date_from"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_from"]));
         $endDate = empty($data["lesson_date_to"]) ? "" : date ("Y-m-d", strtotime($data["lesson_date_to"]));

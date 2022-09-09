@@ -91,8 +91,8 @@
                                                         <td class="text-left">{{ $payment->item_name }}</td>
                                                         <td class="text-left">{{ $payment->j_student_name }}</td>
                                                         <td class="text-left">{{ $payment->j_company_name }}</td>
-                                                        <td class="text-left">{{ number_format($payment->amount) }}</td>
-                                                        <td class="text-left">{{ number_format($payment->tax) }}</td>
+                                                        <td class="text-left"> {{ $payment->payment_status == 0 ? 0 : number_format($payment->amount) }}</td>
+                                                        <td class="text-left">{{ $payment->payment_status == 0 ? 0 : number_format($payment->tax) }}</td>
                                                         <td class="text-left">{{ $payment->point_count }}</td>
                                                         <td class="text-left">{{ $payment->payment_status == PaymentStatus::PENDING ?  "-" : PaymentWay::getDescription($payment->payment_way) }}</td>
                                                         <td class="text-left">{{ $payment->j_receive_payment_date }}</td>

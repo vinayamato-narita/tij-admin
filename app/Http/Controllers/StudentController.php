@@ -687,7 +687,7 @@ class StudentController extends BaseController
         $paymentDateTime = date('Y-m-d H:i:s', strtotime($request->payment_date . " " . $currentTime));
 
         if(empty($listCourseBySetCourse)) {
-            DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+            DB::select('CALL sp_admin_insert_payment_history(?,?,?,?,?,?,?,?,?,?,?,?,?)',
                 array(
                     $orderId,
                     $studentInfo->student_id,
@@ -697,7 +697,7 @@ class StudentController extends BaseController
                     $course->parent_id,
                     $request->payment_way,
                     $paymentDateTime,
-                    '',
+                    Carbon::now()->format('Y-m-d'),
                     isset($request->begin_date) ? $request->begin_date : $request->start_date,
                     $request->amount,
                     "",
@@ -715,7 +715,7 @@ class StudentController extends BaseController
                         $course->parent_id,
                         $request->payment_way,
                         $paymentDateTime,
-                        '',
+                        Carbon::now()->format('Y-m-d'),
                         isset($request->begin_date) ? $request->begin_date : $request->start_date,
                         $request->amount,
                         "",

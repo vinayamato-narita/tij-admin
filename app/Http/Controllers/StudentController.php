@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -1281,7 +1282,8 @@ class StudentController extends BaseController
             ->leftJoin('point_subscription_history', function($join) {
                 $join->on('student_point_history.point_subscription_id', '=', 'point_subscription_history.point_subscription_history_id');
             })
-            ->where('student_point_history.student_id', $id);
+            ->where('student_point_history.student_id', $id)
+            ->where('point_subscription_history.payment_status', PaymentStatus::SUCCESS);
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {

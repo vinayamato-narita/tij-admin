@@ -141,9 +141,9 @@ class PaymentHistoryController extends BaseController
 
         Session::put('sessionPaymentHistory', collect($request));
 
-        $total_tax = $queryBuilder->sum('point_subscription_history.tax');
-        $total_amount = $queryBuilder->sum('point_subscription_history.amount');
         $paymentList = $queryBuilder->sortable(['update_date' => 'DESC'])->paginate($pageLimit);
+        $total_tax = $queryBuilder->where('payment_status', PaymentStatus::SUCCESS)->sum('point_subscription_history.tax');
+        $total_amount = $queryBuilder->where('payment_status', PaymentStatus::SUCCESS)->sum('point_subscription_history.amount');
 
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
@@ -304,8 +304,8 @@ class PaymentHistoryController extends BaseController
             $input['コース名'] = $this->convertShijis($item['item_name']);
             $input['学習者名'] = $this->convertShijis($item['j_student_name']);
             $input['法人名'] = $this->convertShijis($item['j_company_name']);
-            $input['売上'] = $this->convertShijis($item['amount']);
-            $input['消費税'] = $this->convertShijis($item['tax']);
+            $input['売上'] = $this->convertShijis($item['payment_status'] == PaymentStatus::PENDING ? 0 : $item['amount']);
+            $input['消費税'] = $this->convertShijis($item['payment_status'] == PaymentStatus::PENDING ? 0 : $item['tax']);
             $input['支払方法'] = $this->convertShijis($item['payment_way']);
             $input['入金日'] = $this->convertShijis($item['j_receive_payment_date']);
             if (!empty( $item['j_place_of_residence']))
@@ -354,6 +354,8 @@ class PaymentHistoryController extends BaseController
         $paymentInfo->_token = csrf_token();
         if($paymentInfo->payment_status == PaymentStatus::PENDING) {
             $paymentInfo->payment_way = PaymentWayEx::PENDING;
+            $paymentInfo->amount = 0;
+            $paymentInfo->tax = 0;
         }
         $paymentInfo->payment_ways = PaymentWayEx::asSelectArray();
 

@@ -71,7 +71,7 @@ const MESSAGE_IMPORT_SUCCESS = '登録が完了しました。';
 
 
 const PAGE_SIZE_LIMIT = [20, 50, 100];
-const PAGE_SIZE_DEFAULT = 20;
+const PAGE_SIZE_DEFAULT = 100;
 
 const COURSE_FREE_ID = 1;
 

@@ -934,6 +934,10 @@ class StudentController extends BaseController
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('is_tmp_entry','ASC') : $queryBuilder->orderBy('is_tmp_entry','DESC');
             }
         }
+        else {
+            $queryBuilder =  $queryBuilder->orderBy('student_id','DESC');
+
+        }
 
         Session::put('sessionStudent', collect($request));
 

@@ -155,7 +155,7 @@
         },
         data() {
             return {
-                pageLimit: 20,
+                pageLimit: 100,
                 dataList : [{}],
                 inputSearch :'',
                 from: 0,
@@ -210,7 +210,7 @@
             },
             search(e) {
                 this.inputSearch = $('[name="search_input"]').val();
-                this.pageLimit = 20;
+                this.pageLimit = 100;
                 this.getData();
 
             },

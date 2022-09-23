@@ -199,6 +199,10 @@ class LessonController extends BaseController
 
     public function registerPreparation(Request $request)
     {
+        if (empty($request->lessonId) || gettype($request->lessonId) != 'integer' || empty($request->preparationId) || gettype($request->preparationId) != 'integer' )
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
         DB::beginTransaction();
         try {
             $pl = new PreparationLesson();
@@ -262,6 +266,10 @@ class LessonController extends BaseController
 
     public function registerReview(Request $request)
     {
+        if (empty($request->reviewId) || gettype($request->reviewId) != 'integer' || empty($request->lessonId) || gettype($request->lessonId) != 'integer')
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
         DB::beginTransaction();
         try {
             $rl = new ReviewLesson();

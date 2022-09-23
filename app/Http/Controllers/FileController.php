@@ -24,6 +24,10 @@ class FileController extends BaseController
 {
     public function getFiles(Request $request)
     {
+        if (isset($request->page) && !is_numeric($request->page))
+            return response()->json([
+                'status' => 'INTERNAL_ERR',
+            ], StatusCode::INTERNAL_ERR);
         $pageLimit = $this->newListLimit($request);
         $queryBuilder = new File();
 

@@ -142,6 +142,11 @@ class TestController extends BaseController
                 'status' => 'NG',
             ], StatusCode::BAD_REQUEST);
         }
+        if (isset($request->test_id) && !is_numeric($request->test_id)) {
+            return response()->json([
+                'status' => 'NG',
+            ], StatusCode::NOT_FOUND);
+        }
         $testInfo = Test::where('test_id', $request->test_id)->first();
         if ($testInfo == null) {
             return response()->json([

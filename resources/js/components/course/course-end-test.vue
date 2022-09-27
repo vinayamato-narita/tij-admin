@@ -66,12 +66,13 @@
                                 <!--                                <li v-for="index in lastPage" class="page-item" :class="index == currentPage ? 'active' : ''">
                                                                     <a class="page-link" v-on:click="toPage(index)" rel="prev" aria-label="previous')">{{index}}</a>
                                                                 </li>-->
-                                <li v-if="currentPage != lastPage"   class="page-item">
-                                    <a class="page-link" v-on:click="toPage(lastPage)" rel="next" aria-label="many-next')">>></a>
-                                </li>
                                 <li v-if="currentPage != lastPage" class="page-item">
                                     <a class="page-link" v-on:click="toPage(currentPage + 1)" rel="next" aria-label="next')">></a>
                                 </li>
+                                <li v-if="currentPage != lastPage"   class="page-item">
+                                    <a class="page-link" v-on:click="toPage(lastPage)" rel="next" aria-label="many-next')">>></a>
+                                </li>
+
                             </ul>
                         </nav>
                     </div>
@@ -130,11 +131,12 @@
                                 <!--                                <li v-for="index in lastPage" class="page-item" :class="index == currentPage ? 'active' : ''">
                                                                     <a class="page-link" v-on:click="toPage(index)" rel="prev" aria-label="previous')">{{index}}</a>
                                                                 </li>-->
-                                <li v-if="currentPage != lastPage"   class="page-item">
-                                    <a class="page-link" v-on:click="toPage(lastPage)" rel="next" aria-label="many-next')">>></a>
-                                </li>
+
                                 <li v-if="currentPage != lastPage" class="page-item">
                                     <a class="page-link" v-on:click="toPage(currentPage + 1)" rel="next" aria-label="next')">></a>
+                                </li>
+                                <li v-if="currentPage != lastPage"   class="page-item">
+                                    <a class="page-link" v-on:click="toPage(lastPage)" rel="next" aria-label="many-next')">>></a>
                                 </li>
                             </ul>
                         </nav>

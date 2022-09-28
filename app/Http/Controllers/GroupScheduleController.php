@@ -391,8 +391,8 @@ class GroupScheduleController extends BaseController
         }
 
         if ($request->linkZoomScheduleFlag) {
-            $startDateTimeUTC = $startDateTime->setTimezone('UTC');
-            $endDateTimeUTC = $endDateTime->setTimezone('UTC');
+            $startDateTimeUTC = Carbon::parse($request['startDateTime'])->setTimezone('UTC');
+            $endDateTimeUTC = Carbon::parse($request['endDateTime'])->setTimezone('UTC');
 
             $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTimeUTC, $endDateTimeUTC) {
                 $query->where(function ($query) use ($startDateTimeUTC) {

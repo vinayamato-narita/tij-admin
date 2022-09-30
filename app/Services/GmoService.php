@@ -21,6 +21,11 @@ class GmoService{
 
     public function alterTran($jobCd, $accessID, $accessPass, $amount) {
         $url = $this->gmoURL . "AlterTran.idPass";
+        Log::info("alterTran");
+        Log::info("jobCd:".$jobCd);
+        Log::info("accessID:".$accessID);
+        Log::info("accessPass:".$accessPass);
+        Log::info("amount:".$amount);
 
         // リクエストコネクションの設定
         $curl=curl_init();
@@ -42,6 +47,7 @@ class GmoService{
         $response = curl_exec( $curl );
         $curlinfo = curl_getinfo( $curl );
         curl_close( $curl );
+        Log::info("response:".$response);
 
         // レスポンスチェック
         if( $curlinfo[ 'http_code' ] != 200 ){
@@ -220,6 +226,11 @@ class GmoService{
 
     public function paypalSales($orderID, $accessID, $accessPass, $amount) {
         $url = $this->gmoURL . "PaypalSales.idPass";
+        Log::info("paypalSales");
+        Log::info("orderID:".$orderID);
+        Log::info("accessID:".$accessID);
+        Log::info("accessPass:".$accessPass);
+        Log::info("amount:".$amount);
 
         // リクエストコネクションの設定
         $curl=curl_init();
@@ -241,6 +252,7 @@ class GmoService{
         $response = curl_exec( $curl );
         $curlinfo = curl_getinfo( $curl );
         curl_close( $curl );
+        Log::info("response:".$response);
 
         // レスポンスチェック
         if( $curlinfo[ 'http_code' ] != 200 ){

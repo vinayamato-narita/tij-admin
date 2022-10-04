@@ -871,17 +871,29 @@ class StudentController extends BaseController
         }
         if (isset($request['student_id'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
+/*                $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']))
                     ->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']))
                     ->where($this->escapeLikeSentence('student.student_email', $request['student_email']))
-                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
+                    ->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));*/
 
-                    if ($request['student_id'] != "") {
-                        $query->where('student.student_id', '=', $request['student_id']);
-                    }
-                    if ($request['create_date'] != "") {
-                        $query->where('student.create_date', '>=', $request['create_date']);
-                    }
+                if ($request['student_name'] != "") {
+                    $query->where($this->escapeLikeSentence('student.student_name', $request['student_name']));
+                }
+                if ($request['student_nickname'] != "") {
+                    $query->where($this->escapeLikeSentence('student.student_nickname', $request['student_nickname']));
+                }
+                if ($request['student_email'] != "") {
+                    $query->where($this->escapeLikeSentence('student.student_email', $request['student_email']));
+                }
+                if ($request['custom_company_name'] != "") {
+                    $query->where($this->escapeLikeSentence('student.company_name', $request['custom_company_name']));
+                }
+                if ($request['student_id'] != "") {
+                    $query->where('student.student_id', '=', $request['student_id']);
+                }
+                if ($request['create_date'] != "") {
+                    $query->where('student.create_date', '>=', $request['create_date']);
+                }
             });
 
             $queryBuilderCount = $queryBuilderCount->where(function ($query) use ($request) {

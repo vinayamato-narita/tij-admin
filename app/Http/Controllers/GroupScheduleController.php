@@ -391,18 +391,22 @@ class GroupScheduleController extends BaseController
         }
 
         if ($request->linkZoomScheduleFlag) {
-            $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTime, $endDateTime) {
-                $query->where(function ($query) use ($startDateTime) {
-                    $query->where('start_time', '<=', $startDateTime)
-                        ->whereRaw('start_time + interval duration minute >= ?', [$startDateTime]);
-                })->orWhere(function ($query) use ($endDateTime) {
-                    $query->where('start_time', '<=', $endDateTime)
-                        ->whereRaw('start_time + interval duration minute >= ?', [$endDateTime]);
-                })->orWhere(function ($query) use ($startDateTime, $endDateTime) {
-                    $query->where('start_time', '<', $startDateTime)
-                        ->whereRaw('start_time + interval duration minute > ?', [$endDateTime]);
+            $startDateTimeUTC = Carbon::parse($request['startDateTime'])->setTimezone('UTC');
+            $endDateTimeUTC = Carbon::parse($request['endDateTime'])->setTimezone('UTC');
+
+            $zoomAccounts = ZoomAccount::whereDoesntHave('zoomSchedules', function ($query) use ($startDateTimeUTC, $endDateTimeUTC) {
+                $query->where(function ($query) use ($startDateTimeUTC) {
+                    $query->where('start_time', '<=', $startDateTimeUTC)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$startDateTimeUTC]);
+                })->orWhere(function ($query) use ($endDateTimeUTC) {
+                    $query->where('start_time', '<=', $endDateTimeUTC)
+                        ->whereRaw('start_time + interval duration minute >= ?', [$endDateTimeUTC]);
+                })->orWhere(function ($query) use ($startDateTimeUTC, $endDateTimeUTC) {
+                    $query->where('start_time', '<', $startDateTimeUTC)
+                        ->whereRaw('start_time + interval duration minute > ?', [$endDateTimeUTC]);
                 });
             })->get();
+
             if (!empty($request->zoomAccountId)) {
                 if (!in_array($request->zoomAccountId, $zoomAccounts->pluck('zoom_account_id')->toArray())) {
                     echo json_encode(array(

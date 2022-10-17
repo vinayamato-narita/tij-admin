@@ -599,6 +599,7 @@ class CourseController extends BaseController
                 $tc = new CourseLesson();
                 $tc->lesson_id = $rq;
                 $tc->course_id = $id;
+                $tc->display_order = CourseLesson::where('course_id', $id)->max('display_order') + 1;
                 $tc->save();
             }
         } catch (\Exception $exception) {

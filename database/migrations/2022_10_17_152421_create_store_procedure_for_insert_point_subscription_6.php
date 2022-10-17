@@ -80,7 +80,7 @@ class CreateStoreProcedureForInsertPointSubscription6 extends Migration
                  ,0
             );
         CASE
-          WHEN _payment_way NOT IN (0,1,9) THEN
+          WHEN _payment_way IN (0,1,9) THEN
             SET _rtn = _rtn;
             -- SET   _add_point = COALESCE((SELECT point_count FROM course WHERE course_id = _course_id),0);
             -- CASE  _add_point

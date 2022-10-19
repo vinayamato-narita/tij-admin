@@ -20,6 +20,23 @@ class ZoomClientService
         return $response;
     }
 
+    public function getUserList($token)
+    {
+        $users = [];
+        $response = Http::accept('application/json')
+            ->withToken($token)
+            ->get('https://api.zoom.us/v2/users');
+        $maxPage = $response->json('page_count');
+        for ($page = 0; $page < $maxPage; $page++) {
+            $response = Http::accept('application/json')
+                ->withToken($token)
+                ->get('https://api.zoom.us/v2/users?page=' . $page);
+            $userPagings = $response->json('users');
+            $users = array_merge($users, $userPagings);
+        }
+        return $users;
+    }
+
     public function getZoomAccessToken($api_key, $api_secret)
     {
         $payload = array(

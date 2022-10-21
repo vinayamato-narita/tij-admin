@@ -13,7 +13,7 @@ class AdminNewsInfo extends Model
     
     public $timestamps = false;
     
-    protected $primaryKey = 'news_id';
+    protected $primaryKey = 'admin_news_info_id';
     
     protected $fillable = ['admin_news_info_id', 'news_id', 'news_title', 'news_body', 'lang_type'];
 }

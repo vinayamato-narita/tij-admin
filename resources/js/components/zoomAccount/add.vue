@@ -62,6 +62,20 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row ">
+                                            <label class="col-md-3 col-form-label text-md-right" for="apiSecret">メールアドレス :
+                                                <span class="glyphicon glyphicon-star"
+                                                ></span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="zoomEmail" type="text" name="zoomEmail" @input="changeInput()"  v-model="zoomEmail"  v-validate="'required|email|max:255'" />
+
+                                                <div class="input-group is-danger" role="alert">
+                                                    {{ errors.first("zoomEmail") }}
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -108,6 +122,11 @@
                     apiSecret: {
                         required: "API SECRETを入力してください",
                         max: "API SECRETは50文字以内で入力してください。",
+                    },
+                    zoomEmail: {
+                        required: "メールアドレスを入力してください",
+                        max: "メールアドレスは255文字以内で入力してください。",
+                        email: "メールアドレス形式が正しくありません。"
                     }
                 },
             };
@@ -125,6 +144,7 @@
                 zoomAccountName: '',
                 apiKey: '',
                 apiSecret: '',
+                zoomEmail: ''
             };
         },
         props: ["listZoomAccountUrl", "createUrl"],
@@ -146,6 +166,7 @@
                         formData.append('zoom_account_name', this.zoomAccountName);
                         formData.append('api_key', this.apiKey);
                         formData.append('api_secret', this.apiSecret);
+                        formData.append('zoom_email', this.zoomEmail);
                         axios
                             .post(that.createUrl , formData, {
                                 header: {

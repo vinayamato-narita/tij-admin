@@ -75,23 +75,39 @@ class ZoomAccountController extends BaseController
                     'message' => 'APIキーとAPI SECRETが正しくありません',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoomUserId = $response->json('id');
-            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoomUserId)->first();
+/*            $zoomUserId = $response->json('id');*/
+            $zoomAccount = ZoomAccount::where([
+                'api_key' =>  $request->api_key,
+                'api_secret' => $request->api_secret,
+                'zoom_email' => $request->zoom_email
+            ])->first();
             if (!empty($zoomAccount)) {
                 return response()->json([
                     'status' => 'UNPROCESSABLE_ENTITY',
                     'message' => 'Zoomアカウントが重複しているため、登録できません。',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoomAccount = new ZoomAccount();
-            $zoomAccount->zoom_account_name = $request->zoom_account_name;
-            $zoomAccount->api_key = $request->api_key;
-            $zoomAccount->api_secret = $request->api_secret;
-            $zoomAccount->zoom_user_id = $zoomUserId;
-            $zoomAccount->save();
+            $users = $zoomClientService->getUserList($request->token);
+            $user = array_filter($users, function ($e) use ($request) {
+                return $e['email'] == $request->zoom_email;
+            });
+            if (!empty($user)) {
+                $zoomAccount = new ZoomAccount();
+                $zoomAccount->zoom_account_name = $request->zoom_account_name;
+                $zoomAccount->api_key = $request->api_key;
+                $zoomAccount->api_secret = $request->api_secret;
+                $zoomAccount->zoom_user_id = reset($user)['id'];
+                $zoomAccount->zoom_email = $request->zoom_email;
+                $zoomAccount->save();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            }
             return response()->json([
-                'status' => 'OK',
-            ], StatusCode::OK);
+                'status' => 'UNPROCESSABLE_ENTITY',
+                'message' => ' メールアドレスが見つかりません。',
+            ], StatusCode::UNPROCESSABLE_ENTITY);
+
         } catch (\Exception $exception) {
             return response()->json([
                 'status' => 'INTERNAL_ERR',
@@ -149,9 +165,12 @@ class ZoomAccountController extends BaseController
                     'message' => 'APIキーとAPI SECRETが正しくありません',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoomUserId = $response->json('id');
-            $zoomAccount = ZoomAccount::where('zoom_user_id', $zoomUserId)
-                ->whereNotIn('zoom_account_id', [$id])
+/*            $zoomUserId = $response->json('id');*/
+            $zoomAccount = ZoomAccount::where([
+                'api_key' =>  $request->api_key,
+                'api_secret' => $request->api_secret,
+                'zoom_email' => $request->zoom_email
+            ])->whereNotIn('zoom_account_id', [$id])
                 ->first();
             if (!empty($zoomAccount)) {
                 return response()->json([
@@ -159,15 +178,28 @@ class ZoomAccountController extends BaseController
                     'message' => 'Zoomアカウントが重複しているため、登録できません。',
                 ], StatusCode::UNPROCESSABLE_ENTITY);
             }
-            $zoomAccount = ZoomAccount::find($id);
-            $zoomAccount->zoom_account_name = $request->zoom_account_name;
-            $zoomAccount->api_key = $request->api_key;
-            $zoomAccount->api_secret = $request->api_secret;
-            $zoomAccount->zoom_user_id = $zoomUserId;
-            $zoomAccount->save();
+
+            $users = $zoomClientService->getUserList($request->token);
+            $user = array_filter($users, function ($e) use ($request) {
+                return $e['email'] == $request->zoom_email;
+            });
+            if (!empty($user)) {
+                $zoomAccount = ZoomAccount::find($id);
+                $zoomAccount->zoom_account_name = $request->zoom_account_name;
+                $zoomAccount->api_key = $request->api_key;
+                $zoomAccount->api_secret = $request->api_secret;
+                $zoomAccount->zoom_user_id = reset($user)['id'];
+                $zoomAccount->zoom_email = $request->zoom_email;
+                $zoomAccount->save();
+                return response()->json([
+                    'status' => 'OK',
+                ], StatusCode::OK);
+            }
             return response()->json([
-                'status' => 'OK',
-            ], StatusCode::OK);
+                'status' => 'UNPROCESSABLE_ENTITY',
+                'message' => ' メールアドレスが見つかりません。',
+            ], StatusCode::UNPROCESSABLE_ENTITY);
+
         } catch (\Exception $exception) {
             return response()->json([
                 'status' => 'INTERNAL_ERR',

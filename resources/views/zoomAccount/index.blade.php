@@ -44,6 +44,7 @@
                                                     <th class="text-left width-130 white-space">@sortablelink('zoom_account_name', ' アカウント名')</th>
                                                     <th class="text-left min-width-150 white-space">@sortablelink('api_key', ' APIキー')</th>
                                                     <th class="text-left min-width-120 white-space">@sortablelink('api_secret', ' API SECRET')</th>
+                                                    <th class="text-left min-width-120 white-space">@sortablelink('zoom_email', ' メールアドレス ')</th>
                                                     <th class="text-left min-width-150 white-space"></th>
                                                 </tr>
                                                 </thead>
@@ -53,6 +54,7 @@
                                                         <td class="text-left">{{ $zoomAccount->zoom_account_name }}</td>
                                                         <td class="text-left">{{ $zoomAccount->api_key }}</td>
                                                         <td class="text-left">{{ $zoomAccount->api_secret }}</td>
+                                                        <td class="text-left">{{ $zoomAccount->zoom_email }}</td>
                                                         <td class="text-right">
                                                             <div class="btn-group">
                                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作選択</button>

@@ -119,7 +119,7 @@ class TeacherController extends BaseController
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
                 $teacher->teacher_sex = $request->teacherSex;
-                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null :  date("Y-m-d", strtotime($request->teacherBirthday));
+                $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null : date("Y-m-d", strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity ?? "";
                 $teacher->teacher_department = $request->teacherDepartment ?? '';
                 $teacher->teacher_hobby = $request->teacherHobby ?? '';
@@ -586,6 +586,7 @@ class TeacherController extends BaseController
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
             'course.course_name',
+            'course.course_type',
             'lesson.lesson_name',
             'lesson_text.lesson_text_name',
             'lesson_history.student_id',
@@ -599,10 +600,10 @@ class TeacherController extends BaseController
             ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
             })
-            ->leftJoin('lesson_text_lesson', function($join) {
+            ->leftJoin('lesson_text_lesson', function ($join) {
                 $join->on('lesson.lesson_id', '=', 'lesson_text_lesson.lesson_id');
             })
-            ->leftJoin('lesson_text', function($join) {
+            ->leftJoin('lesson_text', function ($join) {
                 $join->on('lesson_text_lesson.lesson_text_id', '=', 'lesson_text.lesson_text_id');
             })
             ->join('student', function ($join) {
@@ -659,7 +660,7 @@ class TeacherController extends BaseController
             $queryBuilder = $queryBuilder->orderBy('lesson_date', 'DESC');
         }
 
-        $lessonHistories = $queryBuilder->paginate($pageLimit);
+        $lessonHistories = $queryBuilder->groupBy('lesson_schedule.lesson_schedule_id')->paginate($pageLimit);
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('teacher.lesson-history', [
@@ -738,7 +739,7 @@ class TeacherController extends BaseController
                 $join->on('lesson_history.course_id', '=', 'course.course_id');
             })
             ->where('lesson_history.student_lesson_reserve_type', '!=', 2)
-            ->orderByDesc('lesson_schedule.lesson_starttime');
+            ->orderByDesc('lesson_schedule.lesson_starttime')->groupBy('lesson_schedule.lesson_schedule_id');
 
         if (isset($request['search_input'])) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
@@ -777,8 +778,8 @@ class TeacherController extends BaseController
             $input['course_name'] = $this->convertShijis($item['course_name']);
             $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
             $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);
-            $input['student_id'] = $this->convertShijis($item['student_id']);
-            $input['student_name'] = $this->convertShijis($item['student_name']);
+            $input['student_id'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_id']);
+            $input['student_name'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_name']);
             fputcsv($file, $input);
         }
 

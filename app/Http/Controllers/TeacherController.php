@@ -660,7 +660,7 @@ class TeacherController extends BaseController
             $queryBuilder = $queryBuilder->orderBy('lesson_date', 'DESC');
         }
 
-        $lessonHistories = $queryBuilder->groupBy('lesson_schedule.lesson_schedule_id')->paginate($pageLimit);
+        $lessonHistories = $queryBuilder->paginate($pageLimit);
         $adminSystem = Auth::user()->role == AdminRole::SYSTEM;
 
         return view('teacher.lesson-history', [

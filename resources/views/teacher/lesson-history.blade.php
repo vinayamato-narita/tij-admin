@@ -89,11 +89,8 @@
                                                         <td class="text-center">{{ $lesson->course_type == \App\Enums\CourseTypeEnum::GROUP_COURSE ? '-' : $lesson->student_id }}</td>
                                                         <td class="text-center">{{ $lesson->course_type == \App\Enums\CourseTypeEnum::GROUP_COURSE ? '-' : $lesson->student_name }}</td>
                                                         <td>
-                                                            @if($lesson->course_type != \App\Enums\CourseTypeEnum::GROUP_COURSE)
-                                                                <a href="{{ route('teacher.lessonHistoryDetail', $lesson->lesson_history_id) }}"
-                                                                   class="btn btn-primary btn-sm"><i
-                                                                            class="fa fa-info-circle"></i>詳細</a>
-                                                            @endif
+                                                            <a href="{{ route('teacher.lessonHistoryDetail', $lesson->lesson_history_id) }}" class="btn btn-primary btn-sm"><i class="fa fa-info-circle"></i>詳細</a>
+
                                                         </td>
                                                     </tr>
                                                 @endforeach

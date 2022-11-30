@@ -355,6 +355,10 @@ class StudentController extends BaseController
                     ->where('student_point_history.student_id', '=', $id)
                     ->where('student_point_history.point_count', '<', 0);
             })
+            ->join('point_subscription_history', function($join) {
+                $join->on('point_subscription_history.point_subscription_history_id', '=', 'student_point_history.point_subscription_id')
+                ->where('point_subscription_history.payment_status', '=', 1);
+            })
             ->where('lesson_history.student_id', $id);
 
         if (isset($request['search_input'])) {

@@ -86,8 +86,8 @@
                                                         <td class="text-center">{{ $lesson->course_name }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_name }}</td>
                                                         <td class="text-center">{{ $lesson->lesson_text_name }}</td>
-                                                        <td class="text-center">{{ $lesson->course_type == \App\Enums\CourseTypeEnum::GROUP_COURSE ? '-' : $lesson->student_id }}</td>
-                                                        <td class="text-center">{{ $lesson->course_type == \App\Enums\CourseTypeEnum::GROUP_COURSE ? '-' : $lesson->student_name }}</td>
+                                                        <td class="text-center">{{ $lesson->student_id }}</td>
+                                                        <td class="text-center">{{ $lesson->student_name  }}</td>
                                                         <td>
                                                             <a href="{{ route('teacher.lessonHistoryDetail', $lesson->lesson_history_id) }}" class="btn btn-primary btn-sm"><i class="fa fa-info-circle"></i>詳細</a>
 

@@ -207,6 +207,10 @@ class BreadcrumbComponent
                 'text' => 'コメント編集',
                 'route_str' => "student.editComment",
             ],
+            'lesson_history' => [
+                'text' => 'レッスン履歴一覧',
+                'route_str' => "lesson-history.index",
+            ],
             'lesson_cancel_history_list' => [
                 'text' => 'レッスンキャンセル履歴',
                 'route_str' => "lessonCancelHistory.index",

@@ -18,7 +18,10 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-right search-popup"  style="width: 400px;padding: 10px 10px" role="menu">
-                        <form method="GET" :action="url">
+                        <form method="GET" :action="url"
+                              ref="form"
+                              @submit.prevent="search"
+                        >
                             <input type="hidden" name="limit" :value="pageLimit" />
                             <input type="hidden" name="search_detail" value="1" />
                             <div class="form-group">
@@ -31,6 +34,9 @@
                                             v-model="dataQueryEx.lesson_date_start"
                                             type="date"
                                             v-on:change="onchangeDP"
+                                            @panel-change="onchangeDP"
+                                            @calendar-change="onchangeDP"
+                                            @open="onchangeDP"
                                         ></date-picker>
                                     </div>
                                     <div class="col-md-1">
@@ -43,8 +49,21 @@
                                             v-model="dataQueryEx.lesson_date_end"
                                             type="date"
                                             v-on:change="onchangeDP"
+                                            @panel-change="onchangeDP"
+                                            @calendar-change="onchangeDP"
+                                            @open="onchangeDP"
                                         ></date-picker>
                                     </div>
+
+
+                                </div>
+                                <div
+                                        v-if="over2Month"
+                                        class="input-group is-danger text-center"
+                                        role="alert"
+                                >
+                                    2ヶ月以上の期間で集計はできません。
+
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary width-100">検索</button>
@@ -63,9 +82,9 @@
 
 <script>
     export default {
-        props: ["url", "pageLimit", "dataQuery"],
+        props: ["url", "pageLimit", "dataQuery", "checkMonth"],
         mounted() {
-            
+
         },
         data() {
             return {
@@ -73,9 +92,35 @@
                     lesson_date_start: new Date(this.dataQuery.lesson_date_start ?? ""),
                     lesson_date_end: new Date(this.dataQuery.lesson_date_end ?? ""),
                 },
+                over2Month : false,
             };
         },
         methods: {
+            subtractMonths(numOfMonths, date = new Date()) {
+                date.setMonth(date.getMonth() - numOfMonths);
+                return date;
+            },
+            search() {
+                let that = this;
+                if (this.checkMonth && that.dataQueryEx.lesson_date_start && that.dataQueryEx.lesson_date_end) {
+                    if (that.dataQueryEx.lesson_date_start < that.dataQueryEx.lesson_date_end) {
+                        if (that.dataQueryEx.lesson_date_start <
+                            that.subtractMonths(2, that.dataQueryEx.lesson_date_end)) {
+                            that.over2Month = true;
+                        } else {
+                            this.$refs.form.submit();
+                            that.over2Month = false;
+                        }
+
+                    }
+
+                } else {
+                    this.$refs.form.submit();
+                    that.over2Month = false;
+
+                }
+
+            },
             hideShow() {
                 if (this.$refs['input-group'].classList.value.includes('show')) {
                     this.$refs['input-group'].classList.value = 'input-group show';

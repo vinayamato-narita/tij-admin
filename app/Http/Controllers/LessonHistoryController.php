@@ -39,6 +39,8 @@ class LessonHistoryController extends BaseController
         $pageLimit = $this->newListLimit($request);
         Session::put('lessonHistory', collect($request));
         $queryBuilder = LessonHistory::select(
+            'teacher.teacher_id',
+            'teacher.teacher_name',
             'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
             'lesson_schedule.lesson_endtime',
@@ -51,6 +53,9 @@ class LessonHistoryController extends BaseController
         )
             ->join('lesson_schedule', function ($join) {
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+            })
+            ->join('teacher', function ($join) {
+                $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
             ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
@@ -105,6 +110,12 @@ class LessonHistoryController extends BaseController
             if ($request['sort'] == "lesson_text_name") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('lesson_text_name', 'ASC') : $queryBuilder->orderBy('lesson_text_name', 'DESC');
             }
+            if ($request['sort'] == "teacher_id") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher_id', 'ASC') : $queryBuilder->orderBy('teacher_id', 'DESC');
+            }
+            if ($request['sort'] == "teacher_name") {
+                $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('teacher_name', 'ASC') : $queryBuilder->orderBy('teacher_name', 'DESC');
+            }
             if ($request['sort'] == "student_id") {
                 $queryBuilder = $request['direction'] == "asc" ? $queryBuilder->orderBy('student_id', 'ASC') : $queryBuilder->orderBy('student_id', 'DESC');
             }
@@ -149,6 +160,8 @@ class LessonHistoryController extends BaseController
             $this->convertShijis("コース名"),
             $this->convertShijis("レッスン名"),
             $this->convertShijis("テキスト名"),
+            $this->convertShijis("講師番号"),
+            $this->convertShijis("講師名"),
             $this->convertShijis("学習者番号"),
             $this->convertShijis("学習者名")
         ];
@@ -162,6 +175,8 @@ class LessonHistoryController extends BaseController
         fputcsv($file, $header);
 
         $queryBuilder = LessonHistory::select(
+            'teacher.teacher_id',
+            'teacher.teacher_name',
             'lesson_schedule.teacher_id',
             'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
@@ -176,6 +191,9 @@ class LessonHistoryController extends BaseController
         )
             ->join('lesson_schedule', function ($join) {
                 $join->on('lesson_history.lesson_schedule_id', '=', 'lesson_schedule.lesson_schedule_id');
+            })
+            ->join('teacher', function ($join) {
+                $join->on('lesson_schedule.teacher_id', '=', 'teacher.teacher_id');
             })
             ->join('lesson', function ($join) {
                 $join->on('lesson_schedule.lesson_id', '=', 'lesson.lesson_id');
@@ -233,6 +251,8 @@ class LessonHistoryController extends BaseController
             $input['course_name'] = $this->convertShijis($item['course_name']);
             $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
             $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);
+            $input['teacher_id'] = $this->convertShijis($item['teacher_id']);
+            $input['teacher_name'] = $this->convertShijis($item['teacher_name']);
             $input['student_id'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_id']);
             $input['student_name'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_name']);
             fputcsv($file, $input);

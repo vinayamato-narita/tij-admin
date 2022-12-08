@@ -156,6 +156,7 @@ class LessonHistoryController extends BaseController
             $this->convertShijis("講師コード"),
             $this->convertShijis("レッスン日"),
             $this->convertShijis("レッスン時間"),
+            $this->convertShijis("法人・個人"),
             $this->convertShijis("コースタイプ"),
             $this->convertShijis("コース名"),
             $this->convertShijis("レッスン名"),
@@ -183,6 +184,7 @@ class LessonHistoryController extends BaseController
             'lesson_schedule.lesson_endtime',
             'course.course_name',
             'course.course_type',
+            'course.is_for_lms',
             'lesson.lesson_name',
             'lesson_text.lesson_text_name',
             'lesson_history.student_id',
@@ -238,6 +240,7 @@ class LessonHistoryController extends BaseController
             $item['lesson_date'] = DateTimeComponent::getDate($item['lesson_date']);
             $item['lesson_starttime'] = DateTimeComponent::getStartEndTime($item['lesson_starttime'], $item['lesson_endtime']);
             $item['course_type'] = $item['course_type'] == CourseTypeEnum:: REGULAR_COURSE ? "プライベート" : "グループ";
+            $item['is_for_lms'] = $item['is_for_lms'] == 0 ? "個人" : "法人";
             return $item;
         });
 
@@ -247,6 +250,7 @@ class LessonHistoryController extends BaseController
             $input['teacher_code'] = $this->convertShijis($teacherInfo->teacher_code);
             $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
             $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
+            $input['is_for_lms'] = $this->convertShijis($item['is_for_lms']);
             $input['course_type'] = $this->convertShijis($item['course_type']);
             $input['course_name'] = $this->convertShijis($item['course_name']);
             $input['lesson_name'] = $this->convertShijis($item['lesson_name']);

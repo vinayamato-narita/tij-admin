@@ -178,6 +178,7 @@ class LessonHistoryController extends BaseController
         $queryBuilder = LessonHistory::select(
             'teacher.teacher_id',
             'teacher.teacher_name',
+            'teacher.teacher_code',
             'lesson_schedule.teacher_id',
             'lesson_schedule.lesson_date',
             'lesson_schedule.lesson_starttime',
@@ -246,8 +247,7 @@ class LessonHistoryController extends BaseController
 
         $input = [];
         foreach ($dataExport as $item) {
-            $teacherInfo = Teacher::where('teacher_id', $item['teacher_id'])->first();
-            $input['teacher_code'] = $this->convertShijis($teacherInfo->teacher_code);
+            $input['teacher_code'] = $this->convertShijis($item['teacher_code']);
             $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
             $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
             $input['is_for_lms'] = $this->convertShijis($item['is_for_lms']);

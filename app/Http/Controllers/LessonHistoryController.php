@@ -245,8 +245,32 @@ class LessonHistoryController extends BaseController
             return $item;
         });
 
+        $countLoop = floor(5000/ count($dataExport));
+        $remainder = 5000 % count($dataExport);
+        $remain = $dataExport->slice(0,$remainder);
+
+        for ($i = 0; $i < $countLoop; $i++)
+        {
+            $input = [];
+            foreach ($dataExport as $item) {
+                $input['teacher_code'] = $this->convertShijis($item['teacher_code']);
+                $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
+                $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
+                $input['is_for_lms'] = $this->convertShijis($item['is_for_lms']);
+                $input['course_type'] = $this->convertShijis($item['course_type']);
+                $input['course_name'] = $this->convertShijis($item['course_name']);
+                $input['lesson_name'] = $this->convertShijis($item['lesson_name']);
+                $input['lesson_text_name'] = $this->convertShijis($item['lesson_text_name']);
+                $input['teacher_id'] = $this->convertShijis($item['teacher_id']);
+                $input['teacher_name'] = $this->convertShijis($item['teacher_name']);
+                $input['student_id'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_id']);
+                $input['student_name'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_name']);
+                fputcsv($file, $input);
+            }
+        }
+
         $input = [];
-        foreach ($dataExport as $item) {
+        foreach ($remain as $item) {
             $input['teacher_code'] = $this->convertShijis($item['teacher_code']);
             $input['lesson_date'] = $this->convertShijis($item['lesson_date']);
             $input['lesson_starttime'] = $this->convertShijis($item['lesson_starttime']);
@@ -261,6 +285,7 @@ class LessonHistoryController extends BaseController
             $input['student_name'] = $this->convertShijis($item['course_type'] == 'グループ' ? '-' : $item['student_name']);
             fputcsv($file, $input);
         }
+
 
         return Response::download(public_path() . '/csv_file/users/' . $fileName, $fileName, $header);
     }

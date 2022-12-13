@@ -29,6 +29,9 @@ Route::group([
     Route::resource('dashboard', DashboardController::class);
     Route::resource('admin', AdminController::class);
 
+    //lesson history
+    Route::get('/lesson-history/export', 'LessonHistoryController@export')->name('lesson-history.export');
+    Route::resource('lesson-history', LessonHistoryController::class);
     //teacher
     Route::resource('teacher', TeacherController::class);
     Route::get('teacher/{id}/lesson', 'TeacherController@lesson')->name('teacher.lesson');

@@ -84,7 +84,7 @@
                                 <th class="text-center bg-gray-100 " style="width: 50px">
                                     <input   type="radio" class=" checkbox" style="width: auto; height: auto; display: none;">
                                 </th>
-                                <th class="text-center text-md-left bg-gray-100">予習名</th>
+                                <th class="text-center text-md-left bg-gray-100">復習名</th>
                             </tr>
                             </thead>
                             <tbody>

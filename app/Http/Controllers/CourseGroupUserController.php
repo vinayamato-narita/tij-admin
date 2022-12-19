@@ -355,6 +355,7 @@ class CourseGroupUserController extends BaseController
 
                     Student::where('student_id', $studentId)->update([
                         'course_update_count'=> DB::raw('course_update_count+1'),
+                        'course_id' => $courseId
                     ]);
 
                     // update paid status

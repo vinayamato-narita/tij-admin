@@ -353,6 +353,11 @@ class CourseGroupUserController extends BaseController
                     // sp_insert_point_subscription
                     $ret = DB::select('call sp_insert_point_subscription(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', $data);
 
+                    Student::where('student_id', $studentId)->update([
+                        'course_update_count'=> DB::raw('course_update_count+1'),
+                        'course_id' => $courseId
+                    ]);
+
                     // update paid status
                     PointSubscriptionHistory::where('order_id', '=', $orderId)
                         ->update([
@@ -424,6 +429,8 @@ class CourseGroupUserController extends BaseController
                     }
                 }
             }
+
+            DB::table('course')->whereIn('course_id', $courseIds)->update(['group_lesson_status' => 1]);
 
             return view('groupCourse.user_import_success', [
                 'listBreadcrumb' => $listBreadcrumb,

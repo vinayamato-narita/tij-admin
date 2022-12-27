@@ -163,9 +163,9 @@ class Course extends Model
         }
 
         if ($this->group_lesson_status  == GroupLessonStatus::COURSE_DECIDE) {
-            if ($this->course_start_date > $now) return '開講決定';
-            if ($this->publish_date_from < $now) return '終了';
-            else return '開講中';
+            if ($this->publish_date_to < $now) return '終了';
+            if ($this->course_start_date  > $now) return '開講決定';
+            return '開講中';
 
         }
 

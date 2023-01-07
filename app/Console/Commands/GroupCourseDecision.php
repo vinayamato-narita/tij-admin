@@ -14,6 +14,7 @@ use App\Models\LessonSchedule;
 use App\Models\PointSubscriptionHistory;
 use App\Models\SendRemindMailPattern;
 use App\Models\StudentPointHistory;
+use App\Models\TimeZone;
 use App\Services\GmoService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -65,6 +66,9 @@ class GroupCourseDecision extends Command
         $getMailStudentJa = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::JA);
         $getMailStudentEn = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::EN);
         $getMailStudentZh = SendRemindMailPattern::getRemindmailPatternInfo(MailType::OPEN_GROUP_LESSON, LangType::ZH);
+
+        $timeZones = TimeZone::pluck('diff_time', 'timezone_id')->toArray();
+
 
         foreach ($courses as $course) {
             try {
@@ -134,12 +138,13 @@ class GroupCourseDecision extends Command
                     //send mail teacher
                     foreach ($course->lessonSchedules as $lessonSchedule) {
                         $mailPattern = SendRemindMailPattern::getRemindmailPatternInfo(MailType::TEACHER_CANCEL_LESSON, LangType::JA);
+                        $diff_time = $timeZones[$lessonSchedule->teacher->timezone_id];
 
                         if (count($mailPattern)) {
                             $mailSubject = $mailPattern[0]->mail_subject;
                             $mailBody = $mailPattern[0]->mail_body;
-                            $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
-                            $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+                            $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_date, $diff_time), $mailBody);
+                            $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time), $mailBody);;
                             $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson->lesson_name, $mailBody);
                             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
                             $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher->teacher_nickname, $mailBody);
@@ -252,5 +257,19 @@ class GroupCourseDecision extends Command
         }
 
         Log::info('group course decision batch end');
+    }
+
+    private function getDateTimeZone($date, $diff)
+    {
+        $dif = ($diff - 9)  * 60 * 60;
+        $timestamp = strtotime($date) + $dif;
+        return date('Y年m月d日', $timestamp);
+    }
+
+    private function getTimeTimeZone($date, $diff)
+    {
+        $dif = ($diff - 9)  * 60 * 60;
+        $timestamp = strtotime($date) + $dif;
+        return date('H:i', $timestamp);
     }
 }

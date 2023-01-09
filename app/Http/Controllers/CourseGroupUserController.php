@@ -684,6 +684,7 @@ class CourseGroupUserController extends BaseController
                                 $mailBody = $mailPattern[0]->mail_body;
                                 $mailBody = str_replace("#STUDENT_NAME#", $value['student_name'], $mailBody);
                                 $mailBody = str_replace("#STUDENT_PASSWORD#", $value['password'], $mailBody);
+                                $mailBody = str_replace("#STUDENT_MAIL#", $value['student_email'], $mailBody);
                                 $mailBody = str_replace("#STUDENT_MY_PAGE_URL#", config('env.APP_URL_STUDENT'), $mailBody);
                                 $mailBody = str_replace("#ZOOM_MANUAL_URL#", config('env.ZOOM_MANUAL_URL'), $mailBody);
 

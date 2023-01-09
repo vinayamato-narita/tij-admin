@@ -149,7 +149,7 @@ class GroupCourseDecision extends Command
                             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
                             $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher->teacher_nickname, $mailBody);
                             $mailBody = str_replace("#COURSE_NAME#", $course->course_name, $mailBody);
-                            $mailBody = str_replace("#LESSON_DATE_JP#",  Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+                            $mailBody = str_replace("#LESSON_DATE_JP#",  Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
                             $mailBody = str_replace("#LESSON_TIME_JP#",  Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
 
                             Mail::raw($mailBody, function ($message) use ($lessonSchedule, $mailSubject) {
@@ -263,7 +263,7 @@ class GroupCourseDecision extends Command
     {
         $dif = ($diff - 9)  * 60 * 60;
         $timestamp = strtotime($date) + $dif;
-        return date('Y年m月d日', $timestamp);
+        return date('Y-m-d', $timestamp);
     }
 
     private function getTimeTimeZone($date, $diff)

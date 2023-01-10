@@ -213,8 +213,8 @@ class SendMailBeforeLessonStart extends Command
 
             $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_starttime, $diff_time), $mailBody);
             $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time), $mailBody);
-            $mailBody = str_replace("#LESSON_DATE_JP#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
-            $mailBody = str_replace("#LESSON_TIME_JP#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+            $mailBody = str_replace("#LESSON_DATE_JST#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+            $mailBody = str_replace("#LESSON_TIME_JST#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
             $mailBody = str_replace("#ZOOM_URL#", $lessonSchedule->zoom_url, $mailBody);
             $mailBody = str_replace("#TEACHER_MY_PAGE_URL#", config('env.APP_URL_TEACHER'), $mailBody);

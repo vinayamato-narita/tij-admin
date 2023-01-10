@@ -149,7 +149,7 @@ class SendMailBeforeLessonStart extends Command
                 $mailSubject = $getMailStudentJp[0]->mail_subject;
                 $mailBody = $getMailStudentJp[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
                 $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
@@ -167,7 +167,7 @@ class SendMailBeforeLessonStart extends Command
                 $mailSubject = $getMailStudentEn[0]->mail_subject;
                 $mailBody = $getMailStudentEn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
                 $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_en, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_en, $mailBody);
@@ -185,7 +185,7 @@ class SendMailBeforeLessonStart extends Command
                 $mailSubject = $getMailStudentCn[0]->mail_subject;
                 $mailBody = $getMailStudentCn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
                 $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_cn, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_cn, $mailBody);
@@ -213,7 +213,7 @@ class SendMailBeforeLessonStart extends Command
 
             $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_starttime, $diff_time), $mailBody);
             $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time), $mailBody);
-            $mailBody = str_replace("#LESSON_DATE_JP#", Carbon::parse($lessonSchedule->lesson_date)->format('Y年m月d日'), $mailBody);
+            $mailBody = str_replace("#LESSON_DATE_JP#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
             $mailBody = str_replace("#LESSON_TIME_JP#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
             $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
             $mailBody = str_replace("#ZOOM_URL#", $lessonSchedule->zoom_url, $mailBody);

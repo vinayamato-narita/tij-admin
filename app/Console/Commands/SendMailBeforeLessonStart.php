@@ -75,6 +75,7 @@ class SendMailBeforeLessonStart extends Command
             'lesson.lesson_id',
             'lesson_text.lesson_text_name',
             'teacher.teacher_nickname',
+            'student.timezone_id as student_timezone_id',
             'student.student_email',
             'lesson_schedule.lesson_schedule_id',
             'lesson_schedule.course_type',
@@ -145,12 +146,21 @@ class SendMailBeforeLessonStart extends Command
 
         foreach($lessonSchedules as $lessonSchedule) 
         {
+            $diff_time_student = $timeZones[$lessonSchedule->student_timezone_id];
+
             if ($lessonSchedule->lang_type == LangType::JA && count($getMailStudentJp)) {
                 $mailSubject = $getMailStudentJp[0]->mail_subject;
                 $mailBody = $getMailStudentJp[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
-                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+/*                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);*/
+
+                $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_starttime, $diff_time_student, 'Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time_student), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE_JST#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME_JST#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+
+
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
@@ -167,8 +177,12 @@ class SendMailBeforeLessonStart extends Command
                 $mailSubject = $getMailStudentEn[0]->mail_subject;
                 $mailBody = $getMailStudentEn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
-                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+/*                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);*/
+                $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_starttime, $diff_time_student, 'Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time_student), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE_JST#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME_JST#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_en, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_en, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
@@ -185,8 +199,13 @@ class SendMailBeforeLessonStart extends Command
                 $mailSubject = $getMailStudentCn[0]->mail_subject;
                 $mailBody = $getMailStudentCn[0]->mail_body;
                 $mailBody = str_replace("#STUDENT_NAME#", $lessonSchedule->student_name, $mailBody);
-                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
-                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
+/*                $mailBody = str_replace("#LESSON_DATE#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);*/
+
+                $mailBody = str_replace("#LESSON_DATE#", $this->getDateTimeZone($lessonSchedule->lesson_starttime, $diff_time_student, 'Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME#", $this->getTimeTimeZone($lessonSchedule->lesson_starttime, $diff_time_student), $mailBody);
+                $mailBody = str_replace("#LESSON_DATE_JST#", Carbon::parse($lessonSchedule->lesson_date)->format('Y-m-d'), $mailBody);
+                $mailBody = str_replace("#LESSON_TIME_JST#", Carbon::parse($lessonSchedule->lesson_starttime)->format('H:i'), $mailBody);
                 $mailBody = str_replace("#LESSON_NAME#", $lessonSchedule->lesson_name_cn, $mailBody);
                 $mailBody = str_replace("#LESSON_TEXT_NAME#", $lessonSchedule->lesson_text_name_cn, $mailBody);
                 $mailBody = str_replace("#TEACHER_NICKNAME#", $lessonSchedule->teacher_nickname, $mailBody);
@@ -234,11 +253,11 @@ class SendMailBeforeLessonStart extends Command
 
     }
 
-    private function getDateTimeZone($date, $diff) 
+    private function getDateTimeZone($date, $diff, $format = 'Y年m月d日')
     {
         $dif = ($diff - 9)  * 60 * 60;
         $timestamp = strtotime($date) + $dif;
-        return date('Y年m月d日', $timestamp);
+        return date($format, $timestamp);
     }
 
     private function getTimeTimeZone($date, $diff) 

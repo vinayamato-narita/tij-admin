@@ -90,7 +90,7 @@ class LessonHistoryController extends BaseController
         }
         if (isset($request['lesson_date_end']) && $request['lesson_date_end'] != null) {
             $queryBuilder = $queryBuilder->where(function ($query) use ($request) {
-                $query->where('lesson_schedule.lesson_date', '<=', $request['lesson_date_end']);
+                $query->where('lesson_schedule.lesson_date', '<=', $request['lesson_date_end'] . ' 23:59:59');
             });
         }
 

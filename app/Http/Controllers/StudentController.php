@@ -1018,7 +1018,8 @@ class StudentController extends BaseController
         $queryBuilder = Student::select('student.student_id as student_id',
             'student.student_name as student_name',
             'student.student_email as student_email',
-            DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
+            // DB::raw("(CASE WHEN student.is_lms_user = 0 THEN student.company_name ELSE '' END) AS custom_company_name"),
+            'student.company_name as custom_company_name',
             'student.create_date as create_date',
             'student.last_login_date as last_login_date',  
             DB::raw("MIN(CASE WHEN lesson_history.student_lesson_reserve_type = 3 THEN lesson_schedule.lesson_starttime END) AS first_lesson_date"),  
@@ -1079,6 +1080,7 @@ class StudentController extends BaseController
 
         foreach ($studentList as &$item) {
             $input = [];
+            // dd($studentList->toArray());
             $input["学習者番号"] = $this->convertShijis($item['student_id']);
             $input["学習者名"] = $this->convertShijis($item['student_name']);
             $input["学習者メール"] = $this->convertShijis($item['student_email']);

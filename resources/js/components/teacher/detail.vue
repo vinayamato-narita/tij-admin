@@ -56,6 +56,15 @@
                                     </div>
 
                                     <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">自己紹介動画URL:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{this.teacher.introduction_video}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
                                         <label class="col-md-3 col-form-label text-md-right">ニックネーム:
                                         </label>
                                         <div class="col-md-6 text-md-left p-2">

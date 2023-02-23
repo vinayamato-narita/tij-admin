@@ -132,6 +132,39 @@
 
                                         <div class="form-group row ">
                                             <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                                    for="teacherName"
+                                            >自己紹介動画URL:
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input
+                                                        class="form-control"
+                                                        id="introduction_video"
+                                                        type="text"
+                                                        name="introduction_video"
+                                                        @input="changeInput()"
+                                                        v-model="introduction_video"
+                                                        v-validate="
+                                                        'max:255'
+                                                    "
+                                                />
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                >
+                                                    {{
+                                                    errors.first(
+                                                    "introduction_video "
+                                                    )
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row ">
+                                            <label
                                                 class="col-md-3 col-form-label text-md-right"
                                                 for="nickName"
                                                 >ニックネーム:
@@ -806,6 +839,9 @@ export default {
                     required: "講師名を入力してください",
                     max: "名前は255文字以内で入力してください。"
                 },
+                introduction_video: {
+                    max: "自己紹介動画URL は255文字以内で入力してください。"
+                },
                 nickName: {
                     required: "ニックネームを入力してください",
                     max: "ニックネームは255文字以内で入力してください。"
@@ -863,6 +899,7 @@ export default {
         return {
             csrfToken: Laravel.csrfToken,
             teacherName: "",
+            introduction_video : "",
             teacherCode:'',
             displayOrder: 1,
             mail: "",
@@ -924,6 +961,7 @@ export default {
             formData.append("teacherIntroduction", this.teacherIntroduction);
             formData.append("introduceFromAdmin", this.introduceFromAdmin);
             formData.append("teacherNote", this.teacherNote);
+            formData.append("introduction_video", this.introduction_video);
             formData.append(
                 "zoomPersonalMeetingId",
                 this.zoomPersonalMeetingId

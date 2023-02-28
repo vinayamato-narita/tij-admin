@@ -130,37 +130,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row ">
-                                            <label
-                                                    class="col-md-3 col-form-label text-md-right"
-                                                    for="teacherName"
-                                            >自己紹介動画URL:
-                                            </label>
-                                            <div class="col-md-6">
-                                                <input
-                                                        class="form-control"
-                                                        id="introduction_video"
-                                                        type="text"
-                                                        name="introduction_video"
-                                                        @input="changeInput()"
-                                                        v-model="introduction_video"
-                                                        v-validate="
-                                                        'max:255'
-                                                    "
-                                                />
 
-                                                <div
-                                                        class="input-group is-danger"
-                                                        role="alert"
-                                                >
-                                                    {{
-                                                    errors.first(
-                                                    "introduction_video "
-                                                    )
-                                                    }}
-                                                </div>
-                                            </div>
-                                        </div>
 
 
                                         <div class="form-group row ">
@@ -529,6 +499,37 @@
                                                         errors.first(
                                                             "teacherIntroduction"
                                                         )
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row ">
+                                            <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                                    for="teacherName"
+                                            >自己紹介動画URL:
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input
+                                                        class="form-control"
+                                                        id="introduction_video"
+                                                        type="text"
+                                                        name="introduction_video"
+                                                        @input="changeInput()"
+                                                        v-model="introduction_video"
+                                                        v-validate="
+                                                        'max:255'
+                                                    "
+                                                />
+
+                                                <div
+                                                        class="input-group is-danger"
+                                                        role="alert"
+                                                >
+                                                    {{
+                                                    errors.first(
+                                                    "introduction_video "
+                                                    )
                                                     }}
                                                 </div>
                                             </div>

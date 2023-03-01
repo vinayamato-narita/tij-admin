@@ -240,9 +240,9 @@ class LessonStatusController extends BaseController
             $this->convertShijis('講師名'),
             $this->convertShijis('学習者番号'),
             $this->convertShijis('学習者ニックネーム'),
-            $this->convertShijis('学習者スカイプ名'),
+            // $this->convertShijis('学習者スカイプ名'),
             $this->convertShijis('評価（学習者→講師）'),
-            $this->convertShijis('評価（講師→学習者）'),
+            // $this->convertShijis('評価（講師→学習者）'),
             $this->convertShijis('コメント（学習者→講師）'),
             $this->convertShijis('コメント（講師→学習者）')
         ];
@@ -263,13 +263,13 @@ class LessonStatusController extends BaseController
             $row['講師名'] = $this->convertShijis($item->teacher_name);
             $row['学習者番号'] = $this->convertShijis($item->student_id);
             $row['学習者ニックネーム'] = $this->convertShijis($item->student_nickname);
-            $row['学習者スカイプ名'] = $this->convertShijis($item->student_skype_name);
+            // $row['学習者スカイプ名'] = $this->convertShijis($item->student_skype_name);
             $row['評価（学習者→講師）'] = $this->convertShijis($item->teacher_rating);
-            $row['評価（講師→学習者）'] = $this->convertShijis($item->student_rating);
+            // $row['評価（講師→学習者）'] = $this->convertShijis($item->student_rating);
             $row['コメント（学習者→講師）'] = $this->convertShijis($item->comment_from_student_to_teacher);
             $row['コメント（講師→学習者）'] = $this->convertShijis($item->comment_from_teacher_to_student);
 
-            fputcsv($file, array($row['レッスン日'],$row['レッスン時間'],$row['レッスン予約時間'],$row['レッスン名'],$row['テキスト名'],$row['講師名'],$row['学習者番号'],$row['学習者ニックネーム'],$row['学習者スカイプ名'],$row['評価（学習者→講師）'],$row['評価（講師→学習者）'],$row['コメント（学習者→講師）'],$row['コメント（講師→学習者）']));
+            fputcsv($file, array($row['レッスン日'],$row['レッスン時間'],$row['レッスン予約時間'],$row['レッスン名'],$row['テキスト名'],$row['講師名'],$row['学習者番号'],$row['学習者ニックネーム'],$row['評価（学習者→講師）'],$row['コメント（学習者→講師）'],$row['コメント（講師→学習者）']));
         }
 
         fclose($file);

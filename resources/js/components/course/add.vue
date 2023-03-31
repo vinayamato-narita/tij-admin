@@ -288,7 +288,7 @@
 
                                             </div>
                                         </div>
-                                            <div class="form-group row" v-if="this.courseType == 0">
+                                            <div class="form-group row" v-if="this.courseType == 0 || this.courseType == 1">
                                             <label class="col-md-3 col-form-label text-md-right" for="pointCount">受講回数 :
                                                 <span class="glyphicon glyphicon-star"
                                                 ></span>

@@ -820,6 +820,12 @@ export default {
         if (this.studentInfoEx.country_id == null) {
             this.studentInfoEx.country_id = 0;
         }
+        if (this.studentInfoEx.student_sex == null) {
+            this.studentInfoEx.student_sex = "";
+        }
+        if (this.studentInfoEx.place_of_residence == null) {
+            this.studentInfoEx.place_of_residence = "";
+        }
     },
     methods: {
         save(a) {

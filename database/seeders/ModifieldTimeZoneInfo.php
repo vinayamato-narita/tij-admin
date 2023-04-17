@@ -18,11 +18,10 @@ class ModifieldTimeZoneInfo extends Seeder
             DB::beginTransaction();
 
 
-            $queries = "
-update timezone set timezone_name_english = '(GMT+09:00)Osaka,Sapporo,Tokyo/大阪、札幌、東京' , display_no = 1 where timezone_id = 1;
+            $queries = "update timezone set timezone_name_english = '(GMT+09:00)Osaka,Sapporo,Tokyo/大阪、札幌、東京' , display_no = 1 where timezone_id = 1;
 update timezone set timezone_name_english = '(GMT+08:00)Taipei/中华台北' , display_no = 2 where timezone_id = 2;
 update timezone set timezone_name_english = '(GMT-12:00)International Date Line West' , display_no = 6 where timezone_id = 3;
-update timezone set timezone_name_english = '(GMT-11:00)Midway Isl,, Samoa' , display_no = 7 where timezone_id = 4;
+update timezone set timezone_name_english = '(GMT-11:00)Midway Island, Samoa' , display_no = 7 where timezone_id = 4;
 update timezone set timezone_name_english = '(GMT-10:00)Hawaii' , display_no = 8 where timezone_id = 5;
 update timezone set timezone_name_english = '(GMT-09:00)Alaska' , display_no = 9 where timezone_id = 6;
 update timezone set timezone_name_english = '(GMT-08:00)Alaska (Summer time)' , display_no = 10 where timezone_id = 7;
@@ -50,11 +49,11 @@ update timezone set timezone_name_english = '(GMT-03:00)Atlantic Time(Canada) (S
 update timezone set timezone_name_english = '(GMT-04:00)Caracas, La Paz' , display_no = 32 where timezone_id = 29;
 update timezone set timezone_name_english = '(GMT-04:00)Santiago' , display_no = 33 where timezone_id = 30;
 update timezone set timezone_name_english = '(GMT-03:00)Santiago (Summer time)' , display_no = 34 where timezone_id = 31;
-update timezone set timezone_name_english = '(GMT-03:30)Newfoundl,' , display_no = 35 where timezone_id = 32;
-update timezone set timezone_name_english = '(GMT-02:30)Newfoundl, (Summer time)' , display_no = 36 where timezone_id = 33;
+update timezone set timezone_name_english = '(GMT-03:30)Newfoundland' , display_no = 35 where timezone_id = 32;
+update timezone set timezone_name_english = '(GMT-02:30)Newfoundland (Summer time)' , display_no = 36 where timezone_id = 33;
 update timezone set timezone_name_english = '(GMT-03:00)Brasilia' , display_no = 37 where timezone_id = 34;
 update timezone set timezone_name_english = '(GMT-03:00)Buenos Aires, Georgetown' , display_no = 38 where timezone_id = 35;
-update timezone set timezone_name_english = '(GMT-03:00)Greenl,' , display_no = 39 where timezone_id = 36;
+update timezone set timezone_name_english = '(GMT-03:00)Greenland' , display_no = 39 where timezone_id = 36;
 update timezone set timezone_name_english = '(GMT-02:00)Mid-Atlantic' , display_no = 40 where timezone_id = 37;
 update timezone set timezone_name_english = '(GMT-01:00)Mid-Atlantic (Summer time)' , display_no = 41 where timezone_id = 38;
 update timezone set timezone_name_english = '(GMT-01:00)Azores' , display_no = 42 where timezone_id = 39;
@@ -93,9 +92,8 @@ update timezone set timezone_name_english = '(GMT+04:00)Abu Dhabi, Muscat' , dis
 update timezone set timezone_name_english = '(GMT+04:00)Baku, Tbilisi, Yerevan' , display_no = 75 where timezone_id = 72;
 update timezone set timezone_name_english = '(GMT+04:30)Kabul' , display_no = 76 where timezone_id = 73;
 update timezone set timezone_name_english = '(GMT+05:00)Ekaterinburg' , display_no = 77 where timezone_id = 74;
-update timezone set timezone_name_english = '(GMT+05:00)Islamabad, Karachi, Tashkent' , display_no = 78 where timezone_id = 75;
 update timezone set timezone_name_english = '(GMT+05:30)Chennai, Kolkata, Mumbai, New Delhi' , display_no = 4 where timezone_id = 76;
-update timezone set timezone_name_english = '(GMT+05:45)Kathm,u' , display_no = 79 where timezone_id = 77;
+update timezone set timezone_name_english = '(GMT+05:45)Kathmandu' , display_no = 79 where timezone_id = 77;
 update timezone set timezone_name_english = '(GMT+06:00)Almaty, Novosibirsk' , display_no = 80 where timezone_id = 78;
 update timezone set timezone_name_english = '(GMT+06:00)Astana, Dhaka' , display_no = 81 where timezone_id = 79;
 update timezone set timezone_name_english = '(GMT+06:00)Sri Jayawardenepura' , display_no = 82 where timezone_id = 80;
@@ -119,8 +117,8 @@ update timezone set timezone_name_english = '(GMT+10:00)Hobart' , display_no = 9
 update timezone set timezone_name_english = '(GMT+11:00)Hobart (Summer time)' , display_no = 99 where timezone_id = 98;
 update timezone set timezone_name_english = '(GMT+10:00)Vladivostok' , display_no = 100 where timezone_id = 99;
 update timezone set timezone_name_english = '(GMT+11:00)Magadan, Solomon Is., New Caledonia' , display_no = 101 where timezone_id = 100;
-update timezone set timezone_name_english = '(GMT+12:00)Auckl,, Wellington' , display_no = 102 where timezone_id = 101;
-update timezone set timezone_name_english = '(GMT+13:00)Auckl,, Wellington (Summer time)' , display_no = 103 where timezone_id = 102;
+update timezone set timezone_name_english = '(GMT+12:00)Auckland, Wellington' , display_no = 102 where timezone_id = 101;
+update timezone set timezone_name_english = '(GMT+13:00)Auckland, Wellington (Summer time)' , display_no = 103 where timezone_id = 102;
 update timezone set timezone_name_english = '(GMT+12:00)Fiji, Kamchatka, Marshall Is.' , display_no = 104 where timezone_id = 103;
 update timezone set timezone_name_english = '(GMT+13:00)Fiji, Kamchatka, Marshall Is. (Summer time)' , display_no = 105 where timezone_id = 104;
 update timezone set timezone_name_english = '(GMT+13:00)Nukualofa' , display_no = 106 where timezone_id = 105;

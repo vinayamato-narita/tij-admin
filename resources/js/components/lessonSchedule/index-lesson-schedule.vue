@@ -82,7 +82,7 @@
                                                 <h3 class="title-side-table">詳細</h3>
                                                 <div class="subtitle-side-table"></div>
                                                 <div class="wrapper-btn-bulk">
-                                                    <input id="bulk-resistration" @click="bulkResistration()" class="btn active" type="button" value="一括登録">
+                                                    <input id="bulk-resistration" :disabled="this.submiting" @click="bulkResistration()" class="btn active" type="button" value="一括登録">
                                                     <input id="bulk-remove" @click="bulkRemove()" class="btn active" type="reset" value="一括削除">
                                                 </div>
                                                 <div class="wrapper-lesson-detail fixHeight lesson-detail" style="height : 300px">
@@ -104,7 +104,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="wrapper-btn-single">
-                                                        <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" @click="resistration()" type="button" value="登録">
+                                                        <input id="resistration" :class="['btn', submitFlgConds ? 'active' : '']" @click="resistration()" :disabled="this.submiting" type="button" value="登録">
                                                         <input id="remove" :class="['btn', removeFlgConds ? 'active' : '']" type="reset" @click="remove()" value="レッスン削除">
                                                 </div>
                                                 <!-- /.wrapper-lesson-detail -->
@@ -161,7 +161,8 @@ export default {
             studentId : '',
             studentNickname : '',
             teacherZoomId: null,
-            currentRowIndex : 0
+            currentRowIndex : 0,
+            submiting : false
         }
     },
     methods :{
@@ -191,6 +192,8 @@ export default {
                         that.teacherZoomId = response.data.teacherZoomId
                         this.submitFlgConds = false
                         this.removeFlgConds = false
+                        this.submiting = false;
+
                     } else {
                         this.$swal({
                             text: "レッスンスケジュールを取得できません。",
@@ -276,6 +279,7 @@ export default {
             }
         },
         bulkResistration() {
+            this.submiting = true;
             let dataBulkResistration = new Array()
             let idx = 0
             let that = this
@@ -293,10 +297,12 @@ export default {
                             selectedFlg = true
                             if (!((j == this.currentIndex && i >= this.currentRowIndex) || j > this.currentIndex)) {
                                 submitBulkRegistionFlg = false;
+                                this.submiting = false;
                                 errorMessage = "登録可能な日時を選択してください"
                                 break;
                             } else if(this.dataRegisted[i][j] || (this.dataLessonSchedule[i][j]['0']['course_type'] != 'undefined' && this.dataLessonSchedule[i][j]['0']['course_type'] == 1)) {
                                 submitBulkRegistionFlg = false;
+                                this.submiting = false;
                                 errorMessage = "プライベートレッスンのスケジュールを登録・削除できません。"
                                 if (this.dataLessonSchedule[i][j]['0']['course_type'] == 1) {
                                     errorMessage = "グループレッスンのスケジュールを登録・削除できません。"
@@ -313,6 +319,7 @@ export default {
                         }
                     }
                     if (!submitBulkRegistionFlg) {
+                        this.submiting = false;
                         break;
                     }
                 }
@@ -320,11 +327,13 @@ export default {
 
             if (!selectedFlg) {
                 submitBulkRegistionFlg = false;
+                this.submiting = false;
                 errorMessage = "登録可能な日時を選択してください"
             }
 
             if (!submitBulkRegistionFlg) {
-                    this.$swal({
+                this.submiting = false;
+                this.$swal({
                         text: errorMessage,
                         icon: "error",
                         cancelButtonText: "閉じる",
@@ -347,6 +356,7 @@ export default {
                         if (response.data.status == "OK") {
                             this.getData()
                         } else {
+                            this.submiting = false;
                             this.$swal({
                                 text: "レッスンスケジュールを登録できません。",
                                 icon: "warning",
@@ -462,7 +472,10 @@ export default {
                 }); 
         },
         resistration() {
+            this.submiting = true;
+
             if (!this.submitFlgConds) {
+                this.submiting = false;
                 return false;
             }
 
@@ -482,6 +495,7 @@ export default {
                     if (response.data.status == "OK") {
                         this.getData()
                     } else {
+                        this.submiting = false;
                         this.$swal({
                             text: "レッスンスケジュールを登録できません。",
                             icon: "warning",

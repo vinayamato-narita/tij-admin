@@ -18,8 +18,8 @@ class ModifieldTimeZoneInfo extends Seeder
             DB::beginTransaction();
 
 
-            $queries = "update timezone set timezone_name_english = '(GMT+09:00)Osaka,Sapporo,Tokyo/大阪、札幌、東京' , display_no = 1 where timezone_id = 1;
-update timezone set timezone_name_english = '(GMT+08:00)Taipei/中华台北' , display_no = 2 where timezone_id = 2;
+            $queries = "update timezone set timezone_name_english = '(GMT+09:00)Osaka,Sapporo,Tokyo', timezone_name_native='(GMT+09:00)大阪、札幌、東京' , display_no = 1 where timezone_id = 1;
+update timezone set timezone_name_english = '(GMT+08:00)Taipei' , timezone_name_native='(GMT+08:00)中华台北' , display_no = 2 where timezone_id = 2;
 update timezone set timezone_name_english = '(GMT-12:00)International Date Line West' , display_no = 6 where timezone_id = 3;
 update timezone set timezone_name_english = '(GMT-11:00)Midway Island, Samoa' , display_no = 7 where timezone_id = 4;
 update timezone set timezone_name_english = '(GMT-10:00)Hawaii' , display_no = 8 where timezone_id = 5;
@@ -100,7 +100,7 @@ update timezone set timezone_name_english = '(GMT+06:00)Sri Jayawardenepura' , d
 update timezone set timezone_name_english = '(GMT+06:30)Rangoon' , display_no = 83 where timezone_id = 81;
 update timezone set timezone_name_english = '(GMT+07:00)Bangkok, Hanoi, Jakarta' , display_no = 3 where timezone_id = 82;
 update timezone set timezone_name_english = '(GMT+07:00)Krasnoyarsk' , display_no = 84 where timezone_id = 83;
-update timezone set timezone_name_english = '(GMT+08:00)Beijing, Chongqing, Hong Kong, Urumqi/北京、重慶、香港、ウルムチ' , display_no = 85 where timezone_id = 84;
+update timezone set timezone_name_english = '(GMT+08:00)Beijing, Chongqing, Hong Kong, Urumqi' ,timezone_name_native='(GMT+08:00)北京、重慶、香港、ウルムチ',  display_no = 85 where timezone_id = 84;
 update timezone set timezone_name_english = '(GMT+08:00)Irkutsk, Ulaan Bataar' , display_no = 86 where timezone_id = 85;
 update timezone set timezone_name_english = '(GMT+08:00)Kuala Lumpur, Singapore' , display_no = 87 where timezone_id = 86;
 update timezone set timezone_name_english = '(GMT+08:00)Perth' , display_no = 88 where timezone_id = 87;

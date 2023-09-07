@@ -788,6 +788,60 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group row ">
+                                            <label
+                                                    class="col-md-3 col-form-label text-md-right"
+                                            >ステータス:
+                                            </label>
+                                            <div class="col-md-6">
+                                                <div style="margin-top: 5px">
+                                                    <label
+                                                            class="radio"
+                                                            for="show-flag-0"
+                                                    >
+                                                        <input
+                                                                name="show_flag"
+                                                                id="show-flag-0"
+                                                                value="0"
+                                                                v-model="
+                                                                showFlag
+                                                            "
+                                                                type="radio"
+
+                                                        />
+                                                        無効
+                                                    </label>
+                                                    &nbsp;
+                                                    <label
+                                                            class="radio"
+                                                            for="show-flag-1"
+                                                    >
+                                                        <input
+                                                                name="show_flag"
+                                                                value="1"
+                                                                id="show-flag-1"
+                                                                v-model="
+                                                                showFlag
+                                                            "
+                                                                type="radio"
+                                                                checked
+                                                        />
+                                                        有効
+                                                    </label>
+                                                    <div
+                                                            class="input-group is-danger"
+                                                            role="alert"
+                                                    >
+                                                        {{
+                                                        errors.first(
+                                                        "show_flag"
+                                                        )
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-actions text-center">
                                             <div class="line"></div>
                                             <div class="form-group">
@@ -906,6 +960,7 @@ export default {
             mail: "",
             nickName: "",
             isFreeTeacher: 1,
+            showFlag : 1,
             flagShowLoader: false,
             messageText: this.message,
             errorsData: {},
@@ -949,6 +1004,7 @@ export default {
             formData.append("nickName", this.nickName);
             formData.append("timeZone", this.timeZone);
             formData.append("isFreeTeacher", this.isFreeTeacher);
+            formData.append("show_flag", this.showFlag);
             formData.append("teacherSex", this.teacherSex);
             formData.append(
                 "teacherBirthday",

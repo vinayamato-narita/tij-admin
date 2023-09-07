@@ -38,7 +38,9 @@ class CreateTeacherRequest extends FormRequest
             'teacherDepartment' => 'max:255',
             'teacherHobby' => 'max:255',
             'zoomPersonalMeetingId' => 'required|max:255',
-            'zoomPassword' => 'max:50'
+            'zoomPassword' => 'max:50',
+            'show_flag' => 'required'
+
         ];
     }
 

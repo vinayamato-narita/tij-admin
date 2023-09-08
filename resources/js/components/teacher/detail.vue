@@ -221,6 +221,15 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group row ">
+                                        <label class="col-md-3 col-form-label text-md-right">ステータス:
+                                        </label>
+                                        <div class="col-md-6 text-md-left p-2">
+                                            {{teacher.show_flag ? '有効' : '無効'}}
+
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </div>

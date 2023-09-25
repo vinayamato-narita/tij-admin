@@ -119,6 +119,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_email = $request->mail;
                 $teacher->timezone_id = $request->timeZone;
                 $teacher->is_free_teacher = $request->isFreeTeacher;
+                $teacher->show_flag = $request->show_flag;
                 $teacher->teacher_sex = $request->teacherSex;
                 $teacher->teacher_birthday = $request->teacherBirthday == 'null' ? null : date("Y-m-d", strtotime($request->teacherBirthday));
                 $teacher->teacher_university = $request->teacherUniversity ?? "";
@@ -405,6 +406,7 @@ class TeacherController extends BaseController
                 $teacher->teacher_feature2 = $request->teacherFeature2;
                 $teacher->teacher_feature3 = $request->teacherFeature3;
                 $teacher->teacher_feature4 = $request->teacherFeature4;
+                $teacher->show_flag = $request->show_flag;
                 if (isset($request->teacherFileSelected)) {
                     $name = TIJAdminAzureComponent::upload(AzureFolderEnum::TEACHER, $request->teacherFileSelected);
                     if (!empty($teacher->photo_savepath))

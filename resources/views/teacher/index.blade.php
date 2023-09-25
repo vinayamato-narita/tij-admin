@@ -1,5 +1,6 @@
 @php
     use App\Components\SearchQueryComponent;
+    use App\Enums\TeacherShowFlag;
 @endphp
 
 @extends('layouts.default')
@@ -53,6 +54,7 @@
                                                     <th class="text-left min-width-120 white-space">@sortablelink('teacher_nickname', ' ニックネーム')</th>
                                                     <th class="text-left min-width-150 white-space">@sortablelink('teacher_email', ' メールアドレス')</th>
                                                     <th class="text-left min-width-150 white-space">@sortablelink('last_login_date', ' 最終ログイン日時')</th>
+                                                    <th class="text-left min-width-150 white-space">@sortablelink('show_flag', ' ステータス')</th>
                                                     <th class="text-left min-width-150 white-space"></th>
                                                     <th class="text-left min-width-150 white-space"></th>
                                                 </tr>
@@ -65,6 +67,7 @@
                                                         <td class="text-left">{{ $teacher->teacher_nickname }}</td>
                                                         <td class="text-left">{{ $teacher->teacher_email }}</td>
                                                         <td class="text-left">{{ $teacher->last_login_date }}</td>
+                                                        <td class="text-left">{{ TeacherShowFlag::getDescription($teacher->show_flag) }}</td>
                                                         <td class="text-left"></td>
                                                         <td class="text-right">
                                                             <div class="btn-group">
